@@ -18,13 +18,13 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // stack.h
-// 
+//
 // History:
 //		08/14/95 JMI	Started.
 //
 //		07/08/96	JMI	No longer automatically makes user type a pointer.
 //
-//		07/08/96	JMI	Converted to new CList that does not convert your 
+//		07/08/96	JMI	Converted to new CList that does not convert your
 //							template type into a pointer.
 //
 //		07/09/96	JMI	Reconverted to newest CList which does convert
@@ -56,86 +56,78 @@
 // paths to a header file.  In this case we generally go off of our
 // RSPiX root directory.  System.h MUST be included before this macro
 // is evaluated.  System.h is the header that, based on the current
-// platform (or more so in this case on the compiler), defines 
+// platform (or more so in this case on the compiler), defines
 // PATHS_IN_INCLUDES.  Blue.h includes system.h so you can include that
 // instead.
 #ifdef PATHS_IN_INCLUDES
-	#include "ORANGE/CDT/listbase.h"
+#include "ORANGE/CDT/listbase.h"
 #else
-	#include "listbase.h"
+#include "listbase.h"
 #endif // PATHS_IN_INCLUDES
-
 
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs.
 //////////////////////////////////////////////////////////////////////////////
 
-template <class T> class RStack
-	{
-	protected:	// Internal types.
-		typedef T STACKDATA, *PSTACKDATA; 
+template<class T>
+class RStack
+{
+  protected: // Internal types.
+    typedef T STACKDATA, *PSTACKDATA;
 
-	public:	// Construction/Destruction.
-		// Default constructor.
-		RStack()		{ m_sNumItems = 0; }
-		// Destructor.
-		~RStack()	{ }
+  public: // Construction/Destruction.
+    // Default constructor.
+    RStack() { m_sNumItems = 0; }
+    // Destructor.
+    ~RStack() {}
 
-//////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
 
-	public:	// Methods.
-		// Push an item onto the stack.
-		// Returns 0 on success.
-		short Push(STACKDATA sd)
-			{
-			short	sRes	= m_list.InsertHead(sd);
-			if (sRes == 0)
-				{
-				m_sNumItems++;
-				}
-			return sRes;
-			}
+  public: // Methods.
+    // Push an item onto the stack.
+    // Returns 0 on success.
+    short Push(STACKDATA sd)
+    {
+        short sRes = m_list.InsertHead(sd);
+        if (sRes == 0)
+        {
+            m_sNumItems++;
+        }
+        return sRes;
+    }
 
-		// Pop an item off the stack.
-		// Returns item on success; NULL otherwise.
-		short Pop(PSTACKDATA psd)
-			{
-			short	sRes	= m_list.GetHead(psd);
-			if (sRes == 0)
-				{
-				m_sNumItems--;
-				m_list.Remove();
-				}
-			return sRes;
-			}
+    // Pop an item off the stack.
+    // Returns item on success; NULL otherwise.
+    short Pop(PSTACKDATA psd)
+    {
+        short sRes = m_list.GetHead(psd);
+        if (sRes == 0)
+        {
+            m_sNumItems--;
+            m_list.Remove();
+        }
+        return sRes;
+    }
 
-//////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
 
-	public:	// Querries.
-		// Returns the number of items currently in stack.
-		short GetNumItems(void)
-			{ return m_sNumItems; }
+  public: // Querries.
+    // Returns the number of items currently in stack.
+    short GetNumItems(void) { return m_sNumItems; }
 
-		// Returns the top item.
-		short GetTop(PSTACKDATA psd)
-			{
-			return m_list.GetHead(psd);
-			}
+    // Returns the top item.
+    short GetTop(PSTACKDATA psd) { return m_list.GetHead(psd); }
 
-//////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
 
-	protected:	// Internal functions.
+  protected: // Internal functions.
+             //////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////
-
-	public:	// Member variables.
-
-	protected:	// Protected member variables.
-		RBList <T>	m_list;	// The dynamic stack.  Head is top.
-		short			m_sNumItems;	// Number of items in stack.
-	};
-
-
+  public:              // Member variables.
+  protected:           // Protected member variables.
+    RBList<T> m_list;  // The dynamic stack.  Head is top.
+    short m_sNumItems; // Number of items in stack.
+};
 
 #endif // H_STACK
 

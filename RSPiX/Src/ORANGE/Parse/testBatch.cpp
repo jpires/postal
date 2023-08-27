@@ -18,20 +18,19 @@
 #include "simplebatch.h"
 
 main()
-	{
-	RBatch ftest("testBatch.in");
-	ftest.configure(" \t,","~");
+{
+    RBatch ftest("testBatch.in");
+    ftest.configure(" \t,", "~");
 
-	while (ftest.GetLine() != EOF)
-		{
-		// Dump info:
-		TRACE("Line %ld has %hd tokens:\n",ftest.m_lCurrentLine,ftest.m_sNumTokens);
-		for (short i=0;i<ftest.m_sNumTokens;i++)
-			{
-			TRACE("\tToken #%hd at char %hd = {%s}\n",i,
-				ftest.m_sLinePos[i],ftest.m_pszTokenList[i]);
-			}
-		}
-	
-	return 0;
-	}
+    while (ftest.GetLine() != EOF)
+    {
+        // Dump info:
+        TRACE("Line %ld has %hd tokens:\n", ftest.m_lCurrentLine, ftest.m_sNumTokens);
+        for (short i = 0; i < ftest.m_sNumTokens; i++)
+        {
+            TRACE("\tToken #%hd at char %hd = {%s}\n", i, ftest.m_sLinePos[i], ftest.m_pszTokenList[i]);
+        }
+    }
+
+    return 0;
+}

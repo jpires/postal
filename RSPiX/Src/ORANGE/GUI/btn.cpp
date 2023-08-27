@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // BTN.CPP
-// 
+//
 // History:
 //		08/07/96 JMI	Started.
 //
@@ -75,7 +75,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 //
-// This a GUI item that is based on the basic RGuiItem. 
+// This a GUI item that is based on the basic RGuiItem.
 // This overrides HotCall() to get information about where a click in its CHot
 // occurred.
 // This overrides Compose() to add text.
@@ -94,9 +94,9 @@
 #include "Blue.h"
 
 #ifdef PATHS_IN_INCLUDES
-	#include "ORANGE/GUI/btn.h"
+#include "ORANGE/GUI/btn.h"
 #else
-	#include "btn.h"
+#include "btn.h"
 #endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////////////
@@ -104,7 +104,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Sets val to def if val is -1.
-#define DEF(val, def)	((val == -1) ? def : val)
+#define DEF(val, def) ((val == -1) ? def : val)
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -124,21 +124,19 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 RBtn::RBtn()
-	{
-	// Override RGuiItem's default justification.
-	m_justification	= RGuiItem::Centered;
+{
+    // Override RGuiItem's default justification.
+    m_justification = RGuiItem::Centered;
 
-	m_type				= Btn;	// Indicates type of GUI item.
-	}
+    m_type = Btn; // Indicates type of GUI item.
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Destructor.
 //
 //////////////////////////////////////////////////////////////////////////////
-RBtn::~RBtn()
-	{
-	}
+RBtn::~RBtn() {}
 
 ////////////////////////////////////////////////////////////////////////
 // Methods.
@@ -149,36 +147,36 @@ RBtn::~RBtn()
 // Compose item.
 //
 ////////////////////////////////////////////////////////////////////////
-void RBtn::Compose(			// Returns nothing.
-	RImage* pim /*= NULL*/)	// Dest image, uses m_im if NULL.
-	{
-	if (pim == NULL)
-		{
-		pim	= &m_im;
-		}
+void RBtn::Compose(       // Returns nothing.
+  RImage *pim /*= NULL*/) // Dest image, uses m_im if NULL.
+{
+    if (pim == NULL)
+    {
+        pim = &m_im;
+    }
 
-	if (m_sPressed != FALSE)
-		{
-		// Invert border.
-		m_sInvertedBorder	= TRUE;
-		}
-	else
-		{
-		m_sInvertedBorder	= FALSE;
-		}
+    if (m_sPressed != FALSE)
+    {
+        // Invert border.
+        m_sInvertedBorder = TRUE;
+    }
+    else
+    {
+        m_sInvertedBorder = FALSE;
+    }
 
-	// Call base (draws border and background).
-	RGuiItem::Compose(pim);
+    // Call base (draws border and background).
+    RGuiItem::Compose(pim);
 
-	// Draw btn stuff.
-	short	sX, sY, sW, sH;
-	// Get client relative to border so we know where to
-	// put the text.
-	GetClient(&sX, &sY, &sW, &sH);
+    // Draw btn stuff.
+    short sX, sY, sW, sH;
+    // Get client relative to border so we know where to
+    // put the text.
+    GetClient(&sX, &sY, &sW, &sH);
 
-	// Draw text.
-	DrawText(sX, sY, sW, sH, pim);
-	}
+    // Draw text.
+    DrawText(sX, sY, sW, sH, pim);
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -187,43 +185,43 @@ void RBtn::Compose(			// Returns nothing.
 // (virtual).
 //
 ////////////////////////////////////////////////////////////////////////
-void RBtn::CursorEvent(	// Returns nothing.
-	RInputEvent* pie)		// In:  Most recent user input event.             
-								// Out: pie->sUsed = TRUE, if used.
-	{
-	// Call base.
-	RGuiItem::CursorEvent(pie);
+void RBtn::CursorEvent( // Returns nothing.
+  RInputEvent *pie)     // In:  Most recent user input event.
+                        // Out: pie->sUsed = TRUE, if used.
+{
+    // Call base.
+    RGuiItem::CursorEvent(pie);
 
-	switch (pie->sEvent)
-		{
-		case RSP_MB0_DOUBLECLICK:
-		case RSP_MB0_PRESSED:
-			// If not inverted already . . .
-			if (m_sInvertedBorder == FALSE)
-				{
-				// Recompose.
-				Compose();
-				}
+    switch (pie->sEvent)
+    {
+        case RSP_MB0_DOUBLECLICK:
+        case RSP_MB0_PRESSED:
+            // If not inverted already . . .
+            if (m_sInvertedBorder == FALSE)
+            {
+                // Recompose.
+                Compose();
+            }
 
-			// Note that we used it.
-			pie->sUsed	= TRUE;
+            // Note that we used it.
+            pie->sUsed = TRUE;
 
-			break;
+            break;
 
-		case RSP_MB0_RELEASED:
-			// If we were inverted . . .
-			if (m_sInvertedBorder != FALSE)
-				{
-				// Recompose.
-				Compose();
-				}
+        case RSP_MB0_RELEASED:
+            // If we were inverted . . .
+            if (m_sInvertedBorder != FALSE)
+            {
+                // Recompose.
+                Compose();
+            }
 
-			// Note that we used it.
-			pie->sUsed	= TRUE;
+            // Note that we used it.
+            pie->sUsed = TRUE;
 
-			break;
-		}
-	}
+            break;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Querries.

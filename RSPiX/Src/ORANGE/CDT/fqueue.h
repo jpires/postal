@@ -18,7 +18,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 //	fqueue.h
-// 
+//
 // History:
 //		08/30/97	MJR	Started.
 //
@@ -63,144 +63,126 @@
 // default version, which typically does a bitwise copy of the data.  If this
 // is not adequate for your object, you should supply your own.  This is a
 // standard C++ issue, but it seemed worth noting.
-// 
+//
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef FQUEUE_H
 #define FQUEUE_H
 
-
-template <class T, long Items>
+template<class T, long Items>
 class FQueue
-	{
-	//------------------------------------------------------------------------------
-	// Types, enums, etc.
-	//------------------------------------------------------------------------------
-	private:
+{
+    //------------------------------------------------------------------------------
+    // Types, enums, etc.
+    //------------------------------------------------------------------------------
+  private:
+    //------------------------------------------------------------------------------
+    // Variables
+    //------------------------------------------------------------------------------
+  protected:
+    T m_array[Items]; // Array of items
+    T *m_pfirst;      // Pointer to the queue itself
+    T *m_plast;       // Pointer to the last element of the array
+    T *m_pfront;      // Pointer to front of queue
+    T *m_pback;       // Pointer to back of queue
+    size_t m_count;   // Number of items in the queue
 
-	//------------------------------------------------------------------------------
-	// Variables
-	//------------------------------------------------------------------------------
-	protected:
-		T m_array[Items];									// Array of items
-		T* m_pfirst;										// Pointer to the queue itself
-		T* m_plast;											// Pointer to the last element of the array
-		T* m_pfront;										// Pointer to front of queue
-		T* m_pback;											// Pointer to back of queue
-		size_t m_count;									// Number of items in the queue
+    //------------------------------------------------------------------------------
+    // Functions
+    //------------------------------------------------------------------------------
+  public:
+    // Constructor
+    FQueue() { Reset(); }
 
-	//------------------------------------------------------------------------------
-	// Functions
-	//------------------------------------------------------------------------------
-	public:
-		// Constructor
-		FQueue()
-			{
-			Reset();
-			}
+    // Destructor
+    ~FQueue()
+    {
+        m_pfirst = 0;
+        m_plast = 0;
+        m_pfront = 0;
+        m_pback = 0;
+        m_count = 0;
+    }
 
-		// Destructor
-		~FQueue()
-			{
-			m_pfirst = 0;
-			m_plast = 0;
-			m_pfront = 0;
-			m_pback = 0;
-			m_count = 0;
-			}
+    // Reset to post-construction state
+    void Reset(void)
+    {
+        m_pfirst = m_array;
+        m_plast = m_array + (Items - 1);
+        m_pfront = m_pfirst;
+        m_pback = m_pfirst;
+        m_count = 0;
+    }
 
-		// Reset to post-construction state
-		void Reset(void)
-			{
-			m_pfirst = m_array;
-			m_plast = m_array + (Items - 1);
-			m_pfront = m_pfirst;
-			m_pback = m_pfirst;
-			m_count = 0;
-			}
+    // Determine whether queue is empty
+    bool IsEmpty(void) const { return m_count == 0; }
 
-		// Determine whether queue is empty
-		bool IsEmpty(void) const
-			{
-			return m_count == 0;
-			}
+    // Determine whether queue is full
+    bool IsFull(void) const { return m_count == Items; }
 
-		// Determine whether queue is full
-		bool IsFull(void) const
-			{
-			return m_count == Items;
-			}
+    // Determine how many items can be put into the queue (in other words, how much space is left in the queue?)
+    size_t HowManyCanBePut(void) const { return Items - m_count; }
 
-		// Determine how many items can be put into the queue (in other words, how much space is left in the queue?)
-		size_t HowManyCanBePut(void) const
-			{
-			return Items - m_count;
-			}
+    // Determine how many items can be gotten from the queue (in other words, how many items are in the queue?)
+    size_t HowManyCanBeGotten(void) const { return m_count; }
 
-		// Determine how many items can be gotten from the queue (in other words, how many items are in the queue?)
-		size_t HowManyCanBeGotten(void) const
-			{
-			return m_count;
-			}
+    // Put an item at the back of the queue
+    void PutAtBack(const T &item)
+    {
+        ASSERT(!IsFull());
+        m_count++;
+        *m_pback = item;
+        if (++m_pback > m_plast)
+            m_pback = m_pfirst;
+    }
 
-		// Put an item at the back of the queue
-		void PutAtBack(const T& item)
-			{
-			ASSERT(!IsFull());
-			m_count++;
-			*m_pback = item;
-			if (++m_pback > m_plast)
-				m_pback = m_pfirst;
-			}
+    // Get an item from the back of the queue
+    const T &GetFromBack(void)
+    {
+        ASSERT(!IsEmpty());
+        m_count--;
+        if (--m_pback < m_pfirst)
+            m_pback = m_plast;
+        return *m_pback;
+    }
 
-		// Get an item from the back of the queue
-		const T& GetFromBack(void)
-			{
-			ASSERT(!IsEmpty());
-			m_count--;
-			if (--m_pback < m_pfirst)
-				m_pback = m_plast;
-			return *m_pback;
-			}
+    // Peek at the item at the back of the queue
+    const T &PeekAtBack(void)
+    {
+        ASSERT(!IsEmpty());
+        T *p = m_pback;
+        if (--p < m_pfirst)
+            p = m_plast;
+        return *p;
+    }
 
-		// Peek at the item at the back of the queue
-		const T& PeekAtBack(void)
-			{
-			ASSERT(!IsEmpty());
-			T* p = m_pback;
-			if (--p < m_pfirst)
-				p = m_plast;
-			return *p;
-			}
+    // Put an item at the front of the queue
+    void PutAtFront(const T &item)
+    {
+        ASSERT(!IsFull());
+        m_count++;
+        if (--m_pfront < m_pfirst)
+            m_pfront = m_plast;
+        *m_pfront = item;
+    }
 
-		// Put an item at the front of the queue
-		void PutAtFront(const T& item)
-			{
-			ASSERT(!IsFull());
-			m_count++;
-			if (--m_pfront < m_pfirst)
-				m_pfront = m_plast;
-			*m_pfront = item;
-			}
+    // Get an item from the front of the queue
+    const T &GetFromFront(void)
+    {
+        ASSERT(!IsEmpty());
+        m_count--;
+        T *p = m_pfront;
+        if (++m_pfront > m_plast)
+            m_pfront = m_pfirst;
+        return *p;
+    }
 
-		// Get an item from the front of the queue
-		const T& GetFromFront(void)
-			{
-			ASSERT(!IsEmpty());
-			m_count--;
-			T* p = m_pfront;
-			if (++m_pfront > m_plast)
-				m_pfront = m_pfirst;
-			return *p;
-			}
-
-		// Peek at the item at the front of the queue
-		const T& PeekAtFront(void)
-			{
-			ASSERT(!IsEmpty());
-			return *m_pfront;
-			}
-	};
-
+    // Peek at the item at the front of the queue
+    const T &PeekAtFront(void)
+    {
+        ASSERT(!IsEmpty());
+        return *m_pfront;
+    }
+};
 
 #endif // FQUEUE_H
 ////////////////////////////////////////////////////////////////////////////////

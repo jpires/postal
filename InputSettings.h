@@ -55,7 +55,7 @@
 //							Also, changed Jump to Revive.
 //
 //		08/12/97	JMI	Removed StrafeLeft and StrafeRight inputs.  Replaced with
-//							Strafe2 which can get you the same thing if you combine 
+//							Strafe2 which can get you the same thing if you combine
 //							both strafes with an turn arrow key.
 //							Also, added Run2 which is handy for similar reasons.
 //
@@ -74,9 +74,9 @@
 
 #include "RSPiX.h"
 #ifdef PATHS_IN_INCLUDES
-	#include "WishPiX/Prefs/prefs.h"
+#include "WishPiX/Prefs/prefs.h"
 #else
-	#include "prefs.h"
+#include "prefs.h"
 #endif
 
 #include "settings.h"
@@ -84,179 +84,170 @@
 
 // Game settings
 class CInputSettings : CSettings
-	{
-	///////////////////////////////////////////////////////////////////////////
-	// Typedefs, enums.
-	///////////////////////////////////////////////////////////////////////////
-	public:
-		typedef enum
-			{
-			Left,
-			Right,
-			Forward,
-			Backward,
-			Up,
-			Down,
-			MoveLeft,
-			MoveRight,
-			StrafeLeft,
-			StrafeRight,
-			Run,
-			Run2,
-			Strafe,
-			Strafe2,
-			Fire,
-			Fire2,
-			FireLeft,
-			FireRight,
-			FireUp,
-			FireDown,
-			Duck,
-			Revive,
-			Execute,
-			Suicide,
-			NextMap,
-			NextWeapon,
-			PrevWeapon,
-			Weapon0,
-			Weapon1,
-			Weapon2,
-			Weapon3,
-			Weapon4,
-			Weapon5,
-			Weapon6,
-			Weapon7,
-			Weapon8,
-			Weapon9,
-			Weapon10,
+{
+    ///////////////////////////////////////////////////////////////////////////
+    // Typedefs, enums.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    typedef enum
+    {
+        Left,
+        Right,
+        Forward,
+        Backward,
+        Up,
+        Down,
+        MoveLeft,
+        MoveRight,
+        StrafeLeft,
+        StrafeRight,
+        Run,
+        Run2,
+        Strafe,
+        Strafe2,
+        Fire,
+        Fire2,
+        FireLeft,
+        FireRight,
+        FireUp,
+        FireDown,
+        Duck,
+        Revive,
+        Execute,
+        Suicide,
+        NextMap,
+        NextWeapon,
+        PrevWeapon,
+        Weapon0,
+        Weapon1,
+        Weapon2,
+        Weapon3,
+        Weapon4,
+        Weapon5,
+        Weapon6,
+        Weapon7,
+        Weapon8,
+        Weapon9,
+        Weapon10,
 
-			NumInputFunctions
-			} InputFunction;
+        NumInputFunctions
+    } InputFunction;
 
-		typedef enum
-			{
-			None				= 0,
-			LeftButton		= 1,
-			RightButton		= 2,
-			MiddleButton	= 4
-			} MouseButtons;
+    typedef enum
+    {
+        None = 0,
+        LeftButton = 1,
+        RightButton = 2,
+        MiddleButton = 4
+    } MouseButtons;
 
-		typedef enum
-			{
-//			None				= 0,
-			ButtonA			= 1,
-			ButtonB			= 2,
-			ButtonC			= 4,
-			ButtonD			= 8
-			} JoyButtons;
+    typedef enum
+    {
+        //			None				= 0,
+        ButtonA = 1,
+        ButtonB = 2,
+        ButtonC = 4,
+        ButtonD = 8
+    } JoyButtons;
 
-		// Game play input information.
-		typedef struct
-			{
-			char*	pszDescription;	// Description of key.
-			char*	pszSaveName;		// Name for INI.
-			U8		u8DefaultKey;		// Default rspScanKeys val (RSP_SK_*).
-			short	sDefMouseButtons;	// Default rspGetMouse psButtons mask (MouseButtons).
-			short	sDefJoyButtons;	// Default rspGetJoyState buttons mask (JoyButtons).
-			} InputInfo;
+    // Game play input information.
+    typedef struct
+    {
+        char *pszDescription;   // Description of key.
+        char *pszSaveName;      // Name for INI.
+        U8 u8DefaultKey;        // Default rspScanKeys val (RSP_SK_*).
+        short sDefMouseButtons; // Default rspGetMouse psButtons mask (MouseButtons).
+        short sDefJoyButtons;   // Default rspGetJoyState buttons mask (JoyButtons).
+    } InputInfo;
 
+    ///////////////////////////////////////////////////////////////////////////
+    // Static members.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    // Function descriptions and default input settings.
+    static InputInfo ms_ainputinfo[CInputSettings::NumInputFunctions];
+    static InputInfo ms_ainputinfoOld[CInputSettings::NumInputFunctions];
 
-	///////////////////////////////////////////////////////////////////////////
-	// Static members.
-	///////////////////////////////////////////////////////////////////////////
-	public:
+    ///////////////////////////////////////////////////////////////////////////
+    // Instantiable members.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    double m_dMovingSlowDegreesPerSec; // Degrees of rotation per second that the
+                                       // user can achieve with the left and right
+                                       // arrow keys when moving without the fast
+                                       // key held down (for main dude input).
+    double m_dMovingFastDegreesPerSec; // Degrees of rotation per second that the
+                                       // user can achieve with the left and right
+                                       // arrow keys when moving while holding the
+                                       // 'fast' key (for main dude input).
+    double m_dStillSlowDegreesPerSec;  // Degrees of rotation per second that the
+                                       // user can achieve with the left and right
+                                       // arrow keys when moving without the fast
+                                       // key held down (for main dude input).
+    double m_dStillFastDegreesPerSec;  // Degrees of rotation per second that the
+                                       // user can achieve with the left and right
+                                       // arrow keys when moving while holding the
+                                       // 'fast' key (for main dude input).
+    double m_sTapRotationDegrees;      // Rotation when 'tapping' a rotate key.
 
-		// Function descriptions and default input settings.
-		static InputInfo	ms_ainputinfo[CInputSettings::NumInputFunctions];
-		static InputInfo	ms_ainputinfoOld[CInputSettings::NumInputFunctions];
+    double m_dMouseSensitivityX; // Percentage of X mouse movement utilized.
+    double m_dMouseSensitivityY; // Percentage of Y mouse movement utilized.
+                                 // For example, if 0.50, mouse movement is
+                                 // halved before interpretation by the
+                                 // input logic.
 
-	///////////////////////////////////////////////////////////////////////////
-	// Instantiable members.
-	///////////////////////////////////////////////////////////////////////////
-	public:
-		double	m_dMovingSlowDegreesPerSec;	// Degrees of rotation per second that the
-															// user can achieve with the left and right
-															// arrow keys when moving without the fast
-															// key held down (for main dude input).
-		double	m_dMovingFastDegreesPerSec;	// Degrees of rotation per second that the
-															// user can achieve with the left and right
-															// arrow keys when moving while holding the 
-															// 'fast' key (for main dude input).
-		double	m_dStillSlowDegreesPerSec;		// Degrees of rotation per second that the
-															// user can achieve with the left and right
-															// arrow keys when moving without the fast
-															// key held down (for main dude input).
-		double	m_dStillFastDegreesPerSec;		// Degrees of rotation per second that the
-															// user can achieve with the left and right
-															// arrow keys when moving while holding the 
-															// 'fast' key (for main dude input).
-		double	m_sTapRotationDegrees;			// Rotation when 'tapping' a rotate key.
+    short m_sUseMouse; // Allow mouse input (for main dude).
 
-		double	m_dMouseSensitivityX;			// Percentage of X mouse movement utilized.
-		double	m_dMouseSensitivityY;			// Percentage of Y mouse movement utilized.
-															// For example, if 0.50, mouse movement is
-															// halved before interpretation by the
-															// input logic.
+    short m_sUseJoy; // Allow joystick input.
 
-		short		m_sUseMouse;						// Allow mouse input (for main dude).
+    U32 m_asPlayKeys[NumInputFunctions];         // Array of game play keys indexed
+                                                 // by an InputFunction value.
+    U32 m_asPlayMouseButtons[NumInputFunctions]; // Array of game play mouse buttons
+                                                 // indexed by an InputFunction value.
+    U32 m_asPlayJoyButtons[NumInputFunctions];   // Array of game play joystick buttons
+                                                 // indexed by an InputFunction value.
+    short m_sJoyStartButton;                     // Default button to use as "Start"
+    short m_sJoyMenuUpButton;                    // Default button to use as "Menu Up"
+    short m_sJoyMenuDownButton;                  // Default button to use as "Menu Down"
+    short m_sJoyMenuLeftButton;                  // Default button to use as "Menu Left"
+    short m_sJoyMenuRightButton;                 // Default button to use as "Menu Right"
+    short m_sJoyMenuUpAxis;                      // Default button to use as "Menu Up"
+    short m_sJoyMenuDownAxis;                    // Default button to use as "Menu Down"
+    short m_sJoyMenuLeftAxis;                    // Default button to use as "Menu Left"
+    short m_sJoyMenuRightAxis;                   // Default button to use as "Menu Right"
+    short m_sJoyMenuConfirmButton;               // Default button to use as "Confirm"
+    short m_sJoyMenuBackButton;                  // Default button to use as "Back"
+    short m_sJoyMenuBackButton2;                 // Other default button to use as "Back"
+    short m_sJoyMenuDeleteKeybindButton;         // Default button to use for deleting keybinds
 
-		short		m_sUseJoy;							// Allow joystick input.
+  public:
+    // Set settings to default values
+    CInputSettings(void);
 
-		U32	m_asPlayKeys[NumInputFunctions];				// Array of game play keys indexed
-																		// by an InputFunction value.
-		U32	m_asPlayMouseButtons[NumInputFunctions];	// Array of game play mouse buttons
-																		// indexed by an InputFunction value.
-		U32	m_asPlayJoyButtons[NumInputFunctions];		// Array of game play joystick buttons
-																		// indexed by an InputFunction value.
-		short	m_sJoyStartButton;						// Default button to use as "Start"
-		short	m_sJoyMenuUpButton;						// Default button to use as "Menu Up"
-		short	m_sJoyMenuDownButton;						// Default button to use as "Menu Down"
-		short	m_sJoyMenuLeftButton;						// Default button to use as "Menu Left"
-		short	m_sJoyMenuRightButton;						// Default button to use as "Menu Right"
-		short	m_sJoyMenuUpAxis;						// Default button to use as "Menu Up"
-		short	m_sJoyMenuDownAxis;						// Default button to use as "Menu Down"
-		short	m_sJoyMenuLeftAxis;						// Default button to use as "Menu Left"
-		short	m_sJoyMenuRightAxis;						// Default button to use as "Menu Right"
-		short	m_sJoyMenuConfirmButton;						// Default button to use as "Confirm"
-		short	m_sJoyMenuBackButton;						// Default button to use as "Back"
-		short	m_sJoyMenuBackButton2;						// Other default button to use as "Back"
-		short	m_sJoyMenuDeleteKeybindButton;			// Default button to use for deleting keybinds
+    // Destructor
+    ~CInputSettings();
 
-	public:
-		// Set settings to default values
-		CInputSettings(void);
+    // Read settings that are stored in preference file
+    short LoadPrefs(RPrefs *pPrefs);
 
-		// Destructor
-		~CInputSettings();
+    // Write settings that are stored in preference file
+    short SavePrefs(RPrefs *pPrefs);
 
-		// Read settings that are stored in preference file
-		short LoadPrefs(
-			RPrefs* pPrefs);
+    // Load settings that are stored in game file
+    short LoadGame(RFile *pFile);
 
-		// Write settings that are stored in preference file
-		short SavePrefs(
-			RPrefs* pPrefs);
+    // Save settings that are stored in game file
+    short SaveGame(RFile *pFile);
 
-		// Load settings that are stored in game file
-		short LoadGame(
-			RFile* pFile);
+    // Temporarily set settings for demo mode (file is for saving current settings)
+    short PreDemo(RFile *pFile);
 
-		// Save settings that are stored in game file
-		short SaveGame(
-			RFile* pFile);
+    // Restore settings to what they were prior to demo mode
+    short PostDemo(RFile *pFile);
 
-		// Temporarily set settings for demo mode (file is for saving current settings)
-		short PreDemo(
-			RFile* pFile);
-
-		// Restore settings to what they were prior to demo mode
-		short PostDemo(
-			RFile* pFile);
-
-		// Set rotation values to the defaults.
-		void DefaultRotations(void);
-
-	};
+    // Set rotation values to the defaults.
+    void DefaultRotations(void);
+};
 
 #endif // INPUTSETTINGS_H
 ////////////////////////////////////////////////////////////////////////////////

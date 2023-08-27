@@ -28,16 +28,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Macros.
 ///////////////////////////////////////////////////////////////////////////////
-#define DllExport	__declspec( dllexport )
-#define DllImport	__declspec( dllimport )
+#define DllExport __declspec(dllexport)
+#define DllImport __declspec(dllimport)
 
 #ifdef _WINDLL
-	#define DLL2EXE	DllExport
-	#define EXE2DLL	DllImport
+#define DLL2EXE DllExport
+#define EXE2DLL DllImport
 #else
-	#define DLL2EXE	DllImport
-	#define EXE2DLL	DllExport
-#endif	// _WINDLL
+#define DLL2EXE DllImport
+#define EXE2DLL DllExport
+#endif // _WINDLL
 
 ///////////////////////////////////////////////////////////////////////////////
 // Typedefs.

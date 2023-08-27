@@ -18,7 +18,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 //	task.cpp
-// 
+//
 // History:
 //		06/14/95 JMI	Started.
 //
@@ -41,13 +41,12 @@
 #include "Blue.h"
 
 #ifdef PATHS_IN_INCLUDES
-	// Green //////////////////////////////////////////////////////////////////
-	#include "GREEN/Task/task.h"
+// Green //////////////////////////////////////////////////////////////////
+#include "GREEN/Task/task.h"
 #else
-	// Green //////////////////////////////////////////////////////////////////
-	#include "task.h"
+// Green //////////////////////////////////////////////////////////////////
+#include "task.h"
 #endif // PATHS_IN_INCLUDES
-
 
 //////////////////////////////////////////////////////////////////////////////
 // Module typedefs.
@@ -58,21 +57,21 @@
 //////////////////////////////////////////////////////////////////////////////
 
 ////////////////// Instantiate Static members ////////////////////////////////
-RList<RTask>	RTask::ms_listActive;			// List of tasks to be called.
+RList<RTask> RTask::ms_listActive; // List of tasks to be called.
 
 //////////////////////////////////////////////////////////////////////////////
 ///////////////////////// Allocation /////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-		
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // Default constructor.
 //
 //////////////////////////////////////////////////////////////////////////////
 RTask::RTask(void)
-	{
-	Reset();
-	}
+{
+    Reset();
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -80,11 +79,11 @@ RTask::RTask(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 RTask::RTask(TaskFunc tf, ULONG ulUser)
-	{
-	Reset();
+{
+    Reset();
 
-	Init(tf, ulUser);
-	}
+    Init(tf, ulUser);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -92,9 +91,9 @@ RTask::RTask(TaskFunc tf, ULONG ulUser)
 //
 //////////////////////////////////////////////////////////////////////////////
 RTask::~RTask(void)
-	{
-	Kill();
-	}
+{
+    Kill();
+}
 
 //////////////////////////////////////////////////////////////////////////////
 ///////////////////////////// Querries ///////////////////////////////////////
@@ -112,12 +111,12 @@ RTask::~RTask(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 void RTask::Init(TaskFunc tf, ULONG ulUser)
-	{
-	ASSERT(tf != NULL);
+{
+    ASSERT(tf != NULL);
 
-	m_fnTask		= tf;
-	m_ulUser	= ulUser;
-	}
+    m_fnTask = tf;
+    m_ulUser = ulUser;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -127,23 +126,23 @@ void RTask::Init(TaskFunc tf, ULONG ulUser)
 //
 //////////////////////////////////////////////////////////////////////////////
 short RTask::Kill(void)
-	{
-	short sRes = 0;	// Assume success.
-	
-	// Attempt to stop the task . . .
-	if (Suspend() == 0)
-		{
-		// Clear the members.
-		Reset();
-		}
-	else
-		{
-		TRACE("Kill(): Suspend() failed.\n");
-		sRes = -1;
-		}
+{
+    short sRes = 0; // Assume success.
 
-	return sRes;
-	}
+    // Attempt to stop the task . . .
+    if (Suspend() == 0)
+    {
+        // Clear the members.
+        Reset();
+    }
+    else
+    {
+        TRACE("Kill(): Suspend() failed.\n");
+        sRes = -1;
+    }
+
+    return sRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -153,36 +152,36 @@ short RTask::Kill(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 short RTask::Start(void)
-	{
-	short sRes = 0;	// Assume success.
+{
+    short sRes = 0; // Assume success.
 
-	if (m_sActive == FALSE)
-		{
-		// Attempt to add to list . . .
-		if (ms_listActive.Add(this) == 0)
-			{
-			// Set active flag.  So we don't have to traverse the list later just
-			// to determine whether or not this is active.
-			m_sActive = TRUE;
-			
-			// Set the next call time.
-			m_lNextExpiration		= GetTime() + m_lInterval;
-			
-			// If an error has occurred at this point . . .
-			if (sRes != 0)
-				{
-				Suspend();
-				}
-			}
-		else
-			{
-			TRACE("Start(): Unable to add this task to active list.\n");
-			sRes = -1;
-			}
-		}
+    if (m_sActive == FALSE)
+    {
+        // Attempt to add to list . . .
+        if (ms_listActive.Add(this) == 0)
+        {
+            // Set active flag.  So we don't have to traverse the list later just
+            // to determine whether or not this is active.
+            m_sActive = TRUE;
 
-	return sRes;
-	}
+            // Set the next call time.
+            m_lNextExpiration = GetTime() + m_lInterval;
+
+            // If an error has occurred at this point . . .
+            if (sRes != 0)
+            {
+                Suspend();
+            }
+        }
+        else
+        {
+            TRACE("Start(): Unable to add this task to active list.\n");
+            sRes = -1;
+        }
+    }
+
+    return sRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -192,27 +191,27 @@ short RTask::Start(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 short RTask::Suspend(void)
-	{
-	short sRes = 0;	// Assume success.
+{
+    short sRes = 0; // Assume success.
 
-	if (m_sActive == TRUE)
-		{
-		// Attempt to remove from list . . .
-		if (ms_listActive.Remove(this) == 0)
-			{
-			// Clear active flag.
-			m_sActive = FALSE;
-			}
-		else
-			{
-			TRACE("Suspend(): Unable to remove this task from active list.\n");
-			sRes = -1;
-			}
-		}
+    if (m_sActive == TRUE)
+    {
+        // Attempt to remove from list . . .
+        if (ms_listActive.Remove(this) == 0)
+        {
+            // Clear active flag.
+            m_sActive = FALSE;
+        }
+        else
+        {
+            TRACE("Suspend(): Unable to remove this task from active list.\n");
+            sRes = -1;
+        }
+    }
 
-	return sRes;
-	}
-		
+    return sRes;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 ///////////////////////////// Internal Methods ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -225,15 +224,15 @@ short RTask::Suspend(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 void RTask::Reset(void)
-	{
-	// Clear instantiable members.
-	m_fnTask			= NULL;
-	m_ulUser		= 0L;
+{
+    // Clear instantiable members.
+    m_fnTask = NULL;
+    m_ulUser = 0L;
 
-	m_sActive	= FALSE;
+    m_sActive = FALSE;
 
-	m_fnTime		= NULL;
-	}
+    m_fnTime = NULL;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 ///////////////////////////// Static functions ///////////////////////////////
@@ -249,34 +248,33 @@ void RTask::Reset(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 void RTask::Do(void)
-	{
-	long	lCurTime;
+{
+    long lCurTime;
 
-	// Go through each node of the list checking its next execution time
-	// against the current.
-	PTASK	ptask	= ms_listActive.GetHead();
+    // Go through each node of the list checking its next execution time
+    // against the current.
+    PTASK ptask = ms_listActive.GetHead();
 
-	while (ptask != NULL)
-		{
-		// Get time for ptask.
-		lCurTime = ptask->GetTime();
-	
-		// If time has expired  . . .
-		if (lCurTime >= ptask->m_lNextExpiration)
-			{
-			ASSERT(ptask->m_fnTask != NULL);
+    while (ptask != NULL)
+    {
+        // Get time for ptask.
+        lCurTime = ptask->GetTime();
 
-			// Call task.
-			(*(ptask->m_fnTask))(ptask->m_ulUser);
-			// Set next expiration time.
-			ptask->m_lNextExpiration = lCurTime + ptask->m_lInterval;
-			}
+        // If time has expired  . . .
+        if (lCurTime >= ptask->m_lNextExpiration)
+        {
+            ASSERT(ptask->m_fnTask != NULL);
 
-		// Get the next task.
-		ptask	= ms_listActive.GetNext();
-		}
-	}
+            // Call task.
+            (*(ptask->m_fnTask))(ptask->m_ulUser);
+            // Set next expiration time.
+            ptask->m_lNextExpiration = lCurTime + ptask->m_lInterval;
+        }
 
+        // Get the next task.
+        ptask = ms_listActive.GetNext();
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // EOF

@@ -26,31 +26,31 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Joystick easy access.
 typedef union
-	{
-	struct
-		{
-		unsigned button1	: 1;
-		unsigned button2	: 1;
-		unsigned button3	: 1;
-		unsigned button4	: 1;
+{
+    struct
+    {
+        unsigned button1 : 1;
+        unsigned button2 : 1;
+        unsigned button3 : 1;
+        unsigned button4 : 1;
 
-		unsigned up			: 1;
-		unsigned down		: 1;
-		unsigned left		: 1;
-		unsigned right		: 1;
+        unsigned up : 1;
+        unsigned down : 1;
+        unsigned left : 1;
+        unsigned right : 1;
 
-		unsigned toward	: 1;
-		unsigned away		: 1;
-		unsigned unused1	: 1;	// Do not use or even reference the unused fields
-		unsigned unused2	: 1;	// as they may someday be used and changed in name.
+        unsigned toward : 1;
+        unsigned away : 1;
+        unsigned unused1 : 1; // Do not use or even reference the unused fields
+        unsigned unused2 : 1; // as they may someday be used and changed in name.
 
-		unsigned unused3	: 1;	// To keep your code compiling when we change these
-		unsigned unused4	: 1;	// unused fields to useful things do not use or 
-		unsigned unused5	: 1;	// even reference these.  Thanks.
-		unsigned unused6	: 1;
-		} ;
-	USHORT us;
-	} JOYSTATE, *PJOYSTATE;
+        unsigned unused3 : 1; // To keep your code compiling when we change these
+        unsigned unused4 : 1; // unused fields to useful things do not use or
+        unsigned unused5 : 1; // even reference these.  Thanks.
+        unsigned unused6 : 1;
+    };
+    USHORT us;
+} JOYSTATE, *PJOYSTATE;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Macros.
@@ -60,31 +60,30 @@ typedef union
 // Use 0 to specify first joystick and 1 to specify second.
 
 // Joy button states.
-#define JOY_BUT_1			0x0001
-#define JOY_BUT_2			0x0002
-#define JOY_BUT_3			0x0004
-#define JOY_BUT_4			0x0008
+#define JOY_BUT_1 0x0001
+#define JOY_BUT_2 0x0002
+#define JOY_BUT_3 0x0004
+#define JOY_BUT_4 0x0008
 
 // Joy buttons' mask.
-#define JOY_BUT			0x000F
+#define JOY_BUT 0x000F
 
 // Joy dir states.
-#define JOY_DIR_UP		0x0010
-#define JOY_DIR_DOWN		0x0020
-#define JOY_DIR_LEFT		0x0040
-#define JOY_DIR_RIGHT	0x0080
-#define JOY_DIR_TOWARD	0x0100	// Toward player.
-#define JOY_DIR_AWAY		0x0200	// Away from player.
+#define JOY_DIR_UP 0x0010
+#define JOY_DIR_DOWN 0x0020
+#define JOY_DIR_LEFT 0x0040
+#define JOY_DIR_RIGHT 0x0080
+#define JOY_DIR_TOWARD 0x0100 // Toward player.
+#define JOY_DIR_AWAY 0x0200   // Away from player.
 
 // Joy dir states.
-#define JOY_DIR_STATES	0x03F0
-
+#define JOY_DIR_STATES 0x03F0
 
 ///////////////////////////////////////////////////////////////////////////////
 // Prototypes.
 ///////////////////////////////////////////////////////////////////////////////
 
-// Updates joystick sJoy's current state and makes the current state the 
+// Updates joystick sJoy's current state and makes the current state the
 // previous.
 // Returns 0 on success.
 extern short Blu_UpdateJoy(short sJoy);
@@ -108,7 +107,6 @@ extern USHORT Blu_GetJoyPrevState(short sJoy);
 
 // Places the previous joystick sJoy's state.
 extern void Blu_GetJoyPrevState(short sJoy, PJOYSTATE pjs);
-
 
 #endif // B_JOY_H
 //////////////////////////////////////////////////////////////////////////////

@@ -32,8 +32,8 @@
 //		04/30/97	JMI	Changed the Setup() override of the CWeapon's Setup() to
 //							pass the current mine type to the Setup() with eType.
 //							Changed Construct() to take an ID as a parameter and added
-//							ConstructProximity(), ConstructTimed(), 
-//							ConstructBouncingBetty(), and ConstructRemoteControl() to 
+//							ConstructProximity(), ConstructTimed(),
+//							ConstructBouncingBetty(), and ConstructRemoteControl() to
 //							allocate that type of mine.
 //							Removed m_eMineType (now uses Class ID instead).
 //							Removed Setup() that took an eType.
@@ -49,7 +49,7 @@
 //
 //		07/21/97	JMI	Now handles delete messages.
 //
-//		08/16/97 BRH	Added a sound handle so that we could have a looping 
+//		08/16/97 BRH	Added a sound handle so that we could have a looping
 //							arming sound that could be stopped when the mine was
 //							armed.
 //
@@ -67,280 +67,269 @@
 #include "weapon.h"
 #include "bulletFest.h"
 
-
 // CMine is an unguided missile weapon class
 class CMine : public CWeapon
-	{
-	//---------------------------------------------------------------------------
-	// Types, enums, etc.
-	//---------------------------------------------------------------------------
-	public:
+{
+    //---------------------------------------------------------------------------
+    // Types, enums, etc.
+    //---------------------------------------------------------------------------
+  public:
+    typedef unsigned char MineType;
 
-	typedef unsigned char MineType;
+    typedef enum
+    {
+        ProximityMine = 3,
+        TimedMine,
+        BouncingBettyMine,
+        RemoteControlMine,
+        NumMineTypes
+    };
 
-	typedef enum
-	{
-		ProximityMine = 3,
-		TimedMine,
-		BouncingBettyMine,
-		RemoteControlMine,
-		NumMineTypes
-	};
+    //---------------------------------------------------------------------------
+    // Variables
+    //---------------------------------------------------------------------------
+  public:
+  protected:
+    short m_sPrevHeight; // Previous height
 
-	//---------------------------------------------------------------------------
-	// Variables
-	//---------------------------------------------------------------------------
-	public:
+    RImage *m_pImage;                         // Pointer to mine image
+    CSprite2 m_sprite;                        // Sprite for 2D mine
+    CSmash m_smash;                           // Collision object
+    CBulletFest m_bulletfest;                 // Used for bouncing betty
+    double m_dVertVel;                        // Vertical velocity
+    double m_dVertDeltaVel;                   // Change in vertical velocity
+    long m_lFuseTime;                         // Time before timed mine goes off
+    SampleMaster::SoundInstance m_siMineBeep; // Arming beep sound that loops
+    // Tracks file counter so we know when to load/save "common" data
+    static short ms_sFileCount;
 
-	protected:
-		short m_sPrevHeight;							// Previous height
+  public:
+    // "Constant" values that we want to be able to tune using the editor
+    static short ms_sProximityRadius;        // Distance at which mine goes off
+    static short ms_sBettyRadius;            // Distance at which mine goes off
+    static short ms_sBettyRange;             // Affected area for Bouncing Betty
+    static long ms_lFuseTime;                // Timed mine explodes after this time
+    static long ms_lArmingTime;              // Proximity mines arm after this time
+    static long ms_lExplosionDelay;          // Delay before explosion triggers mine
+    static double ms_dInitialBounceVelocity; // Bouncing Betty popup velocity
 
-		RImage*		m_pImage;						// Pointer to mine image
-		CSprite2		m_sprite;						// Sprite for 2D mine
-		CSmash		m_smash;							// Collision object
-		CBulletFest	m_bulletfest;					// Used for bouncing betty
-		double		m_dVertVel;						// Vertical velocity 
-		double		m_dVertDeltaVel;				// Change in vertical velocity
-		long			m_lFuseTime;					// Time before timed mine goes off
-		SampleMaster::SoundInstance m_siMineBeep;// Arming beep sound that loops
-		// Tracks file counter so we know when to load/save "common" data 
-		static short ms_sFileCount;
+    //---------------------------------------------------------------------------
+    // Constructor(s) / destructor
+    //---------------------------------------------------------------------------
+  protected:
+    // Constructor
+    CMine(CRealm *pRealm)
+      : CWeapon(pRealm, CProximityMineID)
+    {
+        Reset();
+    }
 
-	public:
-		// "Constant" values that we want to be able to tune using the editor
-		static short ms_sProximityRadius;		// Distance at which mine goes off
-		static short ms_sBettyRadius;				// Distance at which mine goes off
-		static short ms_sBettyRange;				// Affected area for Bouncing Betty
-		static long ms_lFuseTime;					// Timed mine explodes after this time
-		static long ms_lArmingTime;				// Proximity mines arm after this time
-		static long ms_lExplosionDelay;			// Delay before explosion triggers mine
-		static double ms_dInitialBounceVelocity;//Bouncing Betty popup velocity
+    // Constructor
+    CMine(CRealm *pRealm, ClassIDType id)
+      : CWeapon(pRealm, id)
+    {
 
+        Reset();
+    }
 
-	//---------------------------------------------------------------------------
-	// Constructor(s) / destructor
-	//---------------------------------------------------------------------------
-	protected:
-		// Constructor
-		CMine(CRealm* pRealm)
-			: CWeapon(pRealm, CProximityMineID)
-			{
-			Reset();
-			}
+  public:
+    // Destructor
+    ~CMine()
+    {
+        // Stop sound, if any.
+        StopLoopingSample(m_siMineBeep);
 
-		// Constructor
-		CMine(CRealm* pRealm, ClassIDType id)
-			: CWeapon(pRealm, id)
-			{
+        // Remove sprite from scene (this is safe even if it was already removed!)
+        m_pRealm->m_scene.RemoveSprite(&m_sprite);
+        m_pRealm->m_smashatorium.Remove(&m_smash);
 
-			Reset();
-			}
+        // Free resources
+        FreeResources();
+    }
 
-	public:
-		// Destructor
-		~CMine()
-			{
-			// Stop sound, if any.
-			StopLoopingSample(m_siMineBeep);
+    //---------------------------------------------------------------------------
+    // Required static functions
+    //---------------------------------------------------------------------------
+  public:
+    // Construct mine object.
+    static short Construct( // Returns 0 if successfull, non-zero otherwise
+      CRealm *pRealm,       // In:  Pointer to realm this object belongs to
+      CThing **ppNew,       // Out: Pointer to new object
+      ClassIDType id)       // In:  ID of mine to construct.
+    {
+        short sResult = 0;
+        *ppNew = new CMine(pRealm, id);
+        if (*ppNew == 0)
+        {
+            sResult = -1;
+            TRACE("CMine::Construct(): Couldn't construct CMine (that's a bad thing)\n");
+        }
+        return sResult;
+    }
 
-			// Remove sprite from scene (this is safe even if it was already removed!)
-			m_pRealm->m_scene.RemoveSprite(&m_sprite);
-			m_pRealm->m_smashatorium.Remove(&m_smash);
+    // Construct proximity mine object.
+    static short ConstructProximity( // Returns 0 if successfull, non-zero otherwise
+      CRealm *pRealm,                // In:  Pointer to realm this object belongs to
+      CThing **ppNew)                // Out: Pointer to new object
+    {
+        return Construct(pRealm, ppNew, CProximityMineID);
+    }
 
-			// Free resources
-			FreeResources();
-			}
+    // Construct timed mine object.
+    static short ConstructTimed( // Returns 0 if successfull, non-zero otherwise
+      CRealm *pRealm,            // In:  Pointer to realm this object belongs to
+      CThing **ppNew)            // Out: Pointer to new object
+    {
+        return Construct(pRealm, ppNew, CTimedMineID);
+    }
 
-	//---------------------------------------------------------------------------
-	// Required static functions
-	//---------------------------------------------------------------------------
-	public:
-		// Construct mine object.
-		static short Construct(									// Returns 0 if successfull, non-zero otherwise
-			CRealm* pRealm,										// In:  Pointer to realm this object belongs to
-			CThing** ppNew,										// Out: Pointer to new object
-			ClassIDType id)										// In:  ID of mine to construct.
-			{
-			short sResult = 0;
-			*ppNew = new CMine(pRealm, id);
-			if (*ppNew == 0)
-				{
-				sResult = -1;
-				TRACE("CMine::Construct(): Couldn't construct CMine (that's a bad thing)\n");
-				}
-			return sResult;
-			}
+    // Construct bouncing betty mine object.
+    static short ConstructBouncingBetty( // Returns 0 if successfull, non-zero otherwise
+      CRealm *pRealm,                    // In:  Pointer to realm this object belongs to
+      CThing **ppNew)                    // Out: Pointer to new object
+    {
+        return Construct(pRealm, ppNew, CBouncingBettyMineID);
+    }
 
-		// Construct proximity mine object.
-		static short ConstructProximity(						// Returns 0 if successfull, non-zero otherwise
-			CRealm* pRealm,										// In:  Pointer to realm this object belongs to
-			CThing** ppNew)										// Out: Pointer to new object
-			{
-			return Construct(pRealm, ppNew, CProximityMineID);
-			}
+    // Construct remote control mine object.
+    static short ConstructRemoteControl( // Returns 0 if successfull, non-zero otherwise
+      CRealm *pRealm,                    // In:  Pointer to realm this object belongs to
+      CThing **ppNew)                    // Out: Pointer to new object
+    {
+        return Construct(pRealm, ppNew, CRemoteControlMineID);
+    }
 
-		// Construct timed mine object.
-		static short ConstructTimed(							// Returns 0 if successfull, non-zero otherwise
-			CRealm* pRealm,										// In:  Pointer to realm this object belongs to
-			CThing** ppNew)										// Out: Pointer to new object
-			{
-			return Construct(pRealm, ppNew, CTimedMineID);
-			}
+    //---------------------------------------------------------------------------
+    // Internal functions
+    //---------------------------------------------------------------------------
+  public:
+    // Resets members.
+    void Reset(void)
+    {
+        m_pImage = NULL;
+        m_sprite.m_pthing = this;
+        m_lFuseTime = 0;
+        m_u16ShooterID = CIdBank::IdNil;
+        m_siMineBeep = 0;
+    }
 
-		// Construct bouncing betty mine object.
-		static short ConstructBouncingBetty(				// Returns 0 if successfull, non-zero otherwise
-			CRealm* pRealm,										// In:  Pointer to realm this object belongs to
-			CThing** ppNew)										// Out: Pointer to new object
-			{
-			return Construct(pRealm, ppNew, CBouncingBettyMineID);
-			}
+    // Called after load to start the object
+    short Startup(void);
 
-		// Construct remote control mine object.
-		static short ConstructRemoteControl(				// Returns 0 if successfull, non-zero otherwise
-			CRealm* pRealm,										// In:  Pointer to realm this object belongs to
-			CThing** ppNew)										// Out: Pointer to new object
-			{
-			return Construct(pRealm, ppNew, CRemoteControlMineID);
-			}
+    // Init - common initialization code for startup, setup & edit new
+    short Init(void);
 
-	//---------------------------------------------------------------------------
-	// Internal functions
-	//---------------------------------------------------------------------------
-	public:
-		// Resets members.
-		void Reset(void)
-			{
-			m_pImage = NULL;
-			m_sprite.m_pthing	= this;
-			m_lFuseTime = 0;
-			m_u16ShooterID = CIdBank::IdNil;
-			m_siMineBeep = 0;
-			}
+    // Puts up a dialog box in the editor to select mine type
+    short EditModify(void);
 
-		// Called after load to start the object
-		short Startup(void);
+    // Sets up new item in the editor
+    short EditNew(short sX, short sY, short sZ);
 
-		// Init - common initialization code for startup, setup & edit new
-		short Init(void);
+    void EditRect(RRect *pRect)
+    {
+        if (m_pImage)
+        {
+            // Map from 3d to 2d coords
+            Map3Dto2D((short)m_dX, (short)m_dY, (short)m_dZ, &(pRect->sX), &(pRect->sY));
 
-		// Puts up a dialog box in the editor to select mine type
-		short EditModify(void);
+            // Center on image.
+            pRect->sX -= m_pImage->m_sWidth / 2;
+            pRect->sY -= m_pImage->m_sHeight / 2;
+            pRect->sW = m_pImage->m_sWidth;
+            pRect->sH = m_pImage->m_sHeight;
+        }
+    }
 
-		// Sets up new item in the editor
-		short EditNew(short sX, short sY, short sZ);
+    void EditHotSpot( // Returns nothiing.
+      short *psX,     // Out: X coord of 2D hotspot relative to
+                      // EditRect() pos.
+      short *psY)     // Out: Y coord of 2D hotspot relative to
+                      // EditRect() pos.
+    {
+        if (m_pImage)
+        {
+            *psX = m_pImage->m_sWidth / 2;
+            *psY = m_pImage->m_sHeight / 2;
+        }
+        else
+        {
+            CWeapon::EditHotSpot(psX, psY);
+        }
+    }
 
-		void EditRect(RRect* pRect)
-		{
-			if (m_pImage)
-			{
-				// Map from 3d to 2d coords
-				Map3Dto2D(
-					(short) m_dX, 
-					(short) m_dY, 
-					(short) m_dZ, 
-					&(pRect->sX), 
-					&(pRect->sY) );
+    //---------------------------------------------------------------------------
+    // Optional static functions
+    //---------------------------------------------------------------------------
 
-				// Center on image.
-				pRect->sX	-= m_pImage->m_sWidth / 2;
-				pRect->sY	-= m_pImage->m_sHeight / 2;
-				pRect->sW	= m_pImage->m_sWidth;
-				pRect->sH	= m_pImage->m_sHeight;
-			}
-		}
+    // Called before play begins to cache resources for this object.
+    static short Preload(CRealm *prealm); // In:  Calling realm.
 
-		void EditHotSpot(			// Returns nothiing.
-			short*	psX,			// Out: X coord of 2D hotspot relative to
-										// EditRect() pos.
-			short*	psY)			// Out: Y coord of 2D hotspot relative to
-										// EditRect() pos.
-			{
-			if (m_pImage)
-				{
-				*psX	= m_pImage->m_sWidth / 2;
-				*psY	= m_pImage->m_sHeight / 2;
-				}
-			else
-				{
-				CWeapon::EditHotSpot(psX, psY);
-				}
-			}
+    //---------------------------------------------------------------------------
+    // Required virtual functions (implimenting them as inlines doesn't pay!)
+    //---------------------------------------------------------------------------
+  public:
+    // Load object (should call base class version!)
+    short Load(             // Returns 0 if successfull, non-zero otherwise
+      RFile *pFile,         // In:  File to load from
+      bool bEditMode,       // In:  True for edit mode, false otherwise
+      short sFileCount,     // In:  File count (unique per file, never 0)
+      ULONG ulFileVersion); // In:  Version of file format to load.
 
-	//---------------------------------------------------------------------------
-	// Optional static functions
-	//---------------------------------------------------------------------------
+    // Save object (should call base class version!)
+    short Save(          // Returns 0 if successfull, non-zero otherwise
+      RFile *pFile,      // In:  File to save to
+      short sFileCount); // In:  File count (unique per file, never 0)
 
-		// Called before play begins to cache resources for this object.
-		static short Preload(
-			CRealm* prealm);				// In:  Calling realm.
+    // Update object
+    void Update(void);
 
-	//---------------------------------------------------------------------------
-	// Required virtual functions (implimenting them as inlines doesn't pay!)
-	//---------------------------------------------------------------------------
-	public:
-		// Load object (should call base class version!)
-		short Load(													// Returns 0 if successfull, non-zero otherwise
-			RFile* pFile,											// In:  File to load from
-			bool bEditMode,										// In:  True for edit mode, false otherwise
-			short sFileCount,										// In:  File count (unique per file, never 0)
-			ULONG	ulFileVersion);								// In:  Version of file format to load.
+    // Render object
+    void Render(void);
 
-		// Save object (should call base class version!)
-		short Save(													// Returns 0 if successfull, non-zero otherwise
-			RFile* pFile,											// In:  File to save to
-			short sFileCount);									// In:  File count (unique per file, never 0)
+    // Called by the object that is creating this weapon - this
+    // overloaded version is for timed mines so that the fuse time
+    // can be set
+    short Setup(short sX,        // In: New x coord
+                short sY,        // In: New y coord
+                short sZ,        // In: New z coord
+                long lFuseTime); // In: Time in ms for fuse
 
-		// Update object
-		void Update(void);
+    // Override base class Setup().
+    virtual // Overridden here.
+      short
+      Setup(short sX,  // In: Starting X position
+            short sY,  // In: Starting Y position
+            short sZ); // In: Starting Z position
 
-		// Render object
-		void Render(void);
+    // Get this class's sprite.  Note that the type will vary.
+    // This is a pure virtual functionin the base class.
+    virtual // Overriden here.
+      CSprite *
+      GetSprite(void) // Returns this weapon's sprite.
+    {
+        return &m_sprite;
+    }
 
-		// Called by the object that is creating this weapon - this
-		// overloaded version is for timed mines so that the fuse time
-		// can be set
-		short Setup(
-			short sX,												// In: New x coord
-			short sY,												// In: New y coord
-			short sZ,												// In: New z coord
-			long lFuseTime);										// In: Time in ms for fuse
+    //---------------------------------------------------------------------------
+    // Internal functions
+    //---------------------------------------------------------------------------
+  protected:
+    // Get all required resources
+    short GetResources(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Override base class Setup().
-		virtual				// Overridden here.
-		short Setup(
-			short sX,												// In: Starting X position
-			short sY,												// In: Starting Y position
-			short sZ);												// In: Starting Z position
+    // Free all resources
+    short FreeResources(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Get this class's sprite.  Note that the type will vary.
-		// This is a pure virtual functionin the base class.
-		virtual			// Overriden here.
-		CSprite* GetSprite(void)	// Returns this weapon's sprite.
-			{
-			return &m_sprite;
-			}
+    // Handle Explosion message
+    void OnExplosionMsg(Explosion_Message *pMessage);
 
-	//---------------------------------------------------------------------------
-	// Internal functions
-	//---------------------------------------------------------------------------
-	protected:
-		// Get all required resources
-		short GetResources(void);						// Returns 0 if successfull, non-zero otherwise
-		
-		// Free all resources
-		short FreeResources(void);						// Returns 0 if successfull, non-zero otherwise
+    // Handle Trigger message (for remote trigger mines)
+    void OnTriggerMsg(Trigger_Message *pMessage);
 
-		// Handle Explosion message
-		void OnExplosionMsg(Explosion_Message* pMessage);
-
-		// Handle Trigger message (for remote trigger mines)
-		void OnTriggerMsg(Trigger_Message* pMessage);
-
-		// Handles an ObjectDelete_Message.
-		void OnDeleteMsg(								// Returns nothing.
-			ObjectDelete_Message* pdeletemsg);	// In:  Message to handle.
-	};
-
+    // Handles an ObjectDelete_Message.
+    void OnDeleteMsg(                    // Returns nothing.
+      ObjectDelete_Message *pdeletemsg); // In:  Message to handle.
+};
 
 #endif // MINE_H
 ////////////////////////////////////////////////////////////////////////////////

@@ -23,7 +23,6 @@
 #ifndef LOG_H
 #define LOG_H
 
-
 short OpenLogFile();
 short CloseLogFile();
 
@@ -32,14 +31,13 @@ short CloseLogFile();
 //			Write the network time log
 //		global variables used:		g_GameSettings
 ////////////////////////////////////////////////////////////////////////////////
-extern
-short WriteTimeStamp(char *pszCaller,						// Name of calling routine
-							char *pszCalleeName,					// Name of player being sent or sending 
-							unsigned char ucMsgType,			// Message type
-							Net::SEQ seqStart,					// Beginning sequent sent/received
-							long sNum,								// Number of seq's sent/received
-							char bReceived,							// a received or a sent message? TRUE if received
-							U16 u16PackageID = 0);				// Uniquely identifiable package id
+extern short WriteTimeStamp(char *pszCaller,         // Name of calling routine
+                            char *pszCalleeName,     // Name of player being sent or sending
+                            unsigned char ucMsgType, // Message type
+                            Net::SEQ seqStart,       // Beginning sequent sent/received
+                            long sNum,               // Number of seq's sent/received
+                            char bReceived,          // a received or a sent message? TRUE if received
+                            U16 u16PackageID = 0);   // Uniquely identifiable package id
 ////////////////////////////////////////////////////////////////////////////////
 // WriteInputData()
 //			Write the network input data to network sync log
@@ -47,8 +45,7 @@ short WriteTimeStamp(char *pszCaller,						// Name of calling routine
 ////////////////////////////////////////////////////////////////////////////////
 extern short WriteInputData(U32 *input);
 
-
-#endif //LOG_H
+#endif // LOG_H
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

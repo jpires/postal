@@ -19,12 +19,12 @@
 #define CFNT_H
 //====================
 #ifdef PATHS_IN_INCLUDES
-	#include "GREEN/BLiT/BLIT.H"
-	#include "GREEN/BLiT/_BlitInt.H"
+#include "GREEN/BLiT/BLIT.H"
+#include "GREEN/BLiT/_BlitInt.H"
 #else
-	#include "BLIT.H"
-	#include "_BlitInt.H" 
-#endif 
+#include "BLIT.H"
+#include "_BlitInt.H"
+#endif
 //====================
 
 // This class is used to hold the information for
@@ -35,49 +35,50 @@
 // Fonts are stored in a singly linked list, largest first.
 
 class RFont
-	{
-public:
-	//---------------
-	RFont();
-	~RFont();
-	void	EraseAll();
-	//---------------
-	//---------------
-	class RFontSet
-		{
-	public:
-		//---------------
-		RFontSet();
-		~RFontSet(); // free associated images...
-		//---------------
+{
+  public:
+    //---------------
+    RFont();
+    ~RFont();
+    void EraseAll();
+    //---------------
+    //---------------
+    class RFontSet
+    {
+      public:
+        //---------------
+        RFontSet();
+        ~RFontSet(); // free associated images...
+        //---------------
 
-		RImage** m_ppimCharacters; // FSPR1 has all kerning info inside
-		short	m_sCellHeight;
-		short m_sMaxWidth;
-		RFontSet* m_pNext;
-		};
-	//--------------- USER STUFF
-	short Save(char* pszFileName);
-	short Save(RFile* pcf);
-	short Load(char* pszFileName);
-	short Load(RFile* pcf);
-	//--------------- UTILITY STUFF
+        RImage **m_ppimCharacters; // FSPR1 has all kerning info inside
+        short m_sCellHeight;
+        short m_sMaxWidth;
+        RFontSet *m_pNext;
+    };
+    //--------------- USER STUFF
+    short Save(char *pszFileName);
+    short Save(RFile *pcf);
+    short Load(char *pszFileName);
+    short Load(RFile *pcf);
+    //--------------- UTILITY STUFF
 
-	short Add(char* pszFileName);
-	short Add(RFile* pcf);
-	short AddLetter(RImage* pimLetter, // if FSPR1, don't need other arguements
-		short sASCII=-1,short sKernL=0,short sKernR=0);
-	// pdScale will be <= 1.0
-	RFontSet* FindSize(short sCellH,double *pdScale);
+    short Add(char *pszFileName);
+    short Add(RFile *pcf);
+    short AddLetter(RImage *pimLetter, // if FSPR1, don't need other arguements
+                    short sASCII = -1,
+                    short sKernL = 0,
+                    short sKernR = 0);
+    // pdScale will be <= 1.0
+    RFontSet *FindSize(short sCellH, double *pdScale);
 
-	short	DeleteSet(RFontSet* pRemove); // will NOT delete the last FontSet!
-	//---------------
-	short m_sMaxCellHeight;
-	short m_sMaxCellWidth;
-	short m_sNumberOfScales;
-	RFontSet* m_pFontSets;
-	};
-
+    short DeleteSet(RFontSet *pRemove); // will NOT delete the last FontSet!
+    //---------------
+    short m_sMaxCellHeight;
+    short m_sMaxCellWidth;
+    short m_sNumberOfScales;
+    RFontSet *m_pFontSets;
+};
 
 //====================
 #endif

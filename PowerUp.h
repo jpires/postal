@@ -17,7 +17,7 @@
 //
 // PowerUp.H
 // Project: Nostril (aka Postal)
-// 
+//
 // History:
 //		05/08/97 JMI	Started.
 //
@@ -44,8 +44,8 @@
 //
 //		06/16/97	JMI	Added a user (audible) feedback function, PickUpFeedback().
 //
-//		07/15/97	JMI	Made GetDescription() and TypeToStockPile() static and 
-//							added stockpiles as parms so they can be used more 
+//		07/15/97	JMI	Made GetDescription() and TypeToStockPile() static and
+//							added stockpiles as parms so they can be used more
 //							generically.
 //							Also, added RepaginateNow().
 //							Also, added IsEmpty().
@@ -58,14 +58,14 @@
 //		07/23/97	JMI	Added separate launcher for napalm.
 //
 //		08/17/97	JMI	Got rid of m_szMessages and all message related functions
-//							and variables from CDude since we are now using the toolbar 
-//							for dude status feedback to the user.  This includes:  
-//							MsgTypeInfo, m_lNextStatusUpdateTime, m_lMsgUpdateDoneTime, 
-//							m_print, m_bClearedStatus, m_szMessages[], m_sDeadMsgNum, 
+//							and variables from CDude since we are now using the toolbar
+//							for dude status feedback to the user.  This includes:
+//							MsgTypeInfo, m_lNextStatusUpdateTime, m_lMsgUpdateDoneTime,
+//							m_print, m_bClearedStatus, m_szMessages[], m_sDeadMsgNum,
 //							ms_amtfMessages[], ms_u8FontForeIndex, ms_u8FontBackIndex,
-//							ms_u8FontShadowIndex, DrawStatus(), StatusChange(), 
-//							MessageChange(), Message(), UpdateFontColors(), 
-//							CPowerUp::ms_apszPowerUpTypeNames[], 
+//							ms_u8FontShadowIndex, DrawStatus(), StatusChange(),
+//							MessageChange(), Message(), UpdateFontColors(),
+//							CPowerUp::ms_apszPowerUpTypeNames[],
 //							CPowerUp::GetDescription(), and some strings and a string
 //							array in localize.*.
 //
@@ -85,192 +85,187 @@
 #include "StockPile.h"
 
 class CPowerUp : public CItem3d
-	{
-	//---------------------------------------------------------------------------
-	// Types, enums, etc.
-	//---------------------------------------------------------------------------
-	public:
+{
+    //---------------------------------------------------------------------------
+    // Types, enums, etc.
+    //---------------------------------------------------------------------------
+  public:
+    //---------------------------------------------------------------------------
+    // Variables
+    //---------------------------------------------------------------------------
+  public:
+  protected:
+    //---------------------------------------------------------------------------
+    // Static Variables
+    //---------------------------------------------------------------------------
+  public:
+    // Powerup anim names.
+    static char *ms_apszPowerUpResNames[CStockPile::NumStockPileItems + 2];
 
-	//---------------------------------------------------------------------------
-	// Variables
-	//---------------------------------------------------------------------------
-	public:
-														
-	protected:
-														
-	//---------------------------------------------------------------------------
-	// Static Variables
-	//---------------------------------------------------------------------------
-	public:
-		// Powerup anim names.
-		static char*	ms_apszPowerUpResNames[CStockPile::NumStockPileItems + 2];
+    //---------------------------------------------------------------------------
+    // Constructor(s) / destructor
+    //---------------------------------------------------------------------------
+  public:
+    // Constructor
+    CPowerUp(CRealm *pRealm)
+      : CItem3d(pRealm, CPowerUpID)
+    {
+        m_panimCur = &m_anim;
 
-	//---------------------------------------------------------------------------
-	// Constructor(s) / destructor
-	//---------------------------------------------------------------------------
-	public:
-		// Constructor
-		CPowerUp(CRealm* pRealm)
-			: CItem3d(pRealm, CPowerUpID)
-			{
-			m_panimCur	= &m_anim;
+        m_stockpile.m_sHitPoints = 0;
 
-			m_stockpile.m_sHitPoints	= 0;
+        m_sprite.m_pthing = this;
 
-			m_sprite.m_pthing	= this;
+        m_smash.m_pThing = this;
+    }
 
-			m_smash.m_pThing	= this;
-			}
+  public:
+    // Destructor
+    ~CPowerUp()
+    {
+        // Remove sprite from scene (this is safe even if it was already removed!)
+        m_pRealm->m_scene.RemoveSprite(&m_sprite);
 
-	public:
-		// Destructor
-		~CPowerUp()
-			{
-			// Remove sprite from scene (this is safe even if it was already removed!)
-			m_pRealm->m_scene.RemoveSprite(&m_sprite);
+        // Free resources
+        FreeResources();
 
-			// Free resources
-			FreeResources();
+        // Remove collision thinger.
+        m_pRealm->m_smashatorium.Remove(&m_smash);
+    }
 
-			// Remove collision thinger.
-			m_pRealm->m_smashatorium.Remove(&m_smash);
-			}
+    //---------------------------------------------------------------------------
+    // Required static functions
+    //---------------------------------------------------------------------------
+  public:
+    // Construct object
+    static short Construct( // Returns 0 if successfull, non-zero otherwise
+      CRealm *pRealm,       // In:  Pointer to realm this object belongs to
+      CThing **ppNew)       // Out: Pointer to new object
+    {
+        short sResult = 0;
+        *ppNew = new CPowerUp(pRealm);
+        if (*ppNew == 0)
+        {
+            sResult = -1;
+            TRACE("CPowerUp::Construct(): Couldn't construct CPowerUp (that's a bad thing)\n");
+        }
+        return sResult;
+    }
 
-	//---------------------------------------------------------------------------
-	// Required static functions
-	//---------------------------------------------------------------------------
-	public:
-		// Construct object
-		static short Construct(									// Returns 0 if successfull, non-zero otherwise
-			CRealm* pRealm,										// In:  Pointer to realm this object belongs to
-			CThing** ppNew)										// Out: Pointer to new object
-			{
-			short sResult = 0;
-			*ppNew = new CPowerUp(pRealm);
-			if (*ppNew == 0)
-				{
-				sResult = -1;
-				TRACE("CPowerUp::Construct(): Couldn't construct CPowerUp (that's a bad thing)\n");
-				}
-			return sResult;
-			}
+    //---------------------------------------------------------------------------
+    // Optional static functions
+    //---------------------------------------------------------------------------
 
+    // Preload assets needed during the game
+    static short Preload(CRealm *prealm);
 
-	//---------------------------------------------------------------------------
-	// Optional static functions
-	//---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------
+    // Required virtual functions (implementing them as inlines doesn't pay!)
+    //---------------------------------------------------------------------------
+  public:
+    // Load object (should call base class version!)
+    short Load(             // Returns 0 if successfull, non-zero otherwise
+      RFile *pFile,         // In:  File to load from
+      bool bEditMode,       // In:  True for edit mode, false otherwise
+      short sFileCount,     // In:  File count (unique per file, never 0)
+      ULONG ulFileVersion); // In:  Version of file format to load.
 
-		// Preload assets needed during the game
-		static short Preload(CRealm* prealm);
+    // Save object (should call base class version!)
+    short Save(          // Returns 0 if successfull, non-zero otherwise
+      RFile *pFile,      // In:  File to save to
+      short sFileCount); // In:  File count (unique per file, never 0)
 
-	//---------------------------------------------------------------------------
-	// Required virtual functions (implementing them as inlines doesn't pay!)
-	//---------------------------------------------------------------------------
-	public:
-		
-		// Load object (should call base class version!)
-		short Load(													// Returns 0 if successfull, non-zero otherwise
-			RFile* pFile,											// In:  File to load from
-			bool bEditMode,										// In:  True for edit mode, false otherwise
-			short sFileCount,										// In:  File count (unique per file, never 0)
-			ULONG	ulFileVersion);								// In:  Version of file format to load.
+    // Update object
+    void Update(void);
 
-		// Save object (should call base class version!)
-		short Save(													// Returns 0 if successfull, non-zero otherwise
-			RFile* pFile,											// In:  File to save to
-			short sFileCount);									// In:  File count (unique per file, never 0)
+    // Render object
+    void Render(void);
 
-		// Update object
-		void Update(void);
+    // Called by editor to init new object at specified position
+    short EditNew( // Returns 0 if successfull, non-zero otherwise
+      short sX,    // In:  New x coord
+      short sY,    // In:  New y coord
+      short sZ);   // In:  New z coord
 
-		// Render object
-		void Render(void);
+    // Called by editor to modify object
+    short EditModify(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Called by editor to init new object at specified position
-		short EditNew(												// Returns 0 if successfull, non-zero otherwise
-			short sX,												// In:  New x coord
-			short sY,												// In:  New y coord
-			short sZ);												// In:  New z coord
+    //---------------------------------------------------------------------------
+    // Handy external functions
+    //---------------------------------------------------------------------------
+  public:
+    short Setup( // Returns 0 on success.
+      short sX,  // In: New x coord
+      short sY,  // In: New y coord
+      short sZ); // In: New z coord
 
-		// Called by editor to modify object
-		short EditModify(void);									// Returns 0 if successfull, non-zero otherwise
+    // Call to grab this item.
+    short Grab(             // Returns 0 on success.
+      CSprite *psprParent); // In:  Parent's sprite.
 
-	//---------------------------------------------------------------------------
-	// Handy external functions
-	//---------------------------------------------------------------------------
-	public:
+    // Call to release this item.
+    void Drop(   // Returns nothing.
+      short sX,  // In:  Position from which to release.
+      short sY,  // In:  Position from which to release.
+      short sZ); // In:  Position from which to release.
 
-		short Setup(												// Returns 0 on success.
-			short sX,												// In: New x coord
-			short sY,												// In: New y coord
-			short sZ);												// In: New z coord
+    // Determine if this powerup's stockpile is empty.
+    bool IsEmpty(void) // Returns true, if the stockpile is
+                       // empty.
+    {
+        return m_stockpile.IsEmpty();
+    }
 
-		// Call to grab this item.
-		short Grab(						// Returns 0 on success.
-			CSprite* psprParent);	// In:  Parent's sprite.
+    // Plays a sample corresponding to the type of powerup indicating it
+    // was picked up.
+    void PickUpFeedback(void); // Returns nothing.
 
-		// Call to release this item.
-		void Drop(						// Returns nothing.
-			short sX,					// In:  Position from which to release.
-			short sY,					// In:  Position from which to release.
-			short sZ);					// In:  Position from which to release.
+    // If this powerup has nothing left, destroys itself.  Otherwise, chooses
+    // a new resource to represent its current contents.
+    // NOTE:  This function can cause this item to be destroyed.  Don't use
+    // a ptr to this object after calling this function.
+    void RepaginateNow(void);
 
-		// Determine if this powerup's stockpile is empty.
-		bool IsEmpty(void)					// Returns true, if the stockpile is
-													// empty.
-			{
-			return m_stockpile.IsEmpty();
-			}
+    // Message handling functions ////////////////////////////////////////////
 
-		// Plays a sample corresponding to the type of powerup indicating it
-		// was picked up.
-		void PickUpFeedback(void);	// Returns nothing.
+    // Handles a Shot_Message.
+    virtual // Override to implement additional functionality.
+            // Call base class to get default functionality.
+      void
+      OnShotMsg(                 // Returns nothing.
+        Shot_Message *pshotmsg); // In:  Message to handle.
 
-		// If this powerup has nothing left, destroys itself.  Otherwise, chooses
-		// a new resource to represent its current contents.
-		// NOTE:  This function can cause this item to be destroyed.  Don't use
-		// a ptr to this object after calling this function.
-		void RepaginateNow(void);
+    // Handles an Explosion_Message.
+    virtual // Override to implement additional functionality.
+            // Call base class to get default functionality.
+      void
+      OnExplosionMsg(                      // Returns nothing.
+        Explosion_Message *pexplosionmsg); // In:  Message to handle.
 
-		// Message handling functions ////////////////////////////////////////////
+    // Handles a Burn_Message.
+    virtual // Override to implement additional functionality.
+            // Call base class to get default functionality.
+      void
+      OnBurnMsg(                 // Returns nothing.
+        Burn_Message *pburnmsg); // In:  Message to handle.
 
-		// Handles a Shot_Message.
-		virtual			// Override to implement additional functionality.
-							// Call base class to get default functionality.
-		void OnShotMsg(					// Returns nothing.
-			Shot_Message* pshotmsg);	// In:  Message to handle.
+    //---------------------------------------------------------------------------
+    // Internal functions
+    //---------------------------------------------------------------------------
+  protected:
+    // Get all required resources
+    short GetResources(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Handles an Explosion_Message.
-		virtual			// Override to implement additional functionality.
-							// Call base class to get default functionality.
-		void OnExplosionMsg(							// Returns nothing.
-			Explosion_Message* pexplosionmsg);	// In:  Message to handle.
+    // Free all resources
+    short FreeResources(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Handles a Burn_Message.
-		virtual			// Override to implement additional functionality.
-							// Call base class to get default functionality.
-		void OnBurnMsg(					// Returns nothing.
-			Burn_Message* pburnmsg);	// In:  Message to handle.
+    // Initialize object.
+    short Init(void); // Returns 0 on success.
 
-	//---------------------------------------------------------------------------
-	// Internal functions
-	//---------------------------------------------------------------------------
-	protected:
-		// Get all required resources
-		short GetResources(void);						// Returns 0 if successfull, non-zero otherwise
-		
-		// Free all resources
-		short FreeResources(void);						// Returns 0 if successfull, non-zero otherwise
-
-		// Initialize object.
-		short Init(void);									// Returns 0 on success.
-
-		// Get resource name for this item.
-		void GetResName(			// Returns nothing.
-			char*	pszResName);	// Out: Resource base name.
-
-	};
-
+    // Get resource name for this item.
+    void GetResName(     // Returns nothing.
+      char *pszResName); // Out: Resource base name.
+};
 
 #endif // POWERUP_H
 ////////////////////////////////////////////////////////////////////////////////

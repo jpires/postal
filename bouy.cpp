@@ -25,13 +25,13 @@
 //		01/28/97 BRH	Added bouy's to the editor which will help with navagation
 //
 //		02/02/97 BRH	Added NextRouteNode function which will tell you which
-//							bouy you should go to next in order to get to your 
+//							bouy you should go to next in order to get to your
 //							destination.
 //
 //		02/03/97 BRH	Added info to the Load and Save functions to save
 //							information needed to reconnect the Bouy network after
-//							loading it.  
-//		
+//							loading it.
+//
 //		02/04/97 BRH	Added GetRouteTableEntry() function that can be called
 //							from the CNavigationNet's ping function which will safely
 //							return an entry from the routing table.  If the table
@@ -42,7 +42,7 @@
 //							loading of DIBs).
 //
 //		02/23/97 BRH	Changed bouy resource to be under Resource Manager control.
-//							Also changed Render to do nothing and moved its 
+//							Also changed Render to do nothing and moved its
 //							functionality to EditRender so that the Bouys are not
 //							drawn during game play but only in the editor.
 //
@@ -102,7 +102,7 @@
 //
 //		06/25/97 BRH	Took out the STL set "linkset" because it was causing
 //							sync problems with the game.  Apparently, the set uses
-//							a tree to store its data, and when building that tree, 
+//							a tree to store its data, and when building that tree,
 //							uses some kind of random function to balance the tree, but
 //							not the standard library rand() function, but a different
 //							random function that we don't reset from realm to realm.
@@ -139,15 +139,15 @@
 //							widened bouy graphic in an attempt to make IDs more read-
 //							able.
 //
-//		08/05/97	JMI	Changed priority to use Z position rather than 2D 
-//							projected Y position.  
+//		08/05/97	JMI	Changed priority to use Z position rather than 2D
+//							projected Y position.
 //
 //		08/05/97 BRH	Defaulted the bouy network to ON.
 //
 //		08/08/97 BRH	Only the bouys of the current Nav Net are displayed now.
 //							(and their hots are disabled when they are not shown).
 //							This will help cut down the confusion and prevent
-//							users from joining the networks which would be bad.  
+//							users from joining the networks which would be bad.
 //
 //		08/08/97	JMI	Now calls GetResources() on Load() and only in edit mode.
 //
@@ -168,10 +168,10 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define IMAGE_FILE			"bouy.bmp"
+#define IMAGE_FILE "bouy.bmp"
 
-#define BOUY_ID_FONT_HEIGHT	15
-#define BOUY_ID_FONT_COLOR		249
+#define BOUY_ID_FONT_HEIGHT 15
+#define BOUY_ID_FONT_COLOR 249
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -181,86 +181,82 @@
 
 // Let this auto-init to 0
 short CBouy::ms_sFileCount;
-bool  CBouy::ms_bShowBouys = true;
-
+bool CBouy::ms_bShowBouys = true;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load object (should call base class version!)
 ////////////////////////////////////////////////////////////////////////////////
-short CBouy::Load(										// Returns 0 if successfull, non-zero otherwise
-	RFile* pFile,											// In:  File to load from
-	bool bEditMode,										// In:  True for edit mode, false otherwise
-	short sFileCount,										// In:  File count (unique per file, never 0)
-	ULONG	ulFileVersion)									// In:  Version of file format to load.
+short CBouy::Load(     // Returns 0 if successfull, non-zero otherwise
+  RFile *pFile,        // In:  File to load from
+  bool bEditMode,      // In:  True for edit mode, false otherwise
+  short sFileCount,    // In:  File count (unique per file, never 0)
+  ULONG ulFileVersion) // In:  Version of file format to load.
 {
-	GameMessage msg;
-	// Call the base load to get the u16InstanceID
-	short sResult = CThing::Load(pFile, bEditMode, sFileCount, ulFileVersion);
-	if (sResult == 0)
-	{
-		// Load common data just once per file (not with each object)
-		if (ms_sFileCount != sFileCount)
-		{
-			ms_sFileCount = sFileCount;
+    GameMessage msg;
+    // Call the base load to get the u16InstanceID
+    short sResult = CThing::Load(pFile, bEditMode, sFileCount, ulFileVersion);
+    if (sResult == 0)
+    {
+        // Load common data just once per file (not with each object)
+        if (ms_sFileCount != sFileCount)
+        {
+            ms_sFileCount = sFileCount;
 
-			// Load static data
-			switch (ulFileVersion)
-			{
-				default:
-				case 1:
-					break;
-			}
-		}
+            // Load static data
+            switch (ulFileVersion)
+            {
+                default:
+                case 1:
+                    break;
+            }
+        }
 
-		// Load object data
-		pFile->Read(&m_dX);
-		pFile->Read(&m_dY);
-		pFile->Read(&m_dZ);
+        // Load object data
+        pFile->Read(&m_dX);
+        pFile->Read(&m_dY);
+        pFile->Read(&m_dZ);
 
-		U16 u16Data;
-		U16 u16NumLinks;
-		U16 i;
-		// Get number of links to be read
-		pFile->Read(&u16NumLinks);
-		for (i = 0; i < u16NumLinks; i++)
-		{
-			pFile->Read(&u16Data);
-			m_LinkInstanceID.InsertTail(u16Data);
-		}
+        U16 u16Data;
+        U16 u16NumLinks;
+        U16 i;
+        // Get number of links to be read
+        pFile->Read(&u16NumLinks);
+        for (i = 0; i < u16NumLinks; i++)
+        {
+            pFile->Read(&u16Data);
+            m_LinkInstanceID.InsertTail(u16Data);
+        }
 
-		// Get the instance ID for the NavNet
-		pFile->Read(&u16Data);
-		m_u16ParentInstanceID = u16Data;
+        // Get the instance ID for the NavNet
+        pFile->Read(&u16Data);
+        m_u16ParentInstanceID = u16Data;
 
-		// Switch on the parts that have changed
-		switch (ulFileVersion)
-		{
-			case 6:
-			case 7:
-			case 8:
-			case 9:
-			case 10:
-			case 11:
-				msg.Load(pFile);
-				break;
+        // Switch on the parts that have changed
+        switch (ulFileVersion)
+        {
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+                msg.Load(pFile);
+                break;
 
-			default:
-				break;
+            default:
+                break;
+        }
 
-		}
+        // If the file version is earlier than the change to real 3D coords . . .
+        if (ulFileVersion < 24)
+        {
+            // Convert to 3D.
+            m_pRealm->MapY2DtoZ3D(m_dZ, &m_dZ);
+        }
 
-		// If the file version is earlier than the change to real 3D coords . . .
-		if (ulFileVersion < 24)
-			{
-			// Convert to 3D.
-			m_pRealm->MapY2DtoZ3D(
-				m_dZ,
-				&m_dZ);
-			}
-
-		// Make sure there were no file errors or format errors . . .
-		if (!pFile->Error() && sResult == 0)
-		{
+        // Make sure there were no file errors or format errors . . .
+        if (!pFile->Error() && sResult == 0)
+        {
 #if 0
 		// If you were thinking of doing something like this, stop.
 		// It is too early to create the image for displaying this
@@ -272,200 +268,187 @@ short CBouy::Load(										// Returns 0 if successfull, non-zero otherwise
 				sResult = GetResources();
 				}
 #endif
-		}
-		else
-		{
-			sResult = -1;
-			TRACE("CBouy::Load(): Error reading from file!\n");
-		}
-	}
-	else
-	{
-		TRACE("CBouy::Load(): CThing::Load() failed.\n");
-	}
+        }
+        else
+        {
+            sResult = -1;
+            TRACE("CBouy::Load(): Error reading from file!\n");
+        }
+    }
+    else
+    {
+        TRACE("CBouy::Load(): CThing::Load() failed.\n");
+    }
 
-	return sResult;
+    return sResult;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Save object (should call base class version!)
 ////////////////////////////////////////////////////////////////////////////////
-short CBouy::Save(										// Returns 0 if successfull, non-zero otherwise
-	RFile* pFile,											// In:  File to save to
-	short sFileCount)										// In:  File count (unique per file, never 0)
+short CBouy::Save(  // Returns 0 if successfull, non-zero otherwise
+  RFile *pFile,     // In:  File to save to
+  short sFileCount) // In:  File count (unique per file, never 0)
 {
-	// Call the base class save to save the u16InstanceID
-	CThing::Save(pFile, sFileCount);
+    // Call the base class save to save the u16InstanceID
+    CThing::Save(pFile, sFileCount);
 
-	// Save common data just once per file (not with each object)
-	if (ms_sFileCount != sFileCount)
-	{
-		ms_sFileCount = sFileCount;
+    // Save common data just once per file (not with each object)
+    if (ms_sFileCount != sFileCount)
+    {
+        ms_sFileCount = sFileCount;
 
-		// Save static data
-	}
+        // Save static data
+    }
 
-	// Save object data
-	pFile->Write(&m_dX);
-	pFile->Write(&m_dY);
-	pFile->Write(&m_dZ);
+    // Save object data
+    pFile->Write(&m_dX);
+    pFile->Write(&m_dY);
+    pFile->Write(&m_dZ);
 
-	U16 u16Data = m_sNumDirectLinks;
-	// Save the number of links that will follow in the file
-	pFile->Write(&u16Data);
-	CBouy* pLinkedBouy = m_aplDirectLinks.GetHead();
-	while (pLinkedBouy != NULL)
-	{
-		u16Data = pLinkedBouy->GetInstanceID();
-		pFile->Write(&u16Data);
-		pLinkedBouy = m_aplDirectLinks.GetNext();
-	}
+    U16 u16Data = m_sNumDirectLinks;
+    // Save the number of links that will follow in the file
+    pFile->Write(&u16Data);
+    CBouy *pLinkedBouy = m_aplDirectLinks.GetHead();
+    while (pLinkedBouy != NULL)
+    {
+        u16Data = pLinkedBouy->GetInstanceID();
+        pFile->Write(&u16Data);
+        pLinkedBouy = m_aplDirectLinks.GetNext();
+    }
 
-	// Save the instance ID for the parent NavNet so it can be connected
-	// again after load
-	u16Data = m_pParentNavNet->GetInstanceID();
-	pFile->Write(&u16Data);
+    // Save the instance ID for the parent NavNet so it can be connected
+    // again after load
+    u16Data = m_pParentNavNet->GetInstanceID();
+    pFile->Write(&u16Data);
 
-	if (pFile->Error())
-		return FAILURE;
-	else
-		return SUCCESS;
+    if (pFile->Error())
+        return FAILURE;
+    else
+        return SUCCESS;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CBouy::Startup(void)								// Returns 0 if successfull, non-zero otherwise
+short CBouy::Startup(void) // Returns 0 if successfull, non-zero otherwise
 {
-	short sResult = 0;
+    short sResult = 0;
 
-	// At this point we can assume the CHood was loaded, so we init our height
-	m_dY = m_pRealm->GetHeight((short) m_dX, (short) m_dZ);
+    // At this point we can assume the CHood was loaded, so we init our height
+    m_dY = m_pRealm->GetHeight((short)m_dX, (short)m_dZ);
 
-	// Init other stuff
-	// Get pointer to Navigation Net
-	// If we don't have a pointer to the nav net yet, get it from the ID
-	if (m_pParentNavNet == NULL)
-	{
-		m_pRealm->m_idbank.GetThingByID((CThing**) &m_pParentNavNet, m_u16ParentInstanceID); 
-		// Re-register yourself with the network.
-		m_pParentNavNet->AddBouy(this);
-	
+    // Init other stuff
+    // Get pointer to Navigation Net
+    // If we don't have a pointer to the nav net yet, get it from the ID
+    if (m_pParentNavNet == NULL)
+    {
+        m_pRealm->m_idbank.GetThingByID((CThing **)&m_pParentNavNet, m_u16ParentInstanceID);
+        // Re-register yourself with the network.
+        m_pParentNavNet->AddBouy(this);
 
-		linkinstanceid::Pointer i;
-		CBouy* pBouy = NULL;
-		for (i = m_LinkInstanceID.GetHead(); i != 0; i = m_LinkInstanceID.GetNext(i))
-		{
-			m_pRealm->m_idbank.GetThingByID((CThing**) &pBouy, m_LinkInstanceID.GetData(i));		
-			// If its not already linked, then add it.
-			if (!m_aplDirectLinks.Find(pBouy))
-			{
-				m_aplDirectLinks.AddTail(pBouy);
-				m_sNumDirectLinks++;
-			}
-		}
+        linkinstanceid::Pointer i;
+        CBouy *pBouy = NULL;
+        for (i = m_LinkInstanceID.GetHead(); i != 0; i = m_LinkInstanceID.GetNext(i))
+        {
+            m_pRealm->m_idbank.GetThingByID((CThing **)&pBouy, m_LinkInstanceID.GetData(i));
+            // If its not already linked, then add it.
+            if (!m_aplDirectLinks.Find(pBouy))
+            {
+                m_aplDirectLinks.AddTail(pBouy);
+                m_sNumDirectLinks++;
+            }
+        }
 
-		// Only in edit mode . . .
-		if (m_pRealm->m_flags.bEditing == true)
-		{
-			sResult = GetResources();
-		}
-	}
+        // Only in edit mode . . .
+        if (m_pRealm->m_flags.bEditing == true)
+        {
+            sResult = GetResources();
+        }
+    }
 
-	return sResult;
+    return sResult;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CBouy::Shutdown(void)							// Returns 0 if successfull, non-zero otherwise
+short CBouy::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 {
-	return 0;
+    return 0;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
 void CBouy::Suspend(void)
 {
-	m_sSuspend++;
+    m_sSuspend++;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
 void CBouy::Resume(void)
 {
-	m_sSuspend--;
+    m_sSuspend--;
 
-	// If we're actually going to start updating again, we need to reset
-	// the time so as to ignore any time that passed while we were suspended.
-	// This method is far from precise, but I'm hoping it's good enough.
+    // If we're actually going to start updating again, we need to reset
+    // the time so as to ignore any time that passed while we were suspended.
+    // This method is far from precise, but I'm hoping it's good enough.
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CBouy::Update(void)
-{
-}
-
+void CBouy::Update(void) {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // AddLink - Add a 1 hop direct link to the routing table
 ////////////////////////////////////////////////////////////////////////////////
 
-short CBouy::AddLink(CBouy* pBouy)
+short CBouy::AddLink(CBouy *pBouy)
 {
-	short sReturn = SUCCESS;
-	
-	if (!m_aplDirectLinks.Find(pBouy))
-	{
-		m_aplDirectLinks.AddTail(pBouy);
-		m_sNumDirectLinks++;
-	}
-	
-	return sReturn;	
+    short sReturn = SUCCESS;
+
+    if (!m_aplDirectLinks.Find(pBouy))
+    {
+        m_aplDirectLinks.AddTail(pBouy);
+        m_sNumDirectLinks++;
+    }
+
+    return sReturn;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CBouy::Render(void)
-{
-}
-
+void CBouy::Render(void) {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to init new object at specified position
 ////////////////////////////////////////////////////////////////////////////////
-short CBouy::EditNew(									// Returns 0 if successfull, non-zero otherwise
-	short sX,												// In:  New x coord
-	short sY,												// In:  New y coord
-	short sZ)												// In:  New z coord
+short CBouy::EditNew( // Returns 0 if successfull, non-zero otherwise
+  short sX,           // In:  New x coord
+  short sY,           // In:  New y coord
+  short sZ)           // In:  New z coord
 {
-	short sResult = 0;
-	
-	// Use specified position
-	m_dX = (double)sX;
-	m_dY = (double)sY;
-	m_dZ = (double)sZ;
+    short sResult = 0;
 
-	// Since we were created in the editor, set our Nav Net
-	m_pParentNavNet = m_pRealm->GetCurrentNavNet();
-	if (m_pParentNavNet->AddBouy(this) == 0)
-		sResult = FAILURE;
-	else
-		// Load resources
-		sResult = GetResources();
+    // Use specified position
+    m_dX = (double)sX;
+    m_dY = (double)sY;
+    m_dZ = (double)sZ;
 
-	return sResult;
+    // Since we were created in the editor, set our Nav Net
+    m_pParentNavNet = m_pRealm->GetCurrentNavNet();
+    if (m_pParentNavNet->AddBouy(this) == 0)
+        sResult = FAILURE;
+    else
+        // Load resources
+        sResult = GetResources();
+
+    return sResult;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -473,209 +456,188 @@ short CBouy::EditNew(									// Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 short CBouy::EditModify(void)
 {
-	return 0;
+    return 0;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to move object to specified position
 ////////////////////////////////////////////////////////////////////////////////
-short CBouy::EditMove(									// Returns 0 if successfull, non-zero otherwise
-	short sX,												// In:  New x coord
-	short sY,												// In:  New y coord
-	short sZ)												// In:  New z coord
+short CBouy::EditMove( // Returns 0 if successfull, non-zero otherwise
+  short sX,            // In:  New x coord
+  short sY,            // In:  New y coord
+  short sZ)            // In:  New z coord
 {
-	m_dX = (double)sX;
-	m_dY = (double)sY;
-	m_dZ = (double)sZ;
+    m_dX = (double)sX;
+    m_dY = (double)sY;
+    m_dZ = (double)sZ;
 
-	return 0;
+    return 0;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CBouy::EditUpdate(void)
-{
-}
-
+void CBouy::EditUpdate(void) {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
 void CBouy::EditRender(void)
 {
-	// No special flags
-	if (ms_bShowBouys)
-	{
-		if (m_pParentNavNet == m_pRealm->GetCurrentNavNet())
-		{
-			m_sprite.m_sInFlags = 0;
-			m_phot->SetActive(TRUE);
-		}
-		else
-		{
-			m_sprite.m_sInFlags = CSprite::InHidden;
-			m_phot->SetActive(FALSE);
-		}
-	}
-	else
-		m_sprite.m_sInFlags = CSprite::InHidden;
+    // No special flags
+    if (ms_bShowBouys)
+    {
+        if (m_pParentNavNet == m_pRealm->GetCurrentNavNet())
+        {
+            m_sprite.m_sInFlags = 0;
+            m_phot->SetActive(TRUE);
+        }
+        else
+        {
+            m_sprite.m_sInFlags = CSprite::InHidden;
+            m_phot->SetActive(FALSE);
+        }
+    }
+    else
+        m_sprite.m_sInFlags = CSprite::InHidden;
 
-	// Map from 3d to 2d coords
-	Map3Dto2D(
-		(short) m_dX, 
-		(short) m_dY, 
-		(short) m_dZ, 
-		&m_sprite.m_sX2, 
-		&m_sprite.m_sY2);
+    // Map from 3d to 2d coords
+    Map3Dto2D((short)m_dX, (short)m_dY, (short)m_dZ, &m_sprite.m_sX2, &m_sprite.m_sY2);
 
-	// Center on image.
-	m_sprite.m_sX2	-= m_pImage->m_sWidth / 2;
-	m_sprite.m_sY2	-= m_pImage->m_sHeight;
+    // Center on image.
+    m_sprite.m_sX2 -= m_pImage->m_sWidth / 2;
+    m_sprite.m_sY2 -= m_pImage->m_sHeight;
 
-	// Priority is based on bottom edge of sprite
-	m_sprite.m_sPriority = m_dZ;
+    // Priority is based on bottom edge of sprite
+    m_sprite.m_sPriority = m_dZ;
 
-	// Layer should be based on info we get from attribute map.
-	m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short) m_dX, (short) m_dZ));
+    // Layer should be based on info we get from attribute map.
+    m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short)m_dX, (short)m_dZ));
 
-	// Image would normally animate, but doesn't for now
-	m_sprite.m_pImage = m_pImage;
+    // Image would normally animate, but doesn't for now
+    m_sprite.m_pImage = m_pImage;
 
-	// Update sprite in scene
-	m_pRealm->m_scene.UpdateSprite(&m_sprite);
+    // Update sprite in scene
+    m_pRealm->m_scene.UpdateSprite(&m_sprite);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Give Edit a rectangle around this object
 ////////////////////////////////////////////////////////////////////////////////
-void CBouy::EditRect(RRect* pRect)
+void CBouy::EditRect(RRect *pRect)
 {
-	Map3Dto2D(
-		m_dX,
-		m_dY,
-		m_dZ,
-		&(pRect->sX),
-		&(pRect->sY) );
+    Map3Dto2D(m_dX, m_dY, m_dZ, &(pRect->sX), &(pRect->sY));
 
-	pRect->sW	= 10;	// Safety.
-	pRect->sH	= 10;	// Safety.
+    pRect->sW = 10; // Safety.
+    pRect->sH = 10; // Safety.
 
-	if (m_pImage != NULL)
-		{
-		pRect->sW	= m_pImage->m_sWidth;
-		pRect->sH	= m_pImage->m_sHeight;
-		}
+    if (m_pImage != NULL)
+    {
+        pRect->sW = m_pImage->m_sWidth;
+        pRect->sH = m_pImage->m_sHeight;
+    }
 
-	pRect->sX	-= pRect->sW / 2;
-	pRect->sY	-= pRect->sH;
+    pRect->sX -= pRect->sW / 2;
+    pRect->sY -= pRect->sH;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to get the hotspot of an object in 2D.
 ////////////////////////////////////////////////////////////////////////////////
-void CBouy::EditHotSpot(	// Returns nothiing.
-	short*	psX,				// Out: X coord of 2D hotspot relative to
-									// EditRect() pos.
-	short*	psY)				// Out: Y coord of 2D hotspot relative to
-									// EditRect() pos.
-	{
-	// Base of bouy is hotspot.
-	*psX	= (m_pImage->m_sWidth / 2);
-	*psY	= m_pImage->m_sHeight;
-	}
+void CBouy::EditHotSpot( // Returns nothiing.
+  short *psX,            // Out: X coord of 2D hotspot relative to
+                         // EditRect() pos.
+  short *psY)            // Out: Y coord of 2D hotspot relative to
+                         // EditRect() pos.
+{
+    // Base of bouy is hotspot.
+    *psX = (m_pImage->m_sWidth / 2);
+    *psY = m_pImage->m_sHeight;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CBouy::GetResources(void)						// Returns 0 if successfull, non-zero otherwise
-	{
-	short sResult = 0;
-	
-	if (m_pImage == 0)
-		{
-		RImage*	pimBouyRes;
-		sResult = rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(IMAGE_FILE), &pimBouyRes);
-		if (sResult == 0)
-			{
-			// Allocate image . . .
-			m_pImage	= new RImage;
-			if (m_pImage != NULL)
-				{
-				// Allocate image data . . .
-				if (m_pImage->CreateImage(
-					pimBouyRes->m_sWidth,
-					pimBouyRes->m_sHeight,
-					RImage::BMP8) == 0)
-					{
-					// Blt bouy res.
-					rspBlit(
-						pimBouyRes,		// Src.
-						m_pImage,		// Dst.
-						0,					// Dst.
-						0,					// Dst.
-						NULL);			// Dst clip.
+short CBouy::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+{
+    short sResult = 0;
 
-					// Put in ID.
-					RPrint	print;
-					print.SetFont(BOUY_ID_FONT_HEIGHT, &g_fontBig);
-					print.SetColor(BOUY_ID_FONT_COLOR);
-					print.SetJustifyCenter();
-					print.print(
-						m_pImage,												// Dst.
-						0,															// Dst.
-						m_pImage->m_sHeight - BOUY_ID_FONT_HEIGHT,	// Dst.
-						"%d",														// Format.
-						(short)m_ucID);										// Src.
-																					
-					// Convert to efficient transparent blit format . . .
-					if (m_pImage->Convert(RImage::FSPR8) != RImage::FSPR8)
-						{
-						sResult = -3;
-						TRACE("CBouy::GetResource() - Couldn't convert to FSPR8\n");
-						}
-					}
-				else
-					{
-					sResult	= -2;
-					TRACE("CBouy::GetResource() - m_pImage->CreateImage() failed.\n");
-					}
+    if (m_pImage == 0)
+    {
+        RImage *pimBouyRes;
+        sResult = rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(IMAGE_FILE), &pimBouyRes);
+        if (sResult == 0)
+        {
+            // Allocate image . . .
+            m_pImage = new RImage;
+            if (m_pImage != NULL)
+            {
+                // Allocate image data . . .
+                if (m_pImage->CreateImage(pimBouyRes->m_sWidth, pimBouyRes->m_sHeight, RImage::BMP8) == 0)
+                {
+                    // Blt bouy res.
+                    rspBlit(pimBouyRes, // Src.
+                            m_pImage,   // Dst.
+                            0,          // Dst.
+                            0,          // Dst.
+                            NULL);      // Dst clip.
 
-				// If an error occurred after allocation . . .
-				if (sResult != 0)
-					{
-					delete m_pImage;
-					m_pImage	= NULL;
-					}
-				}
-			else
-				{
-				sResult	= -1;
-				TRACE("CBouy::GetResource(): Failed to allocate RImage.\n");
-				}
-			
-			rspReleaseResource(&g_resmgrGame, &pimBouyRes);
-			}
-		}
-	
-	return sResult;
-	}
+                    // Put in ID.
+                    RPrint print;
+                    print.SetFont(BOUY_ID_FONT_HEIGHT, &g_fontBig);
+                    print.SetColor(BOUY_ID_FONT_COLOR);
+                    print.SetJustifyCenter();
+                    print.print(m_pImage,                                  // Dst.
+                                0,                                         // Dst.
+                                m_pImage->m_sHeight - BOUY_ID_FONT_HEIGHT, // Dst.
+                                "%d",                                      // Format.
+                                (short)m_ucID);                            // Src.
 
+                    // Convert to efficient transparent blit format . . .
+                    if (m_pImage->Convert(RImage::FSPR8) != RImage::FSPR8)
+                    {
+                        sResult = -3;
+                        TRACE("CBouy::GetResource() - Couldn't convert to FSPR8\n");
+                    }
+                }
+                else
+                {
+                    sResult = -2;
+                    TRACE("CBouy::GetResource() - m_pImage->CreateImage() failed.\n");
+                }
+
+                // If an error occurred after allocation . . .
+                if (sResult != 0)
+                {
+                    delete m_pImage;
+                    m_pImage = NULL;
+                }
+            }
+            else
+            {
+                sResult = -1;
+                TRACE("CBouy::GetResource(): Failed to allocate RImage.\n");
+            }
+
+            rspReleaseResource(&g_resmgrGame, &pimBouyRes);
+        }
+    }
+
+    return sResult;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CBouy::FreeResources(void)						// Returns 0 if successfull, non-zero otherwise
+short CBouy::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
 {
-	if (m_pImage != NULL)
-		{
-		delete m_pImage;
-		m_pImage	= NULL;
-		}
+    if (m_pImage != NULL)
+    {
+        delete m_pImage;
+        m_pImage = NULL;
+    }
 
-	return 0;
+    return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -685,23 +647,22 @@ short CBouy::FreeResources(void)						// Returns 0 if successfull, non-zero othe
 
 void CBouy::Unlink(void)
 {
-	// Follow all of this bouy's direct links and unlink this bouy
-	CBouy* pLinkedBouy = m_aplDirectLinks.GetHead();
-	while (pLinkedBouy)
-	{
-		pLinkedBouy->m_aplDirectLinks.Remove(this);
-		pLinkedBouy->m_sNumDirectLinks--;
-		pLinkedBouy = m_aplDirectLinks.GetNext();
-	}
+    // Follow all of this bouy's direct links and unlink this bouy
+    CBouy *pLinkedBouy = m_aplDirectLinks.GetHead();
+    while (pLinkedBouy)
+    {
+        pLinkedBouy->m_aplDirectLinks.Remove(this);
+        pLinkedBouy->m_sNumDirectLinks--;
+        pLinkedBouy = m_aplDirectLinks.GetNext();
+    }
 
-	// Erase all of your own links to other bouys
-	m_aplDirectLinks.Reset();
-	m_sNumDirectLinks = 0;
+    // Erase all of your own links to other bouys
+    m_aplDirectLinks.Reset();
+    m_sNumDirectLinks = 0;
 
-	// Remove this bouy from the network
-	m_pParentNavNet->RemoveBouy(m_ucID);
+    // Remove this bouy from the network
+    m_pParentNavNet->RemoveBouy(m_ucID);
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // BuildRoutingTable - Fills in the routing table by building a BSF tree and
@@ -711,134 +672,131 @@ void CBouy::Unlink(void)
 
 short CBouy::BuildRoutingTable(void)
 {
-	short sResult = SUCCESS;
-	UCHAR* aVisited = NULL;
-	UCHAR* aDistance = NULL;
-	UCHAR* aParent = NULL;
-	UCHAR* pucCurrentNode = NULL;
-	UCHAR* pucAdjNode = NULL;
-	CBouy* pTraverseBouy = NULL;
+    short sResult = SUCCESS;
+    UCHAR *aVisited = NULL;
+    UCHAR *aDistance = NULL;
+    UCHAR *aParent = NULL;
+    UCHAR *pucCurrentNode = NULL;
+    UCHAR *pucAdjNode = NULL;
+    CBouy *pTraverseBouy = NULL;
 
-	ASSERT(m_pParentNavNet != NULL);
-	short sCurrentNumNodes = m_pParentNavNet->GetNumNodes();
-	RQueue <UCHAR, 256> bfsQueue;
+    ASSERT(m_pParentNavNet != NULL);
+    short sCurrentNumNodes = m_pParentNavNet->GetNumNodes();
+    RQueue<UCHAR, 256> bfsQueue;
 
-	// Make sure there is enough space in the routing table, or
-	// reallocate it if there isn't enough.
-	if (m_sRouteTableSize < sCurrentNumNodes)
-	{
-		if (m_paucRouteTable != NULL)
-			free(m_paucRouteTable);
-		m_paucRouteTable = (UCHAR*) malloc(sCurrentNumNodes);
-		m_sRouteTableSize = sCurrentNumNodes;
-	}
+    // Make sure there is enough space in the routing table, or
+    // reallocate it if there isn't enough.
+    if (m_sRouteTableSize < sCurrentNumNodes)
+    {
+        if (m_paucRouteTable != NULL)
+            free(m_paucRouteTable);
+        m_paucRouteTable = (UCHAR *)malloc(sCurrentNumNodes);
+        m_sRouteTableSize = sCurrentNumNodes;
+    }
 
-	// Allocate memory for use in building the BSF tree
-	aVisited = (UCHAR*) malloc(sCurrentNumNodes);
-	aDistance = (UCHAR*) malloc(sCurrentNumNodes);
-	aParent = (UCHAR*) malloc(sCurrentNumNodes);
+    // Allocate memory for use in building the BSF tree
+    aVisited = (UCHAR *)malloc(sCurrentNumNodes);
+    aDistance = (UCHAR *)malloc(sCurrentNumNodes);
+    aParent = (UCHAR *)malloc(sCurrentNumNodes);
 
-	if (m_paucRouteTable != NULL &&
-	    aVisited != NULL &&
-		 aDistance != NULL &&
-		 aParent != NULL)
-	{
-		// Initialize the table to unreachable and initialize the
-		// BSF data structures.
-		memset(m_paucRouteTable, 255, m_sRouteTableSize);
-		memset(aVisited, 0, sCurrentNumNodes);
-		memset(aDistance, 255, sCurrentNumNodes);
-		memset(aParent, 0, sCurrentNumNodes);
+    if (m_paucRouteTable != NULL && aVisited != NULL && aDistance != NULL && aParent != NULL)
+    {
+        // Initialize the table to unreachable and initialize the
+        // BSF data structures.
+        memset(m_paucRouteTable, 255, m_sRouteTableSize);
+        memset(aVisited, 0, sCurrentNumNodes);
+        memset(aDistance, 255, sCurrentNumNodes);
+        memset(aParent, 0, sCurrentNumNodes);
 
-		// Breadth-First Search
-		aVisited[m_ucID] = TRUE;
-		aDistance[m_ucID] = 0;
-		bfsQueue.EnQ(&m_ucID);
+        // Breadth-First Search
+        aVisited[m_ucID] = TRUE;
+        aDistance[m_ucID] = 0;
+        bfsQueue.EnQ(&m_ucID);
 
-		while (!bfsQueue.IsEmpty())
-		{
-			pucCurrentNode = bfsQueue.DeQ();
-			pTraverseBouy = m_pParentNavNet->GetBouy(*pucCurrentNode);
+        while (!bfsQueue.IsEmpty())
+        {
+            pucCurrentNode = bfsQueue.DeQ();
+            pTraverseBouy = m_pParentNavNet->GetBouy(*pucCurrentNode);
 
-			CBouy* pLinkedBouy = pTraverseBouy->m_aplDirectLinks.GetHead();
-			while (pLinkedBouy)
-			{
-				pucAdjNode = &(pLinkedBouy->m_ucID);
-				if (aVisited[*pucAdjNode] == FALSE)
-				{
-					aVisited[*pucAdjNode] = TRUE;
-					aParent[*pucAdjNode] = *pucCurrentNode;
-					aDistance[*pucAdjNode] = aDistance[*pucCurrentNode] + 1;
-					bfsQueue.EnQ(pucAdjNode);
-				}
-				pLinkedBouy = pTraverseBouy->m_aplDirectLinks.GetNext();
-			}
-		}
+            CBouy *pLinkedBouy = pTraverseBouy->m_aplDirectLinks.GetHead();
+            while (pLinkedBouy)
+            {
+                pucAdjNode = &(pLinkedBouy->m_ucID);
+                if (aVisited[*pucAdjNode] == FALSE)
+                {
+                    aVisited[*pucAdjNode] = TRUE;
+                    aParent[*pucAdjNode] = *pucCurrentNode;
+                    aDistance[*pucAdjNode] = aDistance[*pucCurrentNode] + 1;
+                    bfsQueue.EnQ(pucAdjNode);
+                }
+                pLinkedBouy = pTraverseBouy->m_aplDirectLinks.GetNext();
+            }
+        }
 
-		// Breadth-First Search complete.
+        // Breadth-First Search complete.
 
-		// Now the aDistance contains the hop count to all other connected nodes
-		// and aParent provides a way to build the routing table by traversing
-		// backwards.
+        // Now the aDistance contains the hop count to all other connected nodes
+        // and aParent provides a way to build the routing table by traversing
+        // backwards.
 
-		UCHAR ucCurrentDistance;
-		UCHAR curr;
-		short j;
+        UCHAR ucCurrentDistance;
+        UCHAR curr;
+        short j;
 
-		for (j = 1; j < sCurrentNumNodes; j++)
-		{
-			ucCurrentDistance = aDistance[j];
-			// If distance is 255 (infinite flag) then mark that node
-			// as unreachable in the routing table using 255 as the flag
-			if (ucCurrentDistance == 255)
-			{
-				m_paucRouteTable[j] = 255;
-			}
-			else
-			{
-				// If distance is 0, then this is the node, and mark it in the
-				// routing table as 0, meaning you have reached your final destination
-				if (j == m_ucID)
-				{
-					m_paucRouteTable[j] = 0;
-				}
-				else
-				{
-					// If the distance is 1, it is a directly connected node, so put
-					// its ID in the routing table as the node to go to.
-					if (ucCurrentDistance == 1)
-					{
-						m_paucRouteTable[j] = j;
-					}
-					else
-					{
-						// Else, its a child of a directly connected node, so find out which
-						// one by tracing back along the parent tree.
-						curr = j;
+        for (j = 1; j < sCurrentNumNodes; j++)
+        {
+            ucCurrentDistance = aDistance[j];
+            // If distance is 255 (infinite flag) then mark that node
+            // as unreachable in the routing table using 255 as the flag
+            if (ucCurrentDistance == 255)
+            {
+                m_paucRouteTable[j] = 255;
+            }
+            else
+            {
+                // If distance is 0, then this is the node, and mark it in the
+                // routing table as 0, meaning you have reached your final destination
+                if (j == m_ucID)
+                {
+                    m_paucRouteTable[j] = 0;
+                }
+                else
+                {
+                    // If the distance is 1, it is a directly connected node, so put
+                    // its ID in the routing table as the node to go to.
+                    if (ucCurrentDistance == 1)
+                    {
+                        m_paucRouteTable[j] = j;
+                    }
+                    else
+                    {
+                        // Else, its a child of a directly connected node, so find out which
+                        // one by tracing back along the parent tree.
+                        curr = j;
 
-						while (aParent[curr] != m_ucID)
-							curr = aParent[curr];
+                        while (aParent[curr] != m_ucID)
+                            curr = aParent[curr];
 
-						m_paucRouteTable[j] = curr;
-					}
-				}
-			}
-		}
-	}
-	else
-	{
-		TRACE("CBouy::BuildRoutingTable: Error allocating memory for tables for bouy %d\n", m_ucID);
-		sResult = -1;
-	}
+                        m_paucRouteTable[j] = curr;
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        TRACE("CBouy::BuildRoutingTable: Error allocating memory for tables for bouy %d\n", m_ucID);
+        sResult = -1;
+    }
 
-	if (aVisited)
-		free(aVisited);
-	if (aDistance)
-		free(aDistance);
-	if (aParent)
-		free(aParent);
+    if (aVisited)
+        free(aVisited);
+    if (aDistance)
+        free(aDistance);
+    if (aParent)
+        free(aParent);
 
-	return sResult;
+    return sResult;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -847,10 +805,10 @@ short CBouy::BuildRoutingTable(void)
 
 UCHAR CBouy::NextRouteNode(UCHAR dst)
 {
-	if (dst >= m_pParentNavNet->GetNumNodes())
-		return 255;
-	else
-		return m_paucRouteTable[dst];	
+    if (dst >= m_pParentNavNet->GetNumNodes())
+        return 255;
+    else
+        return m_paucRouteTable[dst];
 }
 
 ////////////////////////////////////////////////////////////////////////////////

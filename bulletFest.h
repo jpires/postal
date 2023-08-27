@@ -17,7 +17,7 @@
 //
 // bulletFest.H
 // Project: Nostril (aka Postal)
-// 
+//
 // History:
 //		02/18/97 JMI	Started.
 //
@@ -63,7 +63,7 @@
 // paths to a header file.  In this case we generally go off of our
 // RSPiX root directory.  System.h MUST be included before this macro
 // is evaluated.  System.h is the header that, based on the current
-// platform (or more so in this case on the compiler), defines 
+// platform (or more so in this case on the compiler), defines
 // PATHS_IN_INCLUDES.  Blue.h includes system.h so you can include that
 // instead.
 ///////////////////////////////////////////////////////////////////////////////
@@ -93,172 +93,163 @@
 // Typedefs.
 //////////////////////////////////////////////////////////////////////////////
 class CBulletFest
-	{
-	///////////////////////////////////////////////////////////////////////////
-	// Typedefs/enums.
-	///////////////////////////////////////////////////////////////////////////
-	public:
-		// Macros.
-		enum
-			{
-			TargetHistoryTotalPeriod	= 1000,	// Target history duration in ms.
-			TargetHistoryUpdatePeriod	= 100,	// Duration between history 
-															// updates.
-			TargetUpdatesPerPeriod	= TargetHistoryTotalPeriod / TargetHistoryUpdatePeriod
-			};
+{
+    ///////////////////////////////////////////////////////////////////////////
+    // Typedefs/enums.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    // Macros.
+    enum
+    {
+        TargetHistoryTotalPeriod = 1000, // Target history duration in ms.
+        TargetHistoryUpdatePeriod = 100, // Duration between history
+                                         // updates.
+        TargetUpdatesPerPeriod = TargetHistoryTotalPeriod / TargetHistoryUpdatePeriod
+    };
 
-		// History info.
-		typedef struct
-			{
-			bool	bDirChange;		// true, if a direction change (relative to 
-										// source) occured at this point; false, 
-										// otherwise.
-			long	lSqrDistance;	// Squared distance traveled (relative to 
-										// source) at this point in time.
-			} TargetInfo;
+    // History info.
+    typedef struct
+    {
+        bool bDirChange;   // true, if a direction change (relative to
+                           // source) occured at this point; false,
+                           // otherwise.
+        long lSqrDistance; // Squared distance traveled (relative to
+                           // source) at this point in time.
+    } TargetInfo;
 
-	///////////////////////////////////////////////////////////////////////////
-	// Con/Destruction.
-	///////////////////////////////////////////////////////////////////////////
-	public:
-		CBulletFest()
-			{
-			m_u16IdTarget		= CIdBank::IdNil;
-			m_sCurTracerPos	= 0;
-			}
+    ///////////////////////////////////////////////////////////////////////////
+    // Con/Destruction.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    CBulletFest()
+    {
+        m_u16IdTarget = CIdBank::IdNil;
+        m_sCurTracerPos = 0;
+    }
 
-		~CBulletFest() 
-			{
-			}
+    ~CBulletFest() {}
 
-	///////////////////////////////////////////////////////////////////////////
-	// Methods.
-	///////////////////////////////////////////////////////////////////////////
-	public:
+    ///////////////////////////////////////////////////////////////////////////
+    // Methods.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    // Update current targeting information.  This will function will
+    // continually track the position of a target in order to determine
+    // how much it is moving.  The idea being that targets that move
+    // irratically(sp?) and more often are harder to hit.
+    void UpdateTarget( // Returns nothing.
+      short sAngle,    // In:  Angle of aim in degrees (on X/Z plane).
+      short sX,        // In:  Aim position.
+      short sY,        // In:  Aim position.
+      short sZ,        // In:  Aim position.
+      CRealm *pRealm); // In:  Realm in which to target.
 
-		// Update current targeting information.  This will function will
-		// continually track the position of a target in order to determine
-		// how much it is moving.  The idea being that targets that move 
-		// irratically(sp?) and more often are harder to hit.
-		void UpdateTarget(	// Returns nothing.
-			short sAngle,		// In:  Angle of aim in degrees (on X/Z plane).
-			short	sX,			// In:  Aim position.
-			short	sY,			// In:  Aim position.
-			short	sZ,			// In:  Aim position.
-			CRealm* pRealm);	// In:  Realm in which to target.
+    // Launch a bullet, create a muzzle flare at the src (sX, sY, sZ), and,
+    // if no CThing hit, create a ricochet or impact where the bullet
+    // contacted terrain (*psX, *psY, *psZ).
+    // This same process can be done in pieces with more control to the user
+    // by calling Fire(), Flare(), Ricochet(), and Impact().
+    bool FireDeluxe(                           // Returns what and as Fire() would.
+      short sAngleY,                           // In:  Angle of launch in degrees (on X/Z plane).
+      short sAngleZ,                           // In:  Angle of launch in degrees (on X/Y plane).
+      short sX,                                // In:  Launch position.
+      short sY,                                // In:  Launch position.
+      short sZ,                                // In:  Launch position.
+      short sRange,                            // In:  Maximum distance.
+      CRealm *pRealm,                          // In:  Realm in which to fire.
+      CSmash::Bits bitsInclude,                // In:  Mask of CSmash masks that this bullet can hit.
+      CSmash::Bits bitsDontCare,               // In:  Mask of CSmash masks that this bullet does not care to hit.
+      CSmash::Bits bitsExclude,                // In:  Mask of CSmash masks that this bullet cannot hit.
+      short sMaxRicochetAngle,                 // In:  Maximum angle with terrain that can cause
+                                               // a ricochet (on X/Z plane).
+      short sMaxRicochets,                     // In:  The maximum number of ricochets.
+      short *psX,                              // Out: Hit position.
+      short *psY,                              // Out: Hit position.
+      short *psZ,                              // Out: Hit position.
+      CThing **ppthing,                        // Out: Ptr to thing hit or NULL.
+      bool bTracer = true,                     // In:  Draw a tracer at random point along path.
+      SampleMasterID smid = g_smidBulletFire); // In:  Use ammo sample.
 
-		// Launch a bullet, create a muzzle flare at the src (sX, sY, sZ), and,
-		// if no CThing hit, create a ricochet or impact where the bullet 
-		// contacted terrain (*psX, *psY, *psZ).
-		// This same process can be done in pieces with more control to the user
-		// by calling Fire(), Flare(), Ricochet(), and Impact().
-		bool FireDeluxe(					// Returns what and as Fire() would.
-			short sAngleY,					// In:  Angle of launch in degrees (on X/Z plane).
-			short	sAngleZ,					// In:  Angle of launch in degrees (on X/Y plane).
-			short	sX,						// In:  Launch position.
-			short	sY,						// In:  Launch position.
-			short	sZ,						// In:  Launch position.
-			short	sRange,					// In:  Maximum distance.
-			CRealm* pRealm,				// In:  Realm in which to fire.
-			CSmash::Bits bitsInclude,	// In:  Mask of CSmash masks that this bullet can hit.
-			CSmash::Bits bitsDontCare,	// In:  Mask of CSmash masks that this bullet does not care to hit.
-			CSmash::Bits bitsExclude,	// In:  Mask of CSmash masks that this bullet cannot hit.
-			short	sMaxRicochetAngle,	// In:  Maximum angle with terrain that can cause
-												// a ricochet (on X/Z plane).
-			short	sMaxRicochets,			// In:  The maximum number of ricochets.
-			short* psX,						// Out: Hit position.
-			short* psY,						// Out: Hit position.
-			short* psZ,						// Out: Hit position.
-			CThing** ppthing,				// Out: Ptr to thing hit or NULL.
-			bool	bTracer = true,		// In:  Draw a tracer at random point along path.
-			SampleMasterID	smid	= g_smidBulletFire);	// In:  Use ammo sample.
+    // Launch a bullet.
+    bool Fire(                   // Returns true if a hit, false otherwise.
+      short sAngleY,             // In:  Angle of launch in degrees (on X/Z plane).
+      short sAngleZ,             // In:  Angle of launch in degrees (on X/Y plane).
+      short sX,                  // In:  Launch position.
+      short sY,                  // In:  Launch position.
+      short sZ,                  // In:  Launch position.
+      short sRange,              // In:  Maximum distance.
+      CRealm *pRealm,            // In:  Realm in which to fire.
+      CSmash::Bits bitsInclude,  // In:  Mask of CSmash masks that this bullet can hit.
+      CSmash::Bits bitsDontCare, // In:  Mask of CSmash masks that this bullet does not care to hit.
+      CSmash::Bits bitsExclude,  // In:  Mask of CSmash masks that this bullet cannot hit.
+      short *psX,                // Out: Hit position.
+      short *psY,                // Out: Hit position.
+      short *psZ,                // Out: Hit position.
+      CThing **ppthing,          // Out: Ptr to thing hit or NULL.
+      bool bTracer = true);      // In:  Draw a tracer at random point along path.
 
+    // Create a muzzle flare effect.
+    void Flare(                                // Returns nothing.
+      short sAngle,                            // In:  Angle of launch in degrees (on X/Z plane).
+      short sX,                                // In:  Launch position.
+      short sY,                                // In:  Launch position.
+      short sZ,                                // In:  Launch position.
+      CRealm *pRealm,                          // In:  Realm in which to fire.
+      SampleMasterID smid = g_smidBulletFire); // In:  Use ammo sample.
 
-		// Launch a bullet.
-		bool Fire(							// Returns true if a hit, false otherwise.
-			short sAngleY,					// In:  Angle of launch in degrees (on X/Z plane).
-			short	sAngleZ,					// In:  Angle of launch in degrees (on X/Y plane).
-			short	sX,						// In:  Launch position.
-			short	sY,						// In:  Launch position.
-			short	sZ,						// In:  Launch position.
-			short	sRange,					// In:  Maximum distance.
-			CRealm* pRealm,				// In:  Realm in which to fire.
-			CSmash::Bits bitsInclude,	// In:  Mask of CSmash masks that this bullet can hit.
-			CSmash::Bits bitsDontCare,	// In:  Mask of CSmash masks that this bullet does not care to hit.
-			CSmash::Bits bitsExclude,	// In:  Mask of CSmash masks that this bullet cannot hit.
-			short* psX,						// Out: Hit position.
-			short* psY,						// Out: Hit position.
-			short* psZ,						// Out: Hit position.
-			CThing** ppthing,				// Out: Ptr to thing hit or NULL.
-			bool	bTracer = true);		// In:  Draw a tracer at random point along path.
+    // Create a impact effect.
+    void Impact(       // Returns nothing.
+      short sAngle,    // In:  Angle of launch in degrees (on X/Z plane).
+      short sX,        // In:  Launch position.
+      short sY,        // In:  Launch position.
+      short sZ,        // In:  Launch position.
+      CRealm *pRealm); // In:  Realm in which to fire.
 
-		// Create a muzzle flare effect.
-		void Flare(						// Returns nothing.
-			short sAngle,				// In:  Angle of launch in degrees (on X/Z plane).
-			short	sX,					// In:  Launch position.
-			short	sY,					// In:  Launch position.
-			short	sZ,					// In:  Launch position.
-			CRealm* pRealm,			// In:  Realm in which to fire.
-			SampleMasterID	smid	= g_smidBulletFire);	// In:  Use ammo sample.
+    // Create a ricochet effect.
+    void Ricochet(     // Returns nothing.
+      short sAngle,    // In:  Angle of launch in degrees (on X/Z plane).
+      short sX,        // In:  Launch position.
+      short sY,        // In:  Launch position.
+      short sZ,        // In:  Launch position.
+      CRealm *pRealm); // In:  Realm in which to fire.
 
-		// Create a impact effect.
-		void Impact(				// Returns nothing.
-			short sAngle,			// In:  Angle of launch in degrees (on X/Z plane).
-			short	sX,				// In:  Launch position.
-			short	sY,				// In:  Launch position.
-			short	sZ,				// In:  Launch position.
-			CRealm* pRealm);		// In:  Realm in which to fire.
+    // Updates the static tracer color.
+    static void UpdateTracerColor(CRealm *prealm); // In:  Calling realm.
 
-		// Create a ricochet effect.
-		void Ricochet(				// Returns nothing.
-			short sAngle,			// In:  Angle of launch in degrees (on X/Z plane).
-			short	sX,				// In:  Launch position.
-			short	sY,				// In:  Launch position.
-			short	sZ,				// In:  Launch position.
-			CRealm* pRealm);		// In:  Realm in which to fire.
+    // Preload any assets that may be used.
+    static short Preload(CRealm *prealm); // In:  Calling realm.
 
-		// Updates the static tracer color.
-		static void UpdateTracerColor(
-			CRealm* prealm);				// In:  Calling realm.
+    ///////////////////////////////////////////////////////////////////////////
+    // Querries.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    ///////////////////////////////////////////////////////////////////////////
+    // Instantiable data.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    short m_sCurTracerPos; // Cummulative tracer position to give the look
+                           // of 'forward' movement.
 
-		// Preload any assets that may be used.
-		static short Preload(
-			CRealm* prealm);				// In:  Calling realm.
+    // Target info.  ***NYI***
+    U16 m_u16IdTarget;   // Last known target or IdNil.
+    short m_sDirChanges; // Direction changes (relative to source) over
+                         // last targeting duration.
+    long m_lSqrDistance; // Squared distance traveled (relative to
+                         // source) over last targeting duration.
+    RQueue<TargetInfo, TargetUpdatesPerPeriod> m_qtiHistory;
+    TargetInfo m_ati; // Array of target info used for history queue.
 
-	///////////////////////////////////////////////////////////////////////////
-	// Querries.
-	///////////////////////////////////////////////////////////////////////////
-	public:
+    ///////////////////////////////////////////////////////////////////////////
+    // Static data.
+    ///////////////////////////////////////////////////////////////////////////
+    static U8 ms_u8TracerIndex; // The color index to use for tracers.
+                                // This value is gotten only once per
+                                // execution of this program.
 
+  public:
+};
 
-	///////////////////////////////////////////////////////////////////////////
-	// Instantiable data.
-	///////////////////////////////////////////////////////////////////////////
-	public:
-
-		short	m_sCurTracerPos;	// Cummulative tracer position to give the look
-										// of 'forward' movement.
-
-		// Target info.  ***NYI***
-		U16	m_u16IdTarget;		// Last known target or IdNil.
-		short	m_sDirChanges;		// Direction changes (relative to source) over 
-										// last targeting duration.
-		long	m_lSqrDistance;	// Squared distance traveled (relative to 
-										// source) over last targeting duration.
-		RQueue<TargetInfo, TargetUpdatesPerPeriod>	m_qtiHistory;
-		TargetInfo	m_ati;		// Array of target info used for history queue.
-
-	///////////////////////////////////////////////////////////////////////////
-	// Static data.
-	///////////////////////////////////////////////////////////////////////////
-		static U8	ms_u8TracerIndex;	// The color index to use for tracers.
-												// This value is gotten only once per
-												// execution of this program.
-
-	public:
-	};
-
-#endif	// BULLETFEST_H
+#endif // BULLETFEST_H
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////

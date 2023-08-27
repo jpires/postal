@@ -27,7 +27,6 @@
 
 #include "input.h"
 
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 // CNetInput handle the buffering of inputs received from other players.
@@ -120,216 +119,192 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 class CNetInput
-	{
-	//------------------------------------------------------------------------------
-	// Types, enums, etc.
-	//------------------------------------------------------------------------------
-	public:
-		enum
-			{
-			// Maximum total entries (see elsewhere for in-depth explanation)
-			MaxTotalEntries	= 3 * Net::MaxAheadSeq,
+{
+    //------------------------------------------------------------------------------
+    // Types, enums, etc.
+    //------------------------------------------------------------------------------
+  public:
+    enum
+    {
+        // Maximum total entries (see elsewhere for in-depth explanation)
+        MaxTotalEntries = 3 * Net::MaxAheadSeq,
 
-			// Maxumum new entries (see elsewhere for in-depth explanation)
-			MaxNewEntries     = 2 * Net::MaxAheadSeq,
+        // Maxumum new entries (see elsewhere for in-depth explanation)
+        MaxNewEntries = 2 * Net::MaxAheadSeq,
 
-			// Maximum old entries (see elsewhere for in-depth explanation)
-			MaxOldEntries		= 1 * Net::MaxAheadSeq,
+        // Maximum old entries (see elsewhere for in-depth explanation)
+        MaxOldEntries = 1 * Net::MaxAheadSeq,
 
-			// The size must be a power of two, and the mask must correspond to it.
-			// Remember that this must be at LEAST as large as MaxTotalEntries!
-			Size				= 256,
-			Mask				= Size - 1,
+        // The size must be a power of two, and the mask must correspond to it.
+        // Remember that this must be at LEAST as large as MaxTotalEntries!
+        Size = 256,
+        Mask = Size - 1,
 
-			// Invalid input value
-			Invalid = 0xffffffff
-			};
+        // Invalid input value
+        Invalid = 0xffffffff
+    };
 
-	//------------------------------------------------------------------------------
-	// Variables
-	//------------------------------------------------------------------------------
-	protected:
-		UINPUT					m_aInputs[Size];						// Inputs
-		U8						m_aFrameTimes[Size];					// Game time for the frames *SPA
-		Net::SEQ				m_seqFrame;								// Local player's current frame number
-		Net::SEQ				m_seqOldest;							// Oldest sequence we have
+    //------------------------------------------------------------------------------
+    // Variables
+    //------------------------------------------------------------------------------
+  protected:
+    UINPUT m_aInputs[Size]; // Inputs
+    U8 m_aFrameTimes[Size]; // Game time for the frames *SPA
+    Net::SEQ m_seqFrame;    // Local player's current frame number
+    Net::SEQ m_seqOldest;   // Oldest sequence we have
 
-	//------------------------------------------------------------------------------
-	// Functions
-	//------------------------------------------------------------------------------
-	public:
-		////////////////////////////////////////////////////////////////////////////////
-		// Constructor
-		////////////////////////////////////////////////////////////////////////////////
-		CNetInput()
-			{
-			ASSERT(Size >= MaxTotalEntries);
-			Reset();
-			}
+    //------------------------------------------------------------------------------
+    // Functions
+    //------------------------------------------------------------------------------
+  public:
+    ////////////////////////////////////////////////////////////////////////////////
+    // Constructor
+    ////////////////////////////////////////////////////////////////////////////////
+    CNetInput()
+    {
+        ASSERT(Size >= MaxTotalEntries);
+        Reset();
+    }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    // Destructor
+    ////////////////////////////////////////////////////////////////////////////////
+    ~CNetInput() { Reset(); }
 
-		////////////////////////////////////////////////////////////////////////////////
-		// Destructor
-		////////////////////////////////////////////////////////////////////////////////
-		~CNetInput()
-			{
-			Reset();
-			}
+    ////////////////////////////////////////////////////////////////////////////////
+    // Reset to post-construction state
+    ////////////////////////////////////////////////////////////////////////////////
+    void Reset(void)
+    {
+        short i = 0;
+        // Clear the entire window to "invalid" values
+        for (i = 0; i < Size; i++)
+            m_aInputs[i] = Invalid;
 
-		////////////////////////////////////////////////////////////////////////////////
-		// Reset to post-construction state
-		////////////////////////////////////////////////////////////////////////////////
-		void Reset(void)
-			{
-			short i = 0;
-			// Clear the entire window to "invalid" values
-			for (i = 0; i < Size; i++)
-				m_aInputs[i] = Invalid;
+        // Clear the entire window to initail values *SPA !!Eventually should input from prefs!!
+        for (i = 0; i < Size; i++)
+            m_aFrameTimes[i] = 100;
 
-			// Clear the entire window to initail values *SPA !!Eventually should input from prefs!!
-			for (i = 0; i < Size; i++)
-				m_aFrameTimes[i] = 100;
+        // Start the frame at 0.  The oldest value always lags by a fixed distance.
+        m_seqFrame = 0;
+        m_seqOldest = m_seqFrame - MaxOldEntries;
+    }
 
-			// Start the frame at 0.  The oldest value always lags by a fixed distance.
-			m_seqFrame = 0;
-			m_seqOldest = m_seqFrame - MaxOldEntries;
-			}
+    ////////////////////////////////////////////////////////////////////////////////
+    // Move the frame forward
+    // IT IS ASSUMED THAT THE CALLER WILL NOT BE STUPID!!!
+    // Don't ever move the frame forward unless the input for the current frame
+    // is valid, as reported by GetInput()!
+    ////////////////////////////////////////////////////////////////////////////////
+    void IncFrame(void)
+    {
+        // Make sure this makes sense!
+        ASSERT(m_aInputs[m_seqFrame & Mask] != Invalid);
 
-		////////////////////////////////////////////////////////////////////////////////
-		// Move the frame forward
-		// IT IS ASSUMED THAT THE CALLER WILL NOT BE STUPID!!!
-		// Don't ever move the frame forward unless the input for the current frame
-		// is valid, as reported by GetInput()!
-		////////////////////////////////////////////////////////////////////////////////
-		void IncFrame(void)
-			{
-			// Make sure this makes sense!
-			ASSERT(m_aInputs[m_seqFrame & Mask] != Invalid);
+        // Invalidate oldest sequence
+        m_aInputs[m_seqOldest & Mask] = Invalid;
 
-			// Invalidate oldest sequence
-			m_aInputs[m_seqOldest & Mask] = Invalid;
+        // Move forward
+        m_seqFrame++;
+        m_seqOldest++;
+    }
 
-			// Move forward
-			m_seqFrame++;
-			m_seqOldest++;
-			}
+    ////////////////////////////////////////////////////////////////////////////////
+    // Put a new input value.
+    // If the specified seq is outside of the "new value window", it is ignored.
+    ////////////////////////////////////////////////////////////////////////////////
+    void Put(Net::SEQ seq, UINPUT input)
+    {
+        // If the seq falls within the "new values" window, we use it.  Note that
+        // the "new values" window starts at the current frame.
+        // The excessive casting is to make sure the compiler does this all as
+        // unsigned math and comparisons.
+        if ((Net::SEQ)(seq - m_seqFrame) < (Net::SEQ)MaxNewEntries)
+            m_aInputs[seq & Mask] = input;
+    }
 
-		////////////////////////////////////////////////////////////////////////////////
-		// Put a new input value.
-		// If the specified seq is outside of the "new value window", it is ignored.
-		////////////////////////////////////////////////////////////////////////////////
-		void Put(
-			Net::SEQ seq,
-			UINPUT input)
-			{
-			// If the seq falls within the "new values" window, we use it.  Note that
-			// the "new values" window starts at the current frame.
-			// The excessive casting is to make sure the compiler does this all as
-			// unsigned math and comparisons.
-			if ((Net::SEQ)(seq - m_seqFrame) < (Net::SEQ)MaxNewEntries)
-				m_aInputs[seq & Mask] = input;
-			}
+    ////////////////////////////////////////////////////////////////////////////////
+    // Put a new frame time value.  *SPA
+    // If the specified seq is outside of the "new value window", it is ignored.
+    ////////////////////////////////////////////////////////////////////////////////
+    void PutFrameTime(Net::SEQ seq, U8 frameTime)
+    {
+        // If the seq falls within the "new values" window, we use it.  Note that
+        // the "new values" window starts at the current frame.
+        // The excessive casting is to make sure the compiler does this all as
+        // unsigned math and comparisons.
+        if ((Net::SEQ)(seq - m_seqFrame) < (Net::SEQ)MaxNewEntries)
+        {
+            m_aFrameTimes[seq & Mask] = frameTime;
+        }
+    }
 
-		////////////////////////////////////////////////////////////////////////////////
-		// Put a new frame time value.  *SPA
-		// If the specified seq is outside of the "new value window", it is ignored.
-		////////////////////////////////////////////////////////////////////////////////
-		void PutFrameTime(
-			Net::SEQ seq,
-			U8 frameTime)
-			{
-			// If the seq falls within the "new values" window, we use it.  Note that
-			// the "new values" window starts at the current frame.
-			// The excessive casting is to make sure the compiler does this all as
-			// unsigned math and comparisons.
-			if ((Net::SEQ)(seq - m_seqFrame) < (Net::SEQ)MaxNewEntries)
-				{
-				m_aFrameTimes[seq & Mask] = frameTime;
-				}
-			}
+    ////////////////////////////////////////////////////////////////////////////////
+    // Find first invalid value starting at the specified seq and continuing to
+    // the end of the "new" window.
+    ////////////////////////////////////////////////////////////////////////////////
+    Net::SEQ FindFirstInvalid(Net::SEQ seq)
+    {
+        Net::SEQ offset = (Net::SEQ)(seq - m_seqFrame);
+        while (offset < (Net::SEQ)MaxNewEntries)
+        {
+            if (m_aInputs[seq & Mask] == Invalid)
+                break;
+            seq++;
+            offset++;
+        }
+        return seq;
+    }
 
-		////////////////////////////////////////////////////////////////////////////////
-		// Find first invalid value starting at the specified seq and continuing to
-		// the end of the "new" window.
-		////////////////////////////////////////////////////////////////////////////////
-		Net::SEQ FindFirstInvalid(
-			Net::SEQ seq)
-			{
-			Net::SEQ offset = (Net::SEQ)(seq - m_seqFrame);
-			while (offset < (Net::SEQ)MaxNewEntries)
-				{
-				if (m_aInputs[seq & Mask] == Invalid)
-					break;
-				seq++;
-				offset++;
-				}
-			return seq;
-			}
+    // This alternative version starts at the current frame
+    Net::SEQ FindFirstInvalid(void) { return FindFirstInvalid(m_seqFrame); }
 
-		// This alternative version starts at the current frame
-		Net::SEQ FindFirstInvalid(void)
-			{
-			return FindFirstInvalid(m_seqFrame);
-			}
+    ////////////////////////////////////////////////////////////////////////////////
+    // Get the specified input value.
+    // A return value of CNetInput::Invalid means that input was not available.
+    ////////////////////////////////////////////////////////////////////////////////
+    UINPUT Get(Net::SEQ seq)
+    {
+        // If the seq falls within the total window, we get it.  Note that this
+        // window starts at the oldest value, which is always Net::MaxAheadSeq less
+        // than the current frame.
+        // The excessive casting is to make sure the compiler does this all as
+        // unsigned math and comparisons.
+        if ((Net::SEQ)(seq - m_seqOldest) < (Net::SEQ)MaxTotalEntries)
+            return m_aInputs[seq & Mask];
+        else
+            return Invalid;
+    }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    // Get the specified frame time value. *SPA
+    // A return value of CNetInput::Invalid means that input was not available.
+    ////////////////////////////////////////////////////////////////////////////////
+    U8 GetFrameTime(Net::SEQ seq)
+    {
+        // If the seq falls within the total window, we get it.  Note that this
+        // window starts at the oldest value, which is always Net::MaxAheadSeq less
+        // than the current frame.
+        // The excessive casting is to make sure the compiler does this all as
+        // unsigned math and comparisons.
+        if ((Net::SEQ)(seq - m_seqOldest) < (Net::SEQ)MaxTotalEntries)
+            return m_aFrameTimes[seq & Mask];
+        else
+            return Invalid;
+    }
 
-		////////////////////////////////////////////////////////////////////////////////
-		// Get the specified input value.
-		// A return value of CNetInput::Invalid means that input was not available.
-		////////////////////////////////////////////////////////////////////////////////
-		UINPUT Get(
-			Net::SEQ seq)
-			{
-			// If the seq falls within the total window, we get it.  Note that this
-			// window starts at the oldest value, which is always Net::MaxAheadSeq less
-			// than the current frame.
-			// The excessive casting is to make sure the compiler does this all as
-			// unsigned math and comparisons.
-			if ((Net::SEQ)(seq - m_seqOldest) < (Net::SEQ)MaxTotalEntries)
-				return m_aInputs[seq & Mask];
-			else
-				return Invalid;
-			}
+    ////////////////////////////////////////////////////////////////////////////////
+    // Get current frame seq
+    ////////////////////////////////////////////////////////////////////////////////
+    Net::SEQ GetFrameSeq(void) { return m_seqFrame; }
 
-		////////////////////////////////////////////////////////////////////////////////
-		// Get the specified frame time value. *SPA
-		// A return value of CNetInput::Invalid means that input was not available.
-		////////////////////////////////////////////////////////////////////////////////
-		U8 GetFrameTime(
-			Net::SEQ seq)
-			{
-			// If the seq falls within the total window, we get it.  Note that this
-			// window starts at the oldest value, which is always Net::MaxAheadSeq less
-			// than the current frame.
-			// The excessive casting is to make sure the compiler does this all as
-			// unsigned math and comparisons.
-			if ((Net::SEQ)(seq - m_seqOldest) < (Net::SEQ)MaxTotalEntries)
-				return m_aFrameTimes[seq & Mask];
-			else
-				return Invalid;
-			}
+    ////////////////////////////////////////////////////////////////////////////////
+    // Get oldest frame seq
+    ////////////////////////////////////////////////////////////////////////////////
+    Net::SEQ GetOldestSeq(void) { return m_seqOldest; }
+};
 
-
-		////////////////////////////////////////////////////////////////////////////////
-		// Get current frame seq
-		////////////////////////////////////////////////////////////////////////////////
-		Net::SEQ GetFrameSeq(void)
-			{
-			return m_seqFrame;
-			}
-
-
-		////////////////////////////////////////////////////////////////////////////////
-		// Get oldest frame seq
-		////////////////////////////////////////////////////////////////////////////////
-		Net::SEQ GetOldestSeq(void)
-			{
-			return m_seqOldest;
-			}
-	};
-
-
-#endif //NETINPUT_H
+#endif // NETINPUT_H
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

@@ -16,7 +16,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
 // BufQ.CPP
-// 
+//
 // History:
 //		05/24/97 JMI	Started.
 //
@@ -31,7 +31,6 @@
 
 // Nothing to do here.  It's all in the header for maximum inlining!
 
-
 // This was for testing the code efficiency
 #if 0
 void test(void);
@@ -43,7 +42,7 @@ void test(void)
 	buf.Put(val);
 	}
 #endif
-	
+
 ///////////////////////////////////////////////////////////////////////////////
 // EOF
 ///////////////////////////////////////////////////////////////////////////////

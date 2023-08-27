@@ -32,20 +32,13 @@
 #define CREDITS_H
 #include "SampleMaster.h"
 
-
 // Display the credits, returns SUCCESS or FAILURE
-extern short Credits(SampleMasterID* pMusic = NULL,
-							char*	pszBackground = NULL,
-							char* pszCredits = NULL);
+extern short Credits(SampleMasterID *pMusic = NULL, char *pszBackground = NULL, char *pszCredits = NULL);
 
 // For general usage
-extern short	ScrollPage(char* pszBackground,char* pszScrollScript,
-								  double dScrollRate = 0.0,RRect *prWindow = NULL);
+extern short ScrollPage(char *pszBackground, char *pszScrollScript, double dScrollRate = 0.0, RRect *prWindow = NULL);
 
-
-
-
-#endif //CREDITS_H
+#endif // CREDITS_H
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

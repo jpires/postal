@@ -21,24 +21,24 @@
 //	History:
 //		01/22/97	JMI	Converted many m_spryAlphas/Opaques to arrays and added
 //							a macro enum MaxLayers.
-//		
+//
 //		01/23/97	JMI	Added two very non-major comments and removed a #if 0
 //							block.
-//		
+//
 //		01/26/97	JMI	Made m_imBackground public.  It was the only way I could
 //							figure to get any idea of the realm dimensions that I
 //							needed for the editor.
-//		
+//
 //		01/26/97	JMI	Added override of EditRect() that sets the rect to the
 //							dimensions of m_pimBackground->
-//		
+//
 //		01/31/97 MJR	Added GetWidth() and GetHeight().
-//		
+//
 //		02/03/97	JMI	Updated default relative path used to get hood resources.
-//		
+//
 //		02/04/97	JMI	Changed all resources to pointers so we can fully utilize
 //							the RResMgr.
-//		
+//
 //		02/07/97	JMI	Added m_sWorldXRot, world transformation x rotation.
 //
 //		02/13/97	JMI	Changed paths for hoods to be in hoods/ instead of bg/
@@ -67,142 +67,138 @@
 
 #include "RSPiX.h"
 #ifdef PATHS_IN_INCLUDES
-	#include "WishPiX/Spry/spry.h"
-	#include "ORANGE/MultiGrid/MultiGridIndirect.h"
+#include "WishPiX/Spry/spry.h"
+#include "ORANGE/MultiGrid/MultiGridIndirect.h"
 #else
-	#include "spry.h"
-	#include "multigridindirect.h"
+#include "spry.h"
+#include "multigridindirect.h"
 #endif
 #include "thing.h"
 
 // A fake declaration for CRealm pointers...
-class CRealm; 
+class CRealm;
 
 // This is the hood object
 class CTrigger : public CThing
-	{
-	//---------------------------------------------------------------------------
-	// Types, enums, etc.
-	//---------------------------------------------------------------------------
-	public:
+{
+    //---------------------------------------------------------------------------
+    // Types, enums, etc.
+    //---------------------------------------------------------------------------
+  public:
+    //---------------------------------------------------------------------------
+    // Variables
+    //---------------------------------------------------------------------------
+  public:
+    RMultiGridIndirect *m_pmgi; // Attribute map of regions
+    USHORT m_ausPylonUIDs[256]; // Look up for Pylon ID's
 
-	//---------------------------------------------------------------------------
-	// Variables
-	//---------------------------------------------------------------------------
-	public:
-		
-		RMultiGridIndirect* m_pmgi;							// Attribute map of regions
-		USHORT	m_ausPylonUIDs[256];							// Look up for Pylon ID's
+    //---------------------------------------------------------------------------
+    // Constructor(s) / destructor
+    //---------------------------------------------------------------------------
+  protected:
+    // Constructor
+    CTrigger(CRealm *pRealm);
 
-	//---------------------------------------------------------------------------
-	// Constructor(s) / destructor
-	//---------------------------------------------------------------------------
-	protected:
-		// Constructor
-		CTrigger(CRealm* pRealm);
+  public:
+    // Destructor
+    ~CTrigger();
 
-	public:
-		// Destructor
-		~CTrigger();
+    //---------------------------------------------------------------------------
+    // Required static functions
+    //---------------------------------------------------------------------------
+  public:
+    // Construct object
+    static short Construct( // Returns 0 if successfull, non-zero otherwise
+      CRealm *pRealm,       // In:  Pointer to realm this object belongs to
+      CThing **ppNew)       // Out: Pointer to new object
+    {
+        short sResult = 0;
+        *ppNew = new CTrigger(pRealm);
+        if (*ppNew == 0)
+        {
+            sResult = -1;
+            TRACE("CTrigger::Construct(): Couldn't construct CTrigger!\n");
+        }
+        return sResult;
+    }
 
-	//---------------------------------------------------------------------------
-	// Required static functions
-	//---------------------------------------------------------------------------
-	public:
-		// Construct object
-		static short Construct(									// Returns 0 if successfull, non-zero otherwise
-			CRealm* pRealm,										// In:  Pointer to realm this object belongs to
-			CThing** ppNew)										// Out: Pointer to new object
-			{
-			short sResult = 0;
-			*ppNew = new CTrigger(pRealm);
-			if (*ppNew == 0)
-				{
-				sResult = -1;
-				TRACE("CTrigger::Construct(): Couldn't construct CTrigger!\n");
-				}
-			return sResult;
-			}
+    //---------------------------------------------------------------------------
+    // Required virtual functions (implimenting them as inlines doesn't pay!)
+    //---------------------------------------------------------------------------
+  public:
+    // Load object (should call base class version!)
+    short Load(             // Returns 0 if successfull, non-zero otherwise
+      RFile *pFile,         // In:  File to load from
+      bool bEditMode,       // In:  True for edit mode, false otherwise
+      short sFileCount,     // In:  File count (unique per file, never 0)
+      ULONG ulFileVersion); // In:  Version of file format to load.
 
-	//---------------------------------------------------------------------------
-	// Required virtual functions (implimenting them as inlines doesn't pay!)
-	//---------------------------------------------------------------------------
-	public:
-		// Load object (should call base class version!)
-		short Load(													// Returns 0 if successfull, non-zero otherwise
-			RFile* pFile,											// In:  File to load from
-			bool bEditMode,										// In:  True for edit mode, false otherwise
-			short sFileCount,										// In:  File count (unique per file, never 0)
-			ULONG	ulFileVersion);								// In:  Version of file format to load.
+    // Save object (should call base class version!)
+    short Save(          // Returns 0 if successfull, non-zero otherwise
+      RFile *pFile,      // In:  File to save to
+      short sFileCount); // In:  File count (unique per file, never 0)
 
-		// Save object (should call base class version!)
-		short Save(													// Returns 0 if successfull, non-zero otherwise
-			RFile* pFile,											// In:  File to save to
-			short sFileCount);									// In:  File count (unique per file, never 0)
+    // Startup object
+    short Startup(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Startup object
-		short Startup(void);										// Returns 0 if successfull, non-zero otherwise
+    // Shutdown object
+    short Shutdown(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Shutdown object
-		short Shutdown(void);									// Returns 0 if successfull, non-zero otherwise
+    // Suspend object
+    void Suspend(void);
 
-		// Suspend object
-		void Suspend(void);
+    // Resume object
+    void Resume(void);
 
-		// Resume object
-		void Resume(void);
+    // Update object
+    void Update(void);
 
-		// Update object
-		void Update(void);
+    // Render object
+    void Render(void);
 
-		// Render object
-		void Render(void);
+    // Called by editor to init new object at specified position
+    short EditNew( // Returns 0 if successfull, non-zero otherwise
+      short sX,    // In:  New x coord
+      short sY,    // In:  New y coord
+      short sZ);   // In:  New z coord
 
-		// Called by editor to init new object at specified position
-		short EditNew(												// Returns 0 if successfull, non-zero otherwise
-			short sX,												// In:  New x coord
-			short sY,												// In:  New y coord
-			short sZ);												// In:  New z coord
+    // Called by editor to modify object
+    short EditModify(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Called by editor to modify object
-		short EditModify(void);									// Returns 0 if successfull, non-zero otherwise
+    // Called by editor to move object to specified position
+    short EditMove( // Returns 0 if successfull, non-zero otherwise
+      short sX,     // In:  New x coord
+      short sY,     // In:  New y coord
+      short sZ);    // In:  New z coord
 
-		// Called by editor to move object to specified position
-		short EditMove(											// Returns 0 if successfull, non-zero otherwise
-			short sX,												// In:  New x coord
-			short sY,												// In:  New y coord
-			short sZ);												// In:  New z coord
+    // Called by editor to update object
+    void EditUpdate(void);
 
-		// Called by editor to update object
-		void EditUpdate(void);
+    // Called by editor to render object
+    void EditRender(void);
 
-		// Called by editor to render object
-		void EditRender(void);
+    // Called by editor to get the clickable pos/area of an object.
+    virtual // If you override this, do NOT call this base class.
+      void
+      EditRect(     // Returns nothiing.
+        RRect *prc) // Out: Clickable pos/area of object.
+    {
+        // Default implementation makes the object unclickable.
+        prc->sX = 0;
+        prc->sY = 0;
+        prc->sW = 16;
+        prc->sH = 16;
+    }
 
-		// Called by editor to get the clickable pos/area of an object.
-		virtual	// If you override this, do NOT call this base class.
-		void EditRect(				// Returns nothiing.
-			RRect*	prc)			// Out: Clickable pos/area of object.
-			{
-			// Default implementation makes the object unclickable.
-			prc->sX	= 0;
-			prc->sY	= 0;
-			prc->sW	= 16;
-			prc->sH	= 16;
-			}
+    //---------------------------------------------------------------------------
+    // Trigger Specific Functions
+    //---------------------------------------------------------------------------
+  public:
+    // After the game editor creates the attribute data, stick it here
+    void AddData(RMultiGridIndirect *pmgi);
+};
 
-	//---------------------------------------------------------------------------
-	// Trigger Specific Functions
-	//---------------------------------------------------------------------------
-	public:
-
-		// After the game editor creates the attribute data, stick it here
-		void	AddData(RMultiGridIndirect* pmgi);
-		
-	};
-
-
-#endif //HOOD_H
+#endif // HOOD_H
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

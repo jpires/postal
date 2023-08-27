@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // ProcessGui.H
-// 
+//
 // History:
 //		07/03/97 JMI	Started.
 //
@@ -58,18 +58,18 @@
 // paths to a header file.  In this case we generally go off of our
 // RSPiX root directory.  System.h MUST be included before this macro
 // is evaluated.  System.h is the header that, based on the current
-// platform (or more so in this case on the compiler), defines 
+// platform (or more so in this case on the compiler), defines
 // PATHS_IN_INCLUDES.  Blue.h includes system.h so you can include that
 // instead.
 ///////////////////////////////////////////////////////////////////////////////
 #include "System.h"
 
 #ifdef PATHS_IN_INCLUDES
-	#include "ORANGE/GUI/guiItem.h"
-	#include "ORANGE/DirtRect/DirtRect.h"
+#include "ORANGE/GUI/guiItem.h"
+#include "ORANGE/DirtRect/DirtRect.h"
 #else
-	#include "guiItem.h"
-	#include "DirtRect.h"
+#include "guiItem.h"
+#include "DirtRect.h"
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -84,148 +84,136 @@
 // Typedefs.
 //////////////////////////////////////////////////////////////////////////////
 class RProcessGui
-	{
-	///////////////////////////////////////////////////////////////////////////
-	// Typedefs, enums, etc.
-	///////////////////////////////////////////////////////////////////////////
-	public:
-		typedef long (*UpdateFunc)(	// Returns a non-zero ID to abort or zero
-												// to continue.
-			RInputEvent*	pie);			// Out: Next input event to process.
+{
+    ///////////////////////////////////////////////////////////////////////////
+    // Typedefs, enums, etc.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    typedef long (*UpdateFunc)( // Returns a non-zero ID to abort or zero
+                                // to continue.
+      RInputEvent *pie);        // Out: Next input event to process.
 
-		typedef enum
-			{
-			NoCleanScreen	= 0x0001		// Don't clean the dest buffer when exiting.
-			} Flags;
+    typedef enum
+    {
+        NoCleanScreen = 0x0001 // Don't clean the dest buffer when exiting.
+    } Flags;
 
-	///////////////////////////////////////////////////////////////////////////
-	// Con/Destruction.
-	///////////////////////////////////////////////////////////////////////////
-	public:
-		RProcessGui()
-			{
-			Init();
-			}
+    ///////////////////////////////////////////////////////////////////////////
+    // Con/Destruction.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    RProcessGui() { Init(); }
 
-		~RProcessGui() 
-			{
-			Kill();
-			}
+    ~RProcessGui() { Kill(); }
 
-	///////////////////////////////////////////////////////////////////////////
-	// Methods.
-	///////////////////////////////////////////////////////////////////////////
-	public:
-		// Prepare to handle a GUI.
-		// This must be called to setup components before DoModeless() is called.
-		// (DoModal() does this automatically).
-		short Prepare(							// Returns 0 on success.
-			RGuiItem* pgui,					// In:  GUI to be processed.
-			RGuiItem* pguiOk = NULL,		// In:  If not NULL, specifies GUI 
-													// activated by ENTER key.
-			RGuiItem* pguiCancel = NULL);	// In:  If not NULL, specifies GUI
-													// activated by ESCAPE key.
+    ///////////////////////////////////////////////////////////////////////////
+    // Methods.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    // Prepare to handle a GUI.
+    // This must be called to setup components before DoModeless() is called.
+    // (DoModal() does this automatically).
+    short Prepare(                  // Returns 0 on success.
+      RGuiItem *pgui,               // In:  GUI to be processed.
+      RGuiItem *pguiOk = NULL,      // In:  If not NULL, specifies GUI
+                                    // activated by ENTER key.
+      RGuiItem *pguiCancel = NULL); // In:  If not NULL, specifies GUI
+                                    // activated by ESCAPE key.
 
-		// This should be called to clean up components when no more DoModeless()
-		// calls are to be made on the current GUI.
-		// (DoModal() does this automatically).
-		void Unprepare(void);	// Returns nothing.
+    // This should be called to clean up components when no more DoModeless()
+    // calls are to be made on the current GUI.
+    // (DoModal() does this automatically).
+    void Unprepare(void); // Returns nothing.
 
-		// Setup GUI to notify this class of presses.
-		void SetGuiToNotify(		// Returns nothing.
-			RGuiItem*	pgui);	// In:  GUI item to setup to notify this class
-										// of presses.
+    // Setup GUI to notify this class of presses.
+    void SetGuiToNotify( // Returns nothing.
+      RGuiItem *pgui);   // In:  GUI item to setup to notify this class
+                         // of presses.
 
-		// Set all unclaimed GUIs' callbacks to go through this class.
-		void SetGuisToNotify(	// Returns nothing.
-			RGuiItem* pguiRoot);	// In:  All unclaimed child GUIs' 
-										// callbacks are directed through
-										// ProcessGui.
+    // Set all unclaimed GUIs' callbacks to go through this class.
+    void SetGuisToNotify(  // Returns nothing.
+      RGuiItem *pguiRoot); // In:  All unclaimed child GUIs'
+                           // callbacks are directed through
+                           // ProcessGui.
 
-		// Call this to process a GUI modally.  Once this function is called,
-		// it will not return until a GUI pressed callback occurs on a GUI
-		// with an ID other than 0 or the update callback, m_fnUpdate, if any,
-		// returns non-zero.
-		long DoModal(							// Returns ID of pressed GUI that terminated 
-													// modal loop or value returned from 
-													// m_fnUpdate, if any.
-			RGuiItem* pgui,					// In:  GUI to be processed or NULL.
-			RGuiItem* pguiOk = NULL,		// In:  If not NULL, specifies GUI 
-													// activated by ENTER key.
-			RGuiItem* pguiCancel = NULL,	// In:  If not NULL, specifies GUI
-													// activated by ESCAPE key.
-			RImage* pimDst = NULL);			// Where to draw dialog and rspBlit from.
-													// If this is NULL, the system buffer is
-													// used.
-													// rspBlit is used to update this to the
-													// screen image unless pimDst is the screen
-													// image.
+    // Call this to process a GUI modally.  Once this function is called,
+    // it will not return until a GUI pressed callback occurs on a GUI
+    // with an ID other than 0 or the update callback, m_fnUpdate, if any,
+    // returns non-zero.
+    long DoModal(                  // Returns ID of pressed GUI that terminated
+                                   // modal loop or value returned from
+                                   // m_fnUpdate, if any.
+      RGuiItem *pgui,              // In:  GUI to be processed or NULL.
+      RGuiItem *pguiOk = NULL,     // In:  If not NULL, specifies GUI
+                                   // activated by ENTER key.
+      RGuiItem *pguiCancel = NULL, // In:  If not NULL, specifies GUI
+                                   // activated by ESCAPE key.
+      RImage *pimDst = NULL);      // Where to draw dialog and rspBlit from.
+                                   // If this is NULL, the system buffer is
+                                   // used.
+                                   // rspBlit is used to update this to the
+                                   // screen image unless pimDst is the screen
+                                   // image.
 
-		// Call this to process a GUI modelessly.  This function processes the
-		// GUI for only one iteration allowing the caller continuous control.
-		long DoModeless(						// Returns ID of pressed GUI or value.
-			RGuiItem* pgui,					// In:  GUI to be processed or NULL.
-			RInputEvent* pie,					// In:  Input event to process.
-			RImage* pimDst = NULL);			// Where to draw dialog and rspBlit from.
-													// If this is NULL, the system buffer is
-													// used.
-													// rspBlit is used to update this to the
-													// screen image unless pimDst is the screen
-													// image.
+    // Call this to process a GUI modelessly.  This function processes the
+    // GUI for only one iteration allowing the caller continuous control.
+    long DoModeless(          // Returns ID of pressed GUI or value.
+      RGuiItem *pgui,         // In:  GUI to be processed or NULL.
+      RInputEvent *pie,       // In:  Input event to process.
+      RImage *pimDst = NULL); // Where to draw dialog and rspBlit from.
+                              // If this is NULL, the system buffer is
+                              // used.
+                              // rspBlit is used to update this to the
+                              // screen image unless pimDst is the screen
+                              // image.
 
-	///////////////////////////////////////////////////////////////////////////
-	// Querries.
-	///////////////////////////////////////////////////////////////////////////
-	public:
+    ///////////////////////////////////////////////////////////////////////////
+    // Querries.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    ///////////////////////////////////////////////////////////////////////////
+    // Internal functions.
+    ///////////////////////////////////////////////////////////////////////////
+  protected:
+    // Initialize instantiable data members.
+    void Init(void); // Returns nothing.
 
+    // Deallocate any instantiable dynamic members.
+    void Kill(void); // Returns nothing.
 
-	///////////////////////////////////////////////////////////////////////////
-	// Internal functions.
-	///////////////////////////////////////////////////////////////////////////
-	protected:
+    ///////////////////////////////////////////////////////////////////////////
+    // Internal static functions.
+    ///////////////////////////////////////////////////////////////////////////
+  protected:
+    // Callback for pressed GUIs.
+    static void PressedCall( // Returns nothing.
+      RGuiItem *pgui);       // In:  Pressed GUI.
 
-		// Initialize instantiable data members.
-		void Init(void);	// Returns nothing.
+    ///////////////////////////////////////////////////////////////////////////
+    // Instantiable data.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    RDirtyRects m_drl;      // List of dirtied areas.
+    RImage m_imEraser;      // Erase image.
+    RImage *m_pimLastDst;   // Last composite buffer (used
+                            // in Unprepare() to clean up display).
+    RGuiItem *m_pguiOk;     // GUI activated by ENTER.
+    RGuiItem *m_pguiCancel; // GUI activated by ESCAPE.
 
-		// Deallocate any instantiable dynamic members.
-		void Kill(void);	// Returns nothing.
+    UpdateFunc m_fnUpdate; // Callback to do updates, if not using
+                           // default handling.
 
-	///////////////////////////////////////////////////////////////////////////
-	// Internal static functions.
-	///////////////////////////////////////////////////////////////////////////
-	protected:
+    short m_sFlags; // See Flags.
 
-		// Callback for pressed GUIs.
-		static void PressedCall(	// Returns nothing.
-			RGuiItem*		pgui);	// In:  Pressed GUI.
+    ///////////////////////////////////////////////////////////////////////////
+    // Static data.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    // ID of last item pressed.
+    static long ms_lPressedId;
+};
 
-	///////////////////////////////////////////////////////////////////////////
-	// Instantiable data.
-	///////////////////////////////////////////////////////////////////////////
-	public:
-
-		RDirtyRects	m_drl;			// List of dirtied areas.
-		RImage		m_imEraser;		// Erase image.
-		RImage*		m_pimLastDst;	// Last composite buffer (used
-											// in Unprepare() to clean up display).
-		RGuiItem*	m_pguiOk;		// GUI activated by ENTER.
-		RGuiItem*	m_pguiCancel;	// GUI activated by ESCAPE.
-
-		UpdateFunc	m_fnUpdate;		// Callback to do updates, if not using
-											// default handling.
-
-		short			m_sFlags;		// See Flags.
-
-	///////////////////////////////////////////////////////////////////////////
-	// Static data.
-	///////////////////////////////////////////////////////////////////////////
-	public:
-
-		// ID of last item pressed.
-		static long ms_lPressedId;
-	};
-
-#endif	// PROCESSGUI_H
+#endif // PROCESSGUI_H
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////

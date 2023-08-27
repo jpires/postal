@@ -24,93 +24,80 @@
 
 #include "RSPiX.h"
 #ifdef PATHS_IN_INCLUDES
-	#include "ORANGE/CDT/flist.h"
+#include "ORANGE/CDT/flist.h"
 #else
-	#include "flist.h"
+#include "flist.h"
 #endif
 
 class RPrefs;
 class RFile;
 
 class CSettings
-	{
-	private:
-		typedef RFList<CSettings*> SETTINGS;
+{
+  private:
+    typedef RFList<CSettings *> SETTINGS;
 
-		typedef enum
-			{
-			MemFileSize = 512
-			};
+    typedef enum
+    {
+        MemFileSize = 512
+    };
 
-	//---------------------------------------------------------------------------
-	// This stuff deals with all CSettings objects
-	//---------------------------------------------------------------------------
-	private:
-		static SETTINGS* ms_pSettings;	// Pointer to list of all CSettings objects
-		static void* ms_pMem;				// Pointer to memory used for memory file
+    //---------------------------------------------------------------------------
+    // This stuff deals with all CSettings objects
+    //---------------------------------------------------------------------------
+  private:
+    static SETTINGS *ms_pSettings; // Pointer to list of all CSettings objects
+    static void *ms_pMem;          // Pointer to memory used for memory file
 
-		SETTINGS::Pointer m_pointer;		// Pointer to this object's location in list
-		
-	public:
-		// Read settings that are stored in preference file
-		static short LoadPrefs(
-			char* pszFile);
+    SETTINGS::Pointer m_pointer; // Pointer to this object's location in list
 
-		// Write settings that are stored in preference file
-		static short SavePrefs(
-			char* pszFile);
+  public:
+    // Read settings that are stored in preference file
+    static short LoadPrefs(char *pszFile);
 
-		// Load settings that are stored in game file
-		static short LoadGame(
-			char* pszFile);
+    // Write settings that are stored in preference file
+    static short SavePrefs(char *pszFile);
 
-		// Save settings that are stored in game file
-		static short SaveGame(
-			char* pszFile);
+    // Load settings that are stored in game file
+    static short LoadGame(char *pszFile);
 
-		// Temporarily set settings for demo mode
-		static short PreDemo(
-			void);
+    // Save settings that are stored in game file
+    static short SaveGame(char *pszFile);
 
-		// Restore settings to what they were prior to demo mode
-		static short PostDemo(
-			void);
+    // Temporarily set settings for demo mode
+    static short PreDemo(void);
 
-	//---------------------------------------------------------------------------
-	// This stuff applies to an individual CSettings object
-	//---------------------------------------------------------------------------
-	public:
-		// Set settings to default values
-		CSettings(void);
+    // Restore settings to what they were prior to demo mode
+    static short PostDemo(void);
 
-		// Destructor
-		~CSettings();
+    //---------------------------------------------------------------------------
+    // This stuff applies to an individual CSettings object
+    //---------------------------------------------------------------------------
+  public:
+    // Set settings to default values
+    CSettings(void);
 
-		// Read settings that are stored in preference file
-		virtual short LoadPrefs(
-			RPrefs* pPrefs) = 0;
+    // Destructor
+    ~CSettings();
 
-		// Write settings that are stored in preference file
-		virtual short SavePrefs(
-			RPrefs* pPrefs) = 0;
+    // Read settings that are stored in preference file
+    virtual short LoadPrefs(RPrefs *pPrefs) = 0;
 
-		// Load settings that are stored in game file
-		virtual short LoadGame(
-			RFile* pFile) = 0;
+    // Write settings that are stored in preference file
+    virtual short SavePrefs(RPrefs *pPrefs) = 0;
 
-		// Save settings that are stored in game file
-		virtual short SaveGame(
-			RFile* pFile) = 0;
+    // Load settings that are stored in game file
+    virtual short LoadGame(RFile *pFile) = 0;
 
-		// Temporarily set settings for demo mode (file is for saving current settings)
-		virtual short PreDemo(
-			RFile* pFile) = 0;
+    // Save settings that are stored in game file
+    virtual short SaveGame(RFile *pFile) = 0;
 
-		// Restore settings to what they were prior to demo mode
-		virtual short PostDemo(
-			RFile* pFile) = 0;
-	};
+    // Temporarily set settings for demo mode (file is for saving current settings)
+    virtual short PreDemo(RFile *pFile) = 0;
 
+    // Restore settings to what they were prior to demo mode
+    virtual short PostDemo(RFile *pFile) = 0;
+};
 
 #endif // SETTINGS_H
 ////////////////////////////////////////////////////////////////////////////////

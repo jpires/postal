@@ -32,8 +32,8 @@
 //		05/14/97	JMI	Added g_pszPickedUpMessage_ld_s for CDude.
 //
 //		06/03/97	JMI	Changed g_pszAudioModeError to g_pszAudioModeGeneralError
-//							and added g_pszAudioModeInUseError, 
-//							g_pszAudioModeNoDeviceError, 
+//							and added g_pszAudioModeInUseError,
+//							g_pszAudioModeNoDeviceError,
 //							g_pszAudioModeNotSupportedError.
 //
 //		06/04/97	JMI	Added g_pszNotOnCDROM.
@@ -43,34 +43,34 @@
 //
 //		06/14/97 MJR	Added/enhanced general file error messages.
 //
-//		07/13/97	JMI	Changed g_pszAudioModeNotSupportedError to 
+//		07/13/97	JMI	Changed g_pszAudioModeNotSupportedError to
 //							g_pszAudioModeNotSupportedError_s and changed to ask the
 //							user if they want to try the vanilla mode.
 //							Also, changed the other audio errors to include the
 //							sprintf format parameters in their names.
 //							Also, added g_pszAudioVanillaModeNotSupportedError_s for
-//							the case when the hardware does not support the vanilla 
+//							the case when the hardware does not support the vanilla
 //							mode.
 //
 //		07/21/97	JMI	Added g_pszNoWeaponButHaveAmmo_s_s and g_pszNoWeapon_s.
 //
 //		07/28/97	JMI	Added g_pszDispenserNoDispenseeTypeChosen.
 //
-//		08/05/97	JMI	Added g_pszDontHaveExecuteWeapon_s and 
+//		08/05/97	JMI	Added g_pszDontHaveExecuteWeapon_s and
 //							g_pszDontHaveSuicideWeapon_s.
 //
-//		08/12/97	JMI	Added g_pszGenericBrowseFor_s_Title and 
+//		08/12/97	JMI	Added g_pszGenericBrowseFor_s_Title and
 //							g_pszGenericMustBeRelativePath_s.
 //
 //		08/17/97	JMI	Got rid of m_szMessages and all message related functions
-//							and variables from CDude since we are now using the toolbar 
-//							for dude status feedback to the user.  This includes:  
-//							MsgTypeInfo, m_lNextStatusUpdateTime, m_lMsgUpdateDoneTime, 
-//							m_print, m_bClearedStatus, m_szMessages[], m_sDeadMsgNum, 
+//							and variables from CDude since we are now using the toolbar
+//							for dude status feedback to the user.  This includes:
+//							MsgTypeInfo, m_lNextStatusUpdateTime, m_lMsgUpdateDoneTime,
+//							m_print, m_bClearedStatus, m_szMessages[], m_sDeadMsgNum,
 //							ms_amtfMessages[], ms_u8FontForeIndex, ms_u8FontBackIndex,
-//							ms_u8FontShadowIndex, DrawStatus(), StatusChange(), 
-//							MessageChange(), Message(), UpdateFontColors(), 
-//							CPowerUp::ms_apszPowerUpTypeNames[], 
+//							ms_u8FontShadowIndex, DrawStatus(), StatusChange(),
+//							MessageChange(), Message(), UpdateFontColors(),
+//							CPowerUp::ms_apszPowerUpTypeNames[],
 //							CPowerUp::GetDescription(), and some strings and a string
 //							array in localize.*.
 //
@@ -108,7 +108,6 @@
 #ifndef LOCALIZE_H
 #define LOCALIZE_H
 
-
 // I went with variables instead of macros for one primary reason.  At some
 // point, most likely near the end of the project, when time is in short supply,
 // someone will need to go through and clean up all these strings.  If these
@@ -126,7 +125,7 @@ extern char g_pszVideoChangeDepthError[];
 extern char g_pszVideoDepthError[];
 extern char g_pszVideoResolutionError[];
 extern char g_pszVideoPagesError[];
-extern char	g_pszVideoChangeDepthErrorUnderGDI_s[];
+extern char g_pszVideoChangeDepthErrorUnderGDI_s[];
 
 extern char g_pszAudioModeGeneralError_s[];
 extern char g_pszAudioModeInUseError_s[];
@@ -148,9 +147,9 @@ extern char g_pszGeneralError[];
 extern char g_pszBadPath_s_s[];
 extern char g_pszBadCDPath_s_s[];
 
-extern char	g_pszAssetsMissingError[];
+extern char g_pszAssetsMissingError[];
 extern char g_pszNotOnCDROM[];
-extern char	g_pszSaveFileQuery[];
+extern char g_pszSaveFileQuery[];
 
 extern char g_pszSaveDemoTitle[];
 extern char g_pszSaveGameTitle[];
@@ -158,15 +157,15 @@ extern char g_pszSaveGameErrorTitle[];
 extern char g_pszSaveGameErrorText[];
 extern char g_pszLoadGameTitle[];
 
-extern char	g_pszFileOpenError_s[];
-extern char	g_pszFileReadError_s[];
-extern char	g_pszFileWriteError_s[];
+extern char g_pszFileOpenError_s[];
+extern char g_pszFileReadError_s[];
+extern char g_pszFileWriteError_s[];
 
 extern char g_pszDispenserNoDispenseeTypeChosen[];
 
 extern char g_pszGenericBrowseFor_s_Title[];
 
-extern char	g_pszGenericMustBeRelativePath_s[];
+extern char g_pszGenericMustBeRelativePath_s[];
 
 extern char g_pszDontDropYourselfMORON[];
 
@@ -179,7 +178,6 @@ extern char g_pszNoSoundFiles[];
 
 extern char g_pszPlayOneRealmOnlyMessage[];
 
-
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// Misc  ///////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -187,12 +185,12 @@ extern char g_pszPlayOneRealmOnlyMessage[];
 extern char g_pszEditorDisabled[];
 extern char g_pszMultiplayerDisabled[];
 extern char g_pszBuy[];
-	
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// Menus ///////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-extern char	g_pszMainMenu_Title[];
+extern char g_pszMainMenu_Title[];
 extern char g_pszMainMenu_Start[];
 extern char g_pszMainMenu_Options[];
 extern char g_pszMainMenu_Editor[];
@@ -301,7 +299,6 @@ extern char g_pszStartMultiplayerMenu_Join[];
 extern char g_pszStartMultiplayerMenu_Host[];
 extern char g_pszStartMultiplayerMenu_Options[];
 
-
 extern char g_pszJoinGameMenu_Title[];
 extern char g_pszJoinGameMenu_Browse[];
 extern char g_pszJoinGameMenu_ConnectTo[];
@@ -320,10 +317,10 @@ extern char g_pszMultiplayerSetupMenu_Color[];
 extern char g_pszMultiplayerSetupMenu_Protocol[];
 extern char g_pszMultiplayerSetupMenu_Connection[];
 
-extern char* g_apszScoreDisplayText[];
-extern char* g_apszScoreGoalText[];
-extern char* g_apszScoreUnits[];
-extern char* g_apszScoreExplanations[];
+extern char *g_apszScoreDisplayText[];
+extern char *g_apszScoreGoalText[];
+extern char *g_apszScoreUnits[];
+extern char *g_apszScoreExplanations[];
 
 // Keep at end -- was not in original localizable text.
 extern char g_pszControlsMenu_UseJoystick[];
@@ -332,8 +329,7 @@ extern char g_pszControlsMenu_UseJoystick[];
 ///////////////////////////// Sample Master ////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-extern char* g_apszSoundCategories[];
-
+extern char *g_apszSoundCategories[];
 
 #endif // LOCALIZE_H
 ////////////////////////////////////////////////////////////////////////////////

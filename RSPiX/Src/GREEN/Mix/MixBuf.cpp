@@ -18,7 +18,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 //	MixBuf.cpp
-// 
+//
 // History:
 //		06/19/95 JMI	Started.
 //
@@ -81,7 +81,7 @@
 // This module does the actual mixing for CMix.  Each buffer mixes to its own
 // settings.
 //
-// Normal limitations: This module can mix data of the same sample rate with 
+// Normal limitations: This module can mix data of the same sample rate with
 // different buffer sizes per channel, with different sample sizes (8 or
 // 16 bit PCM), and different numbers of channels (mono or stereo).
 //
@@ -95,15 +95,14 @@
 #include <string.h>
 
 #ifdef PATHS_IN_INCLUDES
-	#include "BLUE/system.h"
-	#include "BLUE/Blue.h"
-	#include "GREEN/Mix/MixBuf.h"
+#include "BLUE/system.h"
+#include "BLUE/Blue.h"
+#include "GREEN/Mix/MixBuf.h"
 #else
-	#include "System.h"
-	#include "Blue.h"
-	#include "MixBuf.h"
+#include "System.h"
+#include "Blue.h"
+#include "MixBuf.h"
 #endif // PATHS_IN_INCLUDES
-
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific macros.
@@ -115,129 +114,129 @@
 #define FORCE_GENERIC_CODE
 
 // Silence for 8 bit.
-#define SILENCE_8		0x80
+#define SILENCE_8 0x80
 // Silence for 16 bit.
-#define SILENCE_16	0x0000
+#define SILENCE_16 0x0000
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
 //////////////////////////////////////////////////////////////////////////////
 
 // Handy typedef for referring to a pointer as signed and unsigned char.
-typedef union	
-	{ 
-	S8* ps8; 
-	U8* pu8; 
-	} P8;
+typedef union
+{
+    S8 *ps8;
+    U8 *pu8;
+} P8;
 
 //////////////////////////////////////////////////////////////////////////////
 // Instantiate static members.
 //////////////////////////////////////////////////////////////////////////////
-long	RMixBuf::ms_lSampleRate;			// Sample rate for audio 
-													// playback/mix.
-long	RMixBuf::ms_lSrcBitsPerSample;	// Sample size in bits for sample data.
-													// 0 for no preference.
-long	RMixBuf::ms_lMixBitsPerSample;	// Sample size in bits for mixing.
-long	RMixBuf::ms_lDstBitsPerSample;	// Sample size in bits for Blue data.
-long	RMixBuf::ms_lNumChannels;			// Number of channels (mono
-													//  or stereo).
-short	RMixBuf::ms_sNumBufs	= 0;			// Number of RMixBufs allocated.
-UCHAR	RMixBuf::ms_ucGlobalVolume = UCHAR(255);	// Full volume is standard
+long RMixBuf::ms_lSampleRate;                  // Sample rate for audio
+                                               // playback/mix.
+long RMixBuf::ms_lSrcBitsPerSample;            // Sample size in bits for sample data.
+                                               // 0 for no preference.
+long RMixBuf::ms_lMixBitsPerSample;            // Sample size in bits for mixing.
+long RMixBuf::ms_lDstBitsPerSample;            // Sample size in bits for Blue data.
+long RMixBuf::ms_lNumChannels;                 // Number of channels (mono
+                                               //  or stereo).
+short RMixBuf::ms_sNumBufs = 0;                // Number of RMixBufs allocated.
+UCHAR RMixBuf::ms_ucGlobalVolume = UCHAR(255); // Full volume is standard
 
-short	RMixBuf::ms_sCutOffVolume = 1;	// Volume to not bother mixing.
+short RMixBuf::ms_sCutOffVolume = 1; // Volume to not bother mixing.
 
 //////////////////////////////////////////////////////////////////////////////
 // Handy conversion functions used by RMixBuf.
 //////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Convert from 8 bps to 16 bps.
-// 
+//
 //////////////////////////////////////////////////////////////////////////////
-inline void Conv8to16(	// Returns nothing.
-	U8*	pu8Src,			// In:  8 bit src.
-	S16*	ps16Dst,			// Out: 16 bit dst.  Cannot be the same as the src.
-	long	lSamples)		// In:  Samples to convert.
-	{
-	while (lSamples--)
-		{
-		// Shift up to 16 bits and toggle sign bit based on 16 bit value (i.e., 
-		// if it was 128 or more, we want no sign and, if it was under 128, we 
-		// want a sign -- I'm not sure if C does this for us or tries something 
-		// similar and screws me...need to check the assembly).
-		*ps16Dst++	= (*pu8Src++ << 8) ^ 0x8000;
-		}
-	}
+inline void Conv8to16( // Returns nothing.
+  U8 *pu8Src,          // In:  8 bit src.
+  S16 *ps16Dst,        // Out: 16 bit dst.  Cannot be the same as the src.
+  long lSamples)       // In:  Samples to convert.
+{
+    while (lSamples--)
+    {
+        // Shift up to 16 bits and toggle sign bit based on 16 bit value (i.e.,
+        // if it was 128 or more, we want no sign and, if it was under 128, we
+        // want a sign -- I'm not sure if C does this for us or tries something
+        // similar and screws me...need to check the assembly).
+        *ps16Dst++ = (*pu8Src++ << 8) ^ 0x8000;
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Convert from 16 bps to 8 bps.
-// 
+//
 //////////////////////////////////////////////////////////////////////////////
-inline void Conv16to8(	// Returns nothing.
-	S16*	ps16Src,			// In:  16 bit src.
-	U8*	pu8Dst,			// Out: 8 bit dst.  _Can_ be the same as the src.
-	long	lSamples)		// In:  Samples to convert.
-	{
-	while (lSamples--)
-		{
-		// Toggle sign bit based on 16 bit value, add 256 / 2 for rounding, and
-		// shift down to 8 bits.
-		*pu8Dst++	= ( (*ps16Src++ ^ 0x8000) + 128) >> 8;
-		}
-	}
+inline void Conv16to8( // Returns nothing.
+  S16 *ps16Src,        // In:  16 bit src.
+  U8 *pu8Dst,          // Out: 8 bit dst.  _Can_ be the same as the src.
+  long lSamples)       // In:  Samples to convert.
+{
+    while (lSamples--)
+    {
+        // Toggle sign bit based on 16 bit value, add 256 / 2 for rounding, and
+        // shift down to 8 bits.
+        *pu8Dst++ = ((*ps16Src++ ^ 0x8000) + 128) >> 8;
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // Handy mixer functions used by RMixBuf.
 //////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Mix (8 bit src, 8 bit destination, no volume scaling, generic).
-// 
+//
 //////////////////////////////////////////////////////////////////////////////
-inline void Mix(		// Returns nothing.
-	U8*	pu8Src,		// In:  Src.
-	U8*	pu8Dst,		// In:  Dst.
-	long	lSamples)	// In:  Number of samples to mix.
-	{
-	short	sVal;
+inline void Mix( // Returns nothing.
+  U8 *pu8Src,    // In:  Src.
+  U8 *pu8Dst,    // In:  Dst.
+  long lSamples) // In:  Number of samples to mix.
+{
+    short sVal;
 
-	while (lSamples--)
-		{
-		// Convert unsigned values into signed shorts, add them, clip sum,
-		// convert back to unsigned value, and save result.
-		
-		// Add values after converting to signed.
-		sVal	= ((short)(*pu8Src++) - 128) + ((short)(*pu8Dst) - 128);
+    while (lSamples--)
+    {
+        // Convert unsigned values into signed shorts, add them, clip sum,
+        // convert back to unsigned value, and save result.
 
-		// Clip.
-		if (sVal > 127)
-			sVal = 127;
-		else if (sVal < -128)
-			sVal = -128;
-		
-		// Stored as unsigned.
-		*pu8Dst++ = (UCHAR)(sVal + 128);
-		}
-	}
+        // Add values after converting to signed.
+        sVal = ((short)(*pu8Src++) - 128) + ((short)(*pu8Dst) - 128);
+
+        // Clip.
+        if (sVal > 127)
+            sVal = 127;
+        else if (sVal < -128)
+            sVal = -128;
+
+        // Stored as unsigned.
+        *pu8Dst++ = (UCHAR)(sVal + 128);
+    }
+}
 
 #if defined(SYS_BIN_X86)
 
 //////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Mix (8 bit src, 8 bit destination, no volume scaling, Intel x86).
-// 
+//
 //////////////////////////////////////////////////////////////////////////////
-inline void MixX86(	// Returns nothing.
-	U8*	pu8Src,		// In:  Src.
-	U8*	pu8Dst,		// In:  Dst.
-	long	lSamples)	// In:  Number of samples to mix.
-	{
-	_asm
-		{
-		// Safety with C:
+inline void MixX86( // Returns nothing.
+  U8 *pu8Src,       // In:  Src.
+  U8 *pu8Dst,       // In:  Dst.
+  long lSamples)    // In:  Number of samples to mix.
+{
+    _asm
+    {
+        // Safety with C:
 		push esi;
 		push edi;
 
@@ -266,54 +265,54 @@ inline void MixX86(	// Returns nothing.
 
 		pop edi;
 		pop esi;
-		}
-	}
+    }
+}
 
-#endif	// defined(SYS_BIN_X86)
+#endif // defined(SYS_BIN_X86)
 
 //////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Mix (16 bit src, 16 bit destination, no volume scaling, generic).
-// 
+//
 //////////////////////////////////////////////////////////////////////////////
-inline void Mix(		// Returns nothing.
-	S16*	ps16Src,		// In:  Src.
-	S16*	ps16Dst,		// In:  Dst.
-	long	lSamples)	// In:  Number of samples to mix.
-	{
-	long	lVal;
+inline void Mix( // Returns nothing.
+  S16 *ps16Src,  // In:  Src.
+  S16 *ps16Dst,  // In:  Dst.
+  long lSamples) // In:  Number of samples to mix.
+{
+    long lVal;
 
-	while (lSamples--)
-		{
-		// Add two signed values, clip sum to fit a 16 bit value and save 
-		// result.
+    while (lSamples--)
+    {
+        // Add two signed values, clip sum to fit a 16 bit value and save
+        // result.
 
-		lVal	= (long)(*ps16Src++) + (long)(*ps16Dst);
+        lVal = (long)(*ps16Src++) + (long)(*ps16Dst);
 
-		if (lVal > 32767)
-			lVal = 32767;
-		else if (lVal < -32768)
-			lVal = -32768;
-		
-		*ps16Dst++ = (S16)(lVal);
-		}
-	}
+        if (lVal > 32767)
+            lVal = 32767;
+        else if (lVal < -32768)
+            lVal = -32768;
+
+        *ps16Dst++ = (S16)(lVal);
+    }
+}
 
 #if defined(SYS_BIN_X86)
 
 //////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Mix (16 bit src, 16 bit destination, no volume scaling, Intel x86).
-// 
+//
 //////////////////////////////////////////////////////////////////////////////
-inline void MixX86(	// Returns nothing.
-	S16*	ps16Src,		// In:  Src.
-	S16*	ps16Dst,		// In:  Dst.
-	long	lSamples)	// In:  Number of samples to mix.
-	{
-	_asm
-		{
-		// Safety with C:
+inline void MixX86( // Returns nothing.
+  S16 *ps16Src,     // In:  Src.
+  S16 *ps16Dst,     // In:  Dst.
+  long lSamples)    // In:  Number of samples to mix.
+{
+    _asm
+    {
+        // Safety with C:
 		push esi;
 		push edi;
 
@@ -338,59 +337,59 @@ inline void MixX86(	// Returns nothing.
 
 		pop edi;
 		pop esi;
-		}
-	}
+    }
+}
 
-#endif	// defined(SYS_BIN_X86)
+#endif // defined(SYS_BIN_X86)
 
 //////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Mix (8 bit src, 8 bit destination, volume scaling, generic).
-// 
+//
 //////////////////////////////////////////////////////////////////////////////
-inline void Mix(		// Returns nothing.
-	U8*	pu8Src,		// In:  Src.
-	U8*	pu8Dst,		// In:  Dst.
-	long	lSamples,	// In:  Number of samples to mix.
-	S16*	psLowTable)	// In:  Volume scale table.
-	{
-	short	sVal;
+inline void Mix(   // Returns nothing.
+  U8 *pu8Src,      // In:  Src.
+  U8 *pu8Dst,      // In:  Dst.
+  long lSamples,   // In:  Number of samples to mix.
+  S16 *psLowTable) // In:  Volume scale table.
+{
+    short sVal;
 
-	while (lSamples--)
-		{
-		// Convert unsigned values into signed shorts, add them, clip sum,
-		// convert back to unsigned value, and save result
+    while (lSamples--)
+    {
+        // Convert unsigned values into signed shorts, add them, clip sum,
+        // convert back to unsigned value, and save result
 
-		// Get signed source value, scaled by volume:
-		// ENDIAN ALERT! Assuming first byte is low!
-		sVal = psLowTable[*pu8Src++];	// scaled
+        // Get signed source value, scaled by volume:
+        // ENDIAN ALERT! Assuming first byte is low!
+        sVal = psLowTable[*pu8Src++]; // scaled
 
-		sVal	= (sVal - 128) + (*pu8Dst - 128);
-		if (sVal > 127)
-			sVal = 127;
-		else if (sVal < -128)
-			sVal = -128;
+        sVal = (sVal - 128) + (*pu8Dst - 128);
+        if (sVal > 127)
+            sVal = 127;
+        else if (sVal < -128)
+            sVal = -128;
 
-		*pu8Dst++ = (UCHAR)(sVal + 128);
-		}
-	}
+        *pu8Dst++ = (UCHAR)(sVal + 128);
+    }
+}
 
 #if defined(SYS_BIN_X86)
 
 //////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Mix (8 bit src, 8 bit destination, volume scaling, Intel x86).
-// 
+//
 //////////////////////////////////////////////////////////////////////////////
-inline void MixX86(	// Returns nothing.
-	U8*	pu8Src,		// In:  Src.
-	U8*	pu8Dst,		// In:  Dst.
-	long	lSamples,	// In:  Number of samples to mix.
-	S16*	psLowTable)	// In:  Volume scale table.
-	{
-	_asm
-		{
-		// Safety with C:
+inline void MixX86( // Returns nothing.
+  U8 *pu8Src,       // In:  Src.
+  U8 *pu8Dst,       // In:  Dst.
+  long lSamples,    // In:  Number of samples to mix.
+  S16 *psLowTable)  // In:  Volume scale table.
+{
+    _asm
+    {
+        // Safety with C:
 		push esi;
 		push edi;
 
@@ -422,86 +421,86 @@ inline void MixX86(	// Returns nothing.
 
 		pop edi;
 		pop esi;
-		}
-	}
+    }
+}
 
-#endif	// defined(SYS_BIN_X86)
+#endif // defined(SYS_BIN_X86)
 
 //////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Mix (16 bit src, 16 bit destination, volume scaling, generic).
-// 
+//
 //////////////////////////////////////////////////////////////////////////////
-inline void Mix(			// Returns nothing.
-	S16*	ps16Src,			// In:  Src.
-	S16*	ps16Dst,			// In:  Dst.
-	long	lSamples,		// In:  Number of samples to mix.
-	S16*	psLowTable,		// In:  Volume scale table for low byte.
-	S16*	psHighTable)	// In:  Volume scale table for high byte.
-	{
-	long	lVal;
-	short	sVal;
-	short	sHighSrc;
-	short	sLowSrc;
+inline void Mix(    // Returns nothing.
+  S16 *ps16Src,     // In:  Src.
+  S16 *ps16Dst,     // In:  Dst.
+  long lSamples,    // In:  Number of samples to mix.
+  S16 *psLowTable,  // In:  Volume scale table for low byte.
+  S16 *psHighTable) // In:  Volume scale table for high byte.
+{
+    long lVal;
+    short sVal;
+    short sHighSrc;
+    short sLowSrc;
 
-	// Move into a byte by byte, sign adjustable reference wrapper.
-	P8	p8Src	= { (S8*)ps16Src };
+    // Move into a byte by byte, sign adjustable reference wrapper.
+    P8 p8Src = { (S8 *)ps16Src };
 
-	while (lSamples--)
-		{
-		// Get signed source value, scaled by volume:
-		
-		// NOTE this confused the Hell out of me at first b/c it 
-		// looks as if these two sections are executing the same
-		// code to access two different members of a struct but
-		// in a different order.  However, the order is actually
-		// important as p8Src is a union (not a struct) and pu8
-		// & ps8 refer to the very same pointer (just one as 
-		// unsigned and the other as signed).  The order in this
-		// case determines which byte is read first -- the signed
-		// or the unsigned.
-		#if defined(SYS_ENDIAN_LITTLE)
-			sLowSrc = short (*p8Src.pu8++);
-			sHighSrc = short (*p8Src.ps8++);
-		#else
-			sHighSrc = short (*p8Src.ps8++);
-			sLowSrc = short (*p8Src.pu8++);
-		#endif
+    while (lSamples--)
+    {
+// Get signed source value, scaled by volume:
 
-		sVal = psLowTable[sLowSrc] + psHighTable[sHighSrc];	// scaled
+// NOTE this confused the Hell out of me at first b/c it
+// looks as if these two sections are executing the same
+// code to access two different members of a struct but
+// in a different order.  However, the order is actually
+// important as p8Src is a union (not a struct) and pu8
+// & ps8 refer to the very same pointer (just one as
+// unsigned and the other as signed).  The order in this
+// case determines which byte is read first -- the signed
+// or the unsigned.
+#if defined(SYS_ENDIAN_LITTLE)
+        sLowSrc = short(*p8Src.pu8++);
+        sHighSrc = short(*p8Src.ps8++);
+#else
+        sHighSrc = short(*p8Src.ps8++);
+        sLowSrc = short(*p8Src.pu8++);
+#endif
 
-		// Add two signed values, clip sum to fit a 16 bit value, and save 
-		// result.
-		lVal	= (long)(sVal) + (long)(*ps16Dst);
+        sVal = psLowTable[sLowSrc] + psHighTable[sHighSrc]; // scaled
 
-		if (lVal > 32767)
-			lVal = 32767;
-		else if (lVal < -32768)
-			lVal = -32768;
+        // Add two signed values, clip sum to fit a 16 bit value, and save
+        // result.
+        lVal = (long)(sVal) + (long)(*ps16Dst);
 
-		*ps16Dst++ = (short)(lVal);
-		}
-	}
+        if (lVal > 32767)
+            lVal = 32767;
+        else if (lVal < -32768)
+            lVal = -32768;
+
+        *ps16Dst++ = (short)(lVal);
+    }
+}
 
 #if defined(SYS_BIN_X86)
 
 //////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Mix (16 bit src, 16 bit destination, volume scaling, Intel x86).
-// 
+//
 //////////////////////////////////////////////////////////////////////////////
-inline void MixX86(		// Returns nothing.
-	S16*	ps16Src,			// In:  Src.
-	S16*	ps16Dst,			// In:  Dst.
-	long	lSamples,		// In:  Number of samples to mix.
-	S16*	psTable)			// In:  Volume scale tables for high AND low byte.
-								// One table is used to save registers but we could
-								// have the second table as well instead of offseting
-								// this table by DVA_LOW_OFFSET.
-	{
-	_asm
-		{
-		// Safety with C:
+inline void MixX86( // Returns nothing.
+  S16 *ps16Src,     // In:  Src.
+  S16 *ps16Dst,     // In:  Dst.
+  long lSamples,    // In:  Number of samples to mix.
+  S16 *psTable)     // In:  Volume scale tables for high AND low byte.
+                    // One table is used to save registers but we could
+                    // have the second table as well instead of offseting
+                    // this table by DVA_LOW_OFFSET.
+{
+    _asm
+    {
+        // Safety with C:
 		push esi;
 		push edi;
 
@@ -512,7 +511,7 @@ inline void MixX86(		// Returns nothing.
 			mov	edx, psTable	; // Can't Dereference Directly
 
 		MixVolLoop16:
-			// Do a source byte at a time:
+          // Do a source byte at a time:
 			mov	bl, [esi]		; // Get src val low byte.
 			mov	ax, [edx + DVA_LOW_OFFSET + ebx*2]	; // Cut volume
 			inc	esi				; // 
@@ -529,16 +528,15 @@ inline void MixX86(		// Returns nothing.
 			mov	ax, 07fffH		; // Set to max positive.
 		MixVolDone16:
 			mov	[edi], ax		; // Store mixed value.
-			add	edi, 2			; // Next dest value.
+			add	edi, 2			;       // Next dest value.
 			loop	MixVolLoop16
 
 		pop edi;
 		pop esi;
-		}
-	}
+    }
+}
 
-#endif	// defined(SYS_BIN_X86)
-
+#endif // defined(SYS_BIN_X86)
 
 //////////////////////////////////////////////////////////////////////////////
 // RMixBuf ///////////////////////////////////////////////////////////////////
@@ -554,31 +552,30 @@ inline void MixX86(		// Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
 RMixBuf::RMixBuf(void)
-	{
-	ms_sNumBufs++;
+{
+    ms_sNumBufs++;
 
-	// Initialize members.
-	Init();
-	}
+    // Initialize members.
+    Init();
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Constructor Especial.
 //
 //////////////////////////////////////////////////////////////////////////////
-RMixBuf::RMixBuf(
-	UCHAR* pu8Dst,	// In:  Destination buffer.
-	ULONG ulSize)	// In:  Size of destination buffer in bytes.
-	{
-	ms_sNumBufs++;
+RMixBuf::RMixBuf(UCHAR *pu8Dst, // In:  Destination buffer.
+                 ULONG ulSize)  // In:  Size of destination buffer in bytes.
+{
+    ms_sNumBufs++;
 
-	// Initialize members.
-	Init();
+    // Initialize members.
+    Init();
 
-	// Set data ptr and size.
-	m_pu8Dst		= pu8Dst;
-	m_ulDstSize	= ulSize;
-	}
+    // Set data ptr and size.
+    m_pu8Dst = pu8Dst;
+    m_ulDstSize = ulSize;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -586,11 +583,11 @@ RMixBuf::RMixBuf(
 //
 //////////////////////////////////////////////////////////////////////////////
 RMixBuf::~RMixBuf(void)
-	{
-	Reset();
+{
+    Reset();
 
-	ms_sNumBufs--;
-	}
+    ms_sNumBufs--;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // Internal Use.
@@ -602,14 +599,14 @@ RMixBuf::~RMixBuf(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 void RMixBuf::Init(void)
-	{
-	m_pu8Dst			= NULL;
-	m_ulDstSize		= 0L;
-	m_pu8Mix			= NULL;
-	m_ulMixSize		= 0L;
-	m_sInUse			= FALSE;
-	m_sOwnMixBuf	= FALSE;
-	}
+{
+    m_pu8Dst = NULL;
+    m_ulDstSize = 0L;
+    m_pu8Mix = NULL;
+    m_ulMixSize = 0L;
+    m_sInUse = FALSE;
+    m_sOwnMixBuf = FALSE;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -617,19 +614,19 @@ void RMixBuf::Init(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 void RMixBuf::Reset(void)
-	{
-	ASSERT(m_sInUse == FALSE);
+{
+    ASSERT(m_sInUse == FALSE);
 
-	if (m_sOwnMixBuf == TRUE)
-		{
-		if (m_pu8Mix != NULL)
-			{
-			free(m_pu8Mix);
-			}
-		}
+    if (m_sOwnMixBuf == TRUE)
+    {
+        if (m_pu8Mix != NULL)
+        {
+            free(m_pu8Mix);
+        }
+    }
 
-	Init();
-	}
+    Init();
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // Methods.
@@ -641,32 +638,31 @@ void RMixBuf::Reset(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 void RMixBuf::Silence(void)
-	{
-	ASSERT(m_sInUse == FALSE);
+{
+    ASSERT(m_sInUse == FALSE);
 
-	if (m_pu8Mix != NULL)
-		{
-		switch (ms_lMixBitsPerSample)
-			{
-			case 8:
-				memset(m_pu8Mix, SILENCE_8, m_ulMixSize);
-				break;
+    if (m_pu8Mix != NULL)
+    {
+        switch (ms_lMixBitsPerSample)
+        {
+            case 8:
+                memset(m_pu8Mix, SILENCE_8, m_ulMixSize);
+                break;
 
-			case 16:
-				memset(m_pu8Mix, SILENCE_16, m_ulMixSize);
-				break;
+            case 16:
+                memset(m_pu8Mix, SILENCE_16, m_ulMixSize);
+                break;
 
-			default:
-				TRACE("Silence(): Unsupported mixing bits per sample: %ld.\n",
-						ms_lMixBitsPerSample);
-				break;
-			}
-		}
-	else
-		{
-		TRACE("Silence(): No mix buffer.\n");
-		}
-	}
+            default:
+                TRACE("Silence(): Unsupported mixing bits per sample: %ld.\n", ms_lMixBitsPerSample);
+                break;
+        }
+    }
+    else
+    {
+        TRACE("Silence(): No mix buffer.\n");
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -675,97 +671,97 @@ void RMixBuf::Silence(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 short RMixBuf::SetSize(ULONG ulSize)
-	{
-	short sRes = 0;	// Assume success.
+{
+    short sRes = 0; // Assume success.
 
-	ASSERT(m_sInUse == FALSE);
+    ASSERT(m_sInUse == FALSE);
 
-	// If there's already a buffer . . .
-	if (m_pu8Mix)
-		{
-		// If we own the buffer . . .
-		if (m_sOwnMixBuf)
-			{
-			// Free it.
-			free(m_pu8Mix);
-			
-			// We no longer own it.
-			m_sOwnMixBuf	= FALSE;
-			}
+    // If there's already a buffer . . .
+    if (m_pu8Mix)
+    {
+        // If we own the buffer . . .
+        if (m_sOwnMixBuf)
+        {
+            // Free it.
+            free(m_pu8Mix);
 
-		m_ulMixSize	= 0L;
-		}
+            // We no longer own it.
+            m_sOwnMixBuf = FALSE;
+        }
 
-	// Allocate new data chunk.
-	m_pu8Mix = (UCHAR*)malloc(ulSize);
-	// If successful . . .
-	if (m_pu8Mix != NULL)
-		{
-		// Success.
-		m_sOwnMixBuf	= TRUE;
-		m_ulMixSize		= ulSize;
-		// Initialize to silence.
-		Silence();
-		}
-	else
-		{
-		TRACE("SetSize(%lu): Unable to allocate buffer.\n", ulSize);
-		sRes = -1;
-		}
+        m_ulMixSize = 0L;
+    }
 
-	return sRes;
-	}
+    // Allocate new data chunk.
+    m_pu8Mix = (UCHAR *)malloc(ulSize);
+    // If successful . . .
+    if (m_pu8Mix != NULL)
+    {
+        // Success.
+        m_sOwnMixBuf = TRUE;
+        m_ulMixSize = ulSize;
+        // Initialize to silence.
+        Silence();
+    }
+    else
+    {
+        TRACE("SetSize(%lu): Unable to allocate buffer.\n", ulSize);
+        sRes = -1;
+    }
+
+    return sRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Set the destination buffer.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RMixBuf::SetDest(	// Returns nothing.
-	UCHAR* pu8Dst,			// In:  Destination buffer.
-	ULONG ulSize)			// In:  Size of destination buffer in bytes.
-	{
-	// If mix is using dest . . .
-	if (m_pu8Mix == m_pu8Dst)
-		{
-		// Clear it.
-		m_pu8Mix		= NULL;
-		m_ulMixSize	= 0;
-		}
+void RMixBuf::SetDest( // Returns nothing.
+  UCHAR *pu8Dst,       // In:  Destination buffer.
+  ULONG ulSize)        // In:  Size of destination buffer in bytes.
+{
+    // If mix is using dest . . .
+    if (m_pu8Mix == m_pu8Dst)
+    {
+        // Clear it.
+        m_pu8Mix = NULL;
+        m_ulMixSize = 0;
+    }
 
-	m_pu8Dst		= pu8Dst;
-	m_ulDstSize	= ulSize;
+    m_pu8Dst = pu8Dst;
+    m_ulDstSize = ulSize;
 
-	// If incorrect size for mixer buffer . . .
-	if (m_ulMixSize != m_ulDstSize && m_ulDstSize)
-		{
-		// If we can use the destination buffer (i.e., if the mix sample depth and 
-		// playback sample depth are the same) . . .
-		if (ms_lMixBitsPerSample == ms_lDstBitsPerSample)
-			{
-			// Just use the destination buffer.
-			m_pu8Mix		= m_pu8Dst;
-			m_ulMixSize	= m_ulDstSize;
+    // If incorrect size for mixer buffer . . .
+    if (m_ulMixSize != m_ulDstSize && m_ulDstSize)
+    {
+        // If we can use the destination buffer (i.e., if the mix sample depth and
+        // playback sample depth are the same) . . .
+        if (ms_lMixBitsPerSample == ms_lDstBitsPerSample)
+        {
+            // Just use the destination buffer.
+            m_pu8Mix = m_pu8Dst;
+            m_ulMixSize = m_ulDstSize;
 
-			// Since this is our first use, Silence() it.
-			Silence();
-			}
-		else
-			{
-			// Set mix size to the size of the playback buffer but at the mix quality.
-			long	lNumSamples	= m_ulDstSize * 8 / ms_lDstBitsPerSample;
-			long	lSize	= lNumSamples * ms_lMixBitsPerSample / 8;
-			if (SetSize(lSize) == 0)
-				{
-				// Note that SetSize() always Silence()s buffer.
-				}
-			else
-				{
-				TRACE("SetDest(): Unable to set size to %ld.\n", lSize);
-				}
-			}
-		}
-	}
+            // Since this is our first use, Silence() it.
+            Silence();
+        }
+        else
+        {
+            // Set mix size to the size of the playback buffer but at the mix quality.
+            long lNumSamples = m_ulDstSize * 8 / ms_lDstBitsPerSample;
+            long lSize = lNumSamples * ms_lMixBitsPerSample / 8;
+            if (SetSize(lSize) == 0)
+            {
+                // Note that SetSize() always Silence()s buffer.
+            }
+            else
+            {
+                TRACE("SetDest(): Unable to set size to %ld.\n", lSize);
+            }
+        }
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -778,68 +774,68 @@ void RMixBuf::SetDest(	// Returns nothing.
 //////////////////////////////////////////////////////////////////////////////
 // This stores both the high and low arrasy in one, to save registers
 // (hence the '*2')
-short	CDVA::ms_asHighByte[DVA_SIZE * 2][256];	// for 16-bit sound
+short CDVA::ms_asHighByte[DVA_SIZE * 2][256]; // for 16-bit sound
 
-CDVA	initVolumeControl;	// create the tables
+CDVA initVolumeControl; // create the tables
 
-CDVA::CDVA()	// Create the tables!
-		{
-		// Create the 16-bit scaling codes..
-		// The 8-bit codes are found by looking at the lower byte of the 
-		// table, as in ms_asLowByte.u8[i*2 + DVA_LOW_BYTE]
+CDVA::CDVA() // Create the tables!
+{
+    // Create the 16-bit scaling codes..
+    // The 8-bit codes are found by looking at the lower byte of the
+    // table, as in ms_asLowByte.u8[i*2 + DVA_LOW_BYTE]
 
-		// Note that volume scaling goes from 0 to 255 in steps of DVA_RESOLUTION
-		// (this is to save memory)
+    // Note that volume scaling goes from 0 to 255 in steps of DVA_RESOLUTION
+    // (this is to save memory)
 
-		//================================================================
-		// Input: 0-255 representing -32768 to +32767. ( (Input-128) * 256)
-		//	DIM Value:	0-255, 255 being identity
-		// Output: 16 bit table yielding Input*256*DIM/255
-		//================================================================
-		long	lSrcVal,lDimVal,lCurValue,lNumerator;
-		short*	psCur = &ms_asHighByte[0][0];	// assume linear addressing:
-		double	dSrcVal;
-		// This is DimVal major!
+    //================================================================
+    // Input: 0-255 representing -32768 to +32767. ( (Input-128) * 256)
+    //	DIM Value:	0-255, 255 being identity
+    // Output: 16 bit table yielding Input*256*DIM/255
+    //================================================================
+    long lSrcVal, lDimVal, lCurValue, lNumerator;
+    short *psCur = &ms_asHighByte[0][0]; // assume linear addressing:
+    double dSrcVal;
+    // This is DimVal major!
 
-		// I'm going to drop integral calculus for now and use multiplication.
-		// This can be sped up later with I.C.
-		for (lDimVal = 0; lDimVal < 256; lDimVal += DVA_RESOLUTION)
-			{
-			double dScale = double(lDimVal)/255.0;
-			// offset for signed!
-			for (dSrcVal = -32768.00; dSrcVal < 32767.0; dSrcVal += 256.0,psCur++)
-				{
-				*psCur = short(dSrcVal * dScale);	// use I.C. to speed up!
-				}
-			}
+    // I'm going to drop integral calculus for now and use multiplication.
+    // This can be sped up later with I.C.
+    for (lDimVal = 0; lDimVal < 256; lDimVal += DVA_RESOLUTION)
+    {
+        double dScale = double(lDimVal) / 255.0;
+        // offset for signed!
+        for (dSrcVal = -32768.00; dSrcVal < 32767.0; dSrcVal += 256.0, psCur++)
+        {
+            *psCur = short(dSrcVal * dScale); // use I.C. to speed up!
+        }
+    }
 
-		// Now, do the low byte... same as RMultiAlpha::ms_aucLiveDimming,
-		// except, for speed's sake, we store the value as 16-bit:
-		// The low byte array should simply follow the high byte array,
-		// so I don't need to reset psCur.
+    // Now, do the low byte... same as RMultiAlpha::ms_aucLiveDimming,
+    // except, for speed's sake, we store the value as 16-bit:
+    // The low byte array should simply follow the high byte array,
+    // so I don't need to reset psCur.
 
-		for (lDimVal = 0; lDimVal < 256; lDimVal += DVA_RESOLUTION)
-			{
-			lNumerator = 127;	// for rounding
-			lCurValue = 0;
+    for (lDimVal = 0; lDimVal < 256; lDimVal += DVA_RESOLUTION)
+    {
+        lNumerator = 127; // for rounding
+        lCurValue = 0;
 
-			*psCur++ = 0;	// initial value
+        *psCur++ = 0; // initial value
 
-			for (lSrcVal = 1; lSrcVal < 256; lSrcVal++,psCur++)
-				{
-				lNumerator += lDimVal;
+        for (lSrcVal = 1; lSrcVal < 256; lSrcVal++, psCur++)
+        {
+            lNumerator += lDimVal;
 
-				if (lNumerator >= 255) 
-					{
-					lNumerator -= 255; 
-					lCurValue++;
-					}
+            if (lNumerator >= 255)
+            {
+                lNumerator -= 255;
+                lCurValue++;
+            }
 
-				*psCur = short(lCurValue);
-				}
-			}
-		TRACE("Volume Control Initialized.\n");
-		}
+            *psCur = short(lCurValue);
+        }
+    }
+    TRACE("Volume Control Initialized.\n");
+}
 //////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////
@@ -848,158 +844,157 @@ CDVA::CDVA()	// Create the tables!
 // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RMixBuf::Mix(	ULONG		ulStartPos,
-							U8*		pu8Data, 
-							ULONG		ulSize, 
-							long		lSampleRate,
-							long		lBitsPerSample,
-							long		lNumChannels,
-							UCHAR		ucVolume,
-							UCHAR		ucVol2)
-	{
-	short sRes	= 0;	// Assume success.
+short RMixBuf::Mix(ULONG ulStartPos,
+                   U8 *pu8Data,
+                   ULONG ulSize,
+                   long lSampleRate,
+                   long lBitsPerSample,
+                   long lNumChannels,
+                   UCHAR ucVolume,
+                   UCHAR ucVol2)
+{
+    short sRes = 0; // Assume success.
 
-	ASSERT(m_sInUse == FALSE);
+    ASSERT(m_sInUse == FALSE);
 
-	// If there's a mix buffer . . .
-	if (m_ulMixSize != 0)
-		{
-		// Must be the same.
-		ASSERT(lSampleRate		== ms_lSampleRate);
-		ASSERT(lNumChannels		== ms_lNumChannels);
+    // If there's a mix buffer . . .
+    if (m_ulMixSize != 0)
+    {
+        // Must be the same.
+        ASSERT(lSampleRate == ms_lSampleRate);
+        ASSERT(lNumChannels == ms_lNumChannels);
 
-		// If ms_lSrcBitsPerSample is non-zero, lBitsPerSample must match.
-		ASSERT(lBitsPerSample	== ms_lSrcBitsPerSample || ms_lSrcBitsPerSample == 0);
+        // If ms_lSrcBitsPerSample is non-zero, lBitsPerSample must match.
+        ASSERT(lBitsPerSample == ms_lSrcBitsPerSample || ms_lSrcBitsPerSample == 0);
 
-		// *** TEMP ***
-		// Temporarily enforce use of same bit depth on sources since we have 
-		// functions yet that convert and mix.
-		// Delete this line once we have support.
-		ASSERT(lBitsPerSample	== ms_lSrcBitsPerSample);
-		// *** END TEMP ***
+        // *** TEMP ***
+        // Temporarily enforce use of same bit depth on sources since we have
+        // functions yet that convert and mix.
+        // Delete this line once we have support.
+        ASSERT(lBitsPerSample == ms_lSrcBitsPerSample);
+        // *** END TEMP ***
 
-		// If you do not have full accuracy in volume settings, round results
-		// up to next actual volume.
-		
-		// Calculate current effective volume scaling on type * global:
-		// This is actually the low byte. (hence DVA_SIZE + )
-		short sCurVolume = CDVA::ms_asHighByte
-			[DVA_SIZE + (ms_ucGlobalVolume>>DVA_SHIFT)][ucVol2];
+        // If you do not have full accuracy in volume settings, round results
+        // up to next actual volume.
 
-		// Round up:
-		sCurVolume = (sCurVolume + (DVA_RESOLUTION-1)) >> DVA_SHIFT;
-		if (sCurVolume >= DVA_SIZE) sCurVolume = (DVA_SIZE-1); // overflow
+        // Calculate current effective volume scaling on type * global:
+        // This is actually the low byte. (hence DVA_SIZE + )
+        short sCurVolume = CDVA::ms_asHighByte[DVA_SIZE + (ms_ucGlobalVolume >> DVA_SHIFT)][ucVol2];
 
-		// Factor in current sample volume:
-		sCurVolume = CDVA::ms_asHighByte
-			[DVA_SIZE + sCurVolume][ucVolume];
+        // Round up:
+        sCurVolume = (sCurVolume + (DVA_RESOLUTION - 1)) >> DVA_SHIFT;
+        if (sCurVolume >= DVA_SIZE)
+            sCurVolume = (DVA_SIZE - 1); // overflow
 
-		if (sCurVolume < DVA_RESOLUTION ) return sRes;	// sound is off
-		if (sCurVolume < ms_sCutOffVolume) return sRes; // Sound is clipped by user
+        // Factor in current sample volume:
+        sCurVolume = CDVA::ms_asHighByte[DVA_SIZE + sCurVolume][ucVolume];
 
-		ASSERT(ulSize <= (m_ulMixSize - ulStartPos) );
-		
-		ULONG ulNum	= MIN(ulSize, m_ulMixSize - ulStartPos);
+        if (sCurVolume < DVA_RESOLUTION)
+            return sRes; // sound is off
+        if (sCurVolume < ms_sCutOffVolume)
+            return sRes; // Sound is clipped by user
 
-		if (ulNum > 0)
-			{
-			if (sCurVolume > (255 - DVA_RESOLUTION))	// full volume, no scaling
-				{
-				switch (lBitsPerSample)
-					{
-					case 8:
-						#if defined(FORCE_GENERIC_CODE) || !defined(SYS_BIN_X86)
+        ASSERT(ulSize <= (m_ulMixSize - ulStartPos));
 
-							::Mix( (U8*)pu8Data, (U8*)(m_pu8Mix + ulStartPos), ulNum);
+        ULONG ulNum = MIN(ulSize, m_ulMixSize - ulStartPos);
 
-						#else
+        if (ulNum > 0)
+        {
+            if (sCurVolume > (255 - DVA_RESOLUTION)) // full volume, no scaling
+            {
+                switch (lBitsPerSample)
+                {
+                    case 8:
+#if defined(FORCE_GENERIC_CODE) || !defined(SYS_BIN_X86)
 
-							MixX86( (U8*)pu8Data, (U8*)(m_pu8Mix + ulStartPos), ulNum);
+                        ::Mix((U8 *)pu8Data, (U8 *)(m_pu8Mix + ulStartPos), ulNum);
 
-						#endif
+#else
 
-						break;
+                        MixX86((U8 *)pu8Data, (U8 *)(m_pu8Mix + ulStartPos), ulNum);
 
-					case 16:
-						#if defined(FORCE_GENERIC_CODE) || !defined(SYS_BIN_X86)
+#endif
 
-							::Mix( (S16*)pu8Data, (S16*)(m_pu8Mix + ulStartPos), ulNum / 2);
+                        break;
 
-						#else
+                    case 16:
+#if defined(FORCE_GENERIC_CODE) || !defined(SYS_BIN_X86)
 
-							MixX86( (S16*)pu8Data, (S16*)(m_pu8Mix + ulStartPos), ulNum / 2);
+                        ::Mix((S16 *)pu8Data, (S16 *)(m_pu8Mix + ulStartPos), ulNum / 2);
 
-						#endif
+#else
 
-						break;
+                        MixX86((S16 *)pu8Data, (S16 *)(m_pu8Mix + ulStartPos), ulNum / 2);
 
-					default:
-						TRACE("Mix(): Unsupported bits per sample: %ld.\n",
-								lBitsPerSample);
-						sRes = -1;
-						break;
-					}
-				}
-			////////////////////////////////////////////////////////////////////////////////
-			else	// do volume scaling
-			////////////////////////////////////////////////////////////////////////////////
-				{
-				// First, figure out which table apply to the current volume level:
-				sCurVolume >>= DVA_SHIFT; // scale to an offset
+#endif
 
-				// Offset high by 128 to represent signed upper bytes
-				short*	psHighTable = 128 + CDVA::ms_asHighByte[sCurVolume];
-				// The assembler doesn't know the offset is signed
-				short*	psASMHighTable = CDVA::ms_asHighByte[sCurVolume];
-				// Low byte is by nature unsigned, so no offset
-				// This is packed into the same table, offset by DVA_SIZE entries
-				short*	psLowTable = CDVA::ms_asHighByte[DVA_SIZE + sCurVolume];
+                        break;
 
-				switch (lBitsPerSample)
-					{
-					case 8:
-						#if defined(FORCE_GENERIC_CODE) || !defined(SYS_BIN_X86)
-							
-							::Mix( (U8*)pu8Data, (U8*)(m_pu8Mix + ulStartPos), ulNum, psLowTable);
+                    default:
+                        TRACE("Mix(): Unsupported bits per sample: %ld.\n", lBitsPerSample);
+                        sRes = -1;
+                        break;
+                }
+            }
+            ////////////////////////////////////////////////////////////////////////////////
+            else // do volume scaling
+                 ////////////////////////////////////////////////////////////////////////////////
+            {
+                // First, figure out which table apply to the current volume level:
+                sCurVolume >>= DVA_SHIFT; // scale to an offset
 
-						#else
+                // Offset high by 128 to represent signed upper bytes
+                short *psHighTable = 128 + CDVA::ms_asHighByte[sCurVolume];
+                // The assembler doesn't know the offset is signed
+                short *psASMHighTable = CDVA::ms_asHighByte[sCurVolume];
+                // Low byte is by nature unsigned, so no offset
+                // This is packed into the same table, offset by DVA_SIZE entries
+                short *psLowTable = CDVA::ms_asHighByte[DVA_SIZE + sCurVolume];
 
-							MixX86( (U8*)pu8Data, (U8*)(m_pu8Mix + ulStartPos), ulNum, psLowTable);
+                switch (lBitsPerSample)
+                {
+                    case 8:
+#if defined(FORCE_GENERIC_CODE) || !defined(SYS_BIN_X86)
 
-						#endif
+                        ::Mix((U8 *)pu8Data, (U8 *)(m_pu8Mix + ulStartPos), ulNum, psLowTable);
 
-						break;
+#else
 
-					case 16:
-						#if defined(FORCE_GENERIC_CODE) || !defined(SYS_BIN_X86)
+                        MixX86((U8 *)pu8Data, (U8 *)(m_pu8Mix + ulStartPos), ulNum, psLowTable);
 
-							::Mix( (S16*)pu8Data, (S16*)(m_pu8Mix + ulStartPos), ulNum / 2, psLowTable, psHighTable);
+#endif
 
-						#else
+                        break;
 
-							MixX86( (S16*)pu8Data, (S16*)(m_pu8Mix + ulStartPos), ulNum / 2, psASMHighTable);
+                    case 16:
+#if defined(FORCE_GENERIC_CODE) || !defined(SYS_BIN_X86)
 
-						#endif
+                        ::Mix((S16 *)pu8Data, (S16 *)(m_pu8Mix + ulStartPos), ulNum / 2, psLowTable, psHighTable);
 
-						break;
+#else
 
-					default:
-						TRACE("Mix(): Unsupported bits per sample: %u.\n",
-								lBitsPerSample);
-						sRes = -1;
-						break;
-					}
-				}
-			}
-		}
-	else
-		{
-		TRACE("Mix():  No mix buffer.\n");
-		sRes	= -2;
-		}
+                        MixX86((S16 *)pu8Data, (S16 *)(m_pu8Mix + ulStartPos), ulNum / 2, psASMHighTable);
 
-	return sRes;
-	}
+#endif
+
+                        break;
+
+                    default:
+                        TRACE("Mix(): Unsupported bits per sample: %u.\n", lBitsPerSample);
+                        sRes = -1;
+                        break;
+                }
+            }
+        }
+    }
+    else
+    {
+        TRACE("Mix():  No mix buffer.\n");
+        sRes = -2;
+    }
+
+    return sRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -1007,33 +1002,33 @@ short RMixBuf::Mix(	ULONG		ulStartPos,
 //
 //////////////////////////////////////////////////////////////////////////////
 void RMixBuf::PrepareForDest(void)
-	{
-	// If we are not mixing at the sample depth we intend to play at . . .
-	if (ms_lDstBitsPerSample != ms_lMixBitsPerSample)
-		{
-		switch (ms_lDstBitsPerSample)
-			{
-			case 8:
-				
-				// Convert to 8 bit for playback.
-				Conv16to8( (S16*)m_pu8Mix, m_pu8Dst, m_ulDstSize);
+{
+    // If we are not mixing at the sample depth we intend to play at . . .
+    if (ms_lDstBitsPerSample != ms_lMixBitsPerSample)
+    {
+        switch (ms_lDstBitsPerSample)
+        {
+            case 8:
 
-				break;
+                // Convert to 8 bit for playback.
+                Conv16to8((S16 *)m_pu8Mix, m_pu8Dst, m_ulDstSize);
 
-			case 16:
+                break;
 
-				// Convert to 16 bit for playback.
-				Conv8to16(m_pu8Mix, (S16*)m_pu8Dst, m_ulMixSize);
+            case 16:
 
-				break;
-			}
-		}
-	else
-		{
-		// Already the same.  Should be using the same buffer.
-		ASSERT(m_pu8Mix == m_pu8Dst);
-		}
-	}
+                // Convert to 16 bit for playback.
+                Conv8to16(m_pu8Mix, (S16 *)m_pu8Dst, m_ulMixSize);
+
+                break;
+        }
+    }
+    else
+    {
+        // Already the same.  Should be using the same buffer.
+        ASSERT(m_pu8Mix == m_pu8Dst);
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // EOF

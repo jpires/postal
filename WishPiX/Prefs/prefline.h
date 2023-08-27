@@ -19,8 +19,8 @@
 //
 //		12/11/96	JPW	RPrefsLine created to contain ini file lines, information
 //							on the type of lines, and to help in processing of lines.
-//		12/16/96	JPW	Fixed so it will work with the STL stuff that comes with 
-//							MSVC 4.1 or newer.  Also fixed a few psz parameters that 
+//		12/16/96	JPW	Fixed so it will work with the STL stuff that comes with
+//							MSVC 4.1 or newer.  Also fixed a few psz parameters that
 //							should have been const's.
 //
 //		03/28/97	JMI	Fixed so this'll work with MSVC 4.2.
@@ -40,55 +40,53 @@
 
 #include "Blue.h"
 #ifdef PATHS_IN_INCLUDES
-	#include "ORANGE/CDT/flist.h"
+#include "ORANGE/CDT/flist.h"
 #else
-	#include "flist.h"
+#include "flist.h"
 #endif
 
 class RPrefsLine;
 
-typedef RFList<RPrefsLine*> RPrefsLineList;
-
+typedef RFList<RPrefsLine *> RPrefsLineList;
 
 class RPrefsLine
-	{
-	public:
-		typedef enum ePrefsLineType
-			{
-			Comment,
-			Section,
-			Variable
-			};
+{
+  public:
+    typedef enum ePrefsLineType
+    {
+        Comment,
+        Section,
+        Variable
+    };
 
-	private:
-		ePrefsLineType	m_Type;					// Type of line read from ini file
-		char				*m_pszLine;				// Line read from ini file
+  private:
+    ePrefsLineType m_Type; // Type of line read from ini file
+    char *m_pszLine;       // Line read from ini file
 
-	public:
-		// Constructor.
-		RPrefsLine (ePrefsLineType Type, const char *pszLine);
+  public:
+    // Constructor.
+    RPrefsLine(ePrefsLineType Type, const char *pszLine);
 
-		// Destructor
-		~RPrefsLine ();
+    // Destructor
+    ~RPrefsLine();
 
-		// Get a constant pointer to the Line of text.
-		const char*	GetLine (void);
+    // Get a constant pointer to the Line of text.
+    const char *GetLine(void);
 
-		// Get type of line.
-		RPrefsLine::ePrefsLineType GetType();
+    // Get type of line.
+    RPrefsLine::ePrefsLineType GetType();
 
-		// Get the section name
-		short GetSectionName(char *pszSection);
-		
-		// Get the variable name
-		short GetVariableName(char *pszVariable);
+    // Get the section name
+    short GetSectionName(char *pszSection);
 
-		// Get the value of the variable
-		short GetVariableValue(char *pszValue);
+    // Get the variable name
+    short GetVariableName(char *pszVariable);
 
-		// Set the value of the variable
-		short SetVariableValue(const char *pszValue);
-	};
+    // Get the value of the variable
+    short GetVariableValue(char *pszValue);
 
+    // Set the value of the variable
+    short SetVariableValue(const char *pszValue);
+};
 
-#endif//PREFLINE_H
+#endif // PREFLINE_H

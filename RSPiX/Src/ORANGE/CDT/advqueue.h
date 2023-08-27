@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // advqueue.h
-// 
+//
 // History:
 //		01/08/96	JMI	Started.
 //
@@ -30,7 +30,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 //
-// This adds some functionality to the generic queue template in 
+// This adds some functionality to the generic queue template in
 // orange/cdt/queue.h.
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -39,28 +39,25 @@
 
 #include "queue.h"
 
-template <class T, short sSize> class RAdvQueue	: public RQueue<T, sSize>
-	{
-	public:
-		// Default constructor.
-		RAdvQueue() { }
-		// Destructor.
-		~RAdvQueue() { }
+template<class T, short sSize>
+class RAdvQueue : public RQueue<T, sSize>
+{
+  public:
+    // Default constructor.
+    RAdvQueue() {}
+    // Destructor.
+    ~RAdvQueue() {}
 
-	public:	// Querries.
-		// Gets the nth element in the queue from the head.
-		T*	Get(short n)
-			{
-			n	= (n > m_sHead) ? (sSize + (m_sHead - n)) : (m_sHead - n);
-			return m_aptQ + n;
-			}
+  public: // Querries.
+    // Gets the nth element in the queue from the head.
+    T *Get(short n)
+    {
+        n = (n > m_sHead) ? (sSize + (m_sHead - n)) : (m_sHead - n);
+        return m_aptQ + n;
+    }
 
-		// Same as Get.  Just kind of silly.
-		T* operator [](short n)
-			{
-			return Get(n);
-			}
+    // Same as Get.  Just kind of silly.
+    T *operator[](short n) { return Get(n); }
+};
 
-	};
-
-#endif	// ADVQUEUE_H
+#endif // ADVQUEUE_H

@@ -41,7 +41,7 @@
 #include "thing.h"
 #include "IdBank.h"
 
-extern void NavNetListPressedCall(RGuiItem* pgui);
+extern void NavNetListPressedCall(RGuiItem *pgui);
 
 ////////////////////////////////////////////////////////////////////////////////
 // Typedefs.
@@ -50,151 +50,146 @@ extern void NavNetListPressedCall(RGuiItem* pgui);
 // One of these classes is created by the editor for each Realm.  This class can
 // then store and retrieve the editor settings for a Realm on Load and Save.
 class CGameEditThing : public CThing
-	{
-	//---------------------------------------------------------------------------
-	// Types, enums, etc.
-	//---------------------------------------------------------------------------
-	protected:
+{
+    //---------------------------------------------------------------------------
+    // Types, enums, etc.
+    //---------------------------------------------------------------------------
+  protected:
+    //---------------------------------------------------------------------------
+    // Variables
+    //---------------------------------------------------------------------------
+  public:
+    // Settings //////////////////////////////////////////////////////////////
 
-	//---------------------------------------------------------------------------
-	// Variables
-	//---------------------------------------------------------------------------
-	public:
+    U16 m_u16CameraTrackId;    // ID of object for grip to track.
+    short m_sViewPosX;         // View position.
+    short m_sViewPosY;         // View position.
+    RListBox *m_plbNavNetList; // Pointer to Nav Net List Box
 
-		// Settings //////////////////////////////////////////////////////////////
-		
-		U16	m_u16CameraTrackId;	// ID of object for grip to track.
-		short	m_sViewPosX;			// View position.
-		short	m_sViewPosY;			// View position.
-		RListBox* m_plbNavNetList; // Pointer to Nav Net List Box
+    //---------------------------------------------------------------------------
+    // Constructor(s) / destructor
+    //---------------------------------------------------------------------------
+  protected:
+    // Constructor
+    CGameEditThing(CRealm *pRealm)
+      : CThing(pRealm, CGameEditThingID)
+    {
+        // Set defaults.
+        m_u16CameraTrackId = CIdBank::IdNil;
+        m_sViewPosX = 0;
+        m_sViewPosY = 0;
+    }
 
-	//---------------------------------------------------------------------------
-	// Constructor(s) / destructor
-	//---------------------------------------------------------------------------
-	protected:
-		// Constructor
-		CGameEditThing(CRealm* pRealm)
-			: CThing(pRealm, CGameEditThingID)
-			{
-			// Set defaults.
-			m_u16CameraTrackId	= CIdBank::IdNil;
-			m_sViewPosX				= 0;
-			m_sViewPosY				= 0;
-			}
+  public:
+    // Destructor
+    ~CGameEditThing() {}
 
-	public:
-		// Destructor
-		~CGameEditThing()
-			{
-			}
+    //---------------------------------------------------------------------------
+    // Required static functions
+    //---------------------------------------------------------------------------
+  public:
+    // Construct object
+    static short Construct( // Returns 0 if successfull, non-zero otherwise
+      CRealm *pRealm,       // In:  Pointer to realm this object belongs to
+      CThing **ppNew)       // Out: Pointer to new object
+    {
+        short sResult = 0;
+        *ppNew = new CGameEditThing(pRealm);
+        if (*ppNew == 0)
+        {
+            sResult = -1;
+            TRACE("CGameEditThing::Construct(): Couldn't construct CGameEditThing!\n");
+        }
+        return sResult;
+    }
 
-	//---------------------------------------------------------------------------
-	// Required static functions
-	//---------------------------------------------------------------------------
-	public:
-		// Construct object
-		static short Construct(									// Returns 0 if successfull, non-zero otherwise
-			CRealm* pRealm,										// In:  Pointer to realm this object belongs to
-			CThing** ppNew)										// Out: Pointer to new object
-			{
-			short sResult = 0;
-			*ppNew = new CGameEditThing(pRealm);
-			if (*ppNew == 0)
-				{
-				sResult = -1;
-				TRACE("CGameEditThing::Construct(): Couldn't construct CGameEditThing!\n");
-				}
-			return sResult;
-			}
+    //---------------------------------------------------------------------------
+    // Required virtual functions (implementing them as inlines doesn't pay!
+    // (unless you really, really don't want them in your CPP!)).
+    //---------------------------------------------------------------------------
+  public:
+    // Load object (should call base class version!)
+    short Load(            // Returns 0 if successfull, non-zero otherwise
+      RFile *pFile,        // In:  File to load from
+      bool bEditMode,      // In:  True for edit mode, false otherwise
+      short sFileCount,    // In:  File count (unique per file, never 0)
+      ULONG ulFileVersion) // In:  Version of file format to load.
+    {
+        // Call base class.
+        short sResult = CThing::Load(pFile, bEditMode, sFileCount, ulFileVersion);
+        if (sResult == 0)
+        {
+            // Read settings.
+            switch (ulFileVersion)
+            {
+                default:
+                case 1:
+                    pFile->Read(&m_u16CameraTrackId);
+                    pFile->Read(&m_sViewPosX);
+                    pFile->Read(&m_sViewPosY);
+                    break;
+            }
 
-	//---------------------------------------------------------------------------
-	// Required virtual functions (implementing them as inlines doesn't pay!
-	// (unless you really, really don't want them in your CPP!)).
-	//---------------------------------------------------------------------------
-	public:
-		// Load object (should call base class version!)
-		short Load(													// Returns 0 if successfull, non-zero otherwise
-			RFile* pFile,											// In:  File to load from
-			bool bEditMode,										// In:  True for edit mode, false otherwise
-			short sFileCount,										// In:  File count (unique per file, never 0)
-			ULONG	ulFileVersion)									// In:  Version of file format to load.
-			{
-			// Call base class.
-			short	sResult	= CThing::Load(pFile, bEditMode, sFileCount, ulFileVersion);
-			if (sResult == 0)
-				{
-				// Read settings.
-				switch (ulFileVersion)
-					{
-					default:
-					case 1:
-						pFile->Read(&m_u16CameraTrackId);
-						pFile->Read(&m_sViewPosX);
-						pFile->Read(&m_sViewPosY);
-						break;
-					}
+            // Make sure there were no format errors . . .
+            if (sResult == 0)
+            {
+                // File status indicates our success, or lack thereof.
+                sResult = pFile->Error();
+            }
+        }
+        else
+        {
+            TRACE("CGameEditThing::Load(): Base class Load() failed.\n");
+        }
 
-				// Make sure there were no format errors . . .
-				if (sResult == 0)
-					{
-					// File status indicates our success, or lack thereof.
-					sResult	= pFile->Error();
-					}
-				}
-			else
-				{
-				TRACE("CGameEditThing::Load(): Base class Load() failed.\n");
-				}
+        return sResult;
+    }
 
-			return sResult;
-			}
+    // Save object (should call base class version!)
+    short Save(         // Returns 0 if successfull, non-zero otherwise
+      RFile *pFile,     // In:  File to save to
+      short sFileCount) // In:  File count (unique per file, never 0)
+    {
+        // Call base class.
+        short sResult = CThing::Save(pFile, sFileCount);
+        if (sResult == 0)
+        {
+            // Write settings.
+            pFile->Write(m_u16CameraTrackId);
+            pFile->Write(m_sViewPosX);
+            pFile->Write(m_sViewPosY);
 
-		// Save object (should call base class version!)
-		short Save(													// Returns 0 if successfull, non-zero otherwise
-			RFile* pFile,											// In:  File to save to
-			short sFileCount)										// In:  File count (unique per file, never 0)
-			{
-			// Call base class.
-			short	sResult	= CThing::Save(pFile, sFileCount);
-			if (sResult == 0)
-				{
-				// Write settings.
-				pFile->Write(m_u16CameraTrackId);
-				pFile->Write(m_sViewPosX);
-				pFile->Write(m_sViewPosY);
+            // File status indicates our success, or lack thereof.
+            sResult = pFile->Error();
+        }
+        else
+        {
+            TRACE("CGameEditThing::Save(): Base class Save() failed.\n");
+        }
 
-				// File status indicates our success, or lack thereof.
-				sResult	= pFile->Error();
-				}
-			else
-				{
-				TRACE("CGameEditThing::Save(): Base class Save() failed.\n");
-				}
+        return sResult;
+    }
 
-			return sResult;
-			}
-
-	//---------------------------------------------------------------------------
-	// Internal functions
-	//---------------------------------------------------------------------------
-	protected:
-	};
+    //---------------------------------------------------------------------------
+    // Internal functions
+    //---------------------------------------------------------------------------
+  protected:
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Protos.
 ////////////////////////////////////////////////////////////////////////////////
 
-extern void GameEdit(
-	void);
+extern void GameEdit(void);
 
-// Called by the menu callback when it wants to tell the editor to continue 
+// Called by the menu callback when it wants to tell the editor to continue
 // editting (end the menu).
 extern void Edit_Menu_Continue(void);
 // Called by the menu callback when it wants to tell the editor to quit the
 // editor.
 extern void Edit_Menu_ExitEditor(void);
 
-#endif //GAMEEDIT_H
+#endif // GAMEEDIT_H
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

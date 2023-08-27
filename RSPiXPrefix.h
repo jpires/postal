@@ -29,12 +29,11 @@
 
 // SmartHeap Stuff.  Normally, we define these in debug mode and comment them out otherwise.
 #define NOSHMALLOC
-//#define MEM_DEBUG
-//#define DEFINE_NEW_MACRO
+// #define MEM_DEBUG
+// #define DEFINE_NEW_MACRO
 
 // Define this for debug mode, comment it out otherwise.
-//#define _DEBUG
-
+// #define _DEBUG
 
 #endif // RSPIXPREFIX_H
 ////////////////////////////////////////////////////////////////////////////////

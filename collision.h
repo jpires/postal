@@ -17,7 +17,7 @@
 //
 // collision.H
 // Project: Nostril (aka Postal)
-// 
+//
 // History:
 //		02/18/97 JMI	Started.
 //
@@ -40,7 +40,7 @@
 // paths to a header file.  In this case we generally go off of our
 // RSPiX root directory.  System.h MUST be included before this macro
 // is evaluated.  System.h is the header that, based on the current
-// platform (or more so in this case on the compiler), defines 
+// platform (or more so in this case on the compiler), defines
 // PATHS_IN_INCLUDES.  Blue.h includes system.h so you can include that
 // instead.
 ///////////////////////////////////////////////////////////////////////////////
@@ -77,57 +77,57 @@
 // Gets then next thing from the specified list that collides with the specified
 // region.
 ////////////////////////////////////////////////////////////////////////////////
-template <class Region>	// Must be a type supported by CThing::IsColliding(...)!
-bool GetNextCollision(	// Returns true if a collision is found, false otherwise.
-	CThing::Things*	pthings,		// In:  List of CThings to search within.
-	Region*				pregion,		// In:  Region OR shape to collide with.
-	CThing**				ppthing)		// In:  CThing to start with or NULL to start at beginning.
-											// Out: CThing collided with or NULL.
-	{
-	bool	bCollision	= false;	// Assume no collision.
+template<class Region>     // Must be a type supported by CThing::IsColliding(...)!
+bool GetNextCollision(     // Returns true if a collision is found, false otherwise.
+  CThing::Things *pthings, // In:  List of CThings to search within.
+  Region *pregion,         // In:  Region OR shape to collide with.
+  CThing **ppthing)        // In:  CThing to start with or NULL to start at beginning.
+                           // Out: CThing collided with or NULL.
+{
+    bool bCollision = false; // Assume no collision.
 
-	CThing::Things::iterator	i	= pthings->begin();
+    CThing::Things::iterator i = pthings->begin();
 
-	// If a beginning was specified . . .
-	if (*ppthing != NULL)
-		{
-		while (i != pthings->end() && *i != *ppthing)
-			{
-			i++;
-			}
+    // If a beginning was specified . . .
+    if (*ppthing != NULL)
+    {
+        while (i != pthings->end() && *i != *ppthing)
+        {
+            i++;
+        }
 
-		if (i == pthings->end())
-			{
-			TRACE("GetNextCollision(): Specified CThing is not in specified list.\n");
-			}
-		else
-			{
-			// Move to next after *ppthing.
-			i++;
-			}
-		}
+        if (i == pthings->end())
+        {
+            TRACE("GetNextCollision(): Specified CThing is not in specified list.\n");
+        }
+        else
+        {
+            // Move to next after *ppthing.
+            i++;
+        }
+    }
 
-	while (i != pthings->end())
-		{
-		// If there is a collision . . .
-		if ((*i)->IsColliding(pregion) == true)
-			{
-			// Remember who it was with.
-			*ppthing	= *i;
-			// Set return value.
-			bCollision	= true;
-			// Exit loop.
-			break;
-			}
-		
-		// Next.
-		i++;
-		}
+    while (i != pthings->end())
+    {
+        // If there is a collision . . .
+        if ((*i)->IsColliding(pregion) == true)
+        {
+            // Remember who it was with.
+            *ppthing = *i;
+            // Set return value.
+            bCollision = true;
+            // Exit loop.
+            break;
+        }
 
-	return bCollision;
-	}
+        // Next.
+        i++;
+    }
 
-#endif	// COLLISION_H
+    return bCollision;
+}
+
+#endif // COLLISION_H
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////

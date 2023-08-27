@@ -33,21 +33,20 @@
 
 #include "RSPiX.h"
 #ifdef PATHS_IN_INCLUDES
-	#include "ORANGE/MultiGrid/MultiGridIndirect.h"
+#include "ORANGE/MultiGrid/MultiGridIndirect.h"
 #else
-	#include "multigridindirect.h"
+#include "multigridindirect.h"
 #endif
 #include "TriggerRegions.h"
 #include "TriggerRgn.h"
 #include "realm.h"
 #include "thing.h"
 
-
 // Here is a generic set of tools for creating a region map.
 // They are a lower level and don't iteratively optimize:
 
 ////////////////////////////////////////////////////////////////////////////////
-//	
+//
 //  CreateRegionMap - Begin your session
 //
 //	 UINPUT: Size of map in pixels, maximum number of overlapping planes,
@@ -55,7 +54,7 @@
 //				without causing greater than the maximum number of tiles to overlap.]
 //				sMaxPlanes must NOT exceed MGI_MAX_PLANES!
 //
-//  OUPUT:	An allocated RMultiGridIndirect containing an uncompressed 
+//  OUPUT:	An allocated RMultiGridIndirect containing an uncompressed
 //				RMultiGrid within it, ready for writing to.
 //
 //	 RETURN VALUE:	NULL on failure, else the new grid.  Can fail due to memory
@@ -63,55 +62,53 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-RMultiGridIndirect*	CreateRegionMap(short sWidth,short sHeight,short sMaxPlanes,
-												 short sTileW,short sTileH)
-	{
-	ASSERT( (sWidth > 0) && (sHeight > 0) && (sMaxPlanes > 0)
-				&& (sTileW > 0) && (sTileH > 0) );
-	ASSERT(sMaxPlanes <= MGI_MAX_PLANES);
+RMultiGridIndirect *CreateRegionMap(short sWidth, short sHeight, short sMaxPlanes, short sTileW, short sTileH)
+{
+    ASSERT((sWidth > 0) && (sHeight > 0) && (sMaxPlanes > 0) && (sTileW > 0) && (sTileH > 0));
+    ASSERT(sMaxPlanes <= MGI_MAX_PLANES);
 
-	RMultiGridIndirect* pMGI = new RMultiGridIndirect;
-	if (!pMGI) 
-		{
-		TRACE("CreateRegionMap: alloc error!\n");
+    RMultiGridIndirect *pMGI = new RMultiGridIndirect;
+    if (!pMGI)
+    {
+        TRACE("CreateRegionMap: alloc error!\n");
 
-		return NULL;
-		}
+        return NULL;
+    }
 
-	if (pMGI->Alloc(sWidth,sHeight,sMaxPlanes,sTileW,sTileH) != SUCCESS) 
-		{
-		TRACE("CreateRegionMap: alloc error!\n");
-		return NULL;
-		}
+    if (pMGI->Alloc(sWidth, sHeight, sMaxPlanes, sTileW, sTileH) != SUCCESS)
+    {
+        TRACE("CreateRegionMap: alloc error!\n");
+        return NULL;
+    }
 
-	// Create and install the MultiGrid.
-	RMultiGrid*	pmg = new RMultiGrid;
+    // Create and install the MultiGrid.
+    RMultiGrid *pmg = new RMultiGrid;
 
-	if (!pmg)
-		{
-		TRACE("CreateRegionMap: alloc error!\n");
-		return NULL;
-		}
+    if (!pmg)
+    {
+        TRACE("CreateRegionMap: alloc error!\n");
+        return NULL;
+    }
 
-	if (pmg->Alloc(sWidth,sHeight) != SUCCESS)
-		{
-		TRACE("CreateRegionMap: alloc error!\n");
-		delete pmg;
-		return NULL;
-		}
+    if (pmg->Alloc(sWidth, sHeight) != SUCCESS)
+    {
+        TRACE("CreateRegionMap: alloc error!\n");
+        delete pmg;
+        return NULL;
+    }
 
-	pMGI->InstallMultiGrid(pmg);
+    pMGI->InstallMultiGrid(pmg);
 
-	return pMGI;
-	}
+    return pMGI;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
-//	
+//
 //	 StrafeAddRegion - add all members of an array of 256 FSPR1's to the map.
 //
 //  It is assumed that there are 255 trigger regions (1 - 255), whose address
 //		is also their "palette value"
-//	
+//
 //	 RETURN VALUE - SUCCESS or FAILURE.  Will return failure if there were too
 //		many overlapping regions in one tile.  (It still will create the map, but
 //    on that one tile there will be some region drop out.)  You can fix this by
@@ -119,47 +116,50 @@ RMultiGridIndirect*	CreateRegionMap(short sWidth,short sHeight,short sMaxPlanes,
 //
 //		NOTE:  When finished, you should compress the MultiGrid as you see fit
 //				before saving.
-//	
+//
 ////////////////////////////////////////////////////////////////////////////////
 
-short	StrafeAddRegion(RMultiGridIndirect* pMGI,TriggerRgn regions[256])
-	{
-	ASSERT(pMGI);
-	short sRet = SUCCESS;
+short StrafeAddRegion(RMultiGridIndirect *pMGI, TriggerRgn regions[256])
+{
+    ASSERT(pMGI);
+    short sRet = SUCCESS;
 
-	for (short i=1; i < 256;i++)
-		{
-		if (regions[i].pimRgn)
-			{
-			if (pMGI->AddFSPR1(regions[i].pimRgn,regions[i].sX,regions[i].sY,
-				UCHAR(i),TriggerRgn::MaxRgnWidth,TriggerRgn::MaxRgnHeight)
-				!= SUCCESS)
-				{
-				TRACE("StrafeAddRegion:: Problem installing region %hd\n",i);
-				sRet = FAILURE;
-				}
-			}
-		}
+    for (short i = 1; i < 256; i++)
+    {
+        if (regions[i].pimRgn)
+        {
+            if (pMGI->AddFSPR1(regions[i].pimRgn,
+                               regions[i].sX,
+                               regions[i].sY,
+                               UCHAR(i),
+                               TriggerRgn::MaxRgnWidth,
+                               TriggerRgn::MaxRgnHeight) != SUCCESS)
+            {
+                TRACE("StrafeAddRegion:: Problem installing region %hd\n", i);
+                sRet = FAILURE;
+            }
+        }
+    }
 
-	return sRet;
-	}
+    return sRet;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 //	 CompressMap - currently just compresses to your specifications, but may
 //		be expanded to do some iterative testing for optimizing compression:
-// 
+//
 //  NOTE:
 //
 ////////////////////////////////////////////////////////////////////////////////
-short CompressMap(RMultiGridIndirect* pMGI,short sTileW,short sTileH)
-	{
-	ASSERT(pMGI);
-	ASSERT(pMGI->m_pmg);
-	// use compression results to optimize
-	pMGI->m_pmg->Compress(sTileW,sTileH);
-	return SUCCESS;
-	}
+short CompressMap(RMultiGridIndirect *pMGI, short sTileW, short sTileH)
+{
+    ASSERT(pMGI);
+    ASSERT(pMGI->m_pmg);
+    // use compression results to optimize
+    pMGI->m_pmg->Compress(sTileW, sTileH);
+    return SUCCESS;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -167,40 +167,40 @@ short CompressMap(RMultiGridIndirect* pMGI,short sTileW,short sTileH)
 //					alerts all relevant pylons to his presence
 ////////////////////////////////////////////////////////////////////////////////
 //
-void	SpewTriggers(CRealm* pRealm,	USHORT	usDudeUID,short sX,short sZ)
-	{
-	UCHAR	aucHitList[MGI_MAX_PLANES];
-	if (pRealm->m_pTriggerMap == NULL) return; // No triggers
+void SpewTriggers(CRealm *pRealm, USHORT usDudeUID, short sX, short sZ)
+{
+    UCHAR aucHitList[MGI_MAX_PLANES];
+    if (pRealm->m_pTriggerMap == NULL)
+        return; // No triggers
 
-	short sMax = pRealm->m_pTriggerMap->m_sMaxPlanes;
+    short sMax = pRealm->m_pTriggerMap->m_sMaxPlanes;
 
-	// GET THE ATTRIBUTE MAP FOR THE TRIGGERS:
-	pRealm->m_pTriggerMap->GetVal(aucHitList,sX,sZ);
-	UCHAR*	pHit = aucHitList;
-	GameMessage	msg;
+    // GET THE ATTRIBUTE MAP FOR THE TRIGGERS:
+    pRealm->m_pTriggerMap->GetVal(aucHitList, sX, sZ);
+    UCHAR *pHit = aucHitList;
+    GameMessage msg;
 
-	msg.msg_DudeTrigger.eType = typeDudeTrigger;
-	msg.msg_DudeTrigger.sPriority = 0;
-	msg.msg_DudeTrigger.u16DudeUniqueID = usDudeUID;
-	msg.msg_DudeTrigger.dX = double(sX);
-	msg.msg_DudeTrigger.dZ = double(sZ);
+    msg.msg_DudeTrigger.eType = typeDudeTrigger;
+    msg.msg_DudeTrigger.sPriority = 0;
+    msg.msg_DudeTrigger.u16DudeUniqueID = usDudeUID;
+    msg.msg_DudeTrigger.dX = double(sX);
+    msg.msg_DudeTrigger.dZ = double(sZ);
 
-	short sNum = sMax;
-	while (*pHit && sNum) // got a hit:
-		{
-		// send a trigger message out:
-		CThing* pThing = NULL;
+    short sNum = sMax;
+    while (*pHit && sNum) // got a hit:
+    {
+        // send a trigger message out:
+        CThing *pThing = NULL;
 
-		if (pRealm->m_idbank.GetThingByID(&pThing, pRealm->m_asPylonUIDs[*pHit]) == SUCCESS)
-			{
-			if (pThing) pThing->SendThingMessage(&msg, 0, pThing); // post the trigger!
-			}
-		pHit++;
-		sMax--;
-		}
-	
-	}
-
+        if (pRealm->m_idbank.GetThingByID(&pThing, pRealm->m_asPylonUIDs[*pHit]) == SUCCESS)
+        {
+            if (pThing)
+                pThing->SendThingMessage(&msg, 0, pThing); // post the trigger!
+        }
+        pHit++;
+        sMax--;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // EOF

@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // Pal.CPP
-// 
+//
 // History:
 // 10/30/96	JMI	Broke CPal and some of its associates out of image.cpp and
 //						imagetyp.h.
@@ -30,7 +30,7 @@
 //						CPal					RPal
 //						ULONG ulType		RPal::Type ulType
 //						m_bCanDestroyData	m_sCanDestroyData
-//						
+//
 //						Also, Convert() contained a "lack of m_" bug where it was
 //						unintentionally doing nothing b/c it was using ulType off
 //						of the stack when it meant the one in the class.
@@ -69,22 +69,22 @@
 // paths to a header file.  In this case we generally go off of our
 // RSPiX root directory.  System.h MUST be included before this macro
 // is evaluated.  System.h is the header that, based on the current
-// platform (or more so in this case on the compiler), defines 
+// platform (or more so in this case on the compiler), defines
 // PATHS_IN_INCLUDES.  Blue.h includes system.h so you can include that
 // instead.
 ///////////////////////////////////////////////////////////////////////////////
 #include "System.h"
 
 #ifdef PATHS_IN_INCLUDES
-	// Green include files
-	#include "GREEN/Image/pal.h"
-	#include "GREEN/Image/Image.h"
-	#include "GREEN/Image/PalFile.h"
+// Green include files
+#include "GREEN/Image/pal.h"
+#include "GREEN/Image/Image.h"
+#include "GREEN/Image/PalFile.h"
 #else
-	// Green include files
-	#include "pal.h"
-	#include "Image.h"
-	#include "PalFile.h"
+// Green include files
+#include "pal.h"
+#include "Image.h"
+#include "PalFile.h"
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -105,19 +105,13 @@
 
 // This array of type names should correspond to the list of
 // enumerated types eImageTypes in image.h.  Whenever you add an image
-// type and an enum, you need to also insert that name into the 
-// corresponding place in this array.  
+// type and an enum, you need to also insert that name into the
+// corresponding place in this array.
 // Note that this uses END_REG_PAL enum item to size the array.
 
-char* RPal::ms_astrTypeNames[END_REG_PAL] = 
-{
-	"Same Type",
-	"PDIB BGRA 8888 (RGBQUAD)",
-	"PSYS System dependent",
-	"P555 RGB 555",
-	"P565 RGB 565",
-	"P888 BGR 888",
-	"PFLX RGB 888",	
+char *RPal::ms_astrTypeNames[END_REG_PAL] = {
+    "Same Type",    "PDIB BGRA 8888 (RGBQUAD)", "PSYS System dependent", "P555 RGB 555", "P565 RGB 565", "P888 BGR 888",
+    "PFLX RGB 888",
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -136,15 +130,14 @@ char* RPal::ms_astrTypeNames[END_REG_PAL] =
 // based on the palette type.  This is used by RPal::GetPalEntrySize
 // to return the size of any registered palette type.
 // Note that this uses END_REG_PAL enum item to size the array.
-short RPal::ms_asPalEntrySizes[END_REG_PAL] = 
-{
-	0,		//NO_PALETTE
-	4,		//PDIB
-	4,		//PSYS
-	2,		//P555
-	2,		//P565
-	3,		//P888
-	3,		//PFLX	03/06/96	JMI
+short RPal::ms_asPalEntrySizes[END_REG_PAL] = {
+    0, // NO_PALETTE
+    4, // PDIB
+    4, // PSYS
+    2, // P555
+    2, // P565
+    3, // P888
+    3, // PFLX	03/06/96	JMI
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -170,15 +163,15 @@ short RPal::ms_asPalEntrySizes[END_REG_PAL] =
 
 RPal::RPal()
 {
-	//	Initialize member variables to zero
-	m_type				= NO_PALETTE;                           
-	m_ulSize				= 0;
-	m_sStartIndex		= 0;
-	m_sNumEntries		= 0;
-	m_sPalEntrySize	= 0;
-	m_pData				= NULL;
-	m_sCanDestroyData	= FALSE;
-} 
+    //	Initialize member variables to zero
+    m_type = NO_PALETTE;
+    m_ulSize = 0;
+    m_sStartIndex = 0;
+    m_sNumEntries = 0;
+    m_sPalEntrySize = 0;
+    m_pData = NULL;
+    m_sCanDestroyData = FALSE;
+}
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -197,11 +190,10 @@ RPal::RPal()
 
 RPal::~RPal()
 {
-	// Free Palette data
-	if (m_sCanDestroyData && m_pData)
-		DestroyData();
+    // Free Palette data
+    if (m_sCanDestroyData && m_pData)
+        DestroyData();
 }
-
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -222,37 +214,30 @@ RPal::~RPal()
 //		FAILURE if it didn't
 //
 //////////////////////////////////////////////////////////////////////
-short RPal::CreatePalette(
-	Type typeNew)
-	{
-	short sResult = SUCCESS;
-	
-	if ((typeNew >= NO_PALETTE) && (typeNew < END_REG_PAL))
-		{
-		// Get size of palette entry
-		short size = GetPalEntrySize(typeNew);
-		
-		// Set number of entries to 256.  This would probably only change
-		// if we add support for 1-, 2- or 4-bit image formats that would
-		// require smaller palettes.
-		short entries = 256;
-		CreateData(
-			size * entries,
-			typeNew,
-			size,
-			0,
-			entries);
-		}
-	else
-		{
-		TRACE("RPal::CreatePalette(): Not a registered palette type!\n");
-		sResult = FAILURE;
-		}
-	
-	return sResult;
-	}
-	
-	
+short RPal::CreatePalette(Type typeNew)
+{
+    short sResult = SUCCESS;
+
+    if ((typeNew >= NO_PALETTE) && (typeNew < END_REG_PAL))
+    {
+        // Get size of palette entry
+        short size = GetPalEntrySize(typeNew);
+
+        // Set number of entries to 256.  This would probably only change
+        // if we add support for 1-, 2- or 4-bit image formats that would
+        // require smaller palettes.
+        short entries = 256;
+        CreateData(size * entries, typeNew, size, 0, entries);
+    }
+    else
+    {
+        TRACE("RPal::CreatePalette(): Not a registered palette type!\n");
+        sResult = FAILURE;
+    }
+
+    return sResult;
+}
+
 //////////////////////////////////////////////////////////////////////
 //
 // GetPalEntrySize
@@ -272,13 +257,13 @@ short RPal::CreatePalette(
 
 short RPal::GetPalEntrySize(Type type)
 {
- 	if (type < END_REG_PAL)
-		return ms_asPalEntrySizes[type];
-	else
-	{
-	 	TRACE("RPal::GetPalEntrySize - Not a registered palette type\n");
-		return -1;
-	}
+    if (type < END_REG_PAL)
+        return ms_asPalEntrySizes[type];
+    else
+    {
+        TRACE("RPal::GetPalEntrySize - Not a registered palette type\n");
+        return -1;
+    }
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -302,41 +287,40 @@ short RPal::GetPalEntrySize(Type type)
 //
 //////////////////////////////////////////////////////////////////////
 
-short	RPal::CreateData(ULONG ulNewSize)
+short RPal::CreateData(ULONG ulNewSize)
 {
-	if (m_sCanDestroyData && m_pData)
-	{
-	 	TRACE("RPal::CreateData - Attempted to create new data while "
-			"m_pData is still pointing to valid memory\n");
-		return FAILURE;
-	}
+    if (m_sCanDestroyData && m_pData)
+    {
+        TRACE("RPal::CreateData - Attempted to create new data while "
+              "m_pData is still pointing to valid memory\n");
+        return FAILURE;
+    }
 
-	if (m_pData && !m_sCanDestroyData)
-		TRACE("RPal::CreateData - Warning m_pData != NULL\n");
+    if (m_pData && !m_sCanDestroyData)
+        TRACE("RPal::CreateData - Warning m_pData != NULL\n");
 
-	m_sCanDestroyData = TRUE;
-	m_ulSize = ulNewSize;
-	return RImage::sCreateMem((void**) &m_pData, ulNewSize);
+    m_sCanDestroyData = TRUE;
+    m_ulSize = ulNewSize;
+    return RImage::sCreateMem((void **)&m_pData, ulNewSize);
 }
 
-short RPal::CreateData(ULONG ulNewSize, 
-                       Type  typeNew,
-							  short sSetPalEntrySize,
-							  short sSetStartIndex,
-							  short sSetNumEntries)
+short RPal::CreateData(ULONG ulNewSize,
+                       Type typeNew,
+                       short sSetPalEntrySize,
+                       short sSetStartIndex,
+                       short sSetNumEntries)
 {
-	short sReturn = CreateData(ulNewSize);
+    short sReturn = CreateData(ulNewSize);
 
-	if (sReturn == SUCCESS)
-	{
-		m_type				= typeNew;
-		m_sPalEntrySize	= sSetPalEntrySize;
-		m_sStartIndex		= sSetStartIndex;
-		m_sNumEntries		= sSetNumEntries;
-	}
-	return sReturn;
+    if (sReturn == SUCCESS)
+    {
+        m_type = typeNew;
+        m_sPalEntrySize = sSetPalEntrySize;
+        m_sStartIndex = sSetStartIndex;
+        m_sNumEntries = sSetNumEntries;
+    }
+    return sReturn;
 }
-
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -356,20 +340,20 @@ short RPal::CreateData(ULONG ulNewSize,
 //
 //////////////////////////////////////////////////////////////////////
 
-short	RPal::DestroyData()
-{   
-	// Only if the data was not supplied by the user.
-	if (m_sCanDestroyData)
-		{
-		m_sCanDestroyData	= FALSE;
-		return RImage::sDestroyMem((void**) &m_pData);
-		}
-	else 
-	{
-	 	TRACE("RPal::DestroyData - Attempted to free data supplied by user via SetData\n");
-		TRACE("                    You are responsible for freeing m_pData\n");
-		return FAILURE;
-	}
+short RPal::DestroyData()
+{
+    // Only if the data was not supplied by the user.
+    if (m_sCanDestroyData)
+    {
+        m_sCanDestroyData = FALSE;
+        return RImage::sDestroyMem((void **)&m_pData);
+    }
+    else
+    {
+        TRACE("RPal::DestroyData - Attempted to free data supplied by user via SetData\n");
+        TRACE("                    You are responsible for freeing m_pData\n");
+        return FAILURE;
+    }
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -377,7 +361,7 @@ short	RPal::DestroyData()
 // RPal::SetData
 //
 // Description:
-//		Allows the user to give their own buffer for the palette.  
+//		Allows the user to give their own buffer for the palette.
 //		The user is responsible for deallocating this buffer when
 //		they are done using it.
 //
@@ -392,19 +376,19 @@ short	RPal::DestroyData()
 //
 //////////////////////////////////////////////////////////////////////
 
-short RPal::SetData(void* pUserData)
+short RPal::SetData(void *pUserData)
 {
-	if (pUserData != NULL && m_pData == NULL)
-	{
-		m_pData = (UCHAR*) pUserData;
-		m_sCanDestroyData = FALSE;
-		return SUCCESS;
-	}
-	else
-	{
-	 	TRACE("RPal::SetData - Your data handle or data pointer is NULL\n");
-		return FAILURE;
-	}
+    if (pUserData != NULL && m_pData == NULL)
+    {
+        m_pData = (UCHAR *)pUserData;
+        m_sCanDestroyData = FALSE;
+        return SUCCESS;
+    }
+    else
+    {
+        TRACE("RPal::SetData - Your data handle or data pointer is NULL\n");
+        return FAILURE;
+    }
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -415,10 +399,10 @@ short RPal::SetData(void* pUserData)
 //		This function detaches the memory buffer from the RPal and
 //		returns a pointer to it.  This allows the RPal to now create
 //		a new buffer without freeing the previous one.  This is useful
-//		for palette conversion functions where you want to keep the 
+//		for palette conversion functions where you want to keep the
 //		same RPal object but just change its data.  The conversion
 //		function can create a new RPal and set its pData pointer to
-//		the detached palette buffer.  Then the original RPal can 
+//		the detached palette buffer.  Then the original RPal can
 //		create a new buffer to accept the converted data.  When the
 //		conversion function is finished it can delete the RPal it
 //		created and along with it, the data.
@@ -431,12 +415,12 @@ short RPal::SetData(void* pUserData)
 //
 //////////////////////////////////////////////////////////////////////
 
-UCHAR* RPal::DetachData(void)
+UCHAR *RPal::DetachData(void)
 {
- 	UCHAR* pDetachment = m_pData;
-	m_pData = NULL;
-	m_sCanDestroyData = FALSE;
-	return pDetachment;
+    UCHAR *pDetachment = m_pData;
+    m_pData = NULL;
+    m_sCanDestroyData = FALSE;
+    return pDetachment;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -444,7 +428,7 @@ UCHAR* RPal::DetachData(void)
 // Convert
 //
 // Description:
-//		This function creates a temporary image of the type that 
+//		This function creates a temporary image of the type that
 //		matches the palette type and then calls the RImage::Convert
 //		function to convert the palette to the given format
 //
@@ -454,39 +438,38 @@ UCHAR* RPal::DetachData(void)
 // Returns:
 //		ulType if successful
 //		NO_PALETTE if there is no appropriate palette conversion
-//		
+//
 //////////////////////////////////////////////////////////////////////
 
 RPal::Type RPal::Convert(Type typeNew)
 {
-	if (typeNew >= END_REG_PAL)
-		return NO_PALETTE;
-	else
-	{
-		RImage* pTempImage = new RImage();
-		// Make image an equivalent RImage type to our current RPal type.
-		// Note that there was one of those bugs here b/c of a lack of
-		// m_.
-		pTempImage->m_type = (RImage::Type)m_type;
-		pTempImage->SetPalette(this);
-		// Convert RImage to type equivalent to desired RPal type.
-		// Note that this reference to typeNew is the local, not the
-		// member.
-		pTempImage->Convert((RImage::Type)typeNew);
-		// Done with image.
-		delete pTempImage;
-		// Return resulting RPal type.
-		return m_type;
-	}
+    if (typeNew >= END_REG_PAL)
+        return NO_PALETTE;
+    else
+    {
+        RImage *pTempImage = new RImage();
+        // Make image an equivalent RImage type to our current RPal type.
+        // Note that there was one of those bugs here b/c of a lack of
+        // m_.
+        pTempImage->m_type = (RImage::Type)m_type;
+        pTempImage->SetPalette(this);
+        // Convert RImage to type equivalent to desired RPal type.
+        // Note that this reference to typeNew is the local, not the
+        // member.
+        pTempImage->Convert((RImage::Type)typeNew);
+        // Done with image.
+        delete pTempImage;
+        // Return resulting RPal type.
+        return m_type;
+    }
 }
-
 
 //////////////////////////////////////////////////////////////////////
 //
 // Save
 //
 // Description:
-//		Saves the palette information to the given file.  
+//		Saves the palette information to the given file.
 //
 // Parameters:
 //		pszFilename = name of the file to be opened for write
@@ -497,22 +480,22 @@ RPal::Type RPal::Convert(Type typeNew)
 //
 //////////////////////////////////////////////////////////////////////
 
-short RPal::Save(char* pszFilename)
+short RPal::Save(char *pszFilename)
 {
-	RFile cf;
-	short sReturn = SUCCESS;
+    RFile cf;
+    short sReturn = SUCCESS;
 
-	if (cf.Open(pszFilename, "wb", RFile::LittleEndian) != SUCCESS)
-	{
-		TRACE("RPal::Save - could not open file for output\n");
-	 	return FAILURE;
-	}
+    if (cf.Open(pszFilename, "wb", RFile::LittleEndian) != SUCCESS)
+    {
+        TRACE("RPal::Save - could not open file for output\n");
+        return FAILURE;
+    }
 
-	sReturn = Save(&cf);
+    sReturn = Save(&cf);
 
-	cf.Close();
+    cf.Close();
 
-	return sReturn;
+    return sReturn;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -535,48 +518,48 @@ short RPal::Save(char* pszFilename)
 //
 //////////////////////////////////////////////////////////////////////
 
-short RPal::Save(RFile* pcf)
+short RPal::Save(RFile *pcf)
 {
-	short sReturn = SUCCESS;
-	ULONG ulFileType = PAL_COOKIE;
-	ULONG ulCurrentVersion = PAL_CURRENT_VERSION;
+    short sReturn = SUCCESS;
+    ULONG ulFileType = PAL_COOKIE;
+    ULONG ulCurrentVersion = PAL_CURRENT_VERSION;
 
-	if (pcf && pcf->IsOpen())
-	{
-		pcf->ClearError();
-		pcf->Write(&ulFileType);
-		pcf->Write(&ulCurrentVersion);
-		// No RFile support for RImage::Type, so we used a U32.
-		U32	u32Temp	= (ULONG)m_type;
-		pcf->Write(&u32Temp);
-		pcf->Write(&m_ulSize);
-		pcf->Write(&m_sStartIndex);
-		pcf->Write(&m_sNumEntries);
-		pcf->Write(&m_sPalEntrySize);
-		if (m_pData)
-		{
-			USHORT usFlag = 1;
-			pcf->Write(&usFlag);
-			pcf->Write(m_pData, m_ulSize);
-		}
-		else
-		{
-			USHORT usFlag = 0;
-			pcf->Write(&usFlag);
-		}
-		if (pcf->Error())
-		{
-			TRACE("RPal::Save - Error writing palette data\n");
-			sReturn = FAILURE;
-		}
-	}
-	else
-	{
-		TRACE("RPal::Save - Error: The RFile does not refer to an open file\n");
-		sReturn = FAILURE;
-	}
+    if (pcf && pcf->IsOpen())
+    {
+        pcf->ClearError();
+        pcf->Write(&ulFileType);
+        pcf->Write(&ulCurrentVersion);
+        // No RFile support for RImage::Type, so we used a U32.
+        U32 u32Temp = (ULONG)m_type;
+        pcf->Write(&u32Temp);
+        pcf->Write(&m_ulSize);
+        pcf->Write(&m_sStartIndex);
+        pcf->Write(&m_sNumEntries);
+        pcf->Write(&m_sPalEntrySize);
+        if (m_pData)
+        {
+            USHORT usFlag = 1;
+            pcf->Write(&usFlag);
+            pcf->Write(m_pData, m_ulSize);
+        }
+        else
+        {
+            USHORT usFlag = 0;
+            pcf->Write(&usFlag);
+        }
+        if (pcf->Error())
+        {
+            TRACE("RPal::Save - Error writing palette data\n");
+            sReturn = FAILURE;
+        }
+    }
+    else
+    {
+        TRACE("RPal::Save - Error: The RFile does not refer to an open file\n");
+        sReturn = FAILURE;
+    }
 
-	return sReturn;
+    return sReturn;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -584,8 +567,8 @@ short RPal::Save(RFile* pcf)
 // Load
 //
 // Description:
-//		This version of the load takes a filename and opens the PAL file.  
-//		
+//		This version of the load takes a filename and opens the PAL file.
+//
 // Parameters:
 //		pszFilename = File from which to load the palette
 //
@@ -596,22 +579,22 @@ short RPal::Save(RFile* pcf)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-short RPal::Load(char* pszFilename)
+short RPal::Load(char *pszFilename)
 {
-	RFile cf;
-	short sReturn = SUCCESS;
+    RFile cf;
+    short sReturn = SUCCESS;
 
-	if (cf.Open(pszFilename, "rb", RFile::LittleEndian) != SUCCESS)
-	{
-		TRACE("RPal::Load - could not open file for input\n");
-	 	return FAILURE;
-	}
+    if (cf.Open(pszFilename, "rb", RFile::LittleEndian) != SUCCESS)
+    {
+        TRACE("RPal::Load - could not open file for input\n");
+        return FAILURE;
+    }
 
-	sReturn = Load(&cf);
+    sReturn = Load(&cf);
 
-	cf.Close();
+    cf.Close();
 
-	return sReturn;
+    return sReturn;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -623,7 +606,7 @@ short RPal::Load(char* pszFilename)
 //		the palette from the current position.  This version of the RPal::Load
 //		function is called by RImage::Load when it is reading a RImage that
 //		contains a palette.
-//		
+//
 // Parameters:
 //		pszFilename = File from which to load the palette
 //
@@ -634,28 +617,27 @@ short RPal::Load(char* pszFilename)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-short RPal::Load(RFile* pcf)
-{	
-	short sReturn = SUCCESS;
-	ULONG ulFileType = 0;
-	ULONG ulFileVersion = 0;
-	USHORT usFlag = 2;
+short RPal::Load(RFile *pcf)
+{
+    short sReturn = SUCCESS;
+    ULONG ulFileType = 0;
+    ULONG ulFileVersion = 0;
+    USHORT usFlag = 2;
 
-	if (pcf && pcf->IsOpen())
-	{
-		pcf->ClearError();
+    if (pcf && pcf->IsOpen())
+    {
+        pcf->ClearError();
 
-		sReturn	= RPalFile::Load(this, pcf);
-	}
-	else
-	{
-		TRACE("RPal::Load - Error: RFile pointer does not refer to an open file\n");
-		sReturn = FAILURE;
-	}
+        sReturn = RPalFile::Load(this, pcf);
+    }
+    else
+    {
+        TRACE("RPal::Load - Error: RFile pointer does not refer to an open file\n");
+        sReturn = FAILURE;
+    }
 
-	return sReturn;
+    return sReturn;
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -665,7 +647,7 @@ short RPal::Load(RFile* pcf)
 //		Gets one or more entries from this palette.  This function offers a
 // 	standardized method for accessing the palette data, regardless of its
 // 	format or type.
-//		
+//
 //		Separate pointers are used for each component (red, green, blue, and
 //		alpha) so this function can access those components regardless of what
 //		order they're stored in.  The lAddToPointers parameter specifies the
@@ -690,127 +672,127 @@ short RPal::Load(RFile* pcf)
 //				  TRACE messages will help pinpoint the failure
 //
 ///////////////////////////////////////////////////////////////////////////////
-short RPal::GetEntries(
-	short sStart,								// In:  Starting palette entry
-	short sCount,								// In:  Number of entries to do
-	unsigned char* pDstRed,					// Out: Starting destination red value
-	unsigned char* pDstGreen,				// Out: Starting destination green value
-	unsigned char* pDstBlue,				// Out: Starting destination blue value
-	long lAddToPointers)						// In:  What to add to pointers to move to next value
-	{
-	// Validate parameters
-	ASSERT(pDstRed != NULL);
-	ASSERT(pDstGreen != NULL);
-	ASSERT(pDstBlue != NULL);
-	if ((sStart < m_sStartIndex) || ((sStart + sCount - 1) > (m_sStartIndex + m_sNumEntries - 1)))
-		{
-		TRACE("RPal::GetEntries(): Specified range (%d to %d) exceeds palette's range (%d to %d)!\n",
-			sStart, m_sStartIndex, m_sStartIndex + m_sNumEntries - 1);
-		return FAILURE;
-		}
-	if (sCount < 0)
-		{
-		TRACE("RPal::GetEntries(): The count cannot be negative!\n");
-		return FAILURE;
-		}
-		
-	short sResult = SUCCESS;
+short RPal::GetEntries(short sStart,             // In:  Starting palette entry
+                       short sCount,             // In:  Number of entries to do
+                       unsigned char *pDstRed,   // Out: Starting destination red value
+                       unsigned char *pDstGreen, // Out: Starting destination green value
+                       unsigned char *pDstBlue,  // Out: Starting destination blue value
+                       long lAddToPointers)      // In:  What to add to pointers to move to next value
+{
+    // Validate parameters
+    ASSERT(pDstRed != NULL);
+    ASSERT(pDstGreen != NULL);
+    ASSERT(pDstBlue != NULL);
+    if ((sStart < m_sStartIndex) || ((sStart + sCount - 1) > (m_sStartIndex + m_sNumEntries - 1)))
+    {
+        TRACE("RPal::GetEntries(): Specified range (%d to %d) exceeds palette's range (%d to %d)!\n",
+              sStart,
+              m_sStartIndex,
+              m_sStartIndex + m_sNumEntries - 1);
+        return FAILURE;
+    }
+    if (sCount < 0)
+    {
+        TRACE("RPal::GetEntries(): The count cannot be negative!\n");
+        return FAILURE;
+    }
 
-	// Calculate pointer to first entry to be modified
-	unsigned char* pucSrc = m_pData + ((sStart - m_sStartIndex) * m_sPalEntrySize);
-	unsigned char green;
+    short sResult = SUCCESS;
 
-	switch(m_type)
-		{
-		case NO_PALETTE:
-			TRACE("RPal::GetEntries - No palette!\n");
-			sResult = FAILURE;
-			break;
-			
-		case PDIB:
-			// Source format: BGR888+reserved
-			while (sCount--)
-				{
-				*pDstBlue  = *pucSrc++;
-				pDstBlue  += lAddToPointers;
-				*pDstGreen = *pucSrc++;
-				pDstGreen += lAddToPointers;
-				*pDstRed   = *pucSrc++;
-				pDstRed   += lAddToPointers;
-				pucSrc++;
-				}
-			break;
+    // Calculate pointer to first entry to be modified
+    unsigned char *pucSrc = m_pData + ((sStart - m_sStartIndex) * m_sPalEntrySize);
+    unsigned char green;
 
-		case PSYS:
-			TRACE("RPal::GetEntries - Does not support PSYS (system-depedendant palette)!\n");
-			sResult = FAILURE;
-			break;
-			
-		case P555:
-			// Source format (bits): 0rrrrrgg gggbbbbb
-			// To avoid endian issues this was done by bytes instead of words!
-			while (sCount--)
-				{
-				*pDstRed = (*pucSrc << 1) & 0xf8;
-				green = (*pucSrc++ << 6) & 0xc0;
-				*pDstGreen = green | ((*pucSrc >> 2) & 0x38);
-				*pDstBlue = (*pucSrc++ << 3) & 0xf8;
-				pDstRed   += lAddToPointers;
-				pDstGreen += lAddToPointers;
-				pDstBlue  += lAddToPointers;
-				}
-			break;
+    switch (m_type)
+    {
+        case NO_PALETTE:
+            TRACE("RPal::GetEntries - No palette!\n");
+            sResult = FAILURE;
+            break;
 
-		case P565:
-			// Source format (bits): rrrrrggg gggbbbbb
-			// To avoid endian issues this was done by bytes instead of words!
-			while (sCount--)
-				{
-				*pDstRed = *pucSrc & 0xf8;
-				green = (*pucSrc++ << 5) & 0xe0;
-				*pDstGreen = green | ((*pucSrc >> 3) & 0x1c);
-				*pDstBlue = (*pucSrc++ << 3) & 0xf8;
-				pDstRed   += lAddToPointers;
-				pDstGreen += lAddToPointers;
-				pDstBlue  += lAddToPointers;
-				}
-			break;
-		
-		case P888:
-			// Source format: BGR888
-			while (sCount--)
-				{
-				*pDstBlue  = *pucSrc++;
-				pDstBlue  += lAddToPointers;
-				*pDstGreen = *pucSrc++;
-				pDstGreen += lAddToPointers;
-				*pDstRed   = *pucSrc++;
-				pDstRed   += lAddToPointers;
-				}
-			break;
-			
-		case PFLX:
-			// Source format: RGB888
-			while (sCount--)
-				{
-				*pDstRed   = *pucSrc++;
-				pDstRed   += lAddToPointers;
-				*pDstGreen = *pucSrc++;
-				pDstGreen += lAddToPointers;
-				*pDstBlue  = *pucSrc++;
-				pDstBlue  += lAddToPointers;
-				}
-			break;
-		
-		default:
-			TRACE("RPal::GetEntries - Not a registered palette type!\n");
-			sResult = FAILURE;
-			break;
-		}
-	
-	return sResult;
-	}
+        case PDIB:
+            // Source format: BGR888+reserved
+            while (sCount--)
+            {
+                *pDstBlue = *pucSrc++;
+                pDstBlue += lAddToPointers;
+                *pDstGreen = *pucSrc++;
+                pDstGreen += lAddToPointers;
+                *pDstRed = *pucSrc++;
+                pDstRed += lAddToPointers;
+                pucSrc++;
+            }
+            break;
 
+        case PSYS:
+            TRACE("RPal::GetEntries - Does not support PSYS (system-depedendant palette)!\n");
+            sResult = FAILURE;
+            break;
+
+        case P555:
+            // Source format (bits): 0rrrrrgg gggbbbbb
+            // To avoid endian issues this was done by bytes instead of words!
+            while (sCount--)
+            {
+                *pDstRed = (*pucSrc << 1) & 0xf8;
+                green = (*pucSrc++ << 6) & 0xc0;
+                *pDstGreen = green | ((*pucSrc >> 2) & 0x38);
+                *pDstBlue = (*pucSrc++ << 3) & 0xf8;
+                pDstRed += lAddToPointers;
+                pDstGreen += lAddToPointers;
+                pDstBlue += lAddToPointers;
+            }
+            break;
+
+        case P565:
+            // Source format (bits): rrrrrggg gggbbbbb
+            // To avoid endian issues this was done by bytes instead of words!
+            while (sCount--)
+            {
+                *pDstRed = *pucSrc & 0xf8;
+                green = (*pucSrc++ << 5) & 0xe0;
+                *pDstGreen = green | ((*pucSrc >> 3) & 0x1c);
+                *pDstBlue = (*pucSrc++ << 3) & 0xf8;
+                pDstRed += lAddToPointers;
+                pDstGreen += lAddToPointers;
+                pDstBlue += lAddToPointers;
+            }
+            break;
+
+        case P888:
+            // Source format: BGR888
+            while (sCount--)
+            {
+                *pDstBlue = *pucSrc++;
+                pDstBlue += lAddToPointers;
+                *pDstGreen = *pucSrc++;
+                pDstGreen += lAddToPointers;
+                *pDstRed = *pucSrc++;
+                pDstRed += lAddToPointers;
+            }
+            break;
+
+        case PFLX:
+            // Source format: RGB888
+            while (sCount--)
+            {
+                *pDstRed = *pucSrc++;
+                pDstRed += lAddToPointers;
+                *pDstGreen = *pucSrc++;
+                pDstGreen += lAddToPointers;
+                *pDstBlue = *pucSrc++;
+                pDstBlue += lAddToPointers;
+            }
+            break;
+
+        default:
+            TRACE("RPal::GetEntries - Not a registered palette type!\n");
+            sResult = FAILURE;
+            break;
+    }
+
+    return sResult;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -820,7 +802,7 @@ short RPal::GetEntries(
 //		Sets one or more entries to this palette.  This function offers a
 // 	standardized method for accessing the palette data, regardless of its
 // 	format or type.
-//		
+//
 //		Separate pointers are used for each component (red, green, blue, and
 //		alpha) so this function can access those components regardless of what
 //		order they're stored in.  The lAddToPointers parameter specifies the
@@ -845,151 +827,152 @@ short RPal::GetEntries(
 //				  TRACE messages will help pinpoint the failure
 //
 ///////////////////////////////////////////////////////////////////////////////
-short RPal::SetEntries(
-	short sStart,								// In:  Starting palette entry
-	short sCount,								// In:  Number of entries to do
-	unsigned char* pSrcRed,					// In:  Starting source red value
-	unsigned char* pSrcGreen,				// In:  Starting source green value
-	unsigned char* pSrcBlue,				// In:  Starting source blue value
-	long lAddToPointers)						// In:  What to add to pointers to move to next value
-	{
-	// Validate parameters
-	ASSERT(pSrcRed != NULL);
-	ASSERT(pSrcGreen != NULL);
-	ASSERT(pSrcBlue != NULL);
-	if ((sStart < m_sStartIndex) || ((sStart + sCount - 1) > (m_sStartIndex + m_sNumEntries - 1)))
-		{
-		TRACE("RPal::PutEntries(): Specified range (%d to %d) exceeds palette's range (%d to %d)!\n",
-			sStart, m_sStartIndex, m_sStartIndex + m_sNumEntries - 1);
-		return FAILURE;
-		}
-	if (sCount < 0)
-		{
-		TRACE("RPal::PutEntries(): The count cannot be negative!\n");
-		return FAILURE;
-		}
-		
-	short sResult = SUCCESS;
+short RPal::SetEntries(short sStart,             // In:  Starting palette entry
+                       short sCount,             // In:  Number of entries to do
+                       unsigned char *pSrcRed,   // In:  Starting source red value
+                       unsigned char *pSrcGreen, // In:  Starting source green value
+                       unsigned char *pSrcBlue,  // In:  Starting source blue value
+                       long lAddToPointers)      // In:  What to add to pointers to move to next value
+{
+    // Validate parameters
+    ASSERT(pSrcRed != NULL);
+    ASSERT(pSrcGreen != NULL);
+    ASSERT(pSrcBlue != NULL);
+    if ((sStart < m_sStartIndex) || ((sStart + sCount - 1) > (m_sStartIndex + m_sNumEntries - 1)))
+    {
+        TRACE("RPal::PutEntries(): Specified range (%d to %d) exceeds palette's range (%d to %d)!\n",
+              sStart,
+              m_sStartIndex,
+              m_sStartIndex + m_sNumEntries - 1);
+        return FAILURE;
+    }
+    if (sCount < 0)
+    {
+        TRACE("RPal::PutEntries(): The count cannot be negative!\n");
+        return FAILURE;
+    }
 
-	// Calculate pointer to first entry to be modified
-	unsigned char* pucDst = m_pData + ((sStart - m_sStartIndex) * m_sPalEntrySize);
+    short sResult = SUCCESS;
 
-	switch(m_type)
-		{
-		case NO_PALETTE:
-			TRACE("RPal::GetEntries - No palette!\n");
-			sResult = FAILURE;
-			break;
-			
-		case PDIB:
-			// Destination format: BGR888+reserved
-			while (sCount--)
-				{
-				*pucDst++  = *pSrcBlue;
-				pSrcBlue  += lAddToPointers;
-				*pucDst++  = *pSrcGreen;
-				pSrcGreen += lAddToPointers;
-				*pucDst++  = *pSrcRed;
-				pSrcRed   += lAddToPointers;
-				pucDst++;
-				}
-			break;
+    // Calculate pointer to first entry to be modified
+    unsigned char *pucDst = m_pData + ((sStart - m_sStartIndex) * m_sPalEntrySize);
 
-		case PSYS:
-			TRACE("RPal::GetEntries - Does not support PSYS (system-depedendant palette)!\n");
-			sResult = FAILURE;
-			break;
-			
-		case P555:
-			// Destination format (bits): 0rrrrrgg gggbbbbb
-			// To avoid endian issues this was done by bytes instead of words!
-			while (sCount--)
-				{
-				*pucDst++ = ((*pSrcRed >> 1) & 0x7c) | ((*pSrcGreen >> 6) & 0x03);
-				*pucDst++ = ((*pSrcGreen << 2) & 0xe0) | ((*pSrcBlue >> 3) & 0x1f);
-				pSrcRed   += lAddToPointers;
-				pSrcGreen += lAddToPointers;
-				pSrcBlue  += lAddToPointers;
-				}
-			break;
+    switch (m_type)
+    {
+        case NO_PALETTE:
+            TRACE("RPal::GetEntries - No palette!\n");
+            sResult = FAILURE;
+            break;
 
-		case P565:
-			// Destination format (bits): rrrrrggg gggbbbbb
-			// To avoid endian issues this was done by bytes instead of words!
-			while (sCount--)
-				{
-				*pucDst++ = (*pSrcRed & 0xf8) | ((*pSrcGreen >> 5) & 0x07);
-				*pucDst++ = ((*pSrcGreen << 3) & 0xe0) | ((*pSrcBlue >> 3) & 0x1f);
-				pSrcRed   += lAddToPointers;
-				pSrcGreen += lAddToPointers;
-				pSrcBlue  += lAddToPointers;
-				}
-			break;
-		
-		case P888:
-			// Destination format: BGR888
-			while (sCount--)
-				{
-				*pucDst++  = *pSrcBlue;
-				pSrcBlue  += lAddToPointers;
-				*pucDst++  = *pSrcGreen;
-				pSrcGreen += lAddToPointers;
-				*pucDst++  = *pSrcRed;
-				pSrcRed   += lAddToPointers;
-				}
-			break;
-			
-		case PFLX:
-			// Destination format: RGB888
-			while (sCount--)
-				{
-				*pucDst++  = *pSrcRed;
-				pSrcRed   += lAddToPointers;
-				*pucDst++  = *pSrcGreen;
-				pSrcGreen += lAddToPointers;
-				*pucDst++  = *pSrcBlue;
-				pSrcBlue  += lAddToPointers;
-				}
-			break;
-		
-		default:
-			TRACE("RPal::GetEntries - Not a registered palette type!\n");
-			sResult = FAILURE;
-			break;
-		}
-	
-	return sResult;
-	}
+        case PDIB:
+            // Destination format: BGR888+reserved
+            while (sCount--)
+            {
+                *pucDst++ = *pSrcBlue;
+                pSrcBlue += lAddToPointers;
+                *pucDst++ = *pSrcGreen;
+                pSrcGreen += lAddToPointers;
+                *pucDst++ = *pSrcRed;
+                pSrcRed += lAddToPointers;
+                pucDst++;
+            }
+            break;
+
+        case PSYS:
+            TRACE("RPal::GetEntries - Does not support PSYS (system-depedendant palette)!\n");
+            sResult = FAILURE;
+            break;
+
+        case P555:
+            // Destination format (bits): 0rrrrrgg gggbbbbb
+            // To avoid endian issues this was done by bytes instead of words!
+            while (sCount--)
+            {
+                *pucDst++ = ((*pSrcRed >> 1) & 0x7c) | ((*pSrcGreen >> 6) & 0x03);
+                *pucDst++ = ((*pSrcGreen << 2) & 0xe0) | ((*pSrcBlue >> 3) & 0x1f);
+                pSrcRed += lAddToPointers;
+                pSrcGreen += lAddToPointers;
+                pSrcBlue += lAddToPointers;
+            }
+            break;
+
+        case P565:
+            // Destination format (bits): rrrrrggg gggbbbbb
+            // To avoid endian issues this was done by bytes instead of words!
+            while (sCount--)
+            {
+                *pucDst++ = (*pSrcRed & 0xf8) | ((*pSrcGreen >> 5) & 0x07);
+                *pucDst++ = ((*pSrcGreen << 3) & 0xe0) | ((*pSrcBlue >> 3) & 0x1f);
+                pSrcRed += lAddToPointers;
+                pSrcGreen += lAddToPointers;
+                pSrcBlue += lAddToPointers;
+            }
+            break;
+
+        case P888:
+            // Destination format: BGR888
+            while (sCount--)
+            {
+                *pucDst++ = *pSrcBlue;
+                pSrcBlue += lAddToPointers;
+                *pucDst++ = *pSrcGreen;
+                pSrcGreen += lAddToPointers;
+                *pucDst++ = *pSrcRed;
+                pSrcRed += lAddToPointers;
+            }
+            break;
+
+        case PFLX:
+            // Destination format: RGB888
+            while (sCount--)
+            {
+                *pucDst++ = *pSrcRed;
+                pSrcRed += lAddToPointers;
+                *pucDst++ = *pSrcGreen;
+                pSrcGreen += lAddToPointers;
+                *pucDst++ = *pSrcBlue;
+                pSrcBlue += lAddToPointers;
+            }
+            break;
+
+        default:
+            TRACE("RPal::GetEntries - Not a registered palette type!\n");
+            sResult = FAILURE;
+            break;
+    }
+
+    return sResult;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Copy operator overload.
 // Note that this could fail.
 ///////////////////////////////////////////////////////////////////////////////
-RPal& RPal::operator=(RPal &palSrc)
-	{
-	// Copy members.
-	m_type				= palSrc.m_type;
-	m_ulSize				= palSrc.m_ulSize;
-	m_sStartIndex		= palSrc.m_sStartIndex;
-	m_sNumEntries		= palSrc.m_sNumEntries;
-	m_sPalEntrySize	= palSrc.m_sPalEntrySize;
-	// If there is any data . . .
-	if (palSrc.m_ulSize > 0)
-		{
-		// Allocate space . . .
-		if (CreateData(palSrc.m_ulSize) == 0)
-			{
-			// Copy actual data.
-			memcpy(m_pData, palSrc.m_pData, palSrc.m_ulSize);
-			}
-		else
-			{
-			TRACE("operator=(): CreateData() failed.\n");
-			}
-		}
+RPal &RPal::operator=(RPal &palSrc)
+{
+    // Copy members.
+    m_type = palSrc.m_type;
+    m_ulSize = palSrc.m_ulSize;
+    m_sStartIndex = palSrc.m_sStartIndex;
+    m_sNumEntries = palSrc.m_sNumEntries;
+    m_sPalEntrySize = palSrc.m_sPalEntrySize;
+    // If there is any data . . .
+    if (palSrc.m_ulSize > 0)
+    {
+        // Allocate space . . .
+        if (CreateData(palSrc.m_ulSize) == 0)
+        {
+            // Copy actual data.
+            memcpy(m_pData, palSrc.m_pData, palSrc.m_ulSize);
+        }
+        else
+        {
+            TRACE("operator=(): CreateData() failed.\n");
+        }
+    }
 
-	return *this;
-	}
+    return *this;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // EOF

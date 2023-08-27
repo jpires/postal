@@ -18,12 +18,12 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // GuiItem.CPP
-// 
+//
 // History:
 //		08/07/96 JMI	Started.
 //
 //		08/11/96	JMI	When m_sBorderThickness was 0, GetClient was returning
-//							0 for the width and height by mistake.  This was 
+//							0 for the width and height by mistake.  This was
 //							remedied(sp?) such that it now uses the width and
 //							height of the image.
 //
@@ -31,7 +31,7 @@
 //							justification and DrawText so derived classes can
 //							utilize this functionality.
 //
-//		08/15/96	JMI	Blit() was checking dest image type for BLiT type instead 
+//		08/15/96	JMI	Blit() was checking dest image type for BLiT type instead
 //							of source image type.
 //
 //		08/15/96	JMI	Added TopPosToChild() complement to ChildPosToTop().
@@ -47,7 +47,7 @@
 //							now has to be a GetTopLeftBorderThickness() and a
 //							GetBottomRightBorderThickness() where before there was only
 //							a GetTotalBorderThickness().  This also required a member
-//							m_sInvertedBorder to remember whether the border was 
+//							m_sInvertedBorder to remember whether the border was
 //							inverted.
 //
 //		09/24/96	JMI	Changed all BLU_MB?_* macros to RSP_MB?_* macros.
@@ -103,7 +103,7 @@
 //
 //		12/04/96	JMI	Now initializes RRects using new syntax.
 //
-//		12/19/96	JMI	Uses new m_justification (as m_sJustification) and 
+//		12/19/96	JMI	Uses new m_justification (as m_sJustification) and
 //							upgraded to new RFont/RPrint.
 //
 //		12/22/96	JMI	Added support for transparent uncompressed buffers.
@@ -113,7 +113,7 @@
 //							with transparent color m_u32TransparentColor.
 //
 //		12/28/96	JMI	Added CreateGuiItem() function that will allocate,
-//							with new, the requested 'standard' RGuiItem or 
+//							with new, the requested 'standard' RGuiItem or
 //							descendant.
 //
 //		12/29/96	JMI	Added m_lId member used to item this RGuiItem from
@@ -124,30 +124,30 @@
 //		12/29/96	JMI	Added DestroyGuiItem() function that will properly
 //							and completely destroy a RGuiItem or descendant, if
 //							the item is of a 'standard' type.
-//							
+//
 //		12/30/96	JMI	Now SetActive() works the way SetVisible() always handled
 //							activation.  On activation, it activates its RHot only
 //							if m_sActive is TRUE.  On deactivation, it always
 //							deactivates its RHot.
-//							Now, if no clip rect specified to Draw(), the created 
+//							Now, if no clip rect specified to Draw(), the created
 //							clip rect is clipped to the image dimensions.
 //
 //		12/31/96	JMI	Added ms_pguiFocus static RGuiItem* and static functions
-//							FocusNext(), FocusPrev(), and SetFocus() to standardize 
-//							focus.  
+//							FocusNext(), FocusPrev(), and SetFocus() to standardize
+//							focus.
 //							Also, updated header comment regarding focus.
 //							Note that ms_pguiFocus can be set by any other API; it
 //							is not necessary to use FocusNext/Prev() and SetFocus(),
-//							but for the sake of making as much work together as 
+//							but for the sake of making as much work together as
 //							possible, it would be nice if we tried to stick to
 //							these functions.
 //
 //		01/01/97	JMI	Added GetHot() which gets the area for the RHot and
 //							now HotCall() will make your RHot as large as possible
-//							on button down in order to increase the likelihood of 
+//							on button down in order to increase the likelihood of
 //							catching the button up.  Also, compose now sets your
 //							RHot to what GetHot() returns.
-//							
+//
 //		01/02/97	JMI	Added DrawFocus() which draws a focus rectangle around
 //							the border of the client area which is intended to show
 //							which item has the focus.
@@ -192,7 +192,7 @@
 //
 //		01/13/97	JMI	Added RListBox to CreateGuiItem() and DestroyGuiItem().
 //
-//		01/14/97	JMI	Create() now calls Destroy() on failure instead of 
+//		01/14/97	JMI	Create() now calls Destroy() on failure instead of
 //							destroying m_im manually.
 //							SetParent() now sets the activated status to that of the
 //							new parent if there is one.  If there is none, the item
@@ -208,7 +208,7 @@
 //
 //		01/14/97	JMI	Added Load and Save capabilities.  Still in early stages
 //							but hopefully I did it correctly.  Seems to work fine.
-//		
+//
 //		01/15/97	JMI	Now Load() and LoadInstantiate() call LoadChildren()
 //							BEFORE Create().
 //
@@ -260,7 +260,7 @@
 //		03/28/97	JMI	RSP_MB0_DOUBLECLICK is now treated the same as
 //							RSP_MB0_PRESSED.
 //
-//		04/01/97	JMI	Changed short m_sCanBeFocused (TRUE, FALSE) to 
+//		04/01/97	JMI	Changed short m_sCanBeFocused (TRUE, FALSE) to
 //							m_targetFocus (Self, Parent, Sibling).
 //							Also, changed position of default case in ReadMembers().
 //
@@ -293,14 +293,14 @@
 //
 //		07/01/97	JMI	Now CopyParms() now copies m_sFontCellHeight.
 //
-//		07/07/97	JMI	Added TextEffectsFlags, m_sTextEffects, m_sTextShadowOffsetX, 
+//		07/07/97	JMI	Added TextEffectsFlags, m_sTextEffects, m_sTextShadowOffsetX,
 //							and m_sTextShadowOffsetY.
-//							Also, upped GUI_FILE_VERSION to 6 to save these new 
+//							Also, upped GUI_FILE_VERSION to 6 to save these new
 //							members.
 //							Also, added SetTextEffects().
 //
-//		08/22/97	JMI	Now uses rspGeneralLock/Unlock() to make sure the 
-//							destination buffer to Draw() is properly locked, if 
+//		08/22/97	JMI	Now uses rspGeneralLock/Unlock() to make sure the
+//							destination buffer to Draw() is properly locked, if
 //							necessary.
 //
 //		09/12/97	JMI	Made ReadMembers() and WriteMembers() public.
@@ -318,7 +318,7 @@
 // of the basic functionality for a gui object from CHot callbacks to drawing
 // borders and backgrounds.  Just about all of its funcitons can be overrided.
 // If you want to create a totally unique GUI item, derive it from this.
-// If you are making a button or other item that is similar to something 
+// If you are making a button or other item that is similar to something
 // already implemented, you might want to derive from a slightly higher
 // level such as RBtn, RTxt, RDlg, RScrollBar, etc.
 //
@@ -329,7 +329,7 @@
 // Effectively, calling SetVisible(TRUE) sets the visible status of this item
 // and calls m_hot.SetActive(m_sActive) for this item and all children.
 // The inverse is NOT true for SetVisible(FALSE).  SetVisible(FALSE) sets
-// this item's m_sVisible to FALSE and calls m_hot.SetActive(FALSE) for this 
+// this item's m_sVisible to FALSE and calls m_hot.SetActive(FALSE) for this
 // and all child items.  The basic idea is that hiding a gui item causes this
 // item and all chidren to not be displayed by setting m_sVisible, for this item
 // only, to FALSE and deactivating mouse input for this and all children.
@@ -344,10 +344,10 @@
 // Focus:
 // There is very little support for focus.  It is considered a higher level
 // idea.  What is provided is merely a static RGuiItem* that can be used to
-// keep track of the item in focus and three functions, FocusNext(), 
+// keep track of the item in focus and three functions, FocusNext(),
 // FocusPrev(), and SetFocus().  Note that FocusNext/Prev() only move the focus
-// among children of one particular parent.  Also, since their is no list of 
-// top-level guis in this model, the changing of focus among top-level guis 
+// among children of one particular parent.  Also, since their is no list of
+// top-level guis in this model, the changing of focus among top-level guis
 // must be done without the use of FocusNext/Prev().  Currently, SetFocus()
 // does barely anything, but it is better to use it than to set ms_pguiFocus
 // manually b/c SetFocus() will probably eventually do something.
@@ -378,64 +378,64 @@
 #include "Blue.h"
 
 #ifdef PATHS_IN_INCLUDES
-	#include "ORANGE/GUI/guiItem.h"
-	#include "GREEN/BLiT/BLIT.H"
-	#include "ORANGE/IFF/iff.h"
+#include "ORANGE/GUI/guiItem.h"
+#include "GREEN/BLiT/BLIT.H"
+#include "ORANGE/IFF/iff.h"
 
-	// Headers for CreateGuiItem.
-	#include "ORANGE/GUI/txt.h"
-	#include "ORANGE/GUI/btn.h"
-	#include "ORANGE/GUI/edit.h"
-	#include "ORANGE/GUI/scrollbar.h"
-	#include "ORANGE/GUI/dlg.h"
-	#include "ORANGE/GUI/ListBox.h"
-	#include "ORANGE/GUI/PushBtn.h"
-	#include "ORANGE/GUI/MultiBtn.h"
+// Headers for CreateGuiItem.
+#include "ORANGE/GUI/txt.h"
+#include "ORANGE/GUI/btn.h"
+#include "ORANGE/GUI/edit.h"
+#include "ORANGE/GUI/scrollbar.h"
+#include "ORANGE/GUI/dlg.h"
+#include "ORANGE/GUI/ListBox.h"
+#include "ORANGE/GUI/PushBtn.h"
+#include "ORANGE/GUI/MultiBtn.h"
 #else
-	#include "BLIT.H"
-	#include "GuiItem.h"
+#include "BLIT.H"
+#include "GuiItem.h"
 
-	// Headers for CreateGuiItem.
-	#include "Txt.h"
-	#include "Btn.h"
-	#include "Edit.h"
-	#include "ScrollBar.h"
-	#include "Dlg.h"
-	#include "ListBox.h"
-	#include "iff.h"
-	#include "PushBtn.h"
-	#include "MultiBtn.h"
+// Headers for CreateGuiItem.
+#include "Txt.h"
+#include "Btn.h"
+#include "Edit.h"
+#include "ScrollBar.h"
+#include "Dlg.h"
+#include "ListBox.h"
+#include "iff.h"
+#include "PushBtn.h"
+#include "MultiBtn.h"
 #endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific macros.
 //////////////////////////////////////////////////////////////////////////////
-#define DEF_BORDER_COLOR				RSP_BLACK_INDEX
-#define DEF_BORDER_SHADOW_COLOR		RSP_BLACK_INDEX
-#define DEF_BORDER_HIGHLIGHT_COLOR	RSP_WHITE_INDEX
-#define DEF_BORDER_EDGE_COLOR			RSP_WHITE_INDEX
+#define DEF_BORDER_COLOR RSP_BLACK_INDEX
+#define DEF_BORDER_SHADOW_COLOR RSP_BLACK_INDEX
+#define DEF_BORDER_HIGHLIGHT_COLOR RSP_WHITE_INDEX
+#define DEF_BORDER_EDGE_COLOR RSP_WHITE_INDEX
 
-#define DEF_BORDER_THICKNESS			1
+#define DEF_BORDER_THICKNESS 1
 
-#define DEF_TEXT_COLOR					RSP_WHITE_INDEX
-#define DEF_BACK_COLOR					RSP_BLACK_INDEX
-#define DEF_SHADOW_COLOR				RSP_BLACK_INDEX
+#define DEF_TEXT_COLOR RSP_WHITE_INDEX
+#define DEF_BACK_COLOR RSP_BLACK_INDEX
+#define DEF_SHADOW_COLOR RSP_BLACK_INDEX
 
-#define DEF_FONT_CELL_HEIGHT			15
+#define DEF_FONT_CELL_HEIGHT 15
 
-#define DEF_FOCUS_COLOR					RSP_WHITE_INDEX
+#define DEF_FOCUS_COLOR RSP_WHITE_INDEX
 
-#define BORDER_EFFECTS_THICKNESS		2
+#define BORDER_EFFECTS_THICKNESS 2
 
 // Sets a value pointed to if ptr is not NULL.
-#define SET(pval, val)					((pval != NULL) ? *pval = val : val)
+#define SET(pval, val) ((pval != NULL) ? *pval = val : val)
 
 // Finger print for GUI files.
-#define GUI_FINGER_PRINT				MAKE_IFF_FCC('R', 'G', 'u', 'i')
-#define GUI_FILE_VERSION				7
+#define GUI_FINGER_PRINT MAKE_IFF_FCC('R', 'G', 'u', 'i')
+#define GUI_FILE_VERSION 7
 
 // If this prop is defined for a GUI item, it is 'delete'able.
-#define DYNAMIC_PROP_KEY				3267021
+#define DYNAMIC_PROP_KEY 3267021
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -444,24 +444,16 @@
 //////////////////////////////////////////////////////////////////////////////
 // Module specific (static) variables.
 //////////////////////////////////////////////////////////////////////////////
-RPrint		RGuiItem::ms_print;			// This is the main RPrint that all
-													// GUI items default to.
-RGuiItem*	RGuiItem::ms_pguiFocus	= NULL;	// Higher level APIs can use this
-															// as their current point of 
-															// input focus.
-char*			RGuiItem::ms_apszTypes[NumGuiTypes]	=	// Array of strings 
-																	// indexed by type.
-	{
-	"GuiItem",
-	"Txt",
-	"Btn",
-	"Edit",
-	"ScrollBar",
-	"Dlg",
-	"ListBox",
-	"PushBtn",
-	"MultiBtn",
-	};
+RPrint RGuiItem::ms_print;                  // This is the main RPrint that all
+                                            // GUI items default to.
+RGuiItem *RGuiItem::ms_pguiFocus = NULL;    // Higher level APIs can use this
+                                            // as their current point of
+                                            // input focus.
+char *RGuiItem::ms_apszTypes[NumGuiTypes] = // Array of strings
+                                            // indexed by type.
+  {
+      "GuiItem", "Txt", "Btn", "Edit", "ScrollBar", "Dlg", "ListBox", "PushBtn", "MultiBtn",
+  };
 
 //////////////////////////////////////////////////////////////////////////////
 // Construction/Destruction.
@@ -473,125 +465,124 @@ char*			RGuiItem::ms_apszTypes[NumGuiTypes]	=	// Array of strings
 //
 //////////////////////////////////////////////////////////////////////////////
 RGuiItem::RGuiItem()
-	{
-	m_sX	= 0;
-	m_sY	= 0;
+{
+    m_sX = 0;
+    m_sY = 0;
 
-	m_hot.m_ulUser			= (ULONG)this;
-	m_hot.m_iecUser		= HotCall;
+    m_hot.m_ulUser = (ULONG)this;
+    m_hot.m_iecUser = HotCall;
 
-	m_sEventAreaX			= 0;	// X coord of area in which we care
-										// about cursor events.            
-	m_sEventAreaY			= 0;	// Y coord of area in which we care
-										// about cursor events.            
-	m_sEventAreaW			= 0;	// Width of area in which we care  
-										// about cursor events.            
-	m_sEventAreaH			= 0;	// Height of area in which we care 
-										// about cursor events.            
-	
-	m_sPressed				= FALSE;
+    m_sEventAreaX = 0; // X coord of area in which we care
+                       // about cursor events.
+    m_sEventAreaY = 0; // Y coord of area in which we care
+                       // about cursor events.
+    m_sEventAreaW = 0; // Width of area in which we care
+                       // about cursor events.
+    m_sEventAreaH = 0; // Height of area in which we care
+                       // about cursor events.
 
-	m_pguiParent			= NULL;
+    m_sPressed = FALSE;
 
-	m_drawcall				= NULL;
-	m_backcall				= NULL;
-	m_bcUser					= NULL;
+    m_pguiParent = NULL;
 
-	m_fnInputEvent			= NULL;
+    m_drawcall = NULL;
+    m_backcall = NULL;
+    m_bcUser = NULL;
 
-	m_ulUserInstance		= NULL;
-	m_ulUserData			= 0;
+    m_fnInputEvent = NULL;
 
-	m_sBorderThickness	= DEF_BORDER_THICKNESS;
+    m_ulUserInstance = NULL;
+    m_ulUserData = 0;
 
-	m_u32BorderColor				= DEF_BORDER_COLOR;	
-	m_u32BorderShadowColor		= DEF_BORDER_SHADOW_COLOR;
-	m_u32BorderHighlightColor	= DEF_BORDER_HIGHLIGHT_COLOR;
-	m_u32BorderEdgeColor			= DEF_BORDER_EDGE_COLOR;
+    m_sBorderThickness = DEF_BORDER_THICKNESS;
 
-	m_u32TextColor			= DEF_TEXT_COLOR;
-	m_u32BackColor			= DEF_BACK_COLOR;
-	m_u32TextShadowColor	= DEF_SHADOW_COLOR;
+    m_u32BorderColor = DEF_BORDER_COLOR;
+    m_u32BorderShadowColor = DEF_BORDER_SHADOW_COLOR;
+    m_u32BorderHighlightColor = DEF_BORDER_HIGHLIGHT_COLOR;
+    m_u32BorderEdgeColor = DEF_BORDER_EDGE_COLOR;
 
-	m_sTextEffects			= 0;	// Flags for text effects.             
-	                                                               
-	m_sTextShadowOffsetX	= 1;	// Offset along X axis for text shadow.
-	m_sTextShadowOffsetY	= 1;	// Offset along Y axis for text shadow.
+    m_u32TextColor = DEF_TEXT_COLOR;
+    m_u32BackColor = DEF_BACK_COLOR;
+    m_u32TextShadowColor = DEF_SHADOW_COLOR;
 
-	m_szText[0]				= '\0';
+    m_sTextEffects = 0; // Flags for text effects.
 
-	m_sFontCellHeight		= DEF_FONT_CELL_HEIGHT;	// Cell height for text.
+    m_sTextShadowOffsetX = 1; // Offset along X axis for text shadow.
+    m_sTextShadowOffsetY = 1; // Offset along Y axis for text shadow.
 
-	// Default to left justified.
-	m_justification		= RGuiItem::Left;
+    m_szText[0] = '\0';
 
-	m_sInvertedBorder		= FALSE;	// TRUE if border is inverted; FALSE
-											// otherwise.                       
+    m_sFontCellHeight = DEF_FONT_CELL_HEIGHT; // Cell height for text.
 
-	m_type					= GuiItem;	// Indicates type of GUI item.
+    // Default to left justified.
+    m_justification = RGuiItem::Left;
 
-	m_sTransparent			= FALSE;	// TRUE, if this should be blt'ed via
-											// a transparent blit call; FALSE,   
-											// otherwise.  Note that this cannot 
-											// override transparent Image formats
-											// (e.g., FSPR8 will always be blt'ed
-											// with transparency).               
-	m_u32TransparentColor	= 0;	// Color used for transparency
-											// when using transparent blit
-											// call.                      
+    m_sInvertedBorder = FALSE; // TRUE if border is inverted; FALSE
+                               // otherwise.
 
-	m_lId						= 0;		// Default ID.
+    m_type = GuiItem; // Indicates type of GUI item.
 
-	m_targetFocus			= Self;	// Target when focus received.
+    m_sTransparent = FALSE;    // TRUE, if this should be blt'ed via
+                               // a transparent blit call; FALSE,
+                               // otherwise.  Note that this cannot
+                               // override transparent Image formats
+                               // (e.g., FSPR8 will always be blt'ed
+                               // with transparency).
+    m_u32TransparentColor = 0; // Color used for transparency
+                               // when using transparent blit
+                               // call.
 
-	m_sShowFocus			= TRUE;	// TRUE if this item shows feedback,
-											// usually via DrawFocus(), when it
-											// has the focus.
+    m_lId = 0; // Default ID.
 
-	m_sFocusPos				= 0;		// Position at which DrawFocus() will
-											// draw the focus rectangle relative
-											// to the client area.  For example,
-											// -1 would but it just outside the
-											// client area.
+    m_targetFocus = Self; // Target when focus received.
 
-	m_u32FocusColor		= DEF_FOCUS_COLOR;	// Color to draw focus with.
+    m_sShowFocus = TRUE; // TRUE if this item shows feedback,
+                         // usually via DrawFocus(), when it
+                         // has the focus.
 
-	m_sClicked				= FALSE;	// TRUE if this item is considered     
-											// 'Clicked'.  For example, the default
-											// implementation makes this TRUE if   
-											// the cursor was pressed AND released 
-											// within this item's hot area.        
+    m_sFocusPos = 0; // Position at which DrawFocus() will
+                     // draw the focus rectangle relative
+                     // to the client area.  For example,
+                     // -1 would but it just outside the
+                     // client area.
 
-	m_szBkdResName[0]		= '\0';	// Name of background res 
-											// file to get into       
-											// m_pimBkdRes.           
-	m_sBkdResTransparent	= FALSE;	// TRUE, if m_pimBkdRes is to be
-											// BLiT'ed transparently; FALSE,
-											// otherwise.                   
-	m_u32BkdResTransparentColor	= 0;	// Transparency color for 
-													// m_pimBkdRes when       
-													// BLiT'ed transparently. 
-	m_sBkdResPlacement	= 0;		// Combination of |'ed             
-											// Placement enum values.          
-	m_pimBkdRes				= NULL;	// Background resource image.
-	                                                        
-	                                                        
-	m_fnGetRes				= NULL;	// User callback to get background res
-											// (m_pimBkdRes).                     
-	m_fnReleaseRes			= NULL;	// User callback to release background
-											// res (m_pimBkdRes).                 
+    m_u32FocusColor = DEF_FOCUS_COLOR; // Color to draw focus with.
 
-	m_sVisible				= TRUE;	// TRUE if Draw() is to draw this item 	
-											// and its children; FALSE, otherwise. 	
-	m_sActive				= TRUE;	// TRUE if the CHot is to be activated
-											// when visible.                      
+    m_sClicked = FALSE; // TRUE if this item is considered
+                        // 'Clicked'.  For example, the default
+                        // implementation makes this TRUE if
+                        // the cursor was pressed AND released
+                        // within this item's hot area.
 
-	// Assign default (lowest GUI) priority.
-	m_hot.SetPriority(0);
+    m_szBkdResName[0] = '\0';        // Name of background res
+                                     // file to get into
+                                     // m_pimBkdRes.
+    m_sBkdResTransparent = FALSE;    // TRUE, if m_pimBkdRes is to be
+                                     // BLiT'ed transparently; FALSE,
+                                     // otherwise.
+    m_u32BkdResTransparentColor = 0; // Transparency color for
+                                     // m_pimBkdRes when
+                                     // BLiT'ed transparently.
+    m_sBkdResPlacement = 0;          // Combination of |'ed
+                                     // Placement enum values.
+    m_pimBkdRes = NULL;              // Background resource image.
 
-	// Set default RPrint.
-	m_pprint					= &ms_print;
-	}
+    m_fnGetRes = NULL;     // User callback to get background res
+                           // (m_pimBkdRes).
+    m_fnReleaseRes = NULL; // User callback to release background
+                           // res (m_pimBkdRes).
+
+    m_sVisible = TRUE; // TRUE if Draw() is to draw this item
+                       // and its children; FALSE, otherwise.
+    m_sActive = TRUE;  // TRUE if the CHot is to be activated
+                       // when visible.
+
+    // Assign default (lowest GUI) priority.
+    m_hot.SetPriority(0);
+
+    // Set default RPrint.
+    m_pprint = &ms_print;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -599,43 +590,43 @@ RGuiItem::RGuiItem()
 //
 //////////////////////////////////////////////////////////////////////////////
 RGuiItem::~RGuiItem()
-	{
-	// Release all children.
-	RGuiItem*	pgui	= m_listguiChildren.GetHead();
-	while (pgui != NULL)
-		{
-		pgui->SetParent(NULL);
+{
+    // Release all children.
+    RGuiItem *pgui = m_listguiChildren.GetHead();
+    while (pgui != NULL)
+    {
+        pgui->SetParent(NULL);
 
-		// If the item has the dynamic prop set . . .
-		if (pgui->IsDynamic() != FALSE)
-			{
-			// Destroy it.
-			delete pgui;
-			}
+        // If the item has the dynamic prop set . . .
+        if (pgui->IsDynamic() != FALSE)
+        {
+            // Destroy it.
+            delete pgui;
+        }
 
-		pgui	= m_listguiChildren.GetNext();
-		}
+        pgui = m_listguiChildren.GetNext();
+    }
 
-	// Release parent.
-	SetParent(NULL);
+    // Release parent.
+    SetParent(NULL);
 
-	// If we were the item in focus . . .
-	if (ms_pguiFocus == this)
-		{
-		// Kill focus.
-		SetFocus(NULL);
-		}
+    // If we were the item in focus . . .
+    if (ms_pguiFocus == this)
+    {
+        // Kill focus.
+        SetFocus(NULL);
+    }
 
-	// Destroy dynamic data.
-	Destroy();
+    // Destroy dynamic data.
+    Destroy();
 
-	// If we had a dynamic prop . . .
-	if (IsProp(DYNAMIC_PROP_KEY) != FALSE)
-		{
-		// Remove the prop.
-		RemoveProp(DYNAMIC_PROP_KEY);
-		}
-	}
+    // If we had a dynamic prop . . .
+    if (IsProp(DYNAMIC_PROP_KEY) != FALSE)
+    {
+        // Remove the prop.
+        RemoveProp(DYNAMIC_PROP_KEY);
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Methods.
@@ -646,387 +637,387 @@ RGuiItem::~RGuiItem()
 // Creates a displayable GUI item.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RGuiItem::Create(			// Returns 0 on success.
-	short sX,						// X position relative to "parent" item.
-	short sY,						// Y position relative to "parent" item.
-	short sW,						// Width.
-	short sH,						// Height.
-	short sDepth)					// Color depth.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::Create( // Returns 0 on success.
+  short sX,             // X position relative to "parent" item.
+  short sY,             // Y position relative to "parent" item.
+  short sW,             // Width.
+  short sH,             // Height.
+  short sDepth)         // Color depth.
+{
+    short sRes = 0; // Assume success.
 
-	Destroy();
+    Destroy();
 
-	m_sX	= sX;
-	m_sY	= sY;
+    m_sX = sX;
+    m_sY = sY;
 
-	if (m_im.CreateImage(sW, sH, RImage::BMP8, 0, sDepth) == 0)
-		{
-		Compose();
+    if (m_im.CreateImage(sW, sH, RImage::BMP8, 0, sDepth) == 0)
+    {
+        Compose();
 
-		// Done.
-		
-		// If there's an error after calling CreateImage, perhaps
-		// we should destroy the RImage data here.
-		if (sRes != 0)
-			{
-			Destroy();
-			}
-		}
-	else
-		{
-		TRACE("Create(): RImage::CreateImage() failed.\n");
-		sRes = -1;
-		}
-	
-	return sRes;
-	}
+        // Done.
+
+        // If there's an error after calling CreateImage, perhaps
+        // we should destroy the RImage data here.
+        if (sRes != 0)
+        {
+            Destroy();
+        }
+    }
+    else
+    {
+        TRACE("Create(): RImage::CreateImage() failed.\n");
+        sRes = -1;
+    }
+
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Destroys dynamic display data.
 // (virtual)
 ////////////////////////////////////////////////////////////////////////
-void RGuiItem::Destroy(void)	// Returns nothing.
-	{
-	m_im.DestroyData();
-	m_im.DestroyPalette();
+void RGuiItem::Destroy(void) // Returns nothing.
+{
+    m_im.DestroyData();
+    m_im.DestroyPalette();
 
-	if (m_pimBkdRes != NULL)
-		{
-		ReleaseRes();
+    if (m_pimBkdRes != NULL)
+    {
+        ReleaseRes();
 
-		ASSERT(m_pimBkdRes == NULL);
-		}
-	}
+        ASSERT(m_pimBkdRes == NULL);
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Blit this item only into provided RImage.  Used by Draw().
 //
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::Blit(		// Returns 0 on success.
-	RImage* pimDst,			// Destination image.
-	short sDstX,				// X position in destination.
-	short sDstY,				// Y position in destination.
-	short sSrcX /*= 0*/,		// X position in source.
-	short sSrcY /*= 0*/,		// Y position in source.
-	short sW /*= 0*/,			// Amount to draw.
-	short sH /*= 0*/,			// Amount to draw.
-	RRect* prc /*= NULL*/)	// Clip to.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::Blit(    // Returns 0 on success.
+  RImage *pimDst,        // Destination image.
+  short sDstX,           // X position in destination.
+  short sDstY,           // Y position in destination.
+  short sSrcX /*= 0*/,   // X position in source.
+  short sSrcY /*= 0*/,   // Y position in source.
+  short sW /*= 0*/,      // Amount to draw.
+  short sH /*= 0*/,      // Amount to draw.
+  RRect *prc /*= NULL*/) // Clip to.
+{
+    short sRes = 0; // Assume success.
 
-	ASSERT(pimDst != NULL);
+    ASSERT(pimDst != NULL);
 
-	// If this is a sprite . . .
-	if (ImageIsCompressed(m_im.m_type) != 0)
-		{
-		if (rspBlit(&m_im, pimDst, sDstX, sDstY, prc) == 0)
-			{
-			// Success.
-			}
-		else
-			{
-			TRACE("Blit(): rspBlit() failed.\n");
-			sRes = -1;
-			}
-		}
-	else
-		{
-		if (sW == 0)
-			{
-			sW	= m_im.m_sWidth;
-			}
+    // If this is a sprite . . .
+    if (ImageIsCompressed(m_im.m_type) != 0)
+    {
+        if (rspBlit(&m_im, pimDst, sDstX, sDstY, prc) == 0)
+        {
+            // Success.
+        }
+        else
+        {
+            TRACE("Blit(): rspBlit() failed.\n");
+            sRes = -1;
+        }
+    }
+    else
+    {
+        if (sW == 0)
+        {
+            sW = m_im.m_sWidth;
+        }
 
-		if (sH == 0)
-			{
-			sH	= m_im.m_sHeight;
-			}
+        if (sH == 0)
+        {
+            sH = m_im.m_sHeight;
+        }
 
-		if (m_sTransparent == FALSE)
-			{
-			if (rspBlit(&m_im, pimDst, sSrcX, sSrcY, 
-							sDstX, sDstY, 
-							sW, sH, prc) == 0)		
-				{
-				// Success.
-				}
-#if 0		// Blit returns the same error for just about everything (including
-			// source clipped out).
+        if (m_sTransparent == FALSE)
+        {
+            if (rspBlit(&m_im, pimDst, sSrcX, sSrcY, sDstX, sDstY, sW, sH, prc) == 0)
+            {
+                // Success.
+            }
+#if 0 // Blit returns the same error for just about everything (including
+      // source clipped out).
 			else
 				{
 				TRACE("Blit(): rspBlit() failed.\n");
 				sRes = -1;
 				}
 #endif
-			}
-		else
-			{
-			rspBlitT(
-				m_u32TransparentColor,	// Transparent color.
-				&m_im, pimDst,				// Src, Dst.
-				sSrcX, sSrcY,
-				sDstX, sDstY,
-				sW, sH,
-				prc,							// Dst clip.
-				NULL);						// Src clip.
-			}
-		}
+        }
+        else
+        {
+            rspBlitT(m_u32TransparentColor, // Transparent color.
+                     &m_im,
+                     pimDst, // Src, Dst.
+                     sSrcX,
+                     sSrcY,
+                     sDstX,
+                     sDstY,
+                     sW,
+                     sH,
+                     prc,   // Dst clip.
+                     NULL); // Src clip.
+        }
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Draw this item and all its subitems into the provided RImage.
 //
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::Draw(		// Returns 0 on success.
-	RImage* pimDst,			// Destination image.
-	short sDstX	/*= 0*/,		// X position in destination.
-	short sDstY	/*= 0*/,		// Y position in destination.
-	short sSrcX /*= 0*/,		// X position in source.
-	short sSrcY /*= 0*/,		// Y position in source.
-	short sW /*= 0*/,			// Amount to draw.
-	short sH /*= 0*/,			// Amount to draw.
-	RRect* prc /*= NULL*/)	// Clip to.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::Draw(    // Returns 0 on success.
+  RImage *pimDst,        // Destination image.
+  short sDstX /*= 0*/,   // X position in destination.
+  short sDstY /*= 0*/,   // Y position in destination.
+  short sSrcX /*= 0*/,   // X position in source.
+  short sSrcY /*= 0*/,   // Y position in source.
+  short sW /*= 0*/,      // Amount to draw.
+  short sH /*= 0*/,      // Amount to draw.
+  RRect *prc /*= NULL*/) // Clip to.
+{
+    short sRes = 0; // Assume success.
 
-	// If visible . . .
-	if (m_sVisible != FALSE)
-		{
-		sDstX	+= m_sX;
-		sDstY	+= m_sY;
+    // If visible . . .
+    if (m_sVisible != FALSE)
+    {
+        sDstX += m_sX;
+        sDstY += m_sY;
 
-		// Note that we lock this here and don't unlock it until after we
-		// have processed our children.  Although and because Draw()
-		// is recursive, this is the most efficient way to do this lock.
-		// Since rspGeneralLock() (or, at least, the functions it calls) 
-		// do not do anything if the buffer is already locked, there is
-		// little efficiency lost in calling this multiple times but plenty
-		// gained by not locking/unlocking and locking/unlocking again and
-		// again (the exception being the flip page).
-		rspGeneralLock(pimDst);
+        // Note that we lock this here and don't unlock it until after we
+        // have processed our children.  Although and because Draw()
+        // is recursive, this is the most efficient way to do this lock.
+        // Since rspGeneralLock() (or, at least, the functions it calls)
+        // do not do anything if the buffer is already locked, there is
+        // little efficiency lost in calling this multiple times but plenty
+        // gained by not locking/unlocking and locking/unlocking again and
+        // again (the exception being the flip page).
+        rspGeneralLock(pimDst);
 
-		if (Blit(pimDst, sDstX, sDstY, sSrcX, sSrcY, sW, sH, prc) == 0)
-			{
-			// An original clippage should be passed to all these children.
-			// Set up default clip rect.
-			RRect	rc;
-			// Get client.
-			GetClient(&rc.sX, &rc.sY, &rc.sW, &rc.sH);
-			
-			// Affect by draw position.
-			rc.sX	+= sDstX;
-			rc.sY	+= sDstY;
-			
-			// Clip to destination.
-			RRect	rcDst;
+        if (Blit(pimDst, sDstX, sDstY, sSrcX, sSrcY, sW, sH, prc) == 0)
+        {
+            // An original clippage should be passed to all these children.
+            // Set up default clip rect.
+            RRect rc;
+            // Get client.
+            GetClient(&rc.sX, &rc.sY, &rc.sW, &rc.sH);
 
-			// If no rect . . .
-			if (prc == NULL)
-				{
-				// Provide one using destination image.
-				rcDst.sX	= 0;
-				rcDst.sY	= 0;
-				rcDst.sW	= pimDst->m_sWidth;
-				rcDst.sH	= pimDst->m_sHeight;
+            // Affect by draw position.
+            rc.sX += sDstX;
+            rc.sY += sDstY;
 
-				prc	= &rcDst;
-				}
+            // Clip to destination.
+            RRect rcDst;
 
-			// Clip default clipper to provided or destination.
-			rc.ClipTo(prc);
+            // If no rect . . .
+            if (prc == NULL)
+            {
+                // Provide one using destination image.
+                rcDst.sX = 0;
+                rcDst.sY = 0;
+                rcDst.sW = pimDst->m_sWidth;
+                rcDst.sH = pimDst->m_sHeight;
 
-			// Draw back to front!
+                prc = &rcDst;
+            }
 
-			RGuiItem*	pgui	= m_listguiChildren.GetTail();
-			
-			while (sRes == 0 && pgui != NULL)
-				{
-				// Draw subitem and all its subitems.
-				sRes	= pgui->Draw(pimDst, sDstX, sDstY, 0, 0, 0, 0, &rc);
+            // Clip default clipper to provided or destination.
+            rc.ClipTo(prc);
 
-				pgui	= m_listguiChildren.GetPrev();
-				}
+            // Draw back to front!
 
-			// If this item has the focus . . .
-			if (ms_pguiFocus == this)
-				{
-				// Draw focus feedback, if this item shows the focus.
-				DrawFocus(pimDst, sDstX, sDstY, &rc);
-				}
-			}
-		else
-			{
-			TRACE("Draw(): Blit() failed.\n");
-			sRes = -1;
-			}
+            RGuiItem *pgui = m_listguiChildren.GetTail();
 
-		// Unlock the destination buffer.
-		rspGeneralUnlock(pimDst);
-		}
+            while (sRes == 0 && pgui != NULL)
+            {
+                // Draw subitem and all its subitems.
+                sRes = pgui->Draw(pimDst, sDstX, sDstY, 0, 0, 0, 0, &rc);
 
-	return sRes;
-	}
+                pgui = m_listguiChildren.GetPrev();
+            }
+
+            // If this item has the focus . . .
+            if (ms_pguiFocus == this)
+            {
+                // Draw focus feedback, if this item shows the focus.
+                DrawFocus(pimDst, sDstX, sDstY, &rc);
+            }
+        }
+        else
+        {
+            TRACE("Draw(): Blit() failed.\n");
+            sRes = -1;
+        }
+
+        // Unlock the destination buffer.
+        rspGeneralUnlock(pimDst);
+    }
+
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Pass a message up to the highest level that we need to draw.
 //
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::Redraw(	// Returns 0 on success.
-	short	sSrcX /*= 0*/,	// X position to start drawing from.
-	short	sSrcY /*= 0*/,	// Y position to start drawing from.
-	short sW /*= 0*/,		// Amount to draw.
-	short sH /*= 0*/)		// Amount to draw.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::Redraw( // Returns 0 on success.
+  short sSrcX /*= 0*/,  // X position to start drawing from.
+  short sSrcY /*= 0*/,  // Y position to start drawing from.
+  short sW /*= 0*/,     // Amount to draw.
+  short sH /*= 0*/)     // Amount to draw.
+{
+    short sRes = 0; // Assume success.
 
-	// If there is a user callback . . .
-	if (m_drawcall != NULL)
-		{
-		if (sW == 0)
-			{
-			sW = m_im.m_sWidth;
-			}
+    // If there is a user callback . . .
+    if (m_drawcall != NULL)
+    {
+        if (sW == 0)
+        {
+            sW = m_im.m_sWidth;
+        }
 
-		if (sH == 0)
-			{
-			sH = m_im.m_sHeight;
-			}
+        if (sH == 0)
+        {
+            sH = m_im.m_sHeight;
+        }
 
-		// If we have a parent . . .
-		if (m_pguiParent != NULL)
-			{
-			sRes = m_pguiParent->Redraw(m_sX + sSrcX, m_sY + sSrcY, sW, sH);
-			}
-		else
-			{
-			// Highest level.  Parent of all parents.
-			// Create a temporary image.
-			RImage im;
-			if (im.CreateImage(sW, sH, RImage::BMP8, 0, m_im.m_sDepth) == 0)
-				{
-				// Draw into image.
-				Draw(&im, -m_sX, -m_sY, sSrcX, sSrcY, sW, sH);
+        // If we have a parent . . .
+        if (m_pguiParent != NULL)
+        {
+            sRes = m_pguiParent->Redraw(m_sX + sSrcX, m_sY + sSrcY, sW, sH);
+        }
+        else
+        {
+            // Highest level.  Parent of all parents.
+            // Create a temporary image.
+            RImage im;
+            if (im.CreateImage(sW, sH, RImage::BMP8, 0, m_im.m_sDepth) == 0)
+            {
+                // Draw into image.
+                Draw(&im, -m_sX, -m_sY, sSrcX, sSrcY, sW, sH);
 
-				RRect	rc(m_sX + sSrcX, m_sY + sSrcY, sW, sH);
-				
-				// Pass on to user callback.
-				(*m_drawcall)(this, &im, &rc);
-		
-				// Done with image.
-				im.DestroyData();
-				}
-			else
-				{
-				TRACE("Redraw(): RImage::CreateImage() failed.\n");
-				sRes	= -1;
-				}
-			}
-		}
-	else
-		{
-		sRes = 1;
-		}
+                RRect rc(m_sX + sSrcX, m_sY + sSrcY, sW, sH);
 
-	return sRes;
-	}
+                // Pass on to user callback.
+                (*m_drawcall)(this, &im, &rc);
+
+                // Done with image.
+                im.DestroyData();
+            }
+            else
+            {
+                TRACE("Redraw(): RImage::CreateImage() failed.\n");
+                sRes = -1;
+            }
+        }
+    }
+    else
+    {
+        sRes = 1;
+    }
+
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Ask user to erase area specified.
 //
 ////////////////////////////////////////////////////////////////////////
-void RGuiItem::Erase(	// Returns nothing.
-	short sX /*= 0*/,		// X position to erase.
-	short sY /*= 0*/,		// Y position to erase.
-	short sW /*= 0*/,		// Width to erase.
-	short sH /*= 0*/)		// Height to erase.
-	{
-	// If there is a callback . . .
-	if (m_drawcall != NULL)
-		{
-		if (sW == 0)
-			{
-			sW	= m_im.m_sWidth;
-			}
+void RGuiItem::Erase( // Returns nothing.
+  short sX /*= 0*/,   // X position to erase.
+  short sY /*= 0*/,   // Y position to erase.
+  short sW /*= 0*/,   // Width to erase.
+  short sH /*= 0*/)   // Height to erase.
+{
+    // If there is a callback . . .
+    if (m_drawcall != NULL)
+    {
+        if (sW == 0)
+        {
+            sW = m_im.m_sWidth;
+        }
 
-		if (sH == 0)
-			{
-			sH	= m_im.m_sHeight;
-			}
+        if (sH == 0)
+        {
+            sH = m_im.m_sHeight;
+        }
 
-		RRect	rc(m_sX + sX, m_sY + sY, sW, sH);
+        RRect rc(m_sX + sX, m_sY + sY, sW, sH);
 
-		// Ask user.
-		(*m_drawcall)(this, NULL, &rc);
-		}
-	}
+        // Ask user.
+        (*m_drawcall)(this, NULL, &rc);
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Set the text that represents this item.
 //
 ////////////////////////////////////////////////////////////////////////
-void RGuiItem::SetText(	
-	char* pszFrmt,	// sprintf formatted format string.
-	...)				// Corresponding good stuff.
-	{
-	va_list val;
-	va_start(val, pszFrmt);    
-	  
-	vsprintf(m_szText, pszFrmt, val);
-	}
+void RGuiItem::SetText(char *pszFrmt, // sprintf formatted format string.
+                       ...)           // Corresponding good stuff.
+{
+    va_list val;
+    va_start(val, pszFrmt);
+
+    vsprintf(m_szText, pszFrmt, val);
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Set the text that represents the specified child item.
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::SetText(	// Returns 0 if item found, non-zero otherwise.
-	long	lId,					// Child item ID (can identify this item).
-	char* pszFrmt,				// sprintf formatted format string.
-	...)							// Corresponding good stuff.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::SetText( // Returns 0 if item found, non-zero otherwise.
+  long lId,              // Child item ID (can identify this item).
+  char *pszFrmt,         // sprintf formatted format string.
+  ...)                   // Corresponding good stuff.
+{
+    short sRes = 0; // Assume success.
 
-	RGuiItem*	pgui	= GetItemFromId(lId);
-	if (pgui != NULL)
-		{
-		va_list	val;
-		va_start	(val, pszFrmt);
+    RGuiItem *pgui = GetItemFromId(lId);
+    if (pgui != NULL)
+    {
+        va_list val;
+        va_start(val, pszFrmt);
 
-		vsprintf(pgui->m_szText, pszFrmt, val);
-		}
-	else
-		{
-		TRACE("SetText(): No such ID %ld.\n", lId);
-		sRes	= -1;
-		}
+        vsprintf(pgui->m_szText, pszFrmt, val);
+    }
+    else
+    {
+        TRACE("SetText(): No such ID %ld.\n", lId);
+        sRes = -1;
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Sets up the current text effects on m_pprint to match this
 // GUI's settings.
 ////////////////////////////////////////////////////////////////////////
-void RGuiItem::SetTextEffects(void)	// Returns nothing.
-	{
-	// If shadow enabled . . .
-	if (m_sTextEffects & Shadow)
-		{
-		m_pprint->SetEffectAbs(RPrint::SHADOW_X, m_sTextShadowOffsetX);
-		m_pprint->SetEffectAbs(RPrint::SHADOW_Y, m_sTextShadowOffsetY);
-		}
-	else
-		{
-		m_pprint->SetEffectAbs(RPrint::SHADOW_X, 0);
-		m_pprint->SetEffectAbs(RPrint::SHADOW_Y, 0);
-		}
+void RGuiItem::SetTextEffects(void) // Returns nothing.
+{
+    // If shadow enabled . . .
+    if (m_sTextEffects & Shadow)
+    {
+        m_pprint->SetEffectAbs(RPrint::SHADOW_X, m_sTextShadowOffsetX);
+        m_pprint->SetEffectAbs(RPrint::SHADOW_Y, m_sTextShadowOffsetY);
+    }
+    else
+    {
+        m_pprint->SetEffectAbs(RPrint::SHADOW_X, 0);
+        m_pprint->SetEffectAbs(RPrint::SHADOW_Y, 0);
+    }
 
-#if 0	// Not Yet Implemented -- time constraints.
+#if 0 // Not Yet Implemented -- time constraints.
 	// If bold enabled . . .
 	if (m_sTextEffects & Bold)
 		{
@@ -1047,32 +1038,32 @@ void RGuiItem::SetTextEffects(void)	// Returns nothing.
 		m_pprint->SetEffect(RPrint::ITALIC, 1.0);
 		}
 #endif
-	}
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Move this item to sX, sY.
 //
 ////////////////////////////////////////////////////////////////////////
-void RGuiItem::Move(	// Returns nothing.
-	short sX,			// New x position.
-	short sY)			// New y position.
-	{
-	// Erase old position.
-	Erase();
-	
-	short	sDifX	= sX - m_sX;
-	short	sDifY	= sY - m_sY;
+void RGuiItem::Move( // Returns nothing.
+  short sX,          // New x position.
+  short sY)          // New y position.
+{
+    // Erase old position.
+    Erase();
 
-	m_hot.m_sX	+= sDifX;
-	m_hot.m_sY	+= sDifY;
+    short sDifX = sX - m_sX;
+    short sDifY = sY - m_sY;
 
-	m_sX = sX; 
-	m_sY = sY;
+    m_hot.m_sX += sDifX;
+    m_hot.m_sY += sDifY;
 
-	// Not necessary if we are updated every iteration or frame.
-	Redraw();
-	}
+    m_sX = sX;
+    m_sY = sY;
+
+    // Not necessary if we are updated every iteration or frame.
+    Redraw();
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1081,59 +1072,57 @@ void RGuiItem::Move(	// Returns nothing.
 // (virtual).
 //
 ////////////////////////////////////////////////////////////////////////
-void RGuiItem::CursorEvent(	// Returns nothing.
-	RInputEvent* pie)				// In:  Most recent user input event.             
-										// Out: pie->sUsed = TRUE, if used.
-	{
-	switch (pie->sEvent)
-		{
-		case RSP_MB0_DOUBLECLICK:
-		case RSP_MB0_PRESSED:
-			// Remember we're pressed.
-			m_sPressed	= TRUE;
+void RGuiItem::CursorEvent( // Returns nothing.
+  RInputEvent *pie)         // In:  Most recent user input event.
+                            // Out: pie->sUsed = TRUE, if used.
+{
+    switch (pie->sEvent)
+    {
+        case RSP_MB0_DOUBLECLICK:
+        case RSP_MB0_PRESSED:
+            // Remember we're pressed.
+            m_sPressed = TRUE;
 
-			// Capture events.
-			m_hot.SetCapture(TRUE);
+            // Capture events.
+            m_hot.SetCapture(TRUE);
 
-			// Get focus.
-			SetFocus();
+            // Get focus.
+            SetFocus();
 
-			// Note that we used it.
-			pie->sUsed	= TRUE;
+            // Note that we used it.
+            pie->sUsed = TRUE;
 
-			break;
+            break;
 
-		case RSP_MB0_RELEASED:
-			if (m_sPressed != FALSE)
-				{
-				// Stop capturing events.
-				m_hot.SetCapture(FALSE);
+        case RSP_MB0_RELEASED:
+            if (m_sPressed != FALSE)
+            {
+                // Stop capturing events.
+                m_hot.SetCapture(FALSE);
 
-				// If inside of item . . .
-				if (	pie->sPosX >= m_sEventAreaX 
-					&& pie->sPosX < m_sEventAreaX + m_sEventAreaW
-					&&	pie->sPosY >= m_sEventAreaY 
-					&& pie->sPosY < m_sEventAreaY + m_sEventAreaH)
-					{
-					// If there is a button up callback . . .
-					if (m_bcUser != NULL)
-						{
-						(*m_bcUser)(this);
-						}
+                // If inside of item . . .
+                if (pie->sPosX >= m_sEventAreaX && pie->sPosX < m_sEventAreaX + m_sEventAreaW &&
+                    pie->sPosY >= m_sEventAreaY && pie->sPosY < m_sEventAreaY + m_sEventAreaH)
+                {
+                    // If there is a button up callback . . .
+                    if (m_bcUser != NULL)
+                    {
+                        (*m_bcUser)(this);
+                    }
 
-					// Note clickage.
-					SetClicked(TRUE);
-					}
+                    // Note clickage.
+                    SetClicked(TRUE);
+                }
 
-				m_sPressed	= FALSE;
-				}
+                m_sPressed = FALSE;
+            }
 
-			// Note that we used it.
-			pie->sUsed	= TRUE;
+            // Note that we used it.
+            pie->sUsed = TRUE;
 
-			break;
-		}
-	}
+            break;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1141,91 +1130,91 @@ void RGuiItem::CursorEvent(	// Returns nothing.
 // Events in hot area.
 //
 ////////////////////////////////////////////////////////////////////////
-void RGuiItem::HotCall(	// Returns nothing.
-	RInputEvent* pie)		// In:  Most recent user input event.             
-								// Out: pie->sUsed = TRUE, if used.
-	{
-	// If this is an unused mouse event . . .
-	if (pie->type == RInputEvent::Mouse && pie->sUsed == FALSE)
-		{
-		short	sHotPosX	= m_hot.m_sX;
-		short	sHotPosY	= m_hot.m_sY;
-		// Make relative to this GUI item (rather than hotbox).
-		pie->sPosX	-= sHotPosX;
-		pie->sPosY	-= sHotPosY;
-		
-		// If within event area or capturing . . .
-		if (	(	pie->sPosX >= m_sEventAreaX && pie->sPosX < m_sEventAreaX + m_sEventAreaW
-				&&	pie->sPosY >= m_sEventAreaY && pie->sPosY < m_sEventAreaY + m_sEventAreaH)
-			||	m_hot.IsCapturing() != FALSE)
-			{
-			// Pass item relative event.
-			CursorEvent(pie);
-			}
+void RGuiItem::HotCall( // Returns nothing.
+  RInputEvent *pie)     // In:  Most recent user input event.
+                        // Out: pie->sUsed = TRUE, if used.
+{
+    // If this is an unused mouse event . . .
+    if (pie->type == RInputEvent::Mouse && pie->sUsed == FALSE)
+    {
+        short sHotPosX = m_hot.m_sX;
+        short sHotPosY = m_hot.m_sY;
+        // Make relative to this GUI item (rather than hotbox).
+        pie->sPosX -= sHotPosX;
+        pie->sPosY -= sHotPosY;
 
-		// If there is a button event callback . . .
-		if (m_fnInputEvent)
-			{
-			// Process event via callback w/ relative positioning
-			m_fnInputEvent(this, pie);
-			}
+        // If within event area or capturing . . .
+        if ((pie->sPosX >= m_sEventAreaX && pie->sPosX < m_sEventAreaX + m_sEventAreaW && pie->sPosY >= m_sEventAreaY &&
+             pie->sPosY < m_sEventAreaY + m_sEventAreaH) ||
+            m_hot.IsCapturing() != FALSE)
+        {
+            // Pass item relative event.
+            CursorEvent(pie);
+        }
 
-		// Put position back.
-		pie->sPosX	+= sHotPosX;
-		pie->sPosY	+= sHotPosY;
-		}
-	}
+        // If there is a button event callback . . .
+        if (m_fnInputEvent)
+        {
+            // Process event via callback w/ relative positioning
+            m_fnInputEvent(this, pie);
+        }
+
+        // Put position back.
+        pie->sPosX += sHotPosX;
+        pie->sPosY += sHotPosY;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Activate or deactivate mouse reaction for this gui item only.
 // If the item has m_sActive set to TRUE, it will be activated.
 ////////////////////////////////////////////////////////////////////////
 // virtual						// If you override this, call this base if possible.
-void RGuiItem::SetActive(	// Returns nothing.
-	short sActive)				// TRUE to make active, FALSE otherwise.
-	{ 
-	if (sActive != FALSE)
-		{
-		m_hot.SetActive(m_sActive);
-		}
-	else
-		{
-		m_hot.SetActive(FALSE);
-		}
-	}
+void RGuiItem::SetActive( // Returns nothing.
+  short sActive)          // TRUE to make active, FALSE otherwise.
+{
+    if (sActive != FALSE)
+    {
+        m_hot.SetActive(m_sActive);
+    }
+    else
+    {
+        m_hot.SetActive(FALSE);
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Hide or show GUI item and child items.  Causes RHots to be
 // deactivated for both this and child items.
 // DOES NOT CHANGE THE VISIBLE STATUS OF CHILD ITEMS.
 ////////////////////////////////////////////////////////////////////////
-//virtual							// If you override this, call this base if possible.
-void RGuiItem::SetVisible(		// Returns nothing.
-	short sVisible)				// TRUE to make visible, FALSE otherwise.
-	{
-	static short sSem	= 0;
+// virtual							// If you override this, call this base if possible.
+void RGuiItem::SetVisible( // Returns nothing.
+  short sVisible)          // TRUE to make visible, FALSE otherwise.
+{
+    static short sSem = 0;
 
-	// Only parent gains/looses its visible status . . .
-	if (++sSem == 1)
-		{
-		m_sVisible	= sVisible;
-		}
+    // Only parent gains/looses its visible status . . .
+    if (++sSem == 1)
+    {
+        m_sVisible = sVisible;
+    }
 
-	// Set activation to visibility combined with visibility attribute.
-	SetActive(m_sVisible && sVisible);
+    // Set activation to visibility combined with visibility attribute.
+    SetActive(m_sVisible && sVisible);
 
-	// Enum children.
-	RGuiItem*	pguiChild	= m_listguiChildren.GetHead();
-	while (pguiChild != NULL)
-		{
-		pguiChild->SetVisible(m_sVisible && sVisible);
+    // Enum children.
+    RGuiItem *pguiChild = m_listguiChildren.GetHead();
+    while (pguiChild != NULL)
+    {
+        pguiChild->SetVisible(m_sVisible && sVisible);
 
-		pguiChild	= m_listguiChildren.GetNext();
-		}
+        pguiChild = m_listguiChildren.GetNext();
+    }
 
-	// Open the gate.
-	sSem--;
-	}
+    // Open the gate.
+    sSem--;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1233,289 +1222,295 @@ void RGuiItem::SetVisible(		// Returns nothing.
 // New can be NULL (so can old).
 //
 ////////////////////////////////////////////////////////////////////////
-void RGuiItem::SetParent(RGuiItem* pguiParent)
-	{
-	short	sDifX	= 0;	// Difference in top level x positioning.
-	short	sDifY	= 0;	// Difference in top level y positioning.
+void RGuiItem::SetParent(RGuiItem *pguiParent)
+{
+    short sDifX = 0; // Difference in top level x positioning.
+    short sDifY = 0; // Difference in top level y positioning.
 
-	// If there is an old . . .
-	if (m_pguiParent != NULL)
-		{
-		// Let it know it's about to lose it's child.
-		m_pguiParent->OnLoseChild(this);
+    // If there is an old . . .
+    if (m_pguiParent != NULL)
+    {
+        // Let it know it's about to lose it's child.
+        m_pguiParent->OnLoseChild(this);
 
-		if (m_pguiParent->m_listguiChildren.Remove(this) == 0)
-			{
-			}
-		else
-			{
-			TRACE("SetParent(): Unable to remove child from old parent.\n");
-			}
-		}
+        if (m_pguiParent->m_listguiChildren.Remove(this) == 0)
+        {
+        }
+        else
+        {
+            TRACE("SetParent(): Unable to remove child from old parent.\n");
+        }
+    }
 
-	// Set new parent.
-	m_pguiParent	= pguiParent;
+    // Set new parent.
+    m_pguiParent = pguiParent;
 
-	// If there is a new . . .
-	if (m_pguiParent != NULL)
-		{
-		// Let it know it's about to gain a child.
-		m_pguiParent->OnGainChild(this);
+    // If there is a new . . .
+    if (m_pguiParent != NULL)
+    {
+        // Let it know it's about to gain a child.
+        m_pguiParent->OnGainChild(this);
 
-		if (m_pguiParent->m_listguiChildren.InsertHead(this) == 0)
-			{
-			}
-		else
-			{
-			TRACE("SetParent(): Unable to Add child to new parent.\n");
-			}
+        if (m_pguiParent->m_listguiChildren.InsertHead(this) == 0)
+        {
+        }
+        else
+        {
+            TRACE("SetParent(): Unable to Add child to new parent.\n");
+        }
 
-		// Set this item's RHot as a child of its parent's.
-		m_hot.SetParent(&(m_pguiParent->m_hot) );
+        // Set this item's RHot as a child of its parent's.
+        m_hot.SetParent(&(m_pguiParent->m_hot));
 
-		// Activate item based on new parent.
-		// NOTE that this can screw up the ordering.
-		SetActive(m_pguiParent->IsActivated());
-		}
-	else
-		{
-		// Set this item's as a global/top-level RHot.
-		m_hot.SetParent(NULL);
-		// Item becomes inactive.  Or should it keep its current activation?
-		SetActive(FALSE);
-		}
-	}
+        // Activate item based on new parent.
+        // NOTE that this can screw up the ordering.
+        SetActive(m_pguiParent->IsActivated());
+    }
+    else
+    {
+        // Set this item's as a global/top-level RHot.
+        m_hot.SetParent(NULL);
+        // Item becomes inactive.  Or should it keep its current activation?
+        SetActive(FALSE);
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Draw border.
 //
 ////////////////////////////////////////////////////////////////////////
-void RGuiItem::DrawBorder(			// Returns nothing.
-	RImage* pim	/*= NULL*/,			// Dest image, uses m_im if NULL.
-	short sInvert	/*= FALSE*/)	// Inverts border if TRUE.
-	{
-	short	sVertShadowPos;
-	short	sHorzShadowPos;
-	short	sVertHighlightPos;
-	short sHorzHighlightPos;
-	short sVertEdgePos;
-	short sHorzEdgePos;
+void RGuiItem::DrawBorder(   // Returns nothing.
+  RImage *pim /*= NULL*/,    // Dest image, uses m_im if NULL.
+  short sInvert /*= FALSE*/) // Inverts border if TRUE.
+{
+    short sVertShadowPos;
+    short sHorzShadowPos;
+    short sVertHighlightPos;
+    short sHorzHighlightPos;
+    short sVertEdgePos;
+    short sHorzEdgePos;
 
-	if (pim == NULL)
-		{
-		pim	= &m_im;
-		}
+    if (pim == NULL)
+    {
+        pim = &m_im;
+    }
 
-	short sW	= pim->m_sWidth;
-	short	sH	= pim->m_sHeight;
+    short sW = pim->m_sWidth;
+    short sH = pim->m_sHeight;
 
-	m_sInvertedBorder	= sInvert;
+    m_sInvertedBorder = sInvert;
 
-	if (sInvert == FALSE)
-		{
-		sVertShadowPos			= sW - m_sBorderThickness;
-		sHorzShadowPos			= sH - m_sBorderThickness;
-		sVertHighlightPos		= 0;
-		sHorzHighlightPos		= 0;
-		sVertEdgePos			= sW - m_sBorderThickness * 2;
-		sHorzEdgePos			= sH - m_sBorderThickness * 2;
-		}
-	else
-		{
-		sVertShadowPos			= 0;
-		sHorzShadowPos			= 0;
-		sVertHighlightPos		= sW - m_sBorderThickness;
-		sHorzHighlightPos		= sH - m_sBorderThickness;
-		sVertEdgePos			= m_sBorderThickness;
-		sHorzEdgePos			= m_sBorderThickness;
-		}
+    if (sInvert == FALSE)
+    {
+        sVertShadowPos = sW - m_sBorderThickness;
+        sHorzShadowPos = sH - m_sBorderThickness;
+        sVertHighlightPos = 0;
+        sHorzHighlightPos = 0;
+        sVertEdgePos = sW - m_sBorderThickness * 2;
+        sHorzEdgePos = sH - m_sBorderThickness * 2;
+    }
+    else
+    {
+        sVertShadowPos = 0;
+        sHorzShadowPos = 0;
+        sVertHighlightPos = sW - m_sBorderThickness;
+        sHorzHighlightPos = sH - m_sBorderThickness;
+        sVertEdgePos = m_sBorderThickness;
+        sHorzEdgePos = m_sBorderThickness;
+    }
 
-	// One pixel for each edge of border gets overwritten.
-	rspRect(m_u32BorderHighlightColor, pim, 0, sHorzHighlightPos, sW, m_sBorderThickness);
-	rspRect(m_u32BorderHighlightColor, pim, sVertHighlightPos, 0, m_sBorderThickness, sH);
+    // One pixel for each edge of border gets overwritten.
+    rspRect(m_u32BorderHighlightColor, pim, 0, sHorzHighlightPos, sW, m_sBorderThickness);
+    rspRect(m_u32BorderHighlightColor, pim, sVertHighlightPos, 0, m_sBorderThickness, sH);
 
-	rspRect(m_u32BorderShadowColor, pim, 0, sHorzShadowPos, sW, m_sBorderThickness);
-	rspRect(m_u32BorderShadowColor, pim, sVertShadowPos, 0, m_sBorderThickness, sH);
+    rspRect(m_u32BorderShadowColor, pim, 0, sHorzShadowPos, sW, m_sBorderThickness);
+    rspRect(m_u32BorderShadowColor, pim, sVertShadowPos, 0, m_sBorderThickness, sH);
 
-	rspRect(m_u32BorderEdgeColor, pim, m_sBorderThickness, sHorzEdgePos, sW - m_sBorderThickness * 2, m_sBorderThickness);
-	rspRect(m_u32BorderEdgeColor, pim, sVertEdgePos, m_sBorderThickness, m_sBorderThickness, sH - m_sBorderThickness * 2);
-	}
+    rspRect(m_u32BorderEdgeColor,
+            pim,
+            m_sBorderThickness,
+            sHorzEdgePos,
+            sW - m_sBorderThickness * 2,
+            m_sBorderThickness);
+    rspRect(m_u32BorderEdgeColor,
+            pim,
+            sVertEdgePos,
+            m_sBorderThickness,
+            m_sBorderThickness,
+            sH - m_sBorderThickness * 2);
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Draw background.  Calls user callback m_backcall if providd.
 //
 ////////////////////////////////////////////////////////////////////////
-void RGuiItem::DrawBackground(	// Returns nothing.
-	RImage* pim	/*= NULL*/)			// Dest image, uses m_im if NULL.
-	{
-	if (pim == NULL)
-		{
-		pim	= &m_im;
-		}
+void RGuiItem::DrawBackground( // Returns nothing.
+  RImage *pim /*= NULL*/)      // Dest image, uses m_im if NULL.
+{
+    if (pim == NULL)
+    {
+        pim = &m_im;
+    }
 
-	RRect	rc;
-	GetClient(&rc.sX, &rc.sY, &rc.sW, &rc.sH);
-	if (m_backcall != NULL)
-		{
-		(*m_backcall)(this, pim, &rc);
-		}
-	else
-		{
-		// Draw "client".
-		rspRect(	m_u32BackColor, pim,
-					rc.sX, rc.sY, 
-					rc.sW, rc.sH);
-		
-		DrawBackgroundRes(pim);
-		}
-	}
+    RRect rc;
+    GetClient(&rc.sX, &rc.sY, &rc.sW, &rc.sH);
+    if (m_backcall != NULL)
+    {
+        (*m_backcall)(this, pim, &rc);
+    }
+    else
+    {
+        // Draw "client".
+        rspRect(m_u32BackColor, pim, rc.sX, rc.sY, rc.sW, rc.sH);
+
+        DrawBackgroundRes(pim);
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Draw background resource, if one is specified.
 // Utilizes m_*BkdRes* parameters to get, place, and BLiT the resource.
 // (virtual).
 ////////////////////////////////////////////////////////////////////////
-void RGuiItem::DrawBackgroundRes(	// Returns nothing.
-	RImage* pim /*= NULL*/)				// Dest image, uses m_im, if NULL.
-	{
-	if (pim == NULL)
-		{
-		pim	= &m_im;
-		}
+void RGuiItem::DrawBackgroundRes( // Returns nothing.
+  RImage *pim /*= NULL*/)         // Dest image, uses m_im, if NULL.
+{
+    if (pim == NULL)
+    {
+        pim = &m_im;
+    }
 
-	// If resource not loaded . . .
-	if (m_pimBkdRes == NULL)
-		{
-		// If there's a background res . . .
-		if (m_szBkdResName[0] != '\0')
-			{
-			if (GetRes() == 0)
-				{
-				}
-			else
-				{
-				TRACE("DrawBackgroundRes(): GetRes() failed.\n");
-				}
-			}
-		}
+    // If resource not loaded . . .
+    if (m_pimBkdRes == NULL)
+    {
+        // If there's a background res . . .
+        if (m_szBkdResName[0] != '\0')
+        {
+            if (GetRes() == 0)
+            {
+            }
+            else
+            {
+                TRACE("DrawBackgroundRes(): GetRes() failed.\n");
+            }
+        }
+    }
 
-	// If resource now available . . .
-	if (m_pimBkdRes != NULL)
-		{
-		RRect	rc;
-		GetClient(&rc.sX, &rc.sY, &rc.sW, &rc.sH);
+    // If resource now available . . .
+    if (m_pimBkdRes != NULL)
+    {
+        RRect rc;
+        GetClient(&rc.sX, &rc.sY, &rc.sW, &rc.sH);
 
-		// Determine size to be drawn.
-		short	sTotalW, sTotalH;
-		if (m_sBkdResPlacement & Tile)
-			{
-			// Get amount to tile multiplied by the size of that dimension.
-			sTotalW	= (rc.sW / m_pimBkdRes->m_sWidth) * m_pimBkdRes->m_sWidth;
-			sTotalH	= (rc.sH / m_pimBkdRes->m_sHeight) * m_pimBkdRes->m_sHeight;
-			// If not centered . . .
-			if ((m_sBkdResPlacement & Center) == 0)
-				{
-				// Allow overblit.
-				
-				// If not a perfect fit . . .
-				if ((rc.sW % m_pimBkdRes->m_sWidth) != 0)
-					{
-					sTotalW	+= m_pimBkdRes->m_sWidth;
-					}
+        // Determine size to be drawn.
+        short sTotalW, sTotalH;
+        if (m_sBkdResPlacement & Tile)
+        {
+            // Get amount to tile multiplied by the size of that dimension.
+            sTotalW = (rc.sW / m_pimBkdRes->m_sWidth) * m_pimBkdRes->m_sWidth;
+            sTotalH = (rc.sH / m_pimBkdRes->m_sHeight) * m_pimBkdRes->m_sHeight;
+            // If not centered . . .
+            if ((m_sBkdResPlacement & Center) == 0)
+            {
+                // Allow overblit.
 
-				if ((rc.sH % m_pimBkdRes->m_sHeight) != 0)
-					{
-					sTotalH	+= m_pimBkdRes->m_sHeight;
-					}
-				}
-			}
-		else
-			{
-			sTotalW	= m_pimBkdRes->m_sWidth;
-			sTotalH	= m_pimBkdRes->m_sHeight;
-			}
+                // If not a perfect fit . . .
+                if ((rc.sW % m_pimBkdRes->m_sWidth) != 0)
+                {
+                    sTotalW += m_pimBkdRes->m_sWidth;
+                }
 
-		// Determine place to be drawn.
-		short	sBlitX, sBlitY;
-		if (m_sBkdResPlacement & Center)
-			{
-			sBlitX	= rc.sX + rc.sW / 2 - sTotalW / 2;
-			sBlitY	= rc.sY + rc.sH / 2 - sTotalH / 2;
-			}
-		else
-			{
-			sBlitX	= rc.sX;
-			sBlitY	= rc.sY;
-			}
+                if ((rc.sH % m_pimBkdRes->m_sHeight) != 0)
+                {
+                    sTotalH += m_pimBkdRes->m_sHeight;
+                }
+            }
+        }
+        else
+        {
+            sTotalW = m_pimBkdRes->m_sWidth;
+            sTotalH = m_pimBkdRes->m_sHeight;
+        }
 
-		// Draw.
-		short	sX, sY;
-		short	sMaxX	= sBlitX + sTotalW;
-		short	sMaxY	= sBlitY + sTotalH;
-		for (sY = sBlitY; sY < sMaxY; sY += m_pimBkdRes->m_sHeight)
-			{
-			for (sX = sBlitX; sX < sMaxX; sX += m_pimBkdRes->m_sWidth)
-				{
-				if (m_sBkdResTransparent == FALSE)
-					{
-					rspBlit(
-						m_pimBkdRes,		// Src.
-						pim,					// Dst.
-						sX,					// Dst.
-						sY,					// Dst.
-						&rc);					// Dst.
-					}
-				else
-					{
-					rspBlitT(
-						m_u32BkdResTransparentColor,	// Src.
-						m_pimBkdRes,						// Src.
-						pim,									// Dst.
-						0,										// Src.
-						0,										// Src.
-						sX,									// Dst.
-						sY,									// Dst.
-						m_pimBkdRes->m_sWidth,			// Both.
-						m_pimBkdRes->m_sHeight,			// Both.
-						&rc,									// Dst.
-						NULL);								// Src.
-					}
-				}
-			}
-		}
-	}
+        // Determine place to be drawn.
+        short sBlitX, sBlitY;
+        if (m_sBkdResPlacement & Center)
+        {
+            sBlitX = rc.sX + rc.sW / 2 - sTotalW / 2;
+            sBlitY = rc.sY + rc.sH / 2 - sTotalH / 2;
+        }
+        else
+        {
+            sBlitX = rc.sX;
+            sBlitY = rc.sY;
+        }
+
+        // Draw.
+        short sX, sY;
+        short sMaxX = sBlitX + sTotalW;
+        short sMaxY = sBlitY + sTotalH;
+        for (sY = sBlitY; sY < sMaxY; sY += m_pimBkdRes->m_sHeight)
+        {
+            for (sX = sBlitX; sX < sMaxX; sX += m_pimBkdRes->m_sWidth)
+            {
+                if (m_sBkdResTransparent == FALSE)
+                {
+                    rspBlit(m_pimBkdRes, // Src.
+                            pim,         // Dst.
+                            sX,          // Dst.
+                            sY,          // Dst.
+                            &rc);        // Dst.
+                }
+                else
+                {
+                    rspBlitT(m_u32BkdResTransparentColor, // Src.
+                             m_pimBkdRes,                 // Src.
+                             pim,                         // Dst.
+                             0,                           // Src.
+                             0,                           // Src.
+                             sX,                          // Dst.
+                             sY,                          // Dst.
+                             m_pimBkdRes->m_sWidth,       // Both.
+                             m_pimBkdRes->m_sHeight,      // Both.
+                             &rc,                         // Dst.
+                             NULL);                       // Src.
+                }
+            }
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Compose item.
 //
 ////////////////////////////////////////////////////////////////////////
-void RGuiItem::Compose(			// Returns nothing.
-	RImage* pim /*= NULL*/)		// Dest image, uses m_im if NULL.
-	{
-	if (pim == NULL)
-		{
-		pim = &m_im;
-		}
+void RGuiItem::Compose(   // Returns nothing.
+  RImage *pim /*= NULL*/) // Dest image, uses m_im if NULL.
+{
+    if (pim == NULL)
+    {
+        pim = &m_im;
+    }
 
-	// If there is a border . . .
-	if (m_sBorderThickness > 0)
-		{
-		// Draw it.
-		DrawBorder(pim, m_sInvertedBorder);
-		}
+    // If there is a border . . .
+    if (m_sBorderThickness > 0)
+    {
+        // Draw it.
+        DrawBorder(pim, m_sInvertedBorder);
+    }
 
-	// Draw background.
-	DrawBackground(pim);
+    // Draw background.
+    DrawBackground(pim);
 
-	// Set hot area.
-	SetHotArea();
+    // Set hot area.
+    SetHotArea();
 
-	// Set event area.
-	SetEventArea();
-	}
+    // Set event area.
+    SetEventArea();
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Do one iteration of processing.  This is useful on items that need to
@@ -1523,126 +1518,125 @@ void RGuiItem::Compose(			// Returns nothing.
 // triggered by an event.
 ////////////////////////////////////////////////////////////////////////
 // virtual						// If you override this, call this base if possible.
-void RGuiItem::Do(			// Returns nothing.
-	RInputEvent* /*pie*/)	// In:  Most recent user input event.             
-									// Out: pie->sUsed = TRUE, if used.
-	{
-	// Currently, this base does nothing.
-	}
+void RGuiItem::Do(       // Returns nothing.
+  RInputEvent * /*pie*/) // In:  Most recent user input event.
+                         // Out: pie->sUsed = TRUE, if used.
+{
+    // Currently, this base does nothing.
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Set this item's event area.  This is the area where cursor events are
 // interesting to the item.
 ////////////////////////////////////////////////////////////////////////
 // virtual									// If you override this, call this base if possible.
-void RGuiItem::SetEventArea(void)	// Returns nothing.
-	{
-	m_sEventAreaX	= 0;
-	m_sEventAreaY	= 0;
-	m_sEventAreaW	= m_im.m_sWidth;
-	m_sEventAreaH	= m_im.m_sHeight;
-	}
+void RGuiItem::SetEventArea(void) // Returns nothing.
+{
+    m_sEventAreaX = 0;
+    m_sEventAreaY = 0;
+    m_sEventAreaW = m_im.m_sWidth;
+    m_sEventAreaH = m_im.m_sHeight;
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Set this item's hot area.  This should be the total dimensions of this
 // item.
 ////////////////////////////////////////////////////////////////////////
 // virtual								// If you override this, call this base if possible.
-void RGuiItem::SetHotArea(void)	// Returns nothing.
-	{
-	// Get the hot area relative to this item.
-	GetHotArea(&(m_hot.m_sX), &(m_hot.m_sY), &(m_hot.m_sW), &(m_hot.m_sH));
-	
-	// Convert to parent coordinates.
-	m_hot.m_sX	+= m_sX;
-	m_hot.m_sY	+= m_sY;
-	}
+void RGuiItem::SetHotArea(void) // Returns nothing.
+{
+    // Get the hot area relative to this item.
+    GetHotArea(&(m_hot.m_sX), &(m_hot.m_sY), &(m_hot.m_sW), &(m_hot.m_sH));
+
+    // Convert to parent coordinates.
+    m_hot.m_sX += m_sX;
+    m_hot.m_sY += m_sY;
+}
 
 ////////////////////////////////////////////////////////////////////////
-// Copy basic parameters regarding appearance and use from this item to 
+// Copy basic parameters regarding appearance and use from this item to
 // the specified one.
 ////////////////////////////////////////////////////////////////////////
 // virtual						// If you override this, call this base if possible.
-void RGuiItem::CopyParms(	// Returns nothing.
-	RGuiItem* pguiDst)		// Destination for parameters from this item.
-	{
-	pguiDst->m_pprint							= m_pprint;
+void RGuiItem::CopyParms( // Returns nothing.
+  RGuiItem *pguiDst)      // Destination for parameters from this item.
+{
+    pguiDst->m_pprint = m_pprint;
 
-	pguiDst->m_u32BorderColor				= m_u32BorderColor;
-	pguiDst->m_u32BorderShadowColor		= m_u32BorderShadowColor;
-	pguiDst->m_u32BorderHighlightColor	= m_u32BorderHighlightColor;
-	pguiDst->m_u32BorderEdgeColor			= m_u32BorderEdgeColor;
+    pguiDst->m_u32BorderColor = m_u32BorderColor;
+    pguiDst->m_u32BorderShadowColor = m_u32BorderShadowColor;
+    pguiDst->m_u32BorderHighlightColor = m_u32BorderHighlightColor;
+    pguiDst->m_u32BorderEdgeColor = m_u32BorderEdgeColor;
 
-	pguiDst->m_u32TextColor					= m_u32TextColor;
-	pguiDst->m_u32BackColor					= m_u32BackColor;
+    pguiDst->m_u32TextColor = m_u32TextColor;
+    pguiDst->m_u32BackColor = m_u32BackColor;
 
-	pguiDst->m_sBorderThickness			= m_sBorderThickness;
+    pguiDst->m_sBorderThickness = m_sBorderThickness;
 
-	pguiDst->m_justification				= m_justification;
+    pguiDst->m_justification = m_justification;
 
-	pguiDst->m_sTransparent					= m_sTransparent;
+    pguiDst->m_sTransparent = m_sTransparent;
 
-	pguiDst->m_u32TransparentColor		= m_u32TransparentColor;
+    pguiDst->m_u32TransparentColor = m_u32TransparentColor;
 
-	pguiDst->m_u32FocusColor				= m_u32FocusColor;
+    pguiDst->m_u32FocusColor = m_u32FocusColor;
 
-	pguiDst->m_sFontCellHeight				= m_sFontCellHeight;
-	}
+    pguiDst->m_sFontCellHeight = m_sFontCellHeight;
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Called by SetParent() when a GUI is losing a child item.
 ////////////////////////////////////////////////////////////////////////
 // virtual							// If you override this, call this base, if possible.
-void RGuiItem::OnLoseChild(	// Returns nothing.
-	RGuiItem*	/*pguiChild*/)	// Child item we're about to lose.
-	{
-	}
+void RGuiItem::OnLoseChild( // Returns nothing.
+  RGuiItem * /*pguiChild*/) // Child item we're about to lose.
+{
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Called by SetParent() when a GUI is gaining a child item.
 ////////////////////////////////////////////////////////////////////////
 // virtual							// If you override this, call this base, if possible.
-void RGuiItem::OnGainChild(	// Returns nothing.
-	RGuiItem*	/*pguiChild*/)	// Child item we're about to gain.
-	{
-	}
+void RGuiItem::OnGainChild( // Returns nothing.
+  RGuiItem * /*pguiChild*/) // Child item we're about to gain.
+{
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Sets the 'clicked' status.
 ////////////////////////////////////////////////////////////////////////
-void RGuiItem::SetClicked(	// Returns nothing.
-	short sClicked)			// New 'clicked' status.
-	{
-	m_sClicked	= sClicked;
-	}
+void RGuiItem::SetClicked( // Returns nothing.
+  short sClicked)          // New 'clicked' status.
+{
+    m_sClicked = sClicked;
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Draws focus for item if m_sShowFocus is TRUE.
 ////////////////////////////////////////////////////////////////////////
 // virtual						// If you override this, call this base if possible.
-void RGuiItem::DrawFocus(	// Returns nothing.
-	RImage* pimDst,			// Destination image.
-	short sDstX	/*= 0*/,		// X offset in destination.
-	short sDstY	/*= 0*/,		// Y offset in destination.
-	RRect* prc /*= NULL*/)	// Clip to.
-	{
-	// If this item shows the focus . . .
-	if (m_sShowFocus != FALSE)
-		{
-		short	sClientX, sClientY, sClientW, sClientH;
-		GetClient(&sClientX, &sClientY, &sClientW, &sClientH);
+void RGuiItem::DrawFocus( // Returns nothing.
+  RImage *pimDst,         // Destination image.
+  short sDstX /*= 0*/,    // X offset in destination.
+  short sDstY /*= 0*/,    // Y offset in destination.
+  RRect *prc /*= NULL*/)  // Clip to.
+{
+    // If this item shows the focus . . .
+    if (m_sShowFocus != FALSE)
+    {
+        short sClientX, sClientY, sClientW, sClientH;
+        GetClient(&sClientX, &sClientY, &sClientW, &sClientH);
 
-		rspRect(
-			MAX(m_sBorderThickness, (short)1),
-			m_u32FocusColor,
-			pimDst,
-			sDstX + sClientX + m_sFocusPos,
-			sDstY + sClientY + m_sFocusPos,
-			sClientW - m_sFocusPos * 2,
-			sClientH - m_sFocusPos * 2,
-			prc);
-		}
-	}
+        rspRect(MAX(m_sBorderThickness, (short)1),
+                m_u32FocusColor,
+                pimDst,
+                sDstX + sClientX + m_sFocusPos,
+                sDstY + sClientY + m_sFocusPos,
+                sClientW - m_sFocusPos * 2,
+                sClientH - m_sFocusPos * 2,
+                prc);
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Called by the static implementation of SetFocus() on the item gaining
@@ -1651,23 +1645,23 @@ void RGuiItem::DrawFocus(	// Returns nothing.
 ////////////////////////////////////////////////////////////////////////
 // virtual				// If you override this, call this base if possible.
 void RGuiItem::OnGainFocus(void)
-	{
-	// Does this item want the focus . . .
-	switch (m_targetFocus)
-		{
-		case Self:
-			break;
-		case Parent:
-			SetFocus(GetParent() );
-			break;
-		case Sibling:
-			FocusNext();
-			break;
-		case Child:
-			SetFocus(m_listguiChildren.GetHead() );
-			break;
-		}
-	}
+{
+    // Does this item want the focus . . .
+    switch (m_targetFocus)
+    {
+        case Self:
+            break;
+        case Parent:
+            SetFocus(GetParent());
+            break;
+        case Sibling:
+            FocusNext();
+            break;
+        case Child:
+            SetFocus(m_listguiChildren.GetHead());
+            break;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Called by the static implementation of SetFocus() on the item losing
@@ -1676,17 +1670,17 @@ void RGuiItem::OnGainFocus(void)
 ////////////////////////////////////////////////////////////////////////
 // virtual				// If you override this, call this base if possible.
 void RGuiItem::OnLoseFocus(void)
-	{
-	// Currently, this base does nothing.
-	}
+{
+    // Currently, this base does nothing.
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Sets the current focus GUI pointer to this GUI.
 ////////////////////////////////////////////////////////////////////////
-RGuiItem* RGuiItem::SetFocus(void)	// Returns pointer to GUI losing the focus.
-	{
-	return SetFocus(this);
-	}
+RGuiItem *RGuiItem::SetFocus(void) // Returns pointer to GUI losing the focus.
+{
+    return SetFocus(this);
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1695,53 +1689,53 @@ RGuiItem* RGuiItem::SetFocus(void)	// Returns pointer to GUI losing the focus.
 // Does nothing if m_szText is empty.
 //
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::DrawText(	// Returns 0 on success.
-	short sX,					// X position in image.
-	short sY,					// Y position in image.
-	short sW /*= 0*/,			// Width of text area.
-	short	sH /*= 0*/,			// Height of test area.
-	RImage* pim /*= NULL*/)	// Destination image.  NULL == use m_im.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::DrawText( // Returns 0 on success.
+  short sX,               // X position in image.
+  short sY,               // Y position in image.
+  short sW /*= 0*/,       // Width of text area.
+  short sH /*= 0*/,       // Height of test area.
+  RImage *pim /*= NULL*/) // Destination image.  NULL == use m_im.
+{
+    short sRes = 0; // Assume success.
 
-	// Draw text.
-	if (m_szText[0] != '\0')
-		{
-		if (pim == NULL)
-			{
-			// Use internal image.
-			pim	= &m_im;
-			}
+    // Draw text.
+    if (m_szText[0] != '\0')
+    {
+        if (pim == NULL)
+        {
+            // Use internal image.
+            pim = &m_im;
+        }
 
-		if (sW == 0)
-			{
-			GetClient(NULL, NULL, &sW, NULL);
-			}
+        if (sW == 0)
+        {
+            GetClient(NULL, NULL, &sW, NULL);
+        }
 
-		if (sH == 0)
-			{
-			GetClient(NULL, NULL, NULL, &sH);
-			}
+        if (sH == 0)
+        {
+            GetClient(NULL, NULL, NULL, &sH);
+        }
 
-		// Text support is currently 8 bit only.
-		m_pprint->SetColor((short)m_u32TextColor, (short)0, m_u32TextShadowColor);
+        // Text support is currently 8 bit only.
+        m_pprint->SetColor((short)m_u32TextColor, (short)0, m_u32TextShadowColor);
 
-		// Set size.  Hopefully this won't do too much scaling for 
-		// caching purposes but I'm not sure.
-		m_pprint->SetFont(m_sFontCellHeight);
+        // Set size.  Hopefully this won't do too much scaling for
+        // caching purposes but I'm not sure.
+        m_pprint->SetFont(m_sFontCellHeight);
 
-		SetJustification();
-		SetTextEffects();
-		m_pprint->SetDestination(pim);
-		m_pprint->SetColumn(sX, sY, sW, sH);
-		m_pprint->print(sX, sY, m_szText);
-		}
+        SetJustification();
+        SetTextEffects();
+        m_pprint->SetDestination(pim);
+        m_pprint->SetColumn(sX, sY, sW, sH);
+        m_pprint->print(sX, sY, m_szText);
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
-// Gets the optional resource image named m_szBkdResName for this item 
+// Gets the optional resource image named m_szBkdResName for this item
 // into m_pimBkdRes.
 // Each call to this function should have a corresponding call to
 // ReleaseRes().
@@ -1749,60 +1743,56 @@ short RGuiItem::DrawText(	// Returns 0 on success.
 // (virtual).
 ////////////////////////////////////////////////////////////////////////
 short RGuiItem::GetRes(void)
-	{
-	short	sRes	= 0;	// Assume success.
+{
+    short sRes = 0; // Assume success.
 
-	// If there's a callback . . .
-	if (m_fnGetRes != NULL)
-		{
-		// Use it instead.
-		sRes	= m_fnGetRes(this);
-		}
-	else
-		{
-		// Release current resource, if any.
-		// Default implementation allows 'Release' call even if no 'Get'
-		// call has yet occurred.  This should not be relied upon when
-		// using user Get/Releases.
-		// There is, of course, the possibility that someone will define
-		// a Release without a Get or vice-versa...I think that's a dumb
-		// idea.
-		ReleaseRes();
+    // If there's a callback . . .
+    if (m_fnGetRes != NULL)
+    {
+        // Use it instead.
+        sRes = m_fnGetRes(this);
+    }
+    else
+    {
+        // Release current resource, if any.
+        // Default implementation allows 'Release' call even if no 'Get'
+        // call has yet occurred.  This should not be relied upon when
+        // using user Get/Releases.
+        // There is, of course, the possibility that someone will define
+        // a Release without a Get or vice-versa...I think that's a dumb
+        // idea.
+        ReleaseRes();
 
-		m_pimBkdRes	= new RImage;
-		if (m_pimBkdRes != NULL)
-			{
-			if (RFileEZLoad(
-				m_pimBkdRes, 
-				m_szBkdResName, 
-				"rb", 
-				RFile::LittleEndian) == 0)
-				{
-				// Success.
-				}
-			else
-				{
-				TRACE("GetRes(): Failed to open resource \"%s\".\n", m_szBkdResName);
-				sRes	= -2;
-				}
+        m_pimBkdRes = new RImage;
+        if (m_pimBkdRes != NULL)
+        {
+            if (RFileEZLoad(m_pimBkdRes, m_szBkdResName, "rb", RFile::LittleEndian) == 0)
+            {
+                // Success.
+            }
+            else
+            {
+                TRACE("GetRes(): Failed to open resource \"%s\".\n", m_szBkdResName);
+                sRes = -2;
+            }
 
-			// If any errors occurred after allocation . . .
-			if (sRes != 0)
-				{
-				delete m_pimBkdRes;
-				m_pimBkdRes	= NULL;
-				}
-			}
-		else
-			{
-			TRACE("GetRes(): Failed to allocate new RImage for "
-				"m_pimBkdRes.\n");
-			sRes	= -1;
-			}
-		}
+            // If any errors occurred after allocation . . .
+            if (sRes != 0)
+            {
+                delete m_pimBkdRes;
+                m_pimBkdRes = NULL;
+            }
+        }
+        else
+        {
+            TRACE("GetRes(): Failed to allocate new RImage for "
+                  "m_pimBkdRes.\n");
+            sRes = -1;
+        }
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Releases the optional resource image previously gotten by a call to
@@ -1814,22 +1804,22 @@ short RGuiItem::GetRes(void)
 // (virtual).
 ////////////////////////////////////////////////////////////////////////
 void RGuiItem::ReleaseRes(void)
-	{
-	// If there's a callback . . .
-	if (m_fnReleaseRes != NULL)
-		{
-		// Use it instead.
-		m_fnReleaseRes(this);
-		}
-	else
-		{
-		if (m_pimBkdRes != NULL)
-			{
-			delete m_pimBkdRes;
-			m_pimBkdRes	= NULL;
-			}
-		}
-	}
+{
+    // If there's a callback . . .
+    if (m_fnReleaseRes != NULL)
+    {
+        // Use it instead.
+        m_fnReleaseRes(this);
+    }
+    else
+    {
+        if (m_pimBkdRes != NULL)
+        {
+            delete m_pimBkdRes;
+            m_pimBkdRes = NULL;
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 // File Oriented.
@@ -1845,29 +1835,29 @@ void RGuiItem::ReleaseRes(void)
 // See LoadInstance(char*).
 //
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::Load(	// Returns 0 on success.
-	char* pszFileName)	// Name of file to load from.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::Load( // Returns 0 on success.
+  char *pszFileName)  // Name of file to load from.
+{
+    short sRes = 0; // Assume success.
 
-	// Attempt to open specified file . . .
-	RFile	file;
-	if (file.Open(pszFileName, "rb", RFile::LittleEndian) == 0)
-		{
-		// Always use your member.
-		sRes	= Load(&file);
+    // Attempt to open specified file . . .
+    RFile file;
+    if (file.Open(pszFileName, "rb", RFile::LittleEndian) == 0)
+    {
+        // Always use your member.
+        sRes = Load(&file);
 
-		// Close the file.
-		file.Close();
-		}
-	else
-		{
-		TRACE("Load(\"%s\"): Failed to open file.\n", pszFileName);
-		sRes	= -1;
-		}
+        // Close the file.
+        file.Close();
+    }
+    else
+    {
+        TRACE("Load(\"%s\"): Failed to open file.\n", pszFileName);
+        sRes = -1;
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1881,65 +1871,60 @@ short RGuiItem::Load(	// Returns 0 on success.
 // (virtual).
 //
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::Load(	// Returns 0 on success.
-	RFile*	pfile)		// RFile open with read access to load from.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::Load( // Returns 0 on success.
+  RFile *pfile)       // RFile open with read access to load from.
+{
+    short sRes = 0; // Assume success.
 
-	ASSERT(pfile->IsOpen() != FALSE);
+    ASSERT(pfile->IsOpen() != FALSE);
 
-	// Read header . . .
-	U32	u32Version;
-	Type	type;
-	if (ReadHeader(pfile, &u32Version, &type) == 0)
-		{
-		ASSERT(type == m_type);
+    // Read header . . .
+    U32 u32Version;
+    Type type;
+    if (ReadHeader(pfile, &u32Version, &type) == 0)
+    {
+        ASSERT(type == m_type);
 
-		// Read members . . .
-		if (ReadMembers(pfile, u32Version) == 0)
-			{
-			// Determine current color depth.
-			short	sDepth	= 8;	// Safety or something.
-			rspGetVideoMode(&sDepth);
+        // Read members . . .
+        if (ReadMembers(pfile, u32Version) == 0)
+        {
+            // Determine current color depth.
+            short sDepth = 8; // Safety or something.
+            rspGetVideoMode(&sDepth);
 
-			if (LoadChildren(pfile) == 0)
-				{
-				// Create item . . .
-				if (Create(
-					m_sX,
-					m_sY,
-					m_im.m_sWidth,
-					m_im.m_sHeight,
-					sDepth) == 0)
-					{
-					// Success.
-					}
-				else
-					{
-					TRACE("Load(): Create() failed.\n");
-					sRes	= -3;
-					}
-				}
-			else
-				{
-				TRACE("Load(): LoadChildren() failed.\n");
-				sRes	= -4;
-				}
-			}
-		else
-			{
-			TRACE("Load(): ReadMembers() failed.\n");
-			sRes	= -2;
-			}
-		}
-	else
-		{
-		TRACE("Load(): ReadHeader() failed.\n");
-		sRes	= -1;
-		}
+            if (LoadChildren(pfile) == 0)
+            {
+                // Create item . . .
+                if (Create(m_sX, m_sY, m_im.m_sWidth, m_im.m_sHeight, sDepth) == 0)
+                {
+                    // Success.
+                }
+                else
+                {
+                    TRACE("Load(): Create() failed.\n");
+                    sRes = -3;
+                }
+            }
+            else
+            {
+                TRACE("Load(): LoadChildren() failed.\n");
+                sRes = -4;
+            }
+        }
+        else
+        {
+            TRACE("Load(): ReadMembers() failed.\n");
+            sRes = -2;
+        }
+    }
+    else
+    {
+        TRACE("Load(): ReadHeader() failed.\n");
+        sRes = -1;
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1949,29 +1934,29 @@ short RGuiItem::Load(	// Returns 0 on success.
 // (static).
 //
 ////////////////////////////////////////////////////////////////////////
-RGuiItem* RGuiItem::LoadInstantiate(	// Returns newly allocated GUI item
-													// on success or NULL on failure.
-	char*	pszFileName)						// Name of file to instantiate from.
-	{
-	RGuiItem*	pgui	= NULL;	// Assume nothing.
+RGuiItem *RGuiItem::LoadInstantiate( // Returns newly allocated GUI item
+                                     // on success or NULL on failure.
+  char *pszFileName)                 // Name of file to instantiate from.
+{
+    RGuiItem *pgui = NULL; // Assume nothing.
 
-	// Attempt to open specified file . . .
-	RFile	file;
-	if (file.Open(pszFileName, "rb", RFile::LittleEndian) == 0)
-		{
-		// Always use your member.
-		pgui	= LoadInstantiate(&file);
+    // Attempt to open specified file . . .
+    RFile file;
+    if (file.Open(pszFileName, "rb", RFile::LittleEndian) == 0)
+    {
+        // Always use your member.
+        pgui = LoadInstantiate(&file);
 
-		// Close the file.
-		file.Close();
-		}
-	else
-		{
-		TRACE("LoadInstantiate(\"%s\"): Failed to open file.\n", pszFileName);
-		}
+        // Close the file.
+        file.Close();
+    }
+    else
+    {
+        TRACE("LoadInstantiate(\"%s\"): Failed to open file.\n", pszFileName);
+    }
 
-	return pgui;
-	}
+    return pgui;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1981,82 +1966,77 @@ RGuiItem* RGuiItem::LoadInstantiate(	// Returns newly allocated GUI item
 // (static).
 //
 ////////////////////////////////////////////////////////////////////////
-RGuiItem* RGuiItem::LoadInstantiate(	// Returns newly allocated GUI item
-													// on success or NULL on failure.
-	RFile*	pfile)							// Pointer to open GUI file.
-	{
-	short			sError	= 0;
-	RGuiItem*	pgui		= NULL;	// Assume nothing.
+RGuiItem *RGuiItem::LoadInstantiate( // Returns newly allocated GUI item
+                                     // on success or NULL on failure.
+  RFile *pfile)                      // Pointer to open GUI file.
+{
+    short sError = 0;
+    RGuiItem *pgui = NULL; // Assume nothing.
 
-	ASSERT(pfile->IsOpen() != FALSE);
+    ASSERT(pfile->IsOpen() != FALSE);
 
-	// Read header . . .
-	U32	u32Version;
-	Type	type;
-	if (ReadHeader(pfile, &u32Version, &type) == 0)
-		{
-		// Allocate a GUI item of the appropriate type . . .
-		pgui	= CreateGuiItem(type);
-		if (pgui != NULL)
-			{
-			// Read members . . .
-			if (pgui->ReadMembers(pfile, u32Version) == 0)
-				{
-				// Determine current color depth.
-				short	sDepth	= 8;	// Safety or something.
-				rspGetVideoMode(&sDepth);
+    // Read header . . .
+    U32 u32Version;
+    Type type;
+    if (ReadHeader(pfile, &u32Version, &type) == 0)
+    {
+        // Allocate a GUI item of the appropriate type . . .
+        pgui = CreateGuiItem(type);
+        if (pgui != NULL)
+        {
+            // Read members . . .
+            if (pgui->ReadMembers(pfile, u32Version) == 0)
+            {
+                // Determine current color depth.
+                short sDepth = 8; // Safety or something.
+                rspGetVideoMode(&sDepth);
 
-				if (pgui->LoadChildren(pfile) == 0)
-					{
-					// Create item . . .
-					if (pgui->Create(
-						pgui->m_sX,
-						pgui->m_sY,
-						pgui->m_im.m_sWidth,
-						pgui->m_im.m_sHeight,
-						sDepth) == 0)
-						{
-						// Success.
-						}
-					else
-						{
-						TRACE("LoadInstantiate(): Create() failed.\n");
-						sError	= 4;
-						}
-					}
-				else
-					{
-					TRACE("LoadInstantiate(): LoadChildren() failed.\n");
-					sError	= 5;
-					}
-				}
-			else
-				{
-				TRACE("LoadInstantiate(): ReadMembers() failed.\n");
-				sError	= 3;
-				}
+                if (pgui->LoadChildren(pfile) == 0)
+                {
+                    // Create item . . .
+                    if (pgui->Create(pgui->m_sX, pgui->m_sY, pgui->m_im.m_sWidth, pgui->m_im.m_sHeight, sDepth) == 0)
+                    {
+                        // Success.
+                    }
+                    else
+                    {
+                        TRACE("LoadInstantiate(): Create() failed.\n");
+                        sError = 4;
+                    }
+                }
+                else
+                {
+                    TRACE("LoadInstantiate(): LoadChildren() failed.\n");
+                    sError = 5;
+                }
+            }
+            else
+            {
+                TRACE("LoadInstantiate(): ReadMembers() failed.\n");
+                sError = 3;
+            }
 
-			// If any errors occurred after allocating GUI . . .
-			if (sError != 0)
-				{
-				delete pgui;
-				pgui	= NULL;
-				}
-			}
-		else
-			{
-			TRACE("LoadInstantiate(): CreateGuiItem() failed.\n");
-			sError	= 2;
-			}
-		}
-	else
-		{
-		TRACE("LoadInstantiate(): ReadHeader() failed.\n");
-		sError	= 1;
-		}
+            // If any errors occurred after allocating GUI . . .
+            if (sError != 0)
+            {
+                delete pgui;
+                pgui = NULL;
+            }
+        }
+        else
+        {
+            TRACE("LoadInstantiate(): CreateGuiItem() failed.\n");
+            sError = 2;
+        }
+    }
+    else
+    {
+        TRACE("LoadInstantiate(): ReadHeader() failed.\n");
+        sError = 1;
+    }
 
-	return pgui;
-	}
+    return pgui;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -2065,38 +2045,36 @@ RGuiItem* RGuiItem::LoadInstantiate(	// Returns newly allocated GUI item
 // (protected).
 //
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::LoadChildren(	// Returns 0 on success.
-	RFile*	pfile)				// File to load from.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::LoadChildren( // Returns 0 on success.
+  RFile *pfile)               // File to load from.
+{
+    short sRes = 0; // Assume success.
 
-	ASSERT(pfile->IsOpen() != FALSE);
+    ASSERT(pfile->IsOpen() != FALSE);
 
-	short	sNum;
-	// Read number of children.
-	pfile->Read(&sNum);
+    short sNum;
+    // Read number of children.
+    pfile->Read(&sNum);
 
-	// Instantiate children.
-	RGuiItem* pgui;
-	short	sCurChild;
-	for (	sCurChild	= 0; 
-			sCurChild < sNum && sRes == 0 && pfile->Error() == FALSE; 
-			sCurChild++)
-		{
-		pgui	= LoadInstantiate(pfile);
-		if (pgui != NULL)
-			{
-			pgui->SetParent(this);
-			}
-		else
-			{
-			TRACE("LoadChildren(): LoadInstantiate() failed.\n");
-			sRes	= -1;
-			}
-		}
+    // Instantiate children.
+    RGuiItem *pgui;
+    short sCurChild;
+    for (sCurChild = 0; sCurChild < sNum && sRes == 0 && pfile->Error() == FALSE; sCurChild++)
+    {
+        pgui = LoadInstantiate(pfile);
+        if (pgui != NULL)
+        {
+            pgui->SetParent(this);
+        }
+        else
+        {
+            TRACE("LoadChildren(): LoadInstantiate() failed.\n");
+            sRes = -1;
+        }
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -2105,57 +2083,57 @@ short RGuiItem::LoadChildren(	// Returns 0 on success.
 // (static).
 //
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::ReadHeader(	// Returns 0 on success.
-	RFile*	pfile,				// In:  File to read from.
-	U32*	pu32Version,			// Out: File format version.
-	Type*	ptype)					// Out: Type of GUI item stored.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::ReadHeader( // Returns 0 on success.
+  RFile *pfile,             // In:  File to read from.
+  U32 *pu32Version,         // Out: File format version.
+  Type *ptype)              // Out: Type of GUI item stored.
+{
+    short sRes = 0; // Assume success.
 
-	ASSERT(pfile->IsOpen() != FALSE);
+    ASSERT(pfile->IsOpen() != FALSE);
 
-	// Read fingerprint.
-	U32	u32FingerPrint;
-	if (pfile->Read(&u32FingerPrint) == 1)
-		{
-		if (u32FingerPrint == GUI_FINGER_PRINT)
-			{
-			// Read file format version.
-			if (pfile->Read(pu32Version) == 1)
-				{
-				// Read type.
-				U32	u32Type;
-				if (pfile->Read(&u32Type) == 1)
-					{
-					// Store type for caller.
-					*ptype	= (Type)u32Type;
-					}
-				else
-					{
-					TRACE("ReadHeader(): Error reading GUI item type from file.\n");
-					sRes	= -4;
-					}
-				}
-			else
-				{
-				TRACE("ReadHeader(): Error reading file format version number.\n");
-				sRes	= -3;
-				}
-			}
-		else
-			{
-			TRACE("ReadHeader(): Invalid finger print.  Not a GUI file.\n");
-			sRes	= -2;
-			}
-		}
-	else
-		{
-		TRACE("ReadHeader(): Error reading finger print.\n");
-		sRes	= -1;
-		}
+    // Read fingerprint.
+    U32 u32FingerPrint;
+    if (pfile->Read(&u32FingerPrint) == 1)
+    {
+        if (u32FingerPrint == GUI_FINGER_PRINT)
+        {
+            // Read file format version.
+            if (pfile->Read(pu32Version) == 1)
+            {
+                // Read type.
+                U32 u32Type;
+                if (pfile->Read(&u32Type) == 1)
+                {
+                    // Store type for caller.
+                    *ptype = (Type)u32Type;
+                }
+                else
+                {
+                    TRACE("ReadHeader(): Error reading GUI item type from file.\n");
+                    sRes = -4;
+                }
+            }
+            else
+            {
+                TRACE("ReadHeader(): Error reading file format version number.\n");
+                sRes = -3;
+            }
+        }
+        else
+        {
+            TRACE("ReadHeader(): Invalid finger print.  Not a GUI file.\n");
+            sRes = -2;
+        }
+    }
+    else
+    {
+        TRACE("ReadHeader(): Error reading finger print.\n");
+        sRes = -1;
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -2163,97 +2141,97 @@ short RGuiItem::ReadHeader(	// Returns 0 on success.
 // (virtual).
 //
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::ReadMembers(	// Returns 0 on success.
-	RFile*	pfile,				// File to read from.
-	U32		u32Version)			// File format version to use.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::ReadMembers( // Returns 0 on success.
+  RFile *pfile,              // File to read from.
+  U32 u32Version)            // File format version to use.
+{
+    short sRes = 0; // Assume success.
 
-	// Read members.  Type must always be first becuase 
-	// LoadInstantiate() utilizes this fact to determine the type of item
-	// that should be instantiated.
-	U32	u32Temp;
-	
-	switch (u32Version)
-		{
-		default:
-		// Insert additional version numbers here!
-		case 6:	// Version 6 stuff.
-			pfile->Read(&m_sTextEffects);
-			pfile->Read(&m_sTextShadowOffsetX);
-			pfile->Read(&m_sTextShadowOffsetY);
+    // Read members.  Type must always be first becuase
+    // LoadInstantiate() utilizes this fact to determine the type of item
+    // that should be instantiated.
+    U32 u32Temp;
 
-		case 5:	// Version 5 stuff.
-			pfile->Read(&m_u32TextShadowColor);
+    switch (u32Version)
+    {
+        default:
+        // Insert additional version numbers here!
+        case 6: // Version 6 stuff.
+            pfile->Read(&m_sTextEffects);
+            pfile->Read(&m_sTextShadowOffsetX);
+            pfile->Read(&m_sTextShadowOffsetY);
 
-		case 4:	// Version 4 stuff.
-			// New members regarding background resources.
-			pfile->Read(m_szBkdResName);
-			pfile->Read(&m_sBkdResTransparent);
-			pfile->Read(&m_u32BkdResTransparentColor);
-			pfile->Read(&m_sBkdResPlacement);
-			// New member regarding font size (height).
-			pfile->Read(&m_sFontCellHeight);
+        case 5: // Version 5 stuff.
+            pfile->Read(&m_u32TextShadowColor);
 
-		case 3:	// Version 3 stuff.
-			// No new stuff here.  RScrollBar has some new members to load.
-		case 2:	// Version 2 stuff.
-			// No new stuff here.  RListBox now saves its m_typeEncapsulator.
+        case 4: // Version 4 stuff.
+            // New members regarding background resources.
+            pfile->Read(m_szBkdResName);
+            pfile->Read(&m_sBkdResTransparent);
+            pfile->Read(&m_u32BkdResTransparentColor);
+            pfile->Read(&m_sBkdResPlacement);
+            // New member regarding font size (height).
+            pfile->Read(&m_sFontCellHeight);
 
-		case 1:	// Version 1 stuff.
-			// No new stuff here.  Derived types RListBox, RScrollBar, and
-			// REdit load their members in version 1.
+        case 3: // Version 3 stuff.
+                // No new stuff here.  RScrollBar has some new members to load.
+        case 2: // Version 2 stuff.
+                // No new stuff here.  RListBox now saves its m_typeEncapsulator.
 
-		case 0:	// Version 0 stuff.
-			// Base class members.
+        case 1: // Version 1 stuff.
+                // No new stuff here.  Derived types RListBox, RScrollBar, and
+                // REdit load their members in version 1.
 
-			pfile->Read(&m_sX);
-			pfile->Read(&m_sY);
-			pfile->Read(&m_im.m_sWidth);
-			pfile->Read(&m_im.m_sHeight);
-			pfile->Read(m_szText);
-			pfile->Read(&m_u32BorderColor);
-			pfile->Read(&m_u32BorderShadowColor);
-			pfile->Read(&m_u32BorderHighlightColor);
-			pfile->Read(&m_u32BorderEdgeColor);
-			pfile->Read(&m_u32TextColor);
-			pfile->Read(&m_u32BackColor);
-			pfile->Read(&m_sBorderThickness);
+        case 0: // Version 0 stuff.
+            // Base class members.
 
-			pfile->Read(&u32Temp);
-			m_justification	= (Justification)u32Temp;
+            pfile->Read(&m_sX);
+            pfile->Read(&m_sY);
+            pfile->Read(&m_im.m_sWidth);
+            pfile->Read(&m_im.m_sHeight);
+            pfile->Read(m_szText);
+            pfile->Read(&m_u32BorderColor);
+            pfile->Read(&m_u32BorderShadowColor);
+            pfile->Read(&m_u32BorderHighlightColor);
+            pfile->Read(&m_u32BorderEdgeColor);
+            pfile->Read(&m_u32TextColor);
+            pfile->Read(&m_u32BackColor);
+            pfile->Read(&m_sBorderThickness);
 
-			pfile->Read(&m_sInvertedBorder);
-			pfile->Read(&m_sTransparent);
-			pfile->Read(&m_u32TransparentColor);
-			pfile->Read(&m_lId);
-			
-			// Used to load m_sCanBeFocused (TRUE, FALSE); now load
-			// m_targetFocus.
-			short	sFocusTarget	= Parent;
-			pfile->Read(&sFocusTarget);
-			m_targetFocus	=	(Target)sFocusTarget;
+            pfile->Read(&u32Temp);
+            m_justification = (Justification)u32Temp;
 
-			pfile->Read(&m_sShowFocus);
-			pfile->Read(&m_u32FocusColor);
-			pfile->Read(&m_sVisible);
-			pfile->Read(&m_sActive);
+            pfile->Read(&m_sInvertedBorder);
+            pfile->Read(&m_sTransparent);
+            pfile->Read(&m_u32TransparentColor);
+            pfile->Read(&m_lId);
 
-			// If successful . . .
-			if (pfile->Error() == FALSE)
-				{
-				// Success.
-				}
-			else
-				{
-				TRACE("ReadMembers(): Error reading RGuiItem members.\n");
-				sRes	= -1;
-				}
-			break;
-		}
+            // Used to load m_sCanBeFocused (TRUE, FALSE); now load
+            // m_targetFocus.
+            short sFocusTarget = Parent;
+            pfile->Read(&sFocusTarget);
+            m_targetFocus = (Target)sFocusTarget;
 
-	return sRes;
-	}
+            pfile->Read(&m_sShowFocus);
+            pfile->Read(&m_u32FocusColor);
+            pfile->Read(&m_sVisible);
+            pfile->Read(&m_sActive);
+
+            // If successful . . .
+            if (pfile->Error() == FALSE)
+            {
+                // Success.
+            }
+            else
+            {
+                TRACE("ReadMembers(): Error reading RGuiItem members.\n");
+                sRes = -1;
+            }
+            break;
+    }
+
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -2261,29 +2239,29 @@ short RGuiItem::ReadMembers(	// Returns 0 on success.
 // pass it to Save(RFile*).
 //
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::Save(	// Returns 0 on success.
-	char* pszFileName)	// Name of file to save to.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::Save( // Returns 0 on success.
+  char *pszFileName)  // Name of file to save to.
+{
+    short sRes = 0; // Assume success.
 
-	// Attempt to open specified file . . .
-	RFile	file;
-	if (file.Open(pszFileName, "wb", RFile::LittleEndian) == 0)
-		{
-		// Always use your member.
-		sRes	= Save(&file);
+    // Attempt to open specified file . . .
+    RFile file;
+    if (file.Open(pszFileName, "wb", RFile::LittleEndian) == 0)
+    {
+        // Always use your member.
+        sRes = Save(&file);
 
-		// Close the file.
-		file.Close();
-		}
-	else
-		{
-		TRACE("Save(\"%s\"): Failed to open file.\n", pszFileName);
-		sRes	= -1;
-		}
+        // Close the file.
+        file.Close();
+    }
+    else
+    {
+        TRACE("Save(\"%s\"): Failed to open file.\n", pszFileName);
+        sRes = -1;
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -2293,32 +2271,32 @@ short RGuiItem::Save(	// Returns 0 on success.
 // (virtual).
 //
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::Save(	// Returns 0 on success.
-	RFile*	pfile)		// RFile open with write access to save to.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::Save( // Returns 0 on success.
+  RFile *pfile)       // RFile open with write access to save to.
+{
+    short sRes = 0; // Assume success.
 
-	ASSERT(pfile->IsOpen() != FALSE);
+    ASSERT(pfile->IsOpen() != FALSE);
 
-	// Write fingerprint.
-	pfile->Write((U32)GUI_FINGER_PRINT);
-	// Write file format version.
-	pfile->Write((U32)GUI_FILE_VERSION);
+    // Write fingerprint.
+    pfile->Write((U32)GUI_FINGER_PRINT);
+    // Write file format version.
+    pfile->Write((U32)GUI_FILE_VERSION);
 
-	// Write member variables for RGuiItem . . .
-	if (WriteMembers(pfile) == 0)
-		{
-		// Write all children.
-		sRes	= SaveChildren(pfile);
-		}
-	else
-		{
-		TRACE("Save(): Error writing RGuiItem members.\n");
-		sRes	= -1;
-		}
+    // Write member variables for RGuiItem . . .
+    if (WriteMembers(pfile) == 0)
+    {
+        // Write all children.
+        sRes = SaveChildren(pfile);
+    }
+    else
+    {
+        TRACE("Save(): Error writing RGuiItem members.\n");
+        sRes = -1;
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -2327,39 +2305,39 @@ short RGuiItem::Save(	// Returns 0 on success.
 // (protected).
 //
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::SaveChildren(	// Returns 0 on success.
-	RFile*	pfile)				// File to save to.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::SaveChildren( // Returns 0 on success.
+  RFile *pfile)               // File to save to.
+{
+    short sRes = 0; // Assume success.
 
-	ASSERT(pfile->IsOpen() != FALSE);
+    ASSERT(pfile->IsOpen() != FALSE);
 
-	// Determine number of child items.
-	short	sNum	= 0;
-	RGuiItem*	pgui = m_listguiChildren.GetHead();
-	while (pgui != NULL)
-		{
-		sNum++;
+    // Determine number of child items.
+    short sNum = 0;
+    RGuiItem *pgui = m_listguiChildren.GetHead();
+    while (pgui != NULL)
+    {
+        sNum++;
 
-		pgui	= m_listguiChildren.GetNext();
-		}
+        pgui = m_listguiChildren.GetNext();
+    }
 
-	// Write number of children.
-	pfile->Write(sNum);
+    // Write number of children.
+    pfile->Write(sNum);
 
-	// Save children.  Note that we go through the children in reverse
-	// order so they, on load, get added back to their parent in the
-	// order they were originally added to this parent.
-	pgui	= m_listguiChildren.GetTail();
-	while (pgui != NULL && sRes == 0 && pfile->Error() == FALSE)
-		{
-		sRes	= pgui->Save(pfile);
+    // Save children.  Note that we go through the children in reverse
+    // order so they, on load, get added back to their parent in the
+    // order they were originally added to this parent.
+    pgui = m_listguiChildren.GetTail();
+    while (pgui != NULL && sRes == 0 && pfile->Error() == FALSE)
+    {
+        sRes = pgui->Save(pfile);
 
-		pgui	= m_listguiChildren.GetPrev();
-		}
+        pgui = m_listguiChildren.GetPrev();
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -2367,62 +2345,62 @@ short RGuiItem::SaveChildren(	// Returns 0 on success.
 // (virtual).
 //
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::WriteMembers(	// Returns 0 on success.
-	RFile*	pfile)				// File to write to.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::WriteMembers( // Returns 0 on success.
+  RFile *pfile)               // File to write to.
+{
+    short sRes = 0; // Assume success.
 
-	// Write members.  Type must always be first becuase 
-	// LoadInstantiate() utilizes this fact to determine the type of item
-	// that should be instantiated.
-	pfile->Write((U32)m_type);
+    // Write members.  Type must always be first becuase
+    // LoadInstantiate() utilizes this fact to determine the type of item
+    // that should be instantiated.
+    pfile->Write((U32)m_type);
 
-	// Insert new members here.
-	pfile->Write(m_sTextEffects);
-	pfile->Write(m_sTextShadowOffsetX);
-	pfile->Write(m_sTextShadowOffsetY);
-	pfile->Write(m_u32TextShadowColor);
-	pfile->Write(m_szBkdResName);
-	pfile->Write(m_sBkdResTransparent);
-	pfile->Write(m_u32BkdResTransparentColor);
-	pfile->Write(m_sBkdResPlacement);
-	pfile->Write(m_sFontCellHeight);
-	pfile->Write(m_sX);
-	pfile->Write(m_sY);
-	pfile->Write(m_im.m_sWidth);
-	pfile->Write(m_im.m_sHeight);
-	pfile->Write(m_szText);
-	pfile->Write(m_u32BorderColor);
-	pfile->Write(m_u32BorderShadowColor);
-	pfile->Write(m_u32BorderHighlightColor);
-	pfile->Write(m_u32BorderEdgeColor);
-	pfile->Write(m_u32TextColor);
-	pfile->Write(m_u32BackColor);
-	pfile->Write(m_sBorderThickness);
-	pfile->Write((U32)m_justification);
-	pfile->Write(m_sInvertedBorder);
-	pfile->Write(m_sTransparent);
-	pfile->Write(m_u32TransparentColor);
-	pfile->Write(m_lId);
-	pfile->Write((short)m_targetFocus);
-	pfile->Write(m_sShowFocus);
-	pfile->Write(m_u32FocusColor);
-	pfile->Write(m_sVisible);
-	pfile->Write(m_sActive);
+    // Insert new members here.
+    pfile->Write(m_sTextEffects);
+    pfile->Write(m_sTextShadowOffsetX);
+    pfile->Write(m_sTextShadowOffsetY);
+    pfile->Write(m_u32TextShadowColor);
+    pfile->Write(m_szBkdResName);
+    pfile->Write(m_sBkdResTransparent);
+    pfile->Write(m_u32BkdResTransparentColor);
+    pfile->Write(m_sBkdResPlacement);
+    pfile->Write(m_sFontCellHeight);
+    pfile->Write(m_sX);
+    pfile->Write(m_sY);
+    pfile->Write(m_im.m_sWidth);
+    pfile->Write(m_im.m_sHeight);
+    pfile->Write(m_szText);
+    pfile->Write(m_u32BorderColor);
+    pfile->Write(m_u32BorderShadowColor);
+    pfile->Write(m_u32BorderHighlightColor);
+    pfile->Write(m_u32BorderEdgeColor);
+    pfile->Write(m_u32TextColor);
+    pfile->Write(m_u32BackColor);
+    pfile->Write(m_sBorderThickness);
+    pfile->Write((U32)m_justification);
+    pfile->Write(m_sInvertedBorder);
+    pfile->Write(m_sTransparent);
+    pfile->Write(m_u32TransparentColor);
+    pfile->Write(m_lId);
+    pfile->Write((short)m_targetFocus);
+    pfile->Write(m_sShowFocus);
+    pfile->Write(m_u32FocusColor);
+    pfile->Write(m_sVisible);
+    pfile->Write(m_sActive);
 
-	// If successful . . .
-	if (pfile->Error() == FALSE)
-		{
-		// Success.
-		}
-	else
-		{
-		TRACE("WriteMembers(): Error writing RGuiItem members.\n");
-		sRes	= -1;
-		}
+    // If successful . . .
+    if (pfile->Error() == FALSE)
+    {
+        // Success.
+    }
+    else
+    {
+        TRACE("WriteMembers(): Error writing RGuiItem members.\n");
+        sRes = -1;
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Querries.
@@ -2433,52 +2411,48 @@ short RGuiItem::WriteMembers(	// Returns 0 on success.
 // Determine if the position is inside the item.
 //
 ////////////////////////////////////////////////////////////////////////
-inline short IsInside(	// Returns TRUE, if inside; FALSE otherwise.
-	RGuiItem*	pgui,		// GUI in question.
-	short			sPosX,	// X coord of position in question.
-	short			sPosY,	// Y coord of position in question.
-	short			sActive,	// If TRUE, only searches active items.
-								// If FALSE, searches all items.
-	short		sEventArea)	// If TRUE, only checks items' event areas.
-								// If FALSE, checks items' entire hot regions.
-	{
-	short	sRes	= TRUE;	// Assume inside.
+inline short IsInside( // Returns TRUE, if inside; FALSE otherwise.
+  RGuiItem *pgui,      // GUI in question.
+  short sPosX,         // X coord of position in question.
+  short sPosY,         // Y coord of position in question.
+  short sActive,       // If TRUE, only searches active items.
+                       // If FALSE, searches all items.
+  short sEventArea)    // If TRUE, only checks items' event areas.
+                       // If FALSE, checks items' entire hot regions.
+{
+    short sRes = TRUE; // Assume inside.
 
-	// If activated is required . . .
-	if (sActive != FALSE)
-		{
-		// Get activation status.
-		sRes	= pgui->IsActivated();
-		}
+    // If activated is required . . .
+    if (sActive != FALSE)
+    {
+        // Get activation status.
+        sRes = pgui->IsActivated();
+    }
 
-	// If okay so far . . .
-	if (sRes != FALSE)
-		{
-		// If using event area . . .
-		if (sEventArea != FALSE)
-			{
-			if (	sPosX < pgui->m_sEventAreaX
-				||	sPosX >= pgui->m_sEventAreaX + pgui->m_sEventAreaW
-				|| sPosY < pgui->m_sEventAreaY
-				|| sPosY >= pgui->m_sEventAreaY + pgui->m_sEventAreaH)
-				{
-				sRes	= FALSE;
-				}
-			}
-		else	// Entire hot area.
-			{
-			if (	sPosX < pgui->m_hot.m_sX
-				||	sPosX >= pgui->m_hot.m_sX + pgui->m_hot.m_sW
-				|| sPosY < pgui->m_hot.m_sY
-				|| sPosY >= pgui->m_hot.m_sY + pgui->m_hot.m_sH)
-				{
-				sRes	= FALSE;
-				}
-			}
-		}
+    // If okay so far . . .
+    if (sRes != FALSE)
+    {
+        // If using event area . . .
+        if (sEventArea != FALSE)
+        {
+            if (sPosX < pgui->m_sEventAreaX || sPosX >= pgui->m_sEventAreaX + pgui->m_sEventAreaW ||
+                sPosY < pgui->m_sEventAreaY || sPosY >= pgui->m_sEventAreaY + pgui->m_sEventAreaH)
+            {
+                sRes = FALSE;
+            }
+        }
+        else // Entire hot area.
+        {
+            if (sPosX < pgui->m_hot.m_sX || sPosX >= pgui->m_hot.m_sX + pgui->m_hot.m_sW || sPosY < pgui->m_hot.m_sY ||
+                sPosY >= pgui->m_hot.m_sY + pgui->m_hot.m_sH)
+            {
+                sRes = FALSE;
+            }
+        }
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -2486,172 +2460,174 @@ inline short IsInside(	// Returns TRUE, if inside; FALSE otherwise.
 // specified parameters.
 //
 ////////////////////////////////////////////////////////////////////////
-RGuiItem* RGuiItem::GetItemFromPoint(	// Returns item ptr, if item found;
-													// NULL on failure.
-	short	sPosX,								// X position.
-	short	sPosY,								// Y position.
-	short	sActive /*= TRUE*/,				// If TRUE, only searches active items.
-													// If FALSE, searches all items.
-	short sEventArea /*= TRUE*/)			// If TRUE, only checks items' event areas.
-													// If FALSE, checks items' entire hot regions.
-	{
-	RGuiItem*	pguiRes	= NULL;	// Assume nothing.
+RGuiItem *RGuiItem::GetItemFromPoint( // Returns item ptr, if item found;
+                                      // NULL on failure.
+  short sPosX,                        // X position.
+  short sPosY,                        // Y position.
+  short sActive /*= TRUE*/,           // If TRUE, only searches active items.
+                                      // If FALSE, searches all items.
+  short sEventArea /*= TRUE*/)        // If TRUE, only checks items' event areas.
+                                      // If FALSE, checks items' entire hot regions.
+{
+    RGuiItem *pguiRes = NULL; // Assume nothing.
 
-	// If inside this item . . .
-	if (IsInside(this, sPosX, sPosY, sActive, sEventArea) != FALSE)
-		{
-		RGuiItem*	pguiCur;
-		pguiRes	= this;	// Start with this.
+    // If inside this item . . .
+    if (IsInside(this, sPosX, sPosY, sActive, sEventArea) != FALSE)
+    {
+        RGuiItem *pguiCur;
+        pguiRes = this; // Start with this.
 
-		do
-			{
-			// Adapt coords to current item's system.
-			sPosX	-= pguiRes->m_sX;
-			sPosY	-= pguiRes->m_sY;
+        do
+        {
+            // Adapt coords to current item's system.
+            sPosX -= pguiRes->m_sX;
+            sPosY -= pguiRes->m_sY;
 
-			// Check children.
-			pguiCur	= pguiRes->m_listguiChildren.GetHead();
-			while (pguiCur != NULL)
-				{
-				if (IsInside(pguiCur, sPosX, sPosY, sActive, sEventArea) != FALSE)
-					{
-					// Found one.
-					pguiRes	= pguiCur;
-					break;
-					}
+            // Check children.
+            pguiCur = pguiRes->m_listguiChildren.GetHead();
+            while (pguiCur != NULL)
+            {
+                if (IsInside(pguiCur, sPosX, sPosY, sActive, sEventArea) != FALSE)
+                {
+                    // Found one.
+                    pguiRes = pguiCur;
+                    break;
+                }
 
-				pguiCur	= pguiRes->m_listguiChildren.GetNext();
-				}
+                pguiCur = pguiRes->m_listguiChildren.GetNext();
+            }
 
-			// until we find no child item containing point.
-			} while (pguiCur != NULL);
-		}
+            // until we find no child item containing point.
+        } while (pguiCur != NULL);
+    }
 
-	return pguiRes;
-	}
+    return pguiRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Returns TRUE if this item was allocated with CreateGuiItem().
 //
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::IsDynamic(void)	// Returns TRUE if this item was allocated with
-											// CreateGuiItem().
-	{
-	return IsProp(DYNAMIC_PROP_KEY);
-	}
+short RGuiItem::IsDynamic(void) // Returns TRUE if this item was allocated with
+                                // CreateGuiItem().
+{
+    return IsProp(DYNAMIC_PROP_KEY);
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Get the text that represents this item.
 //
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::GetText(	// Returns 0 on success.
-	char* pszText,				// Location to copy text to.
-	short sMax)					// Total memory pointed to by pszText.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::GetText( // Returns 0 on success.
+  char *pszText,         // Location to copy text to.
+  short sMax)            // Total memory pointed to by pszText.
+{
+    short sRes = 0; // Assume success.
 
-	if ((short)strlen(m_szText) < sMax)
-		{
-		strcpy(pszText, m_szText);
-		}
-	else
-		{
-		TRACE("GetText(): Not enough room to copy text (provided: %d, "
-				"needed: %d).\n", sMax, strlen(m_szText) + 1);
-		sRes = -1;
-		}
+    if ((short)strlen(m_szText) < sMax)
+    {
+        strcpy(pszText, m_szText);
+    }
+    else
+    {
+        TRACE("GetText(): Not enough room to copy text (provided: %d, "
+              "needed: %d).\n",
+              sMax,
+              strlen(m_szText) + 1);
+        sRes = -1;
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Get the text that represents the specified item.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RGuiItem::GetText(	// Returns 0 on success.
-	long	lId,					// In:  Child item ID (can identify this item). 
-	char* pszText,				// Out: Location to copy text to.
-	short sMax)					// In:  Total memory pointed to by pszText.
-	{
-	short	sRes	= 0;	// Assume success.
+short RGuiItem::GetText( // Returns 0 on success.
+  long lId,              // In:  Child item ID (can identify this item).
+  char *pszText,         // Out: Location to copy text to.
+  short sMax)            // In:  Total memory pointed to by pszText.
+{
+    short sRes = 0; // Assume success.
 
-	RGuiItem*	pgui	= GetItemFromId(lId);
-	if (pgui != NULL)
-		{
-		sRes	= pgui->GetText(pszText, sMax);
-		}
-	else
-		{
-		TRACE("GetText(): No such ID %ld.\n", lId);
-		sRes	= -1;
-		}
+    RGuiItem *pgui = GetItemFromId(lId);
+    if (pgui != NULL)
+    {
+        sRes = pgui->GetText(pszText, sMax);
+    }
+    else
+    {
+        TRACE("GetText(): No such ID %ld.\n", lId);
+        sRes = -1;
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Get the number represented by the text in this item.
 //
 //////////////////////////////////////////////////////////////////////////////
-long RGuiItem::GetVal(void)		// Returns value.
-	{
-	return atol(m_szText);
-	}
+long RGuiItem::GetVal(void) // Returns value.
+{
+    return atol(m_szText);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Get the number represented by the text in the specified item.
 //
 //////////////////////////////////////////////////////////////////////////////
-long RGuiItem::GetVal(	// Returns value.
-	long	lId)				// In:  Child item ID (can identify this item). 
-	{
-	long lRes	= 0;	// Assume value.  Ayuh.
+long RGuiItem::GetVal( // Returns value.
+  long lId)            // In:  Child item ID (can identify this item).
+{
+    long lRes = 0; // Assume value.  Ayuh.
 
-	RGuiItem*	pgui	= GetItemFromId(lId);
-	if (pgui != NULL)
-		{
-		lRes	= pgui->GetVal();
-		}
-	else
-		{
-		TRACE("GetVal(): No such ID %ld.\n", lId);
-		}
+    RGuiItem *pgui = GetItemFromId(lId);
+    if (pgui != NULL)
+    {
+        lRes = pgui->GetVal();
+    }
+    else
+    {
+        TRACE("GetVal(): No such ID %ld.\n", lId);
+    }
 
-	return lRes;
-	}
+    return lRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Gets the thickness of the top/left border (including border edge effect).
 //
 //////////////////////////////////////////////////////////////////////////////
-short RGuiItem::GetTopLeftBorderThickness(void)	// Returns border thickness 
-																// including edge effect.                      
-	{
-	if (m_sBorderThickness == 0)
-		return 0;
-	else
-		return m_sBorderThickness + ((m_sInvertedBorder == FALSE) ? 0 : m_sBorderThickness);
-	}
+short RGuiItem::GetTopLeftBorderThickness(void) // Returns border thickness
+                                                // including edge effect.
+{
+    if (m_sBorderThickness == 0)
+        return 0;
+    else
+        return m_sBorderThickness + ((m_sInvertedBorder == FALSE) ? 0 : m_sBorderThickness);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Gets the thickness of the bottom/right border (including border edge effect).
 //
 //////////////////////////////////////////////////////////////////////////////
-short RGuiItem::GetBottomRightBorderThickness(void)	// Returns border thickness 
-																		// including edge effect.                      
-	{
-	if (m_sBorderThickness == 0)
-		return 0;
-	else
-		return m_sBorderThickness + ((m_sInvertedBorder == FALSE) ? m_sBorderThickness : 0);
-	}
+short RGuiItem::GetBottomRightBorderThickness(void) // Returns border thickness
+                                                    // including edge effect.
+{
+    if (m_sBorderThickness == 0)
+        return 0;
+    else
+        return m_sBorderThickness + ((m_sInvertedBorder == FALSE) ? m_sBorderThickness : 0);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -2660,29 +2636,29 @@ short RGuiItem::GetBottomRightBorderThickness(void)	// Returns border thickness
 // (virtual).
 //
 //////////////////////////////////////////////////////////////////////////////
-void RGuiItem::GetClient(	// Returns nothing.
-	short* psX,					// Out: X position unless NULL.
-	short* psY,					// Out: Y position unless NULL.
-	short* psW,					// Out: Width unless NULL.
-	short* psH)					// Out: Height unless NULL.
-	{
-	if (m_sBorderThickness == 0)
-		{
-		SET(psX, 0);
-		SET(psY, 0);
-		SET(psW, m_im.m_sWidth);
-		SET(psH, m_im.m_sHeight);
-		}
-	else
-		{
-		short	sLeftTop			= GetTopLeftBorderThickness();
-		short sRightBottom	= GetBottomRightBorderThickness();
-		SET(psX, sLeftTop);
-		SET(psY, sLeftTop);
-		SET(psW, m_im.m_sWidth - sLeftTop - sRightBottom);
-		SET(psH, m_im.m_sHeight - sLeftTop - sRightBottom);
-		}
-	}
+void RGuiItem::GetClient( // Returns nothing.
+  short *psX,             // Out: X position unless NULL.
+  short *psY,             // Out: Y position unless NULL.
+  short *psW,             // Out: Width unless NULL.
+  short *psH)             // Out: Height unless NULL.
+{
+    if (m_sBorderThickness == 0)
+    {
+        SET(psX, 0);
+        SET(psY, 0);
+        SET(psW, m_im.m_sWidth);
+        SET(psH, m_im.m_sHeight);
+    }
+    else
+    {
+        short sLeftTop = GetTopLeftBorderThickness();
+        short sRightBottom = GetBottomRightBorderThickness();
+        SET(psX, sLeftTop);
+        SET(psY, sLeftTop);
+        SET(psW, m_im.m_sWidth - sLeftTop - sRightBottom);
+        SET(psH, m_im.m_sHeight - sLeftTop - sRightBottom);
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -2691,60 +2667,60 @@ void RGuiItem::GetClient(	// Returns nothing.
 // (virtual).
 //
 //////////////////////////////////////////////////////////////////////////////
-void RGuiItem::GetHotArea(	// Returns nothing.
-	short* psX,					// Out: X position unless NULL.
-	short* psY,					// Out: Y position unless NULL.
-	short* psW,					// Out: Width unless NULL.
-	short* psH)					// Out: Height unless NULL.
-	{
-	// Base implementation uses entire area.
-	SET(psX, 0);
-	SET(psY, 0);
-	SET(psW, m_im.m_sWidth);
-	SET(psH, m_im.m_sHeight);
-	}
+void RGuiItem::GetHotArea( // Returns nothing.
+  short *psX,              // Out: X position unless NULL.
+  short *psY,              // Out: Y position unless NULL.
+  short *psW,              // Out: Width unless NULL.
+  short *psH)              // Out: Height unless NULL.
+{
+    // Base implementation uses entire area.
+    SET(psX, 0);
+    SET(psY, 0);
+    SET(psW, m_im.m_sWidth);
+    SET(psH, m_im.m_sHeight);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Change the position specified to a top-level coord.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RGuiItem::ChildPosToTop(	// Returns nothing.
-	short* psX,						// In: Child pos, Out: Top level pos.
-	short* psY)						// In: Child pos, Out: Top level pos.
-	{
-	// Offset current pos.
-	*psX	+= m_sX;
-	*psY	+= m_sY;
+void RGuiItem::ChildPosToTop( // Returns nothing.
+  short *psX,                 // In: Child pos, Out: Top level pos.
+  short *psY)                 // In: Child pos, Out: Top level pos.
+{
+    // Offset current pos.
+    *psX += m_sX;
+    *psY += m_sY;
 
-	// If not yet the top level . . .
-	if (m_pguiParent != NULL)
-		{
-		// Pass it on.
-		m_pguiParent->ChildPosToTop(psX, psY);
-		}
-	}
+    // If not yet the top level . . .
+    if (m_pguiParent != NULL)
+    {
+        // Pass it on.
+        m_pguiParent->ChildPosToTop(psX, psY);
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Change the position specified to a child coord.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RGuiItem::TopPosToChild(	// Returns nothing.
-	short* psX,						// In: Top level pos, Out: Child pos.
-	short* psY)						// In: Top level pos, Out: Child pos.
-	{
-	// Offset current pos.
-	*psX	-= m_sX;
-	*psY	-= m_sY;
+void RGuiItem::TopPosToChild( // Returns nothing.
+  short *psX,                 // In: Top level pos, Out: Child pos.
+  short *psY)                 // In: Top level pos, Out: Child pos.
+{
+    // Offset current pos.
+    *psX -= m_sX;
+    *psY -= m_sY;
 
-	// If not yet the top level . . .
-	if (m_pguiParent != NULL)
-		{
-		// Pass it on.
-		m_pguiParent->TopPosToChild(psX, psY);
-		}
-	}
+    // If not yet the top level . . .
+    if (m_pguiParent != NULL)
+    {
+        // Pass it on.
+        m_pguiParent->TopPosToChild(psX, psY);
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -2754,9 +2730,9 @@ void RGuiItem::TopPosToChild(	// Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
 U32 RGuiItem::GetCurrentFileVersion(void)
-	{
-	return GUI_FILE_VERSION;
-	}
+{
+    return GUI_FILE_VERSION;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // Statics.
@@ -2767,197 +2743,195 @@ U32 RGuiItem::GetCurrentFileVersion(void)
 // NOTE:  Eventually, this function may do more, so it is better to call
 // it than simply setting ms_pguiFocus to your gui.
 //////////////////////////////////////////////////////////////////////////////
-// static 
-RGuiItem* RGuiItem::SetFocus(		// Returns pointer to GUI losing the focus.
-	RGuiItem*	pguiNewFocus)		// New item to focus or NULL for none.
-	{
-	// Store loser of focus.
-	RGuiItem*	pguiLoseFocus	= ms_pguiFocus;
+// static
+RGuiItem *RGuiItem::SetFocus( // Returns pointer to GUI losing the focus.
+  RGuiItem *pguiNewFocus)     // New item to focus or NULL for none.
+{
+    // Store loser of focus.
+    RGuiItem *pguiLoseFocus = ms_pguiFocus;
 
-	// If this item does not already have the focus . . .
-	if (pguiNewFocus != ms_pguiFocus)
-		{
-		// Set new focus.
-		ms_pguiFocus	= pguiNewFocus;
+    // If this item does not already have the focus . . .
+    if (pguiNewFocus != ms_pguiFocus)
+    {
+        // Set new focus.
+        ms_pguiFocus = pguiNewFocus;
 
-		// If there is a loser . . .
-		if (pguiLoseFocus != NULL)
-			{
-			// Let the loser know.
-			pguiLoseFocus->OnLoseFocus();
-			}
-		
-		// If the focus has not already changed and is an item . . .
-		if (ms_pguiFocus == pguiNewFocus && pguiNewFocus != NULL)
-			{
-			// Let the gainer know.
-			pguiNewFocus->OnGainFocus();
-			}
-		}
+        // If there is a loser . . .
+        if (pguiLoseFocus != NULL)
+        {
+            // Let the loser know.
+            pguiLoseFocus->OnLoseFocus();
+        }
 
-	// Return loser of focus.
-	return pguiLoseFocus;
-	}
+        // If the focus has not already changed and is an item . . .
+        if (ms_pguiFocus == pguiNewFocus && pguiNewFocus != NULL)
+        {
+            // Let the gainer know.
+            pguiNewFocus->OnGainFocus();
+        }
+    }
+
+    // Return loser of focus.
+    return pguiLoseFocus;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // Moves the focus to the next GUI at the same level as the current
 // ms_pguiFocus.  Does not affect current focus for top-level guis.
 //////////////////////////////////////////////////////////////////////////////
-// static 
-RGuiItem* RGuiItem::FocusNext(void)		// Returns new item with focus or NULL,
-													// if none.
-	{
-	// If there is a current . . .
-	if (ms_pguiFocus != NULL)
-		{
-		// If it has a parent . . .
-		RGuiItem*	pguiParent	= ms_pguiFocus->GetParent();
-		if (pguiParent != NULL)
-			{
-			// Get next . . .
-			RGuiItem* pguiFocus = pguiParent->m_listguiChildren.GetLogicalNext(ms_pguiFocus);
-			// Remember where we started so we can detect complete circle.
-			RGuiItem* pguiStart = pguiFocus;
-			
-			while (pguiFocus != NULL)
-				{
-				// If visible, activated, and doesn't focus siblings . . .
-				if (	pguiFocus->m_sVisible != FALSE 
-					&&	pguiFocus->IsActivated() != FALSE
-					&&	pguiFocus->m_targetFocus != Sibling)
-					{
-					break;
-					}
+// static
+RGuiItem *RGuiItem::FocusNext(void) // Returns new item with focus or NULL,
+                                    // if none.
+{
+    // If there is a current . . .
+    if (ms_pguiFocus != NULL)
+    {
+        // If it has a parent . . .
+        RGuiItem *pguiParent = ms_pguiFocus->GetParent();
+        if (pguiParent != NULL)
+        {
+            // Get next . . .
+            RGuiItem *pguiFocus = pguiParent->m_listguiChildren.GetLogicalNext(ms_pguiFocus);
+            // Remember where we started so we can detect complete circle.
+            RGuiItem *pguiStart = pguiFocus;
 
-				// Try next.
-				pguiFocus	= pguiParent->m_listguiChildren.GetLogicalNext();
+            while (pguiFocus != NULL)
+            {
+                // If visible, activated, and doesn't focus siblings . . .
+                if (pguiFocus->m_sVisible != FALSE && pguiFocus->IsActivated() != FALSE &&
+                    pguiFocus->m_targetFocus != Sibling)
+                {
+                    break;
+                }
 
-				// If we wrapped . . .
-				if (pguiFocus == pguiStart)
-					{
-					pguiFocus	= NULL;
-					}
-				}
+                // Try next.
+                pguiFocus = pguiParent->m_listguiChildren.GetLogicalNext();
 
-			// Set focus to the new item.
-			SetFocus(pguiFocus);
-			}
-		}
+                // If we wrapped . . .
+                if (pguiFocus == pguiStart)
+                {
+                    pguiFocus = NULL;
+                }
+            }
 
-	return ms_pguiFocus;
-	}
+            // Set focus to the new item.
+            SetFocus(pguiFocus);
+        }
+    }
+
+    return ms_pguiFocus;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // Moves the focus to the previous GUI at the same level as the current
 // ms_pguiFocus.  Does not affect current focus for top-level guis.
 //////////////////////////////////////////////////////////////////////////////
-// static 
-RGuiItem* RGuiItem::FocusPrev(void)		// Returns new item with focus or NULL,
-													// if none.
-	{
-	// If there is a current . . .
-	if (ms_pguiFocus != NULL)
-		{
-		// If it has a parent . . .
-		RGuiItem*	pguiParent	= ms_pguiFocus->GetParent();
-		if (pguiParent != NULL)
-			{
-			// Get previous . . .
-			RGuiItem* pguiFocus = pguiParent->m_listguiChildren.GetLogicalPrev(ms_pguiFocus);
-			// Remember where we started so we can detect complete circle.
-			RGuiItem* pguiStart = pguiFocus;
-			
-			while (pguiFocus != NULL)
-				{
-				// If visible, activated, and doesn't focus siblings . . .
-				if (	pguiFocus->m_sVisible != FALSE 
-					&&	pguiFocus->IsActivated() != FALSE
-					&&	pguiFocus->m_targetFocus != Sibling)
-					{
-					break;
-					}
+// static
+RGuiItem *RGuiItem::FocusPrev(void) // Returns new item with focus or NULL,
+                                    // if none.
+{
+    // If there is a current . . .
+    if (ms_pguiFocus != NULL)
+    {
+        // If it has a parent . . .
+        RGuiItem *pguiParent = ms_pguiFocus->GetParent();
+        if (pguiParent != NULL)
+        {
+            // Get previous . . .
+            RGuiItem *pguiFocus = pguiParent->m_listguiChildren.GetLogicalPrev(ms_pguiFocus);
+            // Remember where we started so we can detect complete circle.
+            RGuiItem *pguiStart = pguiFocus;
 
-				// Try prev.
-				pguiFocus	= pguiParent->m_listguiChildren.GetLogicalPrev();
+            while (pguiFocus != NULL)
+            {
+                // If visible, activated, and doesn't focus siblings . . .
+                if (pguiFocus->m_sVisible != FALSE && pguiFocus->IsActivated() != FALSE &&
+                    pguiFocus->m_targetFocus != Sibling)
+                {
+                    break;
+                }
 
-				// If we wrapped . . .
-				if (pguiFocus == pguiStart)
-					{
-					pguiFocus	= NULL;
-					}
-				}
+                // Try prev.
+                pguiFocus = pguiParent->m_listguiChildren.GetLogicalPrev();
 
-			// Set focus to the new item.
-			SetFocus(pguiFocus);
-			}
-		}
+                // If we wrapped . . .
+                if (pguiFocus == pguiStart)
+                {
+                    pguiFocus = NULL;
+                }
+            }
 
-	return ms_pguiFocus;
-	}
+            // Set focus to the new item.
+            SetFocus(pguiFocus);
+        }
+    }
+
+    return ms_pguiFocus;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// Sends the event to the GUI focused via Do(), and, if event is not 
+// Sends the event to the GUI focused via Do(), and, if event is not
 // used, checks for  keys that might change the focus.
 // (static).
 //
 //////////////////////////////////////////////////////////////////////////////
-void RGuiItem::DoFocus(	// Returns nothing.
-	RInputEvent* pie)		// In:  Most recent user input event.             
-								// Out: pie->sUsed = TRUE, if used.
-	{
-	// If there is an item with the focus . . .
-	if (ms_pguiFocus != NULL)
-		{
-		// Pass event on.
-		ms_pguiFocus->Do(pie);
-		}
+void RGuiItem::DoFocus( // Returns nothing.
+  RInputEvent *pie)     // In:  Most recent user input event.
+                        // Out: pie->sUsed = TRUE, if used.
+{
+    // If there is an item with the focus . . .
+    if (ms_pguiFocus != NULL)
+    {
+        // Pass event on.
+        ms_pguiFocus->Do(pie);
+    }
 
-	// If unused key event . . .
-	if (pie->sUsed == FALSE && pie->type == RInputEvent::Key)
-		{
-		// Assume used.  Easier.
-		pie->sUsed	= TRUE;
+    // If unused key event . . .
+    if (pie->sUsed == FALSE && pie->type == RInputEvent::Key)
+    {
+        // Assume used.  Easier.
+        pie->sUsed = TRUE;
 
-		switch (pie->lKey)
-			{
-			// Tab == Next item at current level.
-			case '\t':							
-				FocusNext();
-				break;
+        switch (pie->lKey)
+        {
+            // Tab == Next item at current level.
+            case '\t':
+                FocusNext();
+                break;
 
-			// Shift-Tab == Prev item at current level.
-			case (RSP_GKF_SHIFT | '\t'):
-				FocusPrev();
-				break;
+            // Shift-Tab == Prev item at current level.
+            case (RSP_GKF_SHIFT | '\t'):
+                FocusPrev();
+                break;
 
-			// Control-Tab == Child.
-			case (RSP_GKF_CONTROL | '\t'):
-				// If there's currently an item in focus . . .
-				if (ms_pguiFocus != NULL)
-					{
-					// Get first child in list of children.
-					SetFocus(ms_pguiFocus->m_listguiChildren.GetHead() );
-					}
-				break;
+            // Control-Tab == Child.
+            case (RSP_GKF_CONTROL | '\t'):
+                // If there's currently an item in focus . . .
+                if (ms_pguiFocus != NULL)
+                {
+                    // Get first child in list of children.
+                    SetFocus(ms_pguiFocus->m_listguiChildren.GetHead());
+                }
+                break;
 
-			// Control-Shift-Tab == Parent.
-			case (RSP_GKF_CONTROL | RSP_GKF_SHIFT | '\t'):
-				// If there's currently an item in focus . . .
-				if (ms_pguiFocus != NULL)
-					{
-					// Get parent.
-					SetFocus(ms_pguiFocus->GetParent() );
-					}
-				break;
+            // Control-Shift-Tab == Parent.
+            case (RSP_GKF_CONTROL | RSP_GKF_SHIFT | '\t'):
+                // If there's currently an item in focus . . .
+                if (ms_pguiFocus != NULL)
+                {
+                    // Get parent.
+                    SetFocus(ms_pguiFocus->GetParent());
+                }
+                break;
 
-			default:	// Unused.
-				// Well, better set it back to unused.
-				pie->sUsed	= FALSE;
-				break;
-			}
-		}
-	}
+            default: // Unused.
+                // Well, better set it back to unused.
+                pie->sUsed = FALSE;
+                break;
+        }
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -2966,56 +2940,56 @@ void RGuiItem::DoFocus(	// Returns nothing.
 // (static).
 //
 //////////////////////////////////////////////////////////////////////////////
-RGuiItem* RGuiItem::CreateGuiItem(	// Returns the allocated type on success.
-												// Returns NULL on error.
-	Type	type)								// Type of GuiItem to allocate.  Must be one
-												// of the enums that is a member of 
-												// RGuiItem::Type.
-	{
-	RGuiItem*	pgui	= NULL;	// Assume failure.
-	switch (type)
-		{
-		case GuiItem:		// Generic GuiItem.
-			pgui	= new RGuiItem;
-			break;
-		case Txt:			// RTxt item.
-			pgui	= new RTxt;
-			break;
-		case Btn:			// RBtn item.
-			pgui	= new RBtn;
-			break;
-		case Edit:			// REdit item.
-			pgui	= new REdit;
-			break;
-		case ScrollBar:	// RScrollBar item.
-			pgui	= new RScrollBar;
-			break;
-		case Dlg:			// RDlg item.
-			pgui	= new RDlg;
-			break;
-		case ListBox:		// RListBox item.
-			pgui	= new RListBox;
-			break;
-		case PushBtn:		// RPushBtn item.
-			pgui	= new RPushBtn;
-			break;
-		case MultiBtn:		// RMultiBtn item.
-			pgui	= new RMultiBtn;
-			break;
-		default:
-			TRACE("CreateGuiItem(): Unknown type %d.\n", type);
-			break;
-		}
+RGuiItem *RGuiItem::CreateGuiItem( // Returns the allocated type on success.
+                                   // Returns NULL on error.
+  Type type)                       // Type of GuiItem to allocate.  Must be one
+                                   // of the enums that is a member of
+                                   // RGuiItem::Type.
+{
+    RGuiItem *pgui = NULL; // Assume failure.
+    switch (type)
+    {
+        case GuiItem: // Generic GuiItem.
+            pgui = new RGuiItem;
+            break;
+        case Txt: // RTxt item.
+            pgui = new RTxt;
+            break;
+        case Btn: // RBtn item.
+            pgui = new RBtn;
+            break;
+        case Edit: // REdit item.
+            pgui = new REdit;
+            break;
+        case ScrollBar: // RScrollBar item.
+            pgui = new RScrollBar;
+            break;
+        case Dlg: // RDlg item.
+            pgui = new RDlg;
+            break;
+        case ListBox: // RListBox item.
+            pgui = new RListBox;
+            break;
+        case PushBtn: // RPushBtn item.
+            pgui = new RPushBtn;
+            break;
+        case MultiBtn: // RMultiBtn item.
+            pgui = new RMultiBtn;
+            break;
+        default:
+            TRACE("CreateGuiItem(): Unknown type %d.\n", type);
+            break;
+    }
 
-	// If successfully allocated . . .
-	if (pgui != NULL)
-		{
-		// Mark as dynamic.
-		pgui->SetProp(DYNAMIC_PROP_KEY, TRUE);
-		}
+    // If successfully allocated . . .
+    if (pgui != NULL)
+    {
+        // Mark as dynamic.
+        pgui->SetProp(DYNAMIC_PROP_KEY, TRUE);
+    }
 
-	return pgui;
-	}
+    return pgui;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -3027,47 +3001,47 @@ RGuiItem* RGuiItem::CreateGuiItem(	// Returns the allocated type on success.
 // (static).
 //
 //////////////////////////////////////////////////////////////////////////////
-void RGuiItem::DestroyGuiItem(	// Returns nothing.
-	RGuiItem*	pgui)					// Pointer to gui to deallocate.
-	{
-	ASSERT(pgui != NULL);
+void RGuiItem::DestroyGuiItem( // Returns nothing.
+  RGuiItem *pgui)              // Pointer to gui to deallocate.
+{
+    ASSERT(pgui != NULL);
 
-	switch (pgui->m_type)
-		{
-		case GuiItem:		// Generic GuiItem.
-			delete pgui;
-			break;
-		case Txt:			// RTxt item.
-			delete (RTxt*)pgui;
-			break;
-		case Btn:			// RBtn item.
-			delete (RBtn*)pgui;
-			break;
-		case Edit:			// REdit item.
-			delete (REdit*)pgui;
-			break;
-		case ScrollBar:	// RScrollBar item.
-			delete (RScrollBar*)pgui;
-			break;
-		case Dlg:			// RDlg item.
-			delete (RDlg*)pgui;
-			break;
-		case ListBox:		// RListBox item.
-			delete (RListBox*)pgui;
-			break;
-		case PushBtn:		// RPushBtn item.
-			delete (RPushBtn*)pgui;
-			break;
-		case MultiBtn:		// RMultiBtn item.
-			delete (RMultiBtn*)pgui;
-			break;
-		default:
-			TRACE("DestroyGuiItem(): Unknown type %d.\n", pgui->m_type);
-			TRACE("DestroyGuiItem(): Using RGuiItem delete.\n");
-			delete pgui;
-			break;
-		}
-	}
+    switch (pgui->m_type)
+    {
+        case GuiItem: // Generic GuiItem.
+            delete pgui;
+            break;
+        case Txt: // RTxt item.
+            delete (RTxt *)pgui;
+            break;
+        case Btn: // RBtn item.
+            delete (RBtn *)pgui;
+            break;
+        case Edit: // REdit item.
+            delete (REdit *)pgui;
+            break;
+        case ScrollBar: // RScrollBar item.
+            delete (RScrollBar *)pgui;
+            break;
+        case Dlg: // RDlg item.
+            delete (RDlg *)pgui;
+            break;
+        case ListBox: // RListBox item.
+            delete (RListBox *)pgui;
+            break;
+        case PushBtn: // RPushBtn item.
+            delete (RPushBtn *)pgui;
+            break;
+        case MultiBtn: // RMultiBtn item.
+            delete (RMultiBtn *)pgui;
+            break;
+        default:
+            TRACE("DestroyGuiItem(): Unknown type %d.\n", pgui->m_type);
+            TRACE("DestroyGuiItem(): Using RGuiItem delete.\n");
+            delete pgui;
+            break;
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // EOF

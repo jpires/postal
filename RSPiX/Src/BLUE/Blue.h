@@ -18,7 +18,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 //	Blue.h
-// 
+//
 // History:
 //		07/19/96 JMI	Started.
 //
@@ -41,16 +41,17 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Base for all Blue error returns.
-#define BLU_ERR_BASE					0x1000
+#define BLU_ERR_BASE 0x1000
 
 // Blue error returns ////////////////////////////////////////////////////////
 
 // Audio /////////////////////////////////////////////////////////////////////
 
-#define BLU_ERR_DEVICE_IN_USE	(BLU_ERR_BASE + 1)	// Device already in use.
-#define BLU_ERR_NO_DEVICE		(BLU_ERR_BASE + 2)	// Device (or driver for
-																	// device) not present.
-#define BLU_ERR_NOT_SUPPORTED	(BLU_ERR_BASE + 3)	// Format not supported.
+#define BLU_ERR_DEVICE_IN_USE (BLU_ERR_BASE + 1) // Device already in use.
+#define BLU_ERR_NO_DEVICE                                                                                              \
+    (BLU_ERR_BASE + 2)                           // Device (or driver for
+                                                 // device) not present.
+#define BLU_ERR_NOT_SUPPORTED (BLU_ERR_BASE + 3) // Format not supported.
 
 #endif // BLUE_H
 //////////////////////////////////////////////////////////////////////////////

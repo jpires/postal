@@ -38,11 +38,11 @@
 //		07/14/97 BRH	Added challenge mode parameter to CutSceneStart so that
 //							the proper text can be displayed for the Gauntlet.
 //
-//		08/27/97	JRD	Adding a compact stand along Martini effect for us with the 
+//		08/27/97	JRD	Adding a compact stand along Martini effect for us with the
 //							end of the game called MartiniDo
 //
-//		08/27/97	JRD	Made MartiniDo WAY to easy for Bill to use, by putting up 
-//							with him justpassing the whole screen buffer, me doing a 
+//		08/27/97	JRD	Made MartiniDo WAY to easy for Bill to use, by putting up
+//							with him justpassing the whole screen buffer, me doing a
 //							general lock on it, creating a temporary bmp, and copying
 //							it in.  Happy Bill?
 //
@@ -66,18 +66,18 @@
 //		The program will blacken the screen when done.  (g_pimScreenBuf)
 //
 ////////////////////////////////////////////////////////////////////////////////
-short	MartiniDo(	RImage*	pimBackground,	// actually, this is the ONLY graphic
-						short	sStartX,				// logical start position of image
-						short	sStartY,				// NOTE: it will be clipped so won't actually hit this point!
-						RMultiAlpha*	pAlpha,	// only need 50% - see cut scenes
-						long	lMilliLen,			// how long to do the effect
-						short	sRadius = 24,		// Your tuning pleasure
-						long	lSpinTime = 3600,	// in milliseconds
-						long	lSwayTime = 4000,	// in milliseconds
-						RRect*  prCenter = NULL,// if not NULL, use this portion of the image only!
-						long	lFadeTime = 0,		// fade to black, in milliseconds. (INCL in total time!)
-						SampleMaster::SoundInstance siFade=0// to make sound fade out
-					);
+short MartiniDo(RImage *pimBackground,                 // actually, this is the ONLY graphic
+                short sStartX,                         // logical start position of image
+                short sStartY,                         // NOTE: it will be clipped so won't actually hit this point!
+                RMultiAlpha *pAlpha,                   // only need 50% - see cut scenes
+                long lMilliLen,                        // how long to do the effect
+                short sRadius = 24,                    // Your tuning pleasure
+                long lSpinTime = 3600,                 // in milliseconds
+                long lSwayTime = 4000,                 // in milliseconds
+                RRect *prCenter = NULL,                // if not NULL, use this portion of the image only!
+                long lFadeTime = 0,                    // fade to black, in milliseconds. (INCL in total time!)
+                SampleMaster::SoundInstance siFade = 0 // to make sound fade out
+);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -95,26 +95,31 @@ short	MartiniDo(	RImage*	pimBackground,	// actually, this is the ONLY graphic
 // CutSceneEnd() must be called when the cutscene is no longer needed.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void CutSceneStart(
-	bool bSimple,											// In:  Set to 'true' for simple mode
-	const RString* pstrSection,						// In:  Section to use for this realm
-	const RString* pstrEntry,							// In:  Entry to use for this realm
-	short sBorderX,
-	short sBorderY);
-
+extern void CutSceneStart(bool bSimple,               // In:  Set to 'true' for simple mode
+                          const RString *pstrSection, // In:  Section to use for this realm
+                          const RString *pstrEntry,   // In:  Entry to use for this realm
+                          short sBorderX,
+                          short sBorderY);
 
 ////////////////////////////////////////////////////////////////////////////
 //
 // Configure cutscene effect
 //
 ////////////////////////////////////////////////////////////////////////////
-extern short CutSceneConfig(
-	long lTimeSpin,
-	short sMinX,short sMaxX,long lTimeX,
-	short sMinY,short sMaxY,long lTimeY,
-	double dMinA,double dMaxA,long lTimeA,
-	short sX,short sY,short sW,short sH);
-
+extern short CutSceneConfig(long lTimeSpin,
+                            short sMinX,
+                            short sMaxX,
+                            long lTimeX,
+                            short sMinY,
+                            short sMaxY,
+                            long lTimeY,
+                            double dMinA,
+                            double dMaxA,
+                            long lTimeA,
+                            short sX,
+                            short sY,
+                            short sW,
+                            short sH);
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -123,7 +128,6 @@ extern short CutSceneConfig(
 ////////////////////////////////////////////////////////////////////////////
 extern void CutSceneUpdate(void);
 
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Clean up after the cutscene.  It is safe to call this multiple times.
@@ -131,8 +135,7 @@ extern void CutSceneUpdate(void);
 ////////////////////////////////////////////////////////////////////////////////
 extern void CutSceneEnd(void);
 
-
-#endif //CUTSCENE_H
+#endif // CUTSCENE_H
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

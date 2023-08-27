@@ -37,22 +37,18 @@
 // Macros
 ////////////////////////////////////////////////////////////////////////////////
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 ////////////////////////////////////////////////////////////////////////////////
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables
 ////////////////////////////////////////////////////////////////////////////////
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // Function Prototypes
 ////////////////////////////////////////////////////////////////////////////////
 
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Convert a RSPiX path into a system-specific path.
@@ -60,26 +56,25 @@
 // NOTE: Assumes path lengths are limited to RSP_MAX_PATH.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern char* rspPathToSystem(			// Returns pszSystem
-	const char* pszRSPiX,				// In:  RSPiX path
-	char* pszSystem)						// Out: System path
-	{
-	ASSERT(pszRSPiX != NULL);
-	ASSERT(pszSystem != NULL);
-	ASSERT(strlen(pszRSPiX) <= RSP_MAX_PATH);
+extern char *rspPathToSystem( // Returns pszSystem
+  const char *pszRSPiX,       // In:  RSPiX path
+  char *pszSystem)            // Out: System path
+{
+    ASSERT(pszRSPiX != NULL);
+    ASSERT(pszSystem != NULL);
+    ASSERT(strlen(pszRSPiX) <= RSP_MAX_PATH);
 
-	// Check for backslashes, which are NOT supposed to be used in RSPiX paths.
-	#ifdef _DEBUG
-		if (strchr(pszRSPiX, '\\') != NULL)
-			TRACE("rspPathToSystem(): Warning: RSPiX path contains '\\' which is not legal: '%s'\n", pszRSPiX);
-	#endif
-	
-    if (pszRSPiX != pszSystem)  // yes, pointer comparison.
+// Check for backslashes, which are NOT supposed to be used in RSPiX paths.
+#ifdef _DEBUG
+    if (strchr(pszRSPiX, '\\') != NULL)
+        TRACE("rspPathToSystem(): Warning: RSPiX path contains '\\' which is not legal: '%s'\n", pszRSPiX);
+#endif
+
+    if (pszRSPiX != pszSystem) // yes, pointer comparison.
         strcpy(pszSystem, pszRSPiX);
-	return pszSystem;
-	}
-	
-	
+    return pszSystem;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Convert a RSPiX path into a system-specific path.
@@ -87,16 +82,15 @@ extern char* rspPathToSystem(			// Returns pszSystem
 // NOTE: Assumes path lengths are limited to RSP_MAX_PATH.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern char* rspPathToSystem(			// Returns pointer to system-specific path (static!!!)
-	const char* pszRSPiX)				// In:  RSPiX path
-	{
-	ASSERT(pszRSPiX != NULL);
-	ASSERT(strlen(pszRSPiX) <= RSP_MAX_PATH);
-	
-	static char acDest[RSP_MAX_PATH+1];
-	return rspPathToSystem(pszRSPiX, acDest);
-	}
+extern char *rspPathToSystem( // Returns pointer to system-specific path (static!!!)
+  const char *pszRSPiX)       // In:  RSPiX path
+{
+    ASSERT(pszRSPiX != NULL);
+    ASSERT(strlen(pszRSPiX) <= RSP_MAX_PATH);
 
+    static char acDest[RSP_MAX_PATH + 1];
+    return rspPathToSystem(pszRSPiX, acDest);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -105,20 +99,18 @@ extern char* rspPathToSystem(			// Returns pointer to system-specific path (stat
 // NOTE: Assumes path lengths are limited to RSP_MAX_PATH.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern char* rspPathFromSystem(		// Returns pszRSPiX
-	const char* pszSystem,				// In:  System path
-	char* pszRSPiX)						// Out: RSPiX path
-	{
-	ASSERT(pszSystem != NULL);
-	ASSERT(pszRSPiX != NULL);
-	ASSERT(strlen(pszSystem) <= RSP_MAX_PATH);
+extern char *rspPathFromSystem( // Returns pszRSPiX
+  const char *pszSystem,        // In:  System path
+  char *pszRSPiX)               // Out: RSPiX path
+{
+    ASSERT(pszSystem != NULL);
+    ASSERT(pszRSPiX != NULL);
+    ASSERT(strlen(pszSystem) <= RSP_MAX_PATH);
 
-
-    if (pszRSPiX != pszSystem)  // yes, pointer comparison.
+    if (pszRSPiX != pszSystem) // yes, pointer comparison.
         strcpy(pszRSPiX, pszSystem);
-	return pszRSPiX;
-	}
-
+    return pszRSPiX;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -127,16 +119,15 @@ extern char* rspPathFromSystem(		// Returns pszRSPiX
 // NOTE: Assumes path lengths are limited to RSP_MAX_PATH.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern char* rspPathFromSystem(		// Returns pointer to RSPiX path (static!!!)
-	const char* pszSystem)				// In:  System path
-	{
-	ASSERT(pszSystem != NULL);
-	ASSERT(strlen(pszSystem) <= RSP_MAX_PATH);
-	
-	static char acDest[RSP_MAX_PATH+1];
-	return rspPathFromSystem(pszSystem, acDest);
-	}
+extern char *rspPathFromSystem( // Returns pointer to RSPiX path (static!!!)
+  const char *pszSystem)        // In:  System path
+{
+    ASSERT(pszSystem != NULL);
+    ASSERT(strlen(pszSystem) <= RSP_MAX_PATH);
 
+    static char acDest[RSP_MAX_PATH + 1];
+    return rspPathFromSystem(pszSystem, acDest);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -150,18 +141,17 @@ extern char* rspPathFromSystem(		// Returns pointer to RSPiX path (static!!!)
 // full path of the folder, such as "Macintosh HD:System Folder:Preferences:".
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern short rspGetTempPath(			// Returns 0 on success, non-zero otherwise
-	char* pszPath,							// Out: Temp path returned here if available.
-	short	sMaxPathLen)					// In:  Max path length (to avoid overwrites)
-	{
-	ASSERT(pszPath != NULL);
-	ASSERT(sMaxPathLen > 0);
+extern short rspGetTempPath( // Returns 0 on success, non-zero otherwise
+  char *pszPath,             // Out: Temp path returned here if available.
+  short sMaxPathLen)         // In:  Max path length (to avoid overwrites)
+{
+    ASSERT(pszPath != NULL);
+    ASSERT(sMaxPathLen > 0);
 
     strncpy(pszPath, "/tmp", sMaxPathLen);
-    pszPath[sMaxPathLen-1] = 0;
-	return 0;
-	}
-
+    pszPath[sMaxPathLen - 1] = 0;
+    return 0;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // EOF

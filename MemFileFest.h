@@ -17,7 +17,7 @@
 //
 // MemFileFest.h
 // Project: Nostril (aka Postal)
-// 
+//
 // History:
 //		09/12/97 JMI	Started.
 //
@@ -37,11 +37,11 @@
 //////////////////////////////////////////////////////////////////////////////
 
 typedef struct
-	{
-	char*	pszResName;	// Resource filename.
-	U8*	pau8Res;		// Resource data.
-	long	lResSize;	// Amount of resource data in bytes.
-	} FATEntry;
+{
+    char *pszResName; // Resource filename.
+    U8 *pau8Res;      // Resource data.
+    long lResSize;    // Amount of resource data in bytes.
+} FATEntry;
 
 //////////////////////////////////////////////////////////////////////////////
 // Protos.
@@ -51,12 +51,12 @@ typedef struct
 //////////////////////////////////////////////////////////////////////////////
 // Given a filename, open an RFile to the corresponding resource data.
 //////////////////////////////////////////////////////////////////////////////
-extern short GetMemFileResource(	// Returns 0 on successful open.
-	const char*		pszResName,		// In:  Res filename.
-	RFile::Endian	endian,			// In:  Endian nature for RFile.
-	RFile*			pfile);			// In:  File to open with.
+extern short GetMemFileResource( // Returns 0 on successful open.
+  const char *pszResName,        // In:  Res filename.
+  RFile::Endian endian,          // In:  Endian nature for RFile.
+  RFile *pfile);                 // In:  File to open with.
 
-#endif	// ENABLE_PLAY_SPECIFIC_REALMS_ONLY
+#endif // ENABLE_PLAY_SPECIFIC_REALMS_ONLY
 
 //////////////////////////////////////////////////////////////////////////////
 // EOF

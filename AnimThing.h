@@ -17,7 +17,7 @@
 //
 // AnimThing.H
 // Project: Nostril (aka Postal)
-// 
+//
 // History:
 //		02/18/97 JMI	Started.
 //
@@ -26,7 +26,7 @@
 //
 //		02/19/97	JMI	Unprotected more members.
 //
-//		02/24/97	JMI	Changed declaration of m_sprite from CAlphaSprite2 to 
+//		02/24/97	JMI	Changed declaration of m_sprite from CAlphaSprite2 to
 //							CSprite2.
 //
 //		02/24/97	JMI	Changed m_pthingSendMsg to m_u16IdSendMsg.
@@ -38,7 +38,7 @@
 //		06/24/97	JMI	Now intializes m_msg's priority to 0 on construction for
 //							safety.
 //
-//		07/21/97	JMI	Added GetX(), GetY(), and GetZ().	
+//		07/21/97	JMI	Added GetX(), GetY(), and GetZ().
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -56,177 +56,189 @@
 #include "AlphaAnimType.h"
 
 class CAnimThing : public CThing
-	{
-	//---------------------------------------------------------------------------
-	// Types, enums, etc.
-	//---------------------------------------------------------------------------
-	public:
+{
+    //---------------------------------------------------------------------------
+    // Types, enums, etc.
+    //---------------------------------------------------------------------------
+  public:
+    typedef RChannel<CAlphaAnim> ChannelAA;
 
-		typedef RChannel<CAlphaAnim> ChannelAA;
+    //---------------------------------------------------------------------------
+    // Variables
+    //---------------------------------------------------------------------------
+  public:
+    double m_dX;
+    double m_dY;
+    double m_dZ;
 
-	//---------------------------------------------------------------------------
-	// Variables
-	//---------------------------------------------------------------------------
-	public:
-		double m_dX;
-		double m_dY;
-		double m_dZ;
+    short m_sSuspend;               // Suspend flag
+    short m_sLoop;                  // Loops, if true.
+    char m_szResName[RSP_MAX_PATH]; // Resource name.
 
-		short m_sSuspend;							// Suspend flag
-		short	m_sLoop;								// Loops, if true.
-		char	m_szResName[RSP_MAX_PATH];		// Resource name.
-														
-		long	m_lAnimTime;						// Cummulative animation time.
-		long	m_lAnimPrevTime;					// Last animation time.
-														
-		U16			m_u16IdSendMsg;			// ID of CThing to send msg to when done.
-		GameMessage	m_msg;						// Message to send to m_pthingSendMsg.
+    long m_lAnimTime;     // Cummulative animation time.
+    long m_lAnimPrevTime; // Last animation time.
 
-	protected:
-		CSprite2		m_sprite;					// Sprite.
-		ChannelAA*	m_paachannel;				// Animation (with or without alpha).
-														
-	//---------------------------------------------------------------------------
-	// Constructor(s) / destructor
-	//---------------------------------------------------------------------------
-	public:
-		// Constructor
-		CAnimThing(CRealm* pRealm)
-			: CThing(pRealm, CAnimThingID)
-			{
-			m_paachannel		= NULL;
-			m_sSuspend			= 0;
-			m_sLoop				= TRUE;
-			m_szResName[0]		= '\0';
-			m_msg.msg_Generic.sPriority	= 0;
-			m_u16IdSendMsg		= CIdBank::IdNil;
-			m_sprite.m_pthing	= this;
-			}
+    U16 m_u16IdSendMsg; // ID of CThing to send msg to when done.
+    GameMessage m_msg;  // Message to send to m_pthingSendMsg.
 
-	public:
-		// Destructor
-		~CAnimThing()
-			{
-			// Remove sprite from scene (this is safe even if it was already removed!)
-			m_pRealm->m_scene.RemoveSprite(&m_sprite);
+  protected:
+    CSprite2 m_sprite;       // Sprite.
+    ChannelAA *m_paachannel; // Animation (with or without alpha).
 
-			// Free resources
-			FreeResources();
-			}
+    //---------------------------------------------------------------------------
+    // Constructor(s) / destructor
+    //---------------------------------------------------------------------------
+  public:
+    // Constructor
+    CAnimThing(CRealm *pRealm)
+      : CThing(pRealm, CAnimThingID)
+    {
+        m_paachannel = NULL;
+        m_sSuspend = 0;
+        m_sLoop = TRUE;
+        m_szResName[0] = '\0';
+        m_msg.msg_Generic.sPriority = 0;
+        m_u16IdSendMsg = CIdBank::IdNil;
+        m_sprite.m_pthing = this;
+    }
 
-	//---------------------------------------------------------------------------
-	// Required static functions
-	//---------------------------------------------------------------------------
-	public:
-		// Construct object
-		static short Construct(									// Returns 0 if successfull, non-zero otherwise
-			CRealm* pRealm,										// In:  Pointer to realm this object belongs to
-			CThing** ppNew)										// Out: Pointer to new object
-			{
-			short sResult = 0;
-			*ppNew = new CAnimThing(pRealm);
-			if (*ppNew == 0)
-				{
-				sResult = -1;
-				TRACE("CExplode::Construct(): Couldn't construct CAnimThing (that's a bad thing)\n");
-				}
-			return sResult;
-			}
+  public:
+    // Destructor
+    ~CAnimThing()
+    {
+        // Remove sprite from scene (this is safe even if it was already removed!)
+        m_pRealm->m_scene.RemoveSprite(&m_sprite);
 
-	//---------------------------------------------------------------------------
-	// Required virtual functions (implimenting them as inlines doesn't pay!)
-	//---------------------------------------------------------------------------
-	public:
-		// Load object (should call base class version!)
-		short Load(													// Returns 0 if successfull, non-zero otherwise
-			RFile* pFile,											// In:  File to load from
-			bool bEditMode,										// In:  True for edit mode, false otherwise
-			short sFileCount,										// In:  File count (unique per file, never 0)
-			ULONG	ulFileVersion);								// In:  Version of file format to load.
+        // Free resources
+        FreeResources();
+    }
 
-		// Save object (should call base class version!)
-		short Save(													// Returns 0 if successfull, non-zero otherwise
-			RFile* pFile,											// In:  File to save to
-			short sFileCount);									// In:  File count (unique per file, never 0)
+    //---------------------------------------------------------------------------
+    // Required static functions
+    //---------------------------------------------------------------------------
+  public:
+    // Construct object
+    static short Construct( // Returns 0 if successfull, non-zero otherwise
+      CRealm *pRealm,       // In:  Pointer to realm this object belongs to
+      CThing **ppNew)       // Out: Pointer to new object
+    {
+        short sResult = 0;
+        *ppNew = new CAnimThing(pRealm);
+        if (*ppNew == 0)
+        {
+            sResult = -1;
+            TRACE("CExplode::Construct(): Couldn't construct CAnimThing (that's a bad thing)\n");
+        }
+        return sResult;
+    }
 
-		// Startup object
-		short Startup(void);										// Returns 0 if successfull, non-zero otherwise
+    //---------------------------------------------------------------------------
+    // Required virtual functions (implimenting them as inlines doesn't pay!)
+    //---------------------------------------------------------------------------
+  public:
+    // Load object (should call base class version!)
+    short Load(             // Returns 0 if successfull, non-zero otherwise
+      RFile *pFile,         // In:  File to load from
+      bool bEditMode,       // In:  True for edit mode, false otherwise
+      short sFileCount,     // In:  File count (unique per file, never 0)
+      ULONG ulFileVersion); // In:  Version of file format to load.
 
-		// Shutdown object
-		short Shutdown(void);									// Returns 0 if successfull, non-zero otherwise
+    // Save object (should call base class version!)
+    short Save(          // Returns 0 if successfull, non-zero otherwise
+      RFile *pFile,      // In:  File to save to
+      short sFileCount); // In:  File count (unique per file, never 0)
 
-		// Suspend object
-		void Suspend(void);
+    // Startup object
+    short Startup(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Resume object
-		void Resume(void);
+    // Shutdown object
+    short Shutdown(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Update object
-		void Update(void);
+    // Suspend object
+    void Suspend(void);
 
-		// Render object
-		void Render(void);
+    // Resume object
+    void Resume(void);
 
-		short Setup(												// Returns 0 on success.
-			short sX,												// In: New x coord
-			short sY,												// In: New y coord
-			short sZ);												// In: New z coord
+    // Update object
+    void Update(void);
 
-		// Called by editor to init new object at specified position
-		short EditNew(												// Returns 0 if successfull, non-zero otherwise
-			short sX,												// In:  New x coord
-			short sY,												// In:  New y coord
-			short sZ);												// In:  New z coord
+    // Render object
+    void Render(void);
 
-		// Called by editor to modify object
-		short EditModify(void);									// Returns 0 if successfull, non-zero otherwise
+    short Setup( // Returns 0 on success.
+      short sX,  // In: New x coord
+      short sY,  // In: New y coord
+      short sZ); // In: New z coord
 
-		// Called by editor to move object to specified position
-		short EditMove(											// Returns 0 if successfull, non-zero otherwise
-			short sX,												// In:  New x coord
-			short sY,												// In:  New y coord
-			short sZ);												// In:  New z coord
+    // Called by editor to init new object at specified position
+    short EditNew( // Returns 0 if successfull, non-zero otherwise
+      short sX,    // In:  New x coord
+      short sY,    // In:  New y coord
+      short sZ);   // In:  New z coord
 
-		// Called by editor to get the clickable pos/area of an object in 2D.
-		virtual	// Overridden here.
-		void EditRect(				// Returns nothiing.
-			RRect*	prc);			// Out: Clickable pos/area of object.
+    // Called by editor to modify object
+    short EditModify(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Called by editor to get the hotspot of an object in 2D.
-		virtual	// Overridden here.
-		void EditHotSpot(			// Returns nothiing.
-			short*	psX,			// Out: X coord of 2D hotspot relative to
-										// EditRect() pos.
-			short*	psY);			// Out: Y coord of 2D hotspot relative to
-										// EditRect() pos.
+    // Called by editor to move object to specified position
+    short EditMove( // Returns 0 if successfull, non-zero otherwise
+      short sX,     // In:  New x coord
+      short sY,     // In:  New y coord
+      short sZ);    // In:  New z coord
 
-		// Called by editor to update object
-		void EditUpdate(void);
+    // Called by editor to get the clickable pos/area of an object in 2D.
+    virtual // Overridden here.
+      void
+      EditRect(      // Returns nothiing.
+        RRect *prc); // Out: Clickable pos/area of object.
 
-		// Called by editor to render object
-		void EditRender(void);
+    // Called by editor to get the hotspot of an object in 2D.
+    virtual // Overridden here.
+      void
+      EditHotSpot(   // Returns nothiing.
+        short *psX,  // Out: X coord of 2D hotspot relative to
+                     // EditRect() pos.
+        short *psY); // Out: Y coord of 2D hotspot relative to
+                     // EditRect() pos.
 
-		// Get the coordinates of this thing.
-		virtual					// Overriden here.
-		double GetX(void)	{ return m_dX; }
+    // Called by editor to update object
+    void EditUpdate(void);
 
-		virtual					// Overriden here.
-		double GetY(void)	{ return m_dY; }
+    // Called by editor to render object
+    void EditRender(void);
 
-		virtual					// Overriden here.
-		double GetZ(void)	{ return m_dZ; }
+    // Get the coordinates of this thing.
+    virtual // Overriden here.
+      double
+      GetX(void)
+    {
+        return m_dX;
+    }
 
-	//---------------------------------------------------------------------------
-	// Internal functions
-	//---------------------------------------------------------------------------
-	protected:
-		// Get all required resources
-		short GetResources(void);						// Returns 0 if successfull, non-zero otherwise
-		
-		// Free all resources
-		short FreeResources(void);						// Returns 0 if successfull, non-zero otherwise
-	};
+    virtual // Overriden here.
+      double
+      GetY(void)
+    {
+        return m_dY;
+    }
 
+    virtual // Overriden here.
+      double
+      GetZ(void)
+    {
+        return m_dZ;
+    }
+
+    //---------------------------------------------------------------------------
+    // Internal functions
+    //---------------------------------------------------------------------------
+  protected:
+    // Get all required resources
+    short GetResources(void); // Returns 0 if successfull, non-zero otherwise
+
+    // Free all resources
+    short FreeResources(void); // Returns 0 if successfull, non-zero otherwise
+};
 
 #endif // ANIMTHING_H
 ////////////////////////////////////////////////////////////////////////////////

@@ -27,7 +27,7 @@
 //	FUNCTIONALITY
 //
 // The basic function of this module is to monitor the movement of the display
-// area in order to determine whether any events associated with the 
+// area in order to determine whether any events associated with the
 // background map should be triggered.  If so, the routines which the
 // aplication has associated with those events will be called.
 //
@@ -41,11 +41,11 @@
 // There are two basic types of events: those that are "triggered" when they
 // get withing a certain distance of the display area, and those that are
 // used as markers, which the application will explicitly look for at some
-// point. 
+// point.
 //
 // For example, one event may be used to indicate the player's starting
 // position on the map.  Another event may be used to indicate each of the
-// many places where a mutant penguin should appear.  Another may be used 
+// many places where a mutant penguin should appear.  Another may be used
 // to trigger a special feature, such as turning on color cycling.  Finally,
 // an event can be used to simply mark a position, such as where sea-level is
 // located.
@@ -56,35 +56,34 @@
 #include "System.h"
 #include "event.h"
 #include "univ.h"
-		
+
 extern CUniverse g_GameUniverse;
 
 //*****************************************************************************
 // Event Handlers (function pointers)
 //*****************************************************************************
 
-static void* event_handlers[] = 
-{
-	event_undefined,			// 0
-	event_undefined,			// 1
-	event_undefined,			// 2
-	event_undefined,			// 3
-	event_undefined,			// 4
-	event_undefined,			// 5
-	event_undefined,			// 6
-	event_undefined,			// 7
-	event_undefined,			// 8
-	event_undefined,			// 9
-	event_undefined,			// 10			
+static void *event_handlers[] = {
+    event_undefined, // 0
+    event_undefined, // 1
+    event_undefined, // 2
+    event_undefined, // 3
+    event_undefined, // 4
+    event_undefined, // 5
+    event_undefined, // 6
+    event_undefined, // 7
+    event_undefined, // 8
+    event_undefined, // 9
+    event_undefined, // 10
 };
 
 //*****************************************************************************
 // Declair static members
 //*****************************************************************************
 
-EVENT* CEvent::m_pEventList;
-short  CEvent::m_aIndexList[EVENT_MAX_COORD/EVENT_SPACING];
-CList  CEvent::m_IgnoreList;
+EVENT *CEvent::m_pEventList;
+short CEvent::m_aIndexList[EVENT_MAX_COORD / EVENT_SPACING];
+CList CEvent::m_IgnoreList;
 
 //*****************************************************************************
 //
@@ -92,10 +91,7 @@ CList  CEvent::m_IgnoreList;
 //
 //*****************************************************************************
 
-CEvent::CEvent()
-{
-
-}
+CEvent::CEvent() {}
 
 //*****************************************************************************
 //
@@ -103,10 +99,7 @@ CEvent::CEvent()
 //
 //*****************************************************************************
 
-CEvent::~CEvent()
-{
-
-}
+CEvent::~CEvent() {}
 
 //*****************************************************************************
 //
@@ -135,13 +128,14 @@ CEvent::~CEvent()
 
 void CEvent::Reset()
 {
-	while (m_IgnoreList.Remove());			// Remove all items from the list
+    while (m_IgnoreList.Remove())
+        ; // Remove all items from the list
 
-	m_sEventTriggerMin = 0;						// Set default trigger ranges
-	m_sEventConstMin = 0;
-	m_sEventTriggerMax = 255;
-	m_sEventConstMax = 255;
-	m_sOrientation = HORIZONTAL;				// Set default orientation
+    m_sEventTriggerMin = 0; // Set default trigger ranges
+    m_sEventConstMin = 0;
+    m_sEventTriggerMax = 255;
+    m_sEventConstMax = 255;
+    m_sOrientation = HORIZONTAL; // Set default orientation
 }
 
 //*****************************************************************************
@@ -164,12 +158,12 @@ void CEvent::Reset()
 
 short CEvent::SelectSet(short sEventSet)
 {
-		// from the univ data - somewhere, get the event data
-		// and create memory for the event data then point to it.
-		// of if Univ creates the memory, just get the pointer.
-		m_pEventData = g_GameUniverse.GetEvents();
+    // from the univ data - somewhere, get the event data
+    // and create memory for the event data then point to it.
+    // of if Univ creates the memory, just get the pointer.
+    m_pEventData = g_GameUniverse.GetEvents();
 
-		return SUCCESS;
+    return SUCCESS;
 }
 
 //*****************************************************************************
@@ -196,23 +190,23 @@ short CEvent::SelectSet(short sEventSet)
 
 void CEvent::TriggerInit(short sDispX, short sDispY)
 {
-	// Save the display position
-	m_sDispOldX = sDispX;
-	m_sDispOldY = sDispY;
+    // Save the display position
+    m_sDispOldX = sDispX;
+    m_sDispOldY = sDispY;
 
-	// Determine boundries of trigger area.  Then scan the area and trigger
-	// all events found within it.
-	m_sScanYFrom = max(0, sDispY - EVENT_TRIGGER_TOP);
-	m_sScanYTo = sDispY + GRIP_DISPLAY_H + EVENT_TRIGGER_BOTTOM;
+    // Determine boundries of trigger area.  Then scan the area and trigger
+    // all events found within it.
+    m_sScanYFrom = max(0, sDispY - EVENT_TRIGGER_TOP);
+    m_sScanYTo = sDispY + GRIP_DISPLAY_H + EVENT_TRIGGER_BOTTOM;
 
-	m_sScanXFrom = max(0, sDispX - EVENT_TRIGGER_LEFT);
-	m_sScanXTo = sDispX + GRIP_DISPLAY_W + EVENT_TRIGGER_RIGHT;
+    m_sScanXFrom = max(0, sDispX - EVENT_TRIGGER_LEFT);
+    m_sScanXTo = sDispX + GRIP_DISPLAY_W + EVENT_TRIGGER_RIGHT;
 
-	// Set to trigger from all directions
-	m_sEventDir = EVENT_LEFT + EVENT_RIGHT + EVENT_UP + EVENT_DOWN;
+    // Set to trigger from all directions
+    m_sEventDir = EVENT_LEFT + EVENT_RIGHT + EVENT_UP + EVENT_DOWN;
 
-	// Trigger all events in area
-	Scan();
+    // Trigger all events in area
+    Scan();
 }
 
 //*****************************************************************************
@@ -235,7 +229,7 @@ void CEvent::TriggerInit(short sDispX, short sDispY)
 //		we have to make sure that the new trigger area does not overlap the
 //		previous trigger area.  For example, when moving right, we don't
 //		really want to go from the old right edge to the new right edge,
-//		because if we do that same thing each time, then we'll be checking 
+//		because if we do that same thing each time, then we'll be checking
 //		a particular coordinate again on the next move.  The solution for going
 //		right is to go from the old right edge PLUS 1 to the new right edge.
 //		This avoids the overlap.  A similar thing is done for each of the edges.
@@ -257,165 +251,172 @@ void CEvent::TriggerInit(short sDispX, short sDispY)
 
 short CEvent::Trigger(short sDispX, short sDispY)
 {
- 	// Decrement timers no matter what happens
-	DecrementTimers();
+    // Decrement timers no matter what happens
+    DecrementTimers();
 
-	// Check for direction of movement
-	enum Direction
-	{
-		UP, DOWN, LEFT, RIGHT, DOWN_RIGHT, DOWN_LEFT, UP_RIGHT, UP_LEFT, NONE
-	};
-		
-	Direction eDir;
+    // Check for direction of movement
+    enum Direction
+    {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT,
+        DOWN_RIGHT,
+        DOWN_LEFT,
+        UP_RIGHT,
+        UP_LEFT,
+        NONE
+    };
 
-	if (sDispX != m_sDispOldX && sDispY != m_sDispOldY)
-	{	//diagonal movement
-		if (sDispY > m_sDispOldY)
-		{	// down
-			if (sDispX > m_sDispOldX)
-				eDir = DOWN_RIGHT;
-			else
-				eDir = DOWN_LEFT;
-		}
-		else
-		{	// up
-			if (sDispX > m_sDispOldX)
-				eDir = UP_RIGHT;
-			else
-				eDir = UP_LEFT;
-		}
-	}
-	else
-	{	// one direction only
-		if (sDispY != m_sDispOldY)
-		{	// up/down motion
-			if (sDispY > m_sDispOldY)
-				eDir = DOWN;
-			else
-				eDir = UP;
-		}
-		else
-		{	// left/right motion
-			if (sDispX > m_sDispOldX)
-				eDir = RIGHT;
-			else
-				eDir = LEFT;
-		}
-	}
+    Direction eDir;
 
-	switch (eDir)
-	{
-	 	case UP:
-			m_sEventDir = EVENT_UP;
-			From_Top(sDispY);
-			To_Top(m_sDispOldY);
-			From_Left(m_sDispOldX);
-			To_Right(m_sDispOldX);
-			Scan();			
-			break;
+    if (sDispX != m_sDispOldX && sDispY != m_sDispOldY)
+    { // diagonal movement
+        if (sDispY > m_sDispOldY)
+        { // down
+            if (sDispX > m_sDispOldX)
+                eDir = DOWN_RIGHT;
+            else
+                eDir = DOWN_LEFT;
+        }
+        else
+        { // up
+            if (sDispX > m_sDispOldX)
+                eDir = UP_RIGHT;
+            else
+                eDir = UP_LEFT;
+        }
+    }
+    else
+    { // one direction only
+        if (sDispY != m_sDispOldY)
+        { // up/down motion
+            if (sDispY > m_sDispOldY)
+                eDir = DOWN;
+            else
+                eDir = UP;
+        }
+        else
+        { // left/right motion
+            if (sDispX > m_sDispOldX)
+                eDir = RIGHT;
+            else
+                eDir = LEFT;
+        }
+    }
 
-		case DOWN:
-			m_sEventDir = EVENT_DOWN;
-			From_Bottom(m_sDispOldY);
-			To_Bottom(sDispY);
-			From_Left(m_sDispOldX);
-			To_Right(m_sDispOldX);
-			Scan();
-			break;
+    switch (eDir)
+    {
+        case UP:
+            m_sEventDir = EVENT_UP;
+            From_Top(sDispY);
+            To_Top(m_sDispOldY);
+            From_Left(m_sDispOldX);
+            To_Right(m_sDispOldX);
+            Scan();
+            break;
 
-		case RIGHT:
-			m_sEventDir = EVENT_RIGHT;
-			From_Right(m_sDispOldX);
-			To_Right(sDispX);
-			From_Top(m_sDispOldY);
-			To_Bottom(m_sDispOldY);
-			Scan();
-			break;
+        case DOWN:
+            m_sEventDir = EVENT_DOWN;
+            From_Bottom(m_sDispOldY);
+            To_Bottom(sDispY);
+            From_Left(m_sDispOldX);
+            To_Right(m_sDispOldX);
+            Scan();
+            break;
 
-		case LEFT:
-			m_sEventDir = EVENT_LEFT;
-			From_Left(sDispX);
-			To_Left(m_sDispOldX);
-			From_Top(m_sDispOldY);
-			To_Bottom(m_sDispOldY);
-			Scan();
-			break;
+        case RIGHT:
+            m_sEventDir = EVENT_RIGHT;
+            From_Right(m_sDispOldX);
+            To_Right(sDispX);
+            From_Top(m_sDispOldY);
+            To_Bottom(m_sDispOldY);
+            Scan();
+            break;
 
-		case DOWN_RIGHT:
-			m_sEventDir = EVENT_DOWN + EVENT_RIGHT;
-			// Area 1
-			From_Bottom(m_sDispOldY);
-			To_Bottom(m_sDispOldY);
-			From_Left(sDispX);
-			To_Right(sDispX);
-			Scan();	
-			// Area 2
-			From_Right(m_sDispOldX);
-			To_Right(m_sDispOldX);
-			From_Top(sDispY);
-			To_Bottom(m_sDispOldY);
-			Scan();		
-			break;
+        case LEFT:
+            m_sEventDir = EVENT_LEFT;
+            From_Left(sDispX);
+            To_Left(m_sDispOldX);
+            From_Top(m_sDispOldY);
+            To_Bottom(m_sDispOldY);
+            Scan();
+            break;
 
-		case DOWN_LEFT:
-			m_sEventDir = EVENT_DOWN + EVENT_LEFT;
-			// Area 1
-			From_Bottom(m_sDispOldY);
-			To_Bottom(sDispY);
-			From_Left(sDispX);
-			To_Right(sDispX);
-			Scan();	
-			// Area 2
-			From_Left(sDispX);
-			To_Left(m_sDispOldX);
-			From_Top(sDispY);
-			To_Bottom(m_sDispOldY);
-			Scan();		
-			break;
+        case DOWN_RIGHT:
+            m_sEventDir = EVENT_DOWN + EVENT_RIGHT;
+            // Area 1
+            From_Bottom(m_sDispOldY);
+            To_Bottom(m_sDispOldY);
+            From_Left(sDispX);
+            To_Right(sDispX);
+            Scan();
+            // Area 2
+            From_Right(m_sDispOldX);
+            To_Right(m_sDispOldX);
+            From_Top(sDispY);
+            To_Bottom(m_sDispOldY);
+            Scan();
+            break;
 
-		case UP_RIGHT:
-			m_sEventDir = EVENT_UP + EVENT_RIGHT;
-			// Area 1
-			From_Top(sDispY);
-			To_Top(m_sDispOldY);
-			From_Left(sDispX);
-			To_Right(sDispX);
-			Scan();
-			// Area 2
-			From_Right(m_sDispOldX);
-			To_Right(sDispX);
-			From_Top(m_sDispOldY);
-			To_Bottom(sDispY);
-			Scan();
-			break;
+        case DOWN_LEFT:
+            m_sEventDir = EVENT_DOWN + EVENT_LEFT;
+            // Area 1
+            From_Bottom(m_sDispOldY);
+            To_Bottom(sDispY);
+            From_Left(sDispX);
+            To_Right(sDispX);
+            Scan();
+            // Area 2
+            From_Left(sDispX);
+            To_Left(m_sDispOldX);
+            From_Top(sDispY);
+            To_Bottom(m_sDispOldY);
+            Scan();
+            break;
 
-		case UP_LEFT:
-			m_sEventDir = EVENT_UP + EVENT_LEFT;
-			// Area 1
-			From_Top(sDispY);
-			To_Top(m_sDispOldY);
-			From_Left(sDispX);
-			To_Right(sDispX);
-			Scan();
-			// Area 2
-			From_Left(sDispX);
-			To_Left(m_sDispOldX);
-			From_Top(m_sDispOldY);
-			To_Bottom(sDispY);
-			Scan();
-			break;
+        case UP_RIGHT:
+            m_sEventDir = EVENT_UP + EVENT_RIGHT;
+            // Area 1
+            From_Top(sDispY);
+            To_Top(m_sDispOldY);
+            From_Left(sDispX);
+            To_Right(sDispX);
+            Scan();
+            // Area 2
+            From_Right(m_sDispOldX);
+            To_Right(sDispX);
+            From_Top(m_sDispOldY);
+            To_Bottom(sDispY);
+            Scan();
+            break;
 
-		case NONE:
+        case UP_LEFT:
+            m_sEventDir = EVENT_UP + EVENT_LEFT;
+            // Area 1
+            From_Top(sDispY);
+            To_Top(m_sDispOldY);
+            From_Left(sDispX);
+            To_Right(sDispX);
+            Scan();
+            // Area 2
+            From_Left(sDispX);
+            To_Left(m_sDispOldX);
+            From_Top(m_sDispOldY);
+            To_Bottom(sDispY);
+            Scan();
+            break;
 
-			break;
-	}
+        case NONE:
 
-	// Save display position for next time
-	m_sDispOldX = sDispX;
-	m_sDispOldY = sDispY;
+            break;
+    }
 
+    // Save display position for next time
+    m_sDispOldX = sDispX;
+    m_sDispOldY = sDispY;
 
-	return SUCCESS;					//or perhaps some other value
+    return SUCCESS; // or perhaps some other value
 }
 
 //*****************************************************************************
@@ -434,10 +435,10 @@ short CEvent::Trigger(short sDispX, short sDispY)
 //		it won't be added to the list).  This may be helpful in those
 //		situations where the application is already calling this routine but
 //		sometimes doesn't ahve a valid event id to send to it.  It can
-//		basically create a "dummy" event id by using $ffff . 
+//		basically create a "dummy" event id by using $ffff .
 //
 //		NOTE:  This routine does not check to see if the id being added to
-//		this list is already on the list.  Therefore, the application can 
+//		this list is already on the list.  Therefore, the application can
 //		add an id more than once if it so desires.  Of course, each of those
 //		id's would need to be removed from the list in order for the event
 //		to be triggered again.
@@ -456,9 +457,9 @@ short CEvent::Trigger(short sDispX, short sDispY)
 //
 //*****************************************************************************
 
-void CEvent::Ignore(EVENT* pEvent)
+void CEvent::Ignore(EVENT *pEvent)
 {
-	m_IgnoreList.Add((LISTNODE) pEvent);
+    m_IgnoreList.Add((LISTNODE)pEvent);
 }
 
 //*****************************************************************************
@@ -478,11 +479,10 @@ void CEvent::Ignore(EVENT* pEvent)
 //
 //*****************************************************************************
 
-void CEvent::Unignore(EVENT* pEvent)
+void CEvent::Unignore(EVENT *pEvent)
 {
-	m_IgnoreList.Remove((LISTNODE) pEvent);
+    m_IgnoreList.Remove((LISTNODE)pEvent);
 }
-
 
 //*****************************************************************************
 //
@@ -506,17 +506,17 @@ void CEvent::Unignore(EVENT* pEvent)
 //		contains x, y, type, status, and timer.
 //
 //*****************************************************************************
- 
-EVENT* CEvent::Search(short sEventNum)
-{
-	short s = 0;
 
-	while (m_pEventData[s].sType != sEventNum && m_pEventData[s].sType >= 0)
-		s++;
-	if (m_pEventData[s].sType < 0)
-		return NULL;
-	else
-		return &(m_pEventData[s]);		 	
+EVENT *CEvent::Search(short sEventNum)
+{
+    short s = 0;
+
+    while (m_pEventData[s].sType != sEventNum && m_pEventData[s].sType >= 0)
+        s++;
+    if (m_pEventData[s].sType < 0)
+        return NULL;
+    else
+        return &(m_pEventData[s]);
 }
 
 //*****************************************************************************
@@ -533,7 +533,7 @@ EVENT* CEvent::Search(short sEventNum)
 //		the Search() function.
 //
 // Input:
-//		pEvent = pointer to 
+//		pEvent = pointer to
 //
 // Uses:
 //		m_pEventData array
@@ -546,20 +546,17 @@ EVENT* CEvent::Search(short sEventNum)
 //
 //*****************************************************************************
 
-EVENT* CEvent::SearchNext(EVENT* pEvent)
+EVENT *CEvent::SearchNext(EVENT *pEvent)
 {
-	short s = 0;
-	
-	while (m_pEventData[s].sType != pEvent->sType && 
-	       m_pEventData[s].sType >= 0             &&
-			 &(m_pEventData[s]) == pEvent
-	      )
-		s++;
+    short s = 0;
 
-	if (m_pEventData[s].sType < 0)
-		return NULL;
-	else
-		return &(m_pEventData[s]);
+    while (m_pEventData[s].sType != pEvent->sType && m_pEventData[s].sType >= 0 && &(m_pEventData[s]) == pEvent)
+        s++;
+
+    if (m_pEventData[s].sType < 0)
+        return NULL;
+    else
+        return &(m_pEventData[s]);
 }
 
 //*****************************************************************************
@@ -590,14 +587,14 @@ EVENT* CEvent::SearchNext(EVENT* pEvent)
 //				event = event + 1;
 //			event_index[index] = event;
 //			index = index + 1;
-//			
+//
 //			coord = coord + EVENT_SPACING
 //		}
 //		while (coord < EVENT_INDEX_MAX);
 //
 // Input:
 //		sOrientation = orientation of section, vertical or horizontal
-//	
+//
 // Uses:
 //		pEventData
 //
@@ -611,34 +608,33 @@ EVENT* CEvent::SearchNext(EVENT* pEvent)
 
 void CEvent::CreateIndexes(short sOrientation)
 {
-	short sCoord = 0;
-	short sEvent = 0;
-	short sIndex = 0;
+    short sCoord = 0;
+    short sEvent = 0;
+    short sIndex = 0;
 
-	if (sOrientation == HORIZONTAL)
-	{
-		do
-		{
-			while (m_pEventData[sEvent].sX < sCoord)
-				sEvent++;
-			m_aIndexList[sIndex++] = sEvent;
-			sCoord += EVENT_SPACING;
+    if (sOrientation == HORIZONTAL)
+    {
+        do
+        {
+            while (m_pEventData[sEvent].sX < sCoord)
+                sEvent++;
+            m_aIndexList[sIndex++] = sEvent;
+            sCoord += EVENT_SPACING;
 
-		} while (sCoord < EVENT_INDEX_MAX);		
-	}
-	else // VERTICAL
-	{
-		do
-		{
-			while (m_pEventData[sEvent].sY < sCoord)
-				sEvent++;
-			m_aIndexList[sIndex++] = sEvent;
-			sCoord += EVENT_SPACING;
+        } while (sCoord < EVENT_INDEX_MAX);
+    }
+    else // VERTICAL
+    {
+        do
+        {
+            while (m_pEventData[sEvent].sY < sCoord)
+                sEvent++;
+            m_aIndexList[sIndex++] = sEvent;
+            sCoord += EVENT_SPACING;
 
-		} while (sCoord < EVENT_INDEX_MAX);
-	} 	
+        } while (sCoord < EVENT_INDEX_MAX);
+    }
 }
-
 
 //*****************************************************************************
 //
@@ -651,7 +647,7 @@ void CEvent::CreateIndexes(short sOrientation)
 //		coordinates.  The m_sEventScanFrom and m_sEventScanTo variables are
 //		simply set to the start and end of the range to scan through.
 //
-//		We need to find all events which are defined by the 4 corners, 
+//		We need to find all events which are defined by the 4 corners,
 //		m_sScanXFrom, m_sScanXTo, m_sScanYFrom, m_sScanYTo inclusive.
 //
 //		To find out where in the list to start, we look into a table of indexes
@@ -678,7 +674,7 @@ void CEvent::CreateIndexes(short sOrientation)
 //		m_sScanYFrom
 //		m_sScanYTo
 //		m_pEventData
-//		
+//
 // Output:
 //
 // Return:
@@ -687,40 +683,38 @@ void CEvent::CreateIndexes(short sOrientation)
 
 short CEvent::Scan()
 {
-	short s;
-	short sEventIndex;
+    short s;
+    short sEventIndex;
 
-	if (m_sOrientation == VERTICAL)
-	{	// Vertical - aIndexList is sorted on Y
-		s = m_sScanYFrom / EVENT_SPACING;
-		sEventIndex = m_aIndexList[s];
-		while (m_pEventData[sEventIndex].sY < m_sScanYTo)
-		{
-			if (m_pEventData[sEventIndex].sY > m_sScanYFrom)
-			{
-				if (m_pEventData[sEventIndex].sX >  m_sScanXFrom &&
-				    m_pEventData[sEventIndex].sX <= m_sScanXTo)
-					CallHandler(sEventIndex);	// Trigger event
-			}
-			sEventIndex++;
-		}
-	}
-	else
-	{	// Horizontal - aIndexList is sorted on X
-		s = m_sScanXFrom / EVENT_SPACING;
-		sEventIndex = m_aIndexList[s];
-		while (m_pEventData[sEventIndex].sX < m_sScanXTo)
-		{
-		 	if (m_pEventData[sEventIndex].sX > m_sScanXFrom)
-			{
-			 	if (m_pEventData[sEventIndex].sY >  m_sScanYFrom &&
-				    m_pEventData[sEventIndex].sY <=	m_sScanYTo)
-					CallHandler(sEventIndex);	// Trigger event
-			}
-			sEventIndex++;
-		}
-	}
-	return SUCCESS;				//or perhaps some other value
+    if (m_sOrientation == VERTICAL)
+    { // Vertical - aIndexList is sorted on Y
+        s = m_sScanYFrom / EVENT_SPACING;
+        sEventIndex = m_aIndexList[s];
+        while (m_pEventData[sEventIndex].sY < m_sScanYTo)
+        {
+            if (m_pEventData[sEventIndex].sY > m_sScanYFrom)
+            {
+                if (m_pEventData[sEventIndex].sX > m_sScanXFrom && m_pEventData[sEventIndex].sX <= m_sScanXTo)
+                    CallHandler(sEventIndex); // Trigger event
+            }
+            sEventIndex++;
+        }
+    }
+    else
+    { // Horizontal - aIndexList is sorted on X
+        s = m_sScanXFrom / EVENT_SPACING;
+        sEventIndex = m_aIndexList[s];
+        while (m_pEventData[sEventIndex].sX < m_sScanXTo)
+        {
+            if (m_pEventData[sEventIndex].sX > m_sScanXFrom)
+            {
+                if (m_pEventData[sEventIndex].sY > m_sScanYFrom && m_pEventData[sEventIndex].sY <= m_sScanYTo)
+                    CallHandler(sEventIndex); // Trigger event
+            }
+            sEventIndex++;
+        }
+    }
+    return SUCCESS; // or perhaps some other value
 }
 
 //*****************************************************************************
@@ -761,65 +755,62 @@ short CEvent::Scan()
 
 short CEvent::CallHandler(short sEventIndex)
 {
-//-----------------------------------------------------------------------------
-// Get event's data
-//
-// Check if event's type is within "triggerable" range.  The minimum is
-//	the lowset triggerable event type and the maximum is the highest event
-// type PLUS 1!
-//-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
+    // Get event's data
+    //
+    // Check if event's type is within "triggerable" range.  The minimum is
+    //	the lowset triggerable event type and the maximum is the highest event
+    // type PLUS 1!
+    //-----------------------------------------------------------------------------
 
-	if ((m_pEventData[sEventIndex].sType < m_sEventConstMin || 
-	     m_pEventData[sEventIndex].sType > m_sEventConstMax) &&
-		 (m_pEventData[sEventIndex].sType < m_sEventTriggerMin ||
-		  m_pEventData[sEventIndex].sType > m_sEventTriggerMax))
-		return EVENT_NOT_IN_RANGE;
+    if ((m_pEventData[sEventIndex].sType < m_sEventConstMin || m_pEventData[sEventIndex].sType > m_sEventConstMax) &&
+        (m_pEventData[sEventIndex].sType < m_sEventTriggerMin || m_pEventData[sEventIndex].sType > m_sEventTriggerMax))
+        return EVENT_NOT_IN_RANGE;
 
-//-----------------------------------------------------------------------------
-// Check if event's id appears in ignore list.  If it does, check the timer.
-//	If the timer is negative, the event is still active, so ignore it.  
-// If the timer is zero, unignore the event and retrigger it.  
-// If the timer is positive, ignore the event.  (Event_Trigger does the 
-// decrementing).
-//-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
+    // Check if event's id appears in ignore list.  If it does, check the timer.
+    //	If the timer is negative, the event is still active, so ignore it.
+    // If the timer is zero, unignore the event and retrigger it.
+    // If the timer is positive, ignore the event.  (Event_Trigger does the
+    // decrementing).
+    //-----------------------------------------------------------------------------
 
-	EVENT* pEvent = (EVENT*) m_IgnoreList.GetHead();
-	BOOL 	 bFound = FALSE;
+    EVENT *pEvent = (EVENT *)m_IgnoreList.GetHead();
+    BOOL bFound = FALSE;
 
-	while (pEvent != NULL && !bFound)
-	{
-		if (pEvent == &(m_pEventData[sEventIndex]))
-			bFound = TRUE;
-		else
-			pEvent = (EVENT*) m_IgnoreList.GetNext();
-	}
+    while (pEvent != NULL && !bFound)
+    {
+        if (pEvent == &(m_pEventData[sEventIndex]))
+            bFound = TRUE;
+        else
+            pEvent = (EVENT *)m_IgnoreList.GetNext();
+    }
 
-	if (bFound && pEvent->sIgnoreTimer != 0)
-		return EVENT_ON_IGNORE_LIST;
+    if (bFound && pEvent->sIgnoreTimer != 0)
+        return EVENT_ON_IGNORE_LIST;
 
-//-----------------------------------------------------------------------------
-// Check whether the display has moved in a direction which agrees with that
-// defined by the event status.
-//
-// NOTE: As long as the direction of scrolling overlaps with the direction
-// defined by m_sEventDir, the event should be triggered.  For example, if
-// m_sEventDir has EVENT_RIGHT bit set and the display has moved diagonally
-// right and up, the event should be triggered.
-//
-//	If there are no directional flags set for this event then assume it can 
-// be triggered by any direction.  If directional flags are set, then see if
-// any of those directions match the scroll direction.  If either of these
-// is true, then trigger this event.
-//
-// The event handler function pointers are stored in the table event_handler
-// at the top of this file.  
-//------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
+    // Check whether the display has moved in a direction which agrees with that
+    // defined by the event status.
+    //
+    // NOTE: As long as the direction of scrolling overlaps with the direction
+    // defined by m_sEventDir, the event should be triggered.  For example, if
+    // m_sEventDir has EVENT_RIGHT bit set and the display has moved diagonally
+    // right and up, the event should be triggered.
+    //
+    //	If there are no directional flags set for this event then assume it can
+    // be triggered by any direction.  If directional flags are set, then see if
+    // any of those directions match the scroll direction.  If either of these
+    // is true, then trigger this event.
+    //
+    // The event handler function pointers are stored in the table event_handler
+    // at the top of this file.
+    //------------------------------------------------------------------------------
 
+    //	if ((pEvent->sFlags & m_sEventDir) || !(pEvent->sFlags & EVENT_DIR_MASK))
+    //		(event_handlers[pEvent->sType])();
 
-//	if ((pEvent->sFlags & m_sEventDir) || !(pEvent->sFlags & EVENT_DIR_MASK))
-//		(event_handlers[pEvent->sType])();
-
-	return SUCCESS;
+    return SUCCESS;
 }
 
 //*****************************************************************************
@@ -848,14 +839,14 @@ short CEvent::CallHandler(short sEventIndex)
 
 void CEvent::DecrementTimers()
 {
- 	EVENT* pEvent = (EVENT*) m_IgnoreList.GetHead();
+    EVENT *pEvent = (EVENT *)m_IgnoreList.GetHead();
 
-	while (pEvent)
-	{
-	 	if (pEvent->sTimer > 0)
-			pEvent->sTimer++;
-		pEvent = (EVENT*) m_IgnoreList.GetNext();
-	}
+    while (pEvent)
+    {
+        if (pEvent->sTimer > 0)
+            pEvent->sTimer++;
+        pEvent = (EVENT *)m_IgnoreList.GetNext();
+    }
 }
 
 //*****************************************************************************
@@ -868,13 +859,8 @@ void CEvent::DecrementTimers()
 //
 //*****************************************************************************
 
-void event_undefined()
-{
-
-}
-
+void event_undefined() {}
 
 //*****************************************************************************
 // EOF
 //*****************************************************************************
-

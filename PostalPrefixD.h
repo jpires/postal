@@ -28,7 +28,7 @@
 // prefix file is being included by the file that actually generates the
 // precompiled header.  Only that particular file will define this macro.
 #ifndef POSTAL_PRECOMPILING_NOW
-	#include "PostalPrecompD"
+#include "PostalPrecompD"
 #endif
 
 // Include common settings
@@ -36,12 +36,11 @@
 
 // SmartHeap Stuff.  Normally, we define these in debug mode and comment them out otherwise.
 #define NOSHMALLOC
-//#define MEM_DEBUG
-//#define DEFINE_NEW_MACRO
+// #define MEM_DEBUG
+// #define DEFINE_NEW_MACRO
 
 // Define this for debug mode, comment it out otherwise.
 #define _DEBUG
-
 
 #endif // POSTALPREFIXD_H
 ////////////////////////////////////////////////////////////////////////////////

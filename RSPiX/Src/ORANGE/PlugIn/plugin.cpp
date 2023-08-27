@@ -24,12 +24,12 @@
 // NOTE: RSPXBlue.h is in ORANGE/MFC_CNTL.
 ///////////////////////////////////////////////////////////////////////////////
 // Plug-ins:
-//	1) To get started making your plug-in DLL, you must first create an 
+//	1) To get started making your plug-in DLL, you must first create an
 // AppWizard DLL project.  Choose an MFC Extension DLL as the way in which your
 // project uses MFC (on the first step dialog in the AppWizard).
 //
-// 2) Next, you need to add PlugIn.cpp (this file) and 
-// \\narnia\apps\plugeth\plugethD.lib to your DLL project (although these files 
+// 2) Next, you need to add PlugIn.cpp (this file) and
+// \\narnia\apps\plugeth\plugethD.lib to your DLL project (although these files
 // are in orange you need to add them to your DLL project (not RSPiX Orange)).
 //
 // 3) For debugging, set the executable for debug session (under the Debug tab)
@@ -45,7 +45,6 @@
 // Macros.
 ///////////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 // Includes.
 ///////////////////////////////////////////////////////////////////////////////
@@ -53,14 +52,13 @@
 
 #include "PlugIn/PlugIn.h"
 
-
 ///////////////////////////////////////////////////////////////////////////////
 // Instantiate static members.
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef _WINDLL
-/*EXE2DLL*/ CImage*			CPlugIn::ms_pimBuf	= NULL;	// The current buffer.
-/*EXE2DLL*/ CDialog*			CPlugIn::ms_pdlg		= NULL;	// The Plugger dialog.
-/*EXE2DLL*/ CRSPiXBlue*		CPlugIn::ms_prspix	= NULL;	// The RSPiX window.
+/*EXE2DLL*/ CImage *CPlugIn::ms_pimBuf = NULL;     // The current buffer.
+/*EXE2DLL*/ CDialog *CPlugIn::ms_pdlg = NULL;      // The Plugger dialog.
+/*EXE2DLL*/ CRSPiXBlue *CPlugIn::ms_prspix = NULL; // The RSPiX window.
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -73,25 +71,25 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// These are automagically defined in the DLL.  They return the timestamp of 
-// this file and the size of the CPlugIn structure.  The idea is that the EXE 
-// can then check the values returned by this function against the timestamp of 
-// the file and size of CPlugIn at the time of its compile and determine if 
+// These are automagically defined in the DLL.  They return the timestamp of
+// this file and the size of the CPlugIn structure.  The idea is that the EXE
+// can then check the values returned by this function against the timestamp of
+// the file and size of CPlugIn at the time of its compile and determine if
 // there's a potential synchronization issue with the communication structure.
 //
 ///////////////////////////////////////////////////////////////////////////////
 #ifdef _WINDLL
-DLL2EXE char*	CPlugIn::GetDllMagicTime(void)
-	{
-	return m_szMagicTime; 
-	}
+DLL2EXE char *CPlugIn::GetDllMagicTime(void)
+{
+    return m_szMagicTime;
+}
 #endif // _WINDLL
 
 #ifdef _WINDLL
-DLL2EXE long	CPlugIn::GetDllMagicSize(void)
-	{
-	return m_lMagicSize; 
-	}
+DLL2EXE long CPlugIn::GetDllMagicSize(void)
+{
+    return m_lMagicSize;
+}
 #endif // _WINDLL
 
 ///////////////////////////////////////////////////////////////////////////////

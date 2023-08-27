@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // ListBox.CPP
-// 
+//
 // History:
 //		01/13/97 JMI	Started.
 //
@@ -26,7 +26,7 @@
 //							second.  Changed this module to reflect that.
 //
 //		01/15/97	JMI	Added overrides of base class's Save/LoadChildren() to
-//							implement special cases for m_sbVert, Horz, & 
+//							implement special cases for m_sbVert, Horz, &
 //							m_lcContents.  List items saved and then loaded will not
 //							be recognized as list items by this class.  This should
 //							eventually be supported so one can save a list of items.
@@ -46,13 +46,13 @@
 //
 //		01/21/97	JMI	RemoveItem() was not considering the possibly that the
 //							item being removed might be the selected item.
-//							No longer sizes an encapsulator/string item to 
+//							No longer sizes an encapsulator/string item to
 //							m_sLargestWidth until the AdjustContents() call.
 //
 //		01/21/97	JMI	Changed m_frmContents (RFrame) to m_lcContents
 //							(RListContents).
 //
-//		01/23/97	JMI	EnsureVisible() had an error that made it think that 
+//		01/23/97	JMI	EnsureVisible() had an error that made it think that
 //							some items that were list items were not.
 //
 //		02/05/97	JMI	Changed position of default: case in ReadMembers().
@@ -82,7 +82,7 @@
 //
 //		09/01/97	JMI	Added MakeEncapsulator().
 //
-//		09/07/97	JMI	Now EnsureVisible() accepts an optional position 
+//		09/07/97	JMI	Now EnsureVisible() accepts an optional position
 //							preference so you can bias the location of your item.
 //
 //		09/24/97	JMI	Calls to InsertAfter() and InsertBefore() had their
@@ -90,10 +90,10 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 //
-// This a GUI item that is based on the basic RGuiItem. 
+// This a GUI item that is based on the basic RGuiItem.
 // This overrides HotCall() to get information about where a click in its RHot
 // occurred.
-// This overrides Compose() to create the scrollable area and compose 
+// This overrides Compose() to create the scrollable area and compose
 // the scrollbars.
 //
 // Enhancements/Uses:
@@ -107,11 +107,11 @@
 #include "Blue.h"
 
 #ifdef PATHS_IN_INCLUDES
-	#include "ORANGE/GUI/ListBox.h"
-	#include "ORANGE/GUI/txt.h"
+#include "ORANGE/GUI/ListBox.h"
+#include "ORANGE/GUI/txt.h"
 #else
-	#include "listbox.h"
-	#include "txt.h"
+#include "listbox.h"
+#include "txt.h"
 #endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////////////
@@ -119,19 +119,19 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Sets val to def if val is -1.
-#define DEF(val, def)	((val == -1) ? def : val)
+#define DEF(val, def) ((val == -1) ? def : val)
 
 // Default width for vertical scrollbar and height for horizontal scrollbar.
-#define DEF_SCROLL_THICKNESS	13
+#define DEF_SCROLL_THICKNESS 13
 
 // Space between items.
-#define ITEM_SPACING				m_sBorderThickness
+#define ITEM_SPACING m_sBorderThickness
 
 // Scrollbar priority is very high so it will be above other siblings.
-#define SCROLLBAR_PRIORITY		((short)0x8001)
+#define SCROLLBAR_PRIORITY ((short)0x8001)
 
 // Frame should be lower priority so that scrollbars are 'on top' of it.
-#define FRAME_PRIORITY			((short)0x7FFF)
+#define FRAME_PRIORITY ((short)0x7FFF)
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -151,41 +151,41 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 RListBox::RListBox()
-	{
-	// Override defaults for this.
-	m_type						= ListBox;	// Indicates type of GUI item.
-	m_sInvertedBorder			= TRUE;		// Want sunken look.
-	
-	// Override defaults for children.
-	m_sbVert.m_im.m_sWidth		= DEF_SCROLL_THICKNESS;
-	m_sbVert.m_oOrientation		= RScrollBar::Vertical;
-	m_sbVert.m_upcUser			= ScrollCall;
-	m_sbVert.m_ulUserInstance	= (ULONG)this;
+{
+    // Override defaults for this.
+    m_type = ListBox;         // Indicates type of GUI item.
+    m_sInvertedBorder = TRUE; // Want sunken look.
 
-	// Priority for scrollbars should be higher than any other sibling.
-	m_sbVert.m_hot.SetPriority(SCROLLBAR_PRIORITY);
+    // Override defaults for children.
+    m_sbVert.m_im.m_sWidth = DEF_SCROLL_THICKNESS;
+    m_sbVert.m_oOrientation = RScrollBar::Vertical;
+    m_sbVert.m_upcUser = ScrollCall;
+    m_sbVert.m_ulUserInstance = (ULONG)this;
 
-	m_sbHorz.m_im.m_sHeight		= DEF_SCROLL_THICKNESS;
-	m_sbHorz.m_oOrientation		= RScrollBar::Horizontal;
-	m_sbHorz.m_upcUser			= ScrollCall;
-	m_sbHorz.m_ulUserInstance	= (ULONG)this;
+    // Priority for scrollbars should be higher than any other sibling.
+    m_sbVert.m_hot.SetPriority(SCROLLBAR_PRIORITY);
 
-	// Priority for scrollbars should be higher than any other sibling.
-	m_sbHorz.m_hot.SetPriority(SCROLLBAR_PRIORITY);
+    m_sbHorz.m_im.m_sHeight = DEF_SCROLL_THICKNESS;
+    m_sbHorz.m_oOrientation = RScrollBar::Horizontal;
+    m_sbHorz.m_upcUser = ScrollCall;
+    m_sbHorz.m_ulUserInstance = (ULONG)this;
 
-	// Priority for frame is low.
-	m_lcContents.m_hot.SetPriority(FRAME_PRIORITY);
+    // Priority for scrollbars should be higher than any other sibling.
+    m_sbHorz.m_hot.SetPriority(SCROLLBAR_PRIORITY);
 
-	// Set defaults for direct members.
-	m_sbvVert					= ShownAsNeeded;
-	m_sbvHorz					= ShownAsNeeded;
-									
-	m_sLargestWidth			= 0;
-									
-	m_pguiSel					= NULL;
-	
-	m_typeEncapsulator		= Txt;
-	}
+    // Priority for frame is low.
+    m_lcContents.m_hot.SetPriority(FRAME_PRIORITY);
+
+    // Set defaults for direct members.
+    m_sbvVert = ShownAsNeeded;
+    m_sbvHorz = ShownAsNeeded;
+
+    m_sLargestWidth = 0;
+
+    m_pguiSel = NULL;
+
+    m_typeEncapsulator = Txt;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -193,10 +193,10 @@ RListBox::RListBox()
 //
 //////////////////////////////////////////////////////////////////////////////
 RListBox::~RListBox()
-	{
-	// Remove all items and destroy their encapsulators.
-	RemoveAll();
-	}
+{
+    // Remove all items and destroy their encapsulators.
+    RemoveAll();
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Methods.
@@ -207,257 +207,255 @@ RListBox::~RListBox()
 // Creates a displayable Listbox item.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RListBox::Create(			// Returns 0 on success.
-	short sX,						// X position relative to "parent" item.
-	short sY,						// Y position relative to "parent" item.
-	short sW,						// Width.
-	short sH,						// Height.
-	short sDepth)					// Color depth.
-	{
-	short	sRes	= 0;	// Assume success.
+short RListBox::Create( // Returns 0 on success.
+  short sX,             // X position relative to "parent" item.
+  short sY,             // Y position relative to "parent" item.
+  short sW,             // Width.
+  short sH,             // Height.
+  short sDepth)         // Color depth.
+{
+    short sRes = 0; // Assume success.
 
-	Destroy();
+    Destroy();
 
-	m_sX	= sX;
-	m_sY	= sY;
+    m_sX = sX;
+    m_sY = sY;
 
-	if (m_im.CreateImage(sW, sH, RImage::BMP8, 0, sDepth) == 0)
-		{
-		// Done.
-		
-		// If there's an error after calling CreateImage, perhaps
-		// we should destroy the RImage data here.
-		if (sRes != 0)
-			{
-			Destroy();
-			}
-		}
-	else
-		{
-		TRACE("Create(): RImage::CreateImage() failed.\n");
-		sRes = -1;
-		}
-	
-	// Get client area.
-	short	sClientX, sClientY, sClientW, sClientH;
-	GetClient(&sClientX, &sClientY, &sClientW, &sClientH);
+    if (m_im.CreateImage(sW, sH, RImage::BMP8, 0, sDepth) == 0)
+    {
+        // Done.
 
-	// Create child items:
+        // If there's an error after calling CreateImage, perhaps
+        // we should destroy the RImage data here.
+        if (sRes != 0)
+        {
+            Destroy();
+        }
+    }
+    else
+    {
+        TRACE("Create(): RImage::CreateImage() failed.\n");
+        sRes = -1;
+    }
 
-	CopyParms(&m_lcContents);
+    // Get client area.
+    short sClientX, sClientY, sClientW, sClientH;
+    GetClient(&sClientX, &sClientY, &sClientW, &sClientH);
 
-	m_lcContents.m_sBorderThickness	= 0;
+    // Create child items:
 
-	// Frame is created in AdjustContents() call.
-	m_lcContents.SetParent(this);
+    CopyParms(&m_lcContents);
 
-	CopyParms(&m_sbVert);
+    m_lcContents.m_sBorderThickness = 0;
 
-	if (m_sbVert.Create(
-		sClientX + sClientW - m_sbVert.m_im.m_sWidth,
-		sClientY,
-		m_sbVert.m_im.m_sWidth,
-		sClientH,
-		sDepth) == 0)
-		{
-		m_sbVert.SetParent(this);
-		}
-	else
-		{
-		TRACE("Create(): m_sbVert.Create() failed.\n");
-		// Don't use this.
-		m_sbVert.SetParent(NULL);
-		}
+    // Frame is created in AdjustContents() call.
+    m_lcContents.SetParent(this);
 
-	CopyParms(&m_sbHorz);
+    CopyParms(&m_sbVert);
 
-	if (m_sbHorz.Create(
-		sClientX,
-		sClientY + sClientH - m_sbHorz.m_im.m_sHeight,
-		sClientW - m_sbVert.m_im.m_sWidth,
-		m_sbHorz.m_im.m_sHeight,
-		sDepth) == 0)
-		{
-		m_sbHorz.SetParent(this);
-		}
-	else
-		{
-		TRACE("Create(): m_sbHorz.Create() failed.\n");
-		// Don't use this.
-		m_sbHorz.SetParent(NULL);
-		}
-	
-	// Compose this item.
-	Compose();
+    if (m_sbVert.Create(sClientX + sClientW - m_sbVert.m_im.m_sWidth,
+                        sClientY,
+                        m_sbVert.m_im.m_sWidth,
+                        sClientH,
+                        sDepth) == 0)
+    {
+        m_sbVert.SetParent(this);
+    }
+    else
+    {
+        TRACE("Create(): m_sbVert.Create() failed.\n");
+        // Don't use this.
+        m_sbVert.SetParent(NULL);
+    }
 
-	return sRes;
-	}
+    CopyParms(&m_sbHorz);
+
+    if (m_sbHorz.Create(sClientX,
+                        sClientY + sClientH - m_sbHorz.m_im.m_sHeight,
+                        sClientW - m_sbVert.m_im.m_sWidth,
+                        m_sbHorz.m_im.m_sHeight,
+                        sDepth) == 0)
+    {
+        m_sbHorz.SetParent(this);
+    }
+    else
+    {
+        TRACE("Create(): m_sbHorz.Create() failed.\n");
+        // Don't use this.
+        m_sbHorz.SetParent(NULL);
+    }
+
+    // Compose this item.
+    Compose();
+
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Compose item.
 //
 ////////////////////////////////////////////////////////////////////////
-void RListBox::Compose(			// Returns nothing.
-	RImage* pim /*= NULL*/)	// Dest image, uses m_im if NULL.
-	{
-	if (pim == NULL)
-		{
-		pim	= &m_im;
-		}
+void RListBox::Compose(   // Returns nothing.
+  RImage *pim /*= NULL*/) // Dest image, uses m_im if NULL.
+{
+    if (pim == NULL)
+    {
+        pim = &m_im;
+    }
 
-	// Call base (draws border and background).
-	RGuiItem::Compose(pim);
+    // Call base (draws border and background).
+    RGuiItem::Compose(pim);
 
-	// Resizes all encapsulators, m_lcContents, and sets scroll ranges.
-	AdjustContents();
+    // Resizes all encapsulators, m_lcContents, and sets scroll ranges.
+    AdjustContents();
 
-	// No text.
-	}
+    // No text.
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Add a string into the list box.
 //
 ////////////////////////////////////////////////////////////////////////
-RGuiItem* RListBox::AddString(		// Returns new GUI item on success.
-	char*	pszString,						// String to add.
-	RGuiItem* pguiAfter /*= NULL*/)	// Gui to add after or NULL to add at
-												// end.
-	{
-	// Create a new string item . . .
-	RGuiItem*	pguiRes	= CreateStringItem(pszString);
-	if (pguiRes != NULL)
-		{
-		// Reposition item.
-		AddAfter(pguiRes, pguiAfter);
-		}
-	else
-		{
-		TRACE("AddString(): CreateStringItem() failed.\n");
-		}
+RGuiItem *RListBox::AddString(    // Returns new GUI item on success.
+  char *pszString,                // String to add.
+  RGuiItem *pguiAfter /*= NULL*/) // Gui to add after or NULL to add at
+                                  // end.
+{
+    // Create a new string item . . .
+    RGuiItem *pguiRes = CreateStringItem(pszString);
+    if (pguiRes != NULL)
+    {
+        // Reposition item.
+        AddAfter(pguiRes, pguiAfter);
+    }
+    else
+    {
+        TRACE("AddString(): CreateStringItem() failed.\n");
+    }
 
-	return pguiRes;
-	}
+    return pguiRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Insert a string into the list box.
 //
 ////////////////////////////////////////////////////////////////////////
-RGuiItem* RListBox::InsertString(	// Returns new GUI item on success.
-	char*	pszString,						// String to insert.
-	RGuiItem* pguiBefore /*= NULL*/)	// Gui to insert before or NULL to 
-												// insert at beginning.
-	{
-	// Create a new string item . . .
-	RGuiItem*	pguiRes	= CreateStringItem(pszString);
-	if (pguiRes != NULL)
-		{
-		// Reposition item.
-		InsertBefore(pguiRes, pguiBefore);
-		}
-	else
-		{
-		TRACE("InsertString(): CreateStringItem() failed.\n");
-		}
+RGuiItem *RListBox::InsertString(  // Returns new GUI item on success.
+  char *pszString,                 // String to insert.
+  RGuiItem *pguiBefore /*= NULL*/) // Gui to insert before or NULL to
+                                   // insert at beginning.
+{
+    // Create a new string item . . .
+    RGuiItem *pguiRes = CreateStringItem(pszString);
+    if (pguiRes != NULL)
+    {
+        // Reposition item.
+        InsertBefore(pguiRes, pguiBefore);
+    }
+    else
+    {
+        TRACE("InsertString(): CreateStringItem() failed.\n");
+    }
 
-	return pguiRes;
-	}
+    return pguiRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Add an item into the list box.
 //
 ////////////////////////////////////////////////////////////////////////
-RGuiItem* RListBox::AddItem(			// Returns new GUI item or pgui on
-												// success.  Depends on sEncapsulate.
-	RGuiItem* pgui,						// GUI item to insert.
-	short	sEncapsulate /*= FALSE*/,	// If TRUE, this item will be 
-												// encapsulated in an RGuiItem that
-												// will be returned on success.
-												// If FALSE, this item will be a direct
-												// child of the listbox and will be
-												// returned on success.
-	RGuiItem* pguiAfter /*= NULL*/)	// Gui to add after or NULL to add at
-												// end.
-	{
-	RGuiItem*	pguiRes	= NULL;	// Assume nothing.
+RGuiItem *RListBox::AddItem(      // Returns new GUI item or pgui on
+                                  // success.  Depends on sEncapsulate.
+  RGuiItem *pgui,                 // GUI item to insert.
+  short sEncapsulate /*= FALSE*/, // If TRUE, this item will be
+                                  // encapsulated in an RGuiItem that
+                                  // will be returned on success.
+                                  // If FALSE, this item will be a direct
+                                  // child of the listbox and will be
+                                  // returned on success.
+  RGuiItem *pguiAfter /*= NULL*/) // Gui to add after or NULL to add at
+                                  // end.
+{
+    RGuiItem *pguiRes = NULL; // Assume nothing.
 
-	// If encapsulation requested . . .
-	if (sEncapsulate != FALSE)
-		{
-		// Create encapsulator item.
-		pguiRes	= CreateEncapsulator(pgui);
-		}
-	else
-		{
-		// The item is the item to be placed in the listbox.
-		pguiRes	= pgui;
-		}
+    // If encapsulation requested . . .
+    if (sEncapsulate != FALSE)
+    {
+        // Create encapsulator item.
+        pguiRes = CreateEncapsulator(pgui);
+    }
+    else
+    {
+        // The item is the item to be placed in the listbox.
+        pguiRes = pgui;
+    }
 
-	// If we have the item to be added . . .
-	if (pguiRes != NULL)
-		{
-		// Make child of list area.
-		pguiRes->SetParent(&m_lcContents);
-		// Reposition item.
-		AddAfter(pguiRes, pguiAfter);
-		}
-	else
-		{
-		TRACE("AddItem(): CreateEncapsulator() failed.\n");
-		}
+    // If we have the item to be added . . .
+    if (pguiRes != NULL)
+    {
+        // Make child of list area.
+        pguiRes->SetParent(&m_lcContents);
+        // Reposition item.
+        AddAfter(pguiRes, pguiAfter);
+    }
+    else
+    {
+        TRACE("AddItem(): CreateEncapsulator() failed.\n");
+    }
 
-	return pguiRes;
-	}
+    return pguiRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Insert an item into the list box.
 //
 ////////////////////////////////////////////////////////////////////////
-RGuiItem* RListBox::InsertItem(		// Returns new GUI item or pgui on
-												// success.  Depends on sEncapsulate.
-	RGuiItem* pgui,						// GUI item to insert.
-	short	sEncapsulate /*= FALSE*/,	// If TRUE, this item will be 
-												// encapsulated in an RGuiItem that
-												// will be returned on success.
-												// If FALSE, this item will be a direct
-												// child of the listbox and will be
-												// returned on success.
-	RGuiItem* pguiBefore /*= NULL*/)	// Gui to insert before or NULL to 
-												// insert at beginning.
-	{
-	RGuiItem*	pguiRes	= NULL;	// Assume nothing.
+RGuiItem *RListBox::InsertItem(    // Returns new GUI item or pgui on
+                                   // success.  Depends on sEncapsulate.
+  RGuiItem *pgui,                  // GUI item to insert.
+  short sEncapsulate /*= FALSE*/,  // If TRUE, this item will be
+                                   // encapsulated in an RGuiItem that
+                                   // will be returned on success.
+                                   // If FALSE, this item will be a direct
+                                   // child of the listbox and will be
+                                   // returned on success.
+  RGuiItem *pguiBefore /*= NULL*/) // Gui to insert before or NULL to
+                                   // insert at beginning.
+{
+    RGuiItem *pguiRes = NULL; // Assume nothing.
 
-	// If encapsulation requested . . .
-	if (sEncapsulate != FALSE)
-		{
-		// Create encapsulator item.
-		pguiRes	= CreateEncapsulator(pgui);
-		}
-	else
-		{
-		// The item is the item to be placed in the listbox.
-		pguiRes	= pgui;
-		}
+    // If encapsulation requested . . .
+    if (sEncapsulate != FALSE)
+    {
+        // Create encapsulator item.
+        pguiRes = CreateEncapsulator(pgui);
+    }
+    else
+    {
+        // The item is the item to be placed in the listbox.
+        pguiRes = pgui;
+    }
 
-	// If we have the item to be added . . .
-	if (pguiRes != NULL)
-		{
-		// Make child of list area.
-		pguiRes->SetParent(&m_lcContents);
-		// Reposition item.
-		InsertBefore(pguiRes, pguiBefore);
-		}
-	else
-		{
-		TRACE("AddItem(): CreateEncapsulator() failed.\n");
-		}
+    // If we have the item to be added . . .
+    if (pguiRes != NULL)
+    {
+        // Make child of list area.
+        pguiRes->SetParent(&m_lcContents);
+        // Reposition item.
+        InsertBefore(pguiRes, pguiBefore);
+    }
+    else
+    {
+        TRACE("AddItem(): CreateEncapsulator() failed.\n");
+    }
 
-	return pguiRes;
-	}
+    return pguiRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -465,68 +463,67 @@ RGuiItem* RListBox::InsertItem(		// Returns new GUI item or pgui on
 // encapsulator exists for that item.
 //
 ////////////////////////////////////////////////////////////////////////
-void RListBox::RemoveItem(			// Returns nothing.
-	RGuiItem* pgui)					// Item to remove.  NOTE:  Any 
-											// encapsulating GUI item will be
-											// destroyed.
-	{
-	// Verify item is a list item and get encapsulator, if any:
-	RGuiItem*	pguiParent	= pgui->GetParent();
-	RGuiItem*	pguiRemove	= NULL;
-	if (pguiParent != NULL)
-		{
-		// If parent is the list container . . .
-		if (pguiParent == &m_lcContents)
-			{
-			// Set item to remove.
-			pguiRemove	= pgui;
-			}
-		else
-			{
-			// If parent's parent is the list container . . .
-			if (pguiParent->GetParent() == &m_lcContents)
-				{
-				// Free from encapsulator.
-				pgui->SetParent(NULL);
-				// Set item to remove.
-				pguiRemove	= pguiParent;
-				}
-			}
-		}
+void RListBox::RemoveItem( // Returns nothing.
+  RGuiItem *pgui)          // Item to remove.  NOTE:  Any
+                           // encapsulating GUI item will be
+                           // destroyed.
+{
+    // Verify item is a list item and get encapsulator, if any:
+    RGuiItem *pguiParent = pgui->GetParent();
+    RGuiItem *pguiRemove = NULL;
+    if (pguiParent != NULL)
+    {
+        // If parent is the list container . . .
+        if (pguiParent == &m_lcContents)
+        {
+            // Set item to remove.
+            pguiRemove = pgui;
+        }
+        else
+        {
+            // If parent's parent is the list container . . .
+            if (pguiParent->GetParent() == &m_lcContents)
+            {
+                // Free from encapsulator.
+                pgui->SetParent(NULL);
+                // Set item to remove.
+                pguiRemove = pguiParent;
+            }
+        }
+    }
 
-	// If there is an item to remove . . .
-	if (pguiRemove != NULL)
-		{
-		// If this item is an encapsulator . . .
-		if (IsEncapsulator(pguiRemove) != FALSE)
-			{
-			// If this item was the selected item . . .
-			if (pguiRemove == m_pguiSel)
-				{
-				// Clear selection.
-				SetSel(NULL);
-				}
+    // If there is an item to remove . . .
+    if (pguiRemove != NULL)
+    {
+        // If this item is an encapsulator . . .
+        if (IsEncapsulator(pguiRemove) != FALSE)
+        {
+            // If this item was the selected item . . .
+            if (pguiRemove == m_pguiSel)
+            {
+                // Clear selection.
+                SetSel(NULL);
+            }
 
-			// Remove encapsulator prop.
-			pguiRemove->RemoveProp(ENCAPSULATOR_PROP_KEY);
-			// Destroy item.
-			delete pguiRemove;
-			}
-		else
-			{
-			// If dynamic . . .
-			if (pguiRemove->IsDynamic() != FALSE)
-				{
-				delete pguiRemove;
-				}
-			}
-		}
-	else
-		{
-		TRACE("RemoveItem():  Specified item is not an item of this listbox.\n");
-		}
-
-	}
+            // Remove encapsulator prop.
+            pguiRemove->RemoveProp(ENCAPSULATOR_PROP_KEY);
+            // Destroy item.
+            delete pguiRemove;
+        }
+        else
+        {
+            // If dynamic . . .
+            if (pguiRemove->IsDynamic() != FALSE)
+            {
+                delete pguiRemove;
+            }
+        }
+    }
+    else
+    {
+        TRACE("RemoveItem():  Specified item is not an item of this listbox.\n");
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -534,91 +531,91 @@ void RListBox::RemoveItem(			// Returns nothing.
 // Calls RemoveItem() for each item.
 //
 ////////////////////////////////////////////////////////////////////////
-void RListBox::RemoveAll(void)	// Returns nothing.
-	{
-	RGuiItem*	pgui	= m_lcContents.m_listguiChildren.GetHead();
-	while (pgui != NULL)
-		{
-		RemoveItem(pgui);
+void RListBox::RemoveAll(void) // Returns nothing.
+{
+    RGuiItem *pgui = m_lcContents.m_listguiChildren.GetHead();
+    while (pgui != NULL)
+    {
+        RemoveItem(pgui);
 
-		pgui	= m_lcContents.m_listguiChildren.GetNext();
-		}
-	}
+        pgui = m_lcContents.m_listguiChildren.GetNext();
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Ensure the specified item is within the client of the listbox.
 //
 ////////////////////////////////////////////////////////////////////////
-void RListBox::EnsureVisible(				// Returns nothing.
-	RGuiItem* pgui,							// Item to ensure visibility of.
-	Position	posPreference /*= Top*/)	// In:  Preferred vertical position.
-	{
-	short	sX	= pgui->m_sX;
-	short	sY	= pgui->m_sY;
+void RListBox::EnsureVisible(       // Returns nothing.
+  RGuiItem *pgui,                   // Item to ensure visibility of.
+  Position posPreference /*= Top*/) // In:  Preferred vertical position.
+{
+    short sX = pgui->m_sX;
+    short sY = pgui->m_sY;
 
-	// Take position of item to list contents level.
-	RGuiItem*	pguiParent	= pgui->GetParent();
-	while (pguiParent != NULL && pguiParent != &m_lcContents)
-		{
-		sX	+= pguiParent->m_sX;
-		sY	+= pguiParent->m_sY;
+    // Take position of item to list contents level.
+    RGuiItem *pguiParent = pgui->GetParent();
+    while (pguiParent != NULL && pguiParent != &m_lcContents)
+    {
+        sX += pguiParent->m_sX;
+        sY += pguiParent->m_sY;
 
-		pguiParent	= pguiParent->GetParent();
-		}
+        pguiParent = pguiParent->GetParent();
+    }
 
-	// If we got to the list contents . . .
-	if (pguiParent != NULL)
-		{
-		// Set new position for list contents such that item
-		// is in upper left corner of client.
-		short	sClientX, sClientY, sClientH;
-		GetClient(&sClientX, &sClientY, NULL, &sClientH);
+    // If we got to the list contents . . .
+    if (pguiParent != NULL)
+    {
+        // Set new position for list contents such that item
+        // is in upper left corner of client.
+        short sClientX, sClientY, sClientH;
+        GetClient(&sClientX, &sClientY, NULL, &sClientH);
 
-		switch (posPreference)
-			{
-			case Top:
-				m_lcContents.Move(-sX + sClientX, -sY + sClientY);
-				break;
-			case Middle:
-				m_lcContents.Move(-sX + sClientX, -sY + sClientY + (sClientH - pgui->m_im.m_sHeight) / 2);
-				break;
-			case Bottom:
-				m_lcContents.Move(-sX + sClientX, -sY + sClientY + sClientH - pgui->m_im.m_sHeight);
-				break;
-			}
+        switch (posPreference)
+        {
+            case Top:
+                m_lcContents.Move(-sX + sClientX, -sY + sClientY);
+                break;
+            case Middle:
+                m_lcContents.Move(-sX + sClientX, -sY + sClientY + (sClientH - pgui->m_im.m_sHeight) / 2);
+                break;
+            case Bottom:
+                m_lcContents.Move(-sX + sClientX, -sY + sClientY + sClientH - pgui->m_im.m_sHeight);
+                break;
+        }
 
-		// Update the scrollbars.
-		UpdateScrollBars();
-		}
-	else
-		{
-		TRACE("EnsureVisible(): Specified gui is not a member of this "
-			"listbox.\n");
-		}
-	}
+        // Update the scrollbars.
+        UpdateScrollBars();
+    }
+    else
+    {
+        TRACE("EnsureVisible(): Specified gui is not a member of this "
+              "listbox.\n");
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Set the selection to the specified GUI item.
 //
 ////////////////////////////////////////////////////////////////////////
-void RListBox::SetSel(				// Returns nothing.
-	RGuiItem* pgui)					// Item to select or NULL for none.
-	{
-	// If new selection is different than current . . .
-	if (pgui != m_pguiSel)
-		{
-		// Unselect item.
-		SelectItem(m_pguiSel, FALSE);
+void RListBox::SetSel( // Returns nothing.
+  RGuiItem *pgui)      // Item to select or NULL for none.
+{
+    // If new selection is different than current . . .
+    if (pgui != m_pguiSel)
+    {
+        // Unselect item.
+        SelectItem(m_pguiSel, FALSE);
 
-		// Set new selection.
-		m_pguiSel	= pgui;
+        // Set new selection.
+        m_pguiSel = pgui;
 
-		// Select item.
-		SelectItem(m_pguiSel, TRUE);
-		}
-	}
+        // Select item.
+        SelectItem(m_pguiSel, TRUE);
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -626,236 +623,226 @@ void RListBox::SetSel(				// Returns nothing.
 // their visibility.
 //
 ////////////////////////////////////////////////////////////////////////
-void RListBox::UpdateScrollBarVisibility(void)	// Returns nothing.
-	{
-	// Get client.
-	short	sClientX, sClientY, sClientW, sClientH;
-	GetClient(&sClientX, &sClientY, &sClientW, &sClientH);
+void RListBox::UpdateScrollBarVisibility(void) // Returns nothing.
+{
+    // Get client.
+    short sClientX, sClientY, sClientW, sClientH;
+    GetClient(&sClientX, &sClientY, &sClientW, &sClientH);
 
-	// If visibility is not prohibited . . .
-	if (m_sbvVert != Hidden)
-		{
-		// If the vertical scrollbar should be visible . . .
-		if (m_lcContents.m_im.m_sHeight > sClientH - m_sbHorz.m_im.m_sHeight || m_sbvVert == Shown)
-			{
-			m_sbVert.m_sVisible	= TRUE;
-			}
-		else
-			{
-			m_sbVert.m_sVisible	= FALSE;
-			}
-		}
-	else
-		{
-		m_sbVert.m_sVisible	= FALSE;
-		}
+    // If visibility is not prohibited . . .
+    if (m_sbvVert != Hidden)
+    {
+        // If the vertical scrollbar should be visible . . .
+        if (m_lcContents.m_im.m_sHeight > sClientH - m_sbHorz.m_im.m_sHeight || m_sbvVert == Shown)
+        {
+            m_sbVert.m_sVisible = TRUE;
+        }
+        else
+        {
+            m_sbVert.m_sVisible = FALSE;
+        }
+    }
+    else
+    {
+        m_sbVert.m_sVisible = FALSE;
+    }
 
-	// If visibility is not prohibited . . .
-	if (m_sbvHorz != Hidden)
-		{
-		// If the horizontal scrollbar should be visible . . .
-		if (m_lcContents.m_im.m_sWidth > sClientW - m_sbVert.m_im.m_sWidth || m_sbvHorz == Shown)
-			{
-			m_sbHorz.m_sVisible	= TRUE;
-			}
-		else
-			{
-			m_sbHorz.m_sVisible	= FALSE;
-			}
-		}
-	else
-		{
-		m_sbHorz.m_sVisible	= FALSE;
-		}
+    // If visibility is not prohibited . . .
+    if (m_sbvHorz != Hidden)
+    {
+        // If the horizontal scrollbar should be visible . . .
+        if (m_lcContents.m_im.m_sWidth > sClientW - m_sbVert.m_im.m_sWidth || m_sbvHorz == Shown)
+        {
+            m_sbHorz.m_sVisible = TRUE;
+        }
+        else
+        {
+            m_sbHorz.m_sVisible = FALSE;
+        }
+    }
+    else
+    {
+        m_sbHorz.m_sVisible = FALSE;
+    }
 
-	// Activate scrollbars according to their visibility and current 
-	// activation status of listbox.
-	m_sbVert.SetActive(m_sbVert.m_sVisible && IsActivated());
-	m_sbHorz.SetActive(m_sbHorz.m_sVisible && IsActivated());
-	}
+    // Activate scrollbars according to their visibility and current
+    // activation status of listbox.
+    m_sbVert.SetActive(m_sbVert.m_sVisible && IsActivated());
+    m_sbHorz.SetActive(m_sbHorz.m_sVisible && IsActivated());
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Resize encapsulators to fit the largest encapsulated item or string,
 // reposition all items to appear in the correct order, resize scrollable
-// area (m_lcContents) to fit all listbox items, and update scrollbar 
+// area (m_lcContents) to fit all listbox items, and update scrollbar
 // ranges accordingly.
 //
 ////////////////////////////////////////////////////////////////////////
-void RListBox::AdjustContents(void)					// Returns nothing.
-	{
-	// Get client.
-	short	sClientX, sClientY, sClientW, sClientH;
-	GetClient(&sClientX, &sClientY, &sClientW, &sClientH);
+void RListBox::AdjustContents(void) // Returns nothing.
+{
+    // Get client.
+    short sClientX, sClientY, sClientW, sClientH;
+    GetClient(&sClientX, &sClientY, &sClientW, &sClientH);
 
-	// Minimum is viewable area (when vertical scrollbar shown).
-	m_sLargestWidth		= sClientW - m_sbVert.m_im.m_sWidth;
+    // Minimum is viewable area (when vertical scrollbar shown).
+    m_sLargestWidth = sClientW - m_sbVert.m_im.m_sWidth;
 
-	long	lTotalHeight	= 0;	// Used for averaging heights.
-	long	lTotalItems		= 0;	// Used for averaging heights.
+    long lTotalHeight = 0; // Used for averaging heights.
+    long lTotalItems = 0;  // Used for averaging heights.
 
-	// Get largest width.
-	RGuiItem*	pguiItem	= m_lcContents.m_listguiChildren.GetHead();
-	while (pguiItem != NULL)
-		{
-		// If width is larger than largest . . .
-		if (pguiItem->m_im.m_sWidth > m_sLargestWidth)
-			{
-			m_sLargestWidth	= pguiItem->m_im.m_sWidth;
-			}
+    // Get largest width.
+    RGuiItem *pguiItem = m_lcContents.m_listguiChildren.GetHead();
+    while (pguiItem != NULL)
+    {
+        // If width is larger than largest . . .
+        if (pguiItem->m_im.m_sWidth > m_sLargestWidth)
+        {
+            m_sLargestWidth = pguiItem->m_im.m_sWidth;
+        }
 
-		// Get next item.
-		pguiItem	= m_lcContents.m_listguiChildren.GetNext();
-		}
+        // Get next item.
+        pguiItem = m_lcContents.m_listguiChildren.GetNext();
+    }
 
-	// Go through children sizing encapsulators to m_sLargestWidth and
-	// repositioning items as we go.
-	short	sY	= 0;
-	pguiItem	= m_lcContents.m_listguiChildren.GetHead();
-	while (pguiItem != NULL)
-		{
-		// Reposition.
-		pguiItem->Move(pguiItem->m_sX, sY);
+    // Go through children sizing encapsulators to m_sLargestWidth and
+    // repositioning items as we go.
+    short sY = 0;
+    pguiItem = m_lcContents.m_listguiChildren.GetHead();
+    while (pguiItem != NULL)
+    {
+        // Reposition.
+        pguiItem->Move(pguiItem->m_sX, sY);
 
-		// If this is an encapsulator . . .
-		if (IsEncapsulator(pguiItem) != FALSE)
-			{
-			// If there's a change in width . . .
-			if (pguiItem->m_im.m_sWidth != m_sLargestWidth)
-				{
-				// Recreate item . . .
-				if (pguiItem->Create(
-					pguiItem->m_sX,
-					pguiItem->m_sY,
-					m_sLargestWidth,
-					pguiItem->m_im.m_sHeight,
-					pguiItem->m_im.m_sDepth) == 0)
-					{
-					}
-				else
-					{
-					TRACE("AdustContents(): pguiItem->Create() failed.\n");
-					}
-				}
-			}
+        // If this is an encapsulator . . .
+        if (IsEncapsulator(pguiItem) != FALSE)
+        {
+            // If there's a change in width . . .
+            if (pguiItem->m_im.m_sWidth != m_sLargestWidth)
+            {
+                // Recreate item . . .
+                if (pguiItem->Create(pguiItem->m_sX,
+                                     pguiItem->m_sY,
+                                     m_sLargestWidth,
+                                     pguiItem->m_im.m_sHeight,
+                                     pguiItem->m_im.m_sDepth) == 0)
+                {
+                }
+                else
+                {
+                    TRACE("AdustContents(): pguiItem->Create() failed.\n");
+                }
+            }
+        }
 
-		// Adjust position for next item by this item's height and the
-		// item spacing.
-		sY	+= pguiItem->m_im.m_sHeight + ITEM_SPACING;
+        // Adjust position for next item by this item's height and the
+        // item spacing.
+        sY += pguiItem->m_im.m_sHeight + ITEM_SPACING;
 
-		// Keep total height so we can average it to determine scrollbar
-		// increments.
-		lTotalHeight	+= pguiItem->m_im.m_sHeight + ITEM_SPACING;
-		lTotalItems++;
+        // Keep total height so we can average it to determine scrollbar
+        // increments.
+        lTotalHeight += pguiItem->m_im.m_sHeight + ITEM_SPACING;
+        lTotalItems++;
 
-		// Get next item.
-		pguiItem	= m_lcContents.m_listguiChildren.GetNext();
-		}
+        // Get next item.
+        pguiItem = m_lcContents.m_listguiChildren.GetNext();
+    }
 
-	// New height and/or width for container . . .
-	if (m_lcContents.Create(
-		m_lcContents.m_sX,
-		m_lcContents.m_sY,
-		m_sLargestWidth,
-		sY - ITEM_SPACING,
-		m_lcContents.m_im.m_sDepth) == 0)
-		{
-		}
-	else
-		{
-		TRACE("AdjustContents(): m_lcContents.Create() failed.\n");
-		}
+    // New height and/or width for container . . .
+    if (m_lcContents.Create(m_lcContents.m_sX,
+                            m_lcContents.m_sY,
+                            m_sLargestWidth,
+                            sY - ITEM_SPACING,
+                            m_lcContents.m_im.m_sDepth) == 0)
+    {
+    }
+    else
+    {
+        TRACE("AdjustContents(): m_lcContents.Create() failed.\n");
+    }
 
-	// Update scrollbar visibility.
-	UpdateScrollBarVisibility();
+    // Update scrollbar visibility.
+    UpdateScrollBarVisibility();
 
-	// Set scroll ranges:
+    // Set scroll ranges:
 
-	// The scrollable range is the length of the frame minus the size of
-	// the area that can be viewed.  This is subtracted from the client
-	// position to so it is already mapped directly into 'this's 
-	// coordinate system.
+    // The scrollable range is the length of the frame minus the size of
+    // the area that can be viewed.  This is subtracted from the client
+    // position to so it is already mapped directly into 'this's
+    // coordinate system.
 
-	// If the horizontal scrollbar is visible . . .
-	short	sScrollBarH	= 0;
-	if (m_sbHorz.m_sVisible != FALSE)
-		{
-		// Compensation:
-		sScrollBarH	= m_sbHorz.m_im.m_sHeight;
-		}
+    // If the horizontal scrollbar is visible . . .
+    short sScrollBarH = 0;
+    if (m_sbHorz.m_sVisible != FALSE)
+    {
+        // Compensation:
+        sScrollBarH = m_sbHorz.m_im.m_sHeight;
+    }
 
-	// If viewable area is smaller than list area . . .
-	if (m_lcContents.m_im.m_sHeight > sClientH - sScrollBarH)
-		{
-		m_sbVert.SetRange(
-			-sClientY,
-			(m_lcContents.m_im.m_sHeight - (sClientH - sScrollBarH)) - sClientY);
-		}
-	else
-		{
-		m_sbVert.SetRange(
-			-sClientY,
-			-sClientY);
-		}
-	
-	// If the vertical scrollbar is visible . . .
-	short	sScrollBarW	= 0;
-	if (m_sbVert.m_sVisible != FALSE)
-		{
-		// Compensation:
-		sScrollBarW	= m_sbVert.m_im.m_sWidth;
-		}
+    // If viewable area is smaller than list area . . .
+    if (m_lcContents.m_im.m_sHeight > sClientH - sScrollBarH)
+    {
+        m_sbVert.SetRange(-sClientY, (m_lcContents.m_im.m_sHeight - (sClientH - sScrollBarH)) - sClientY);
+    }
+    else
+    {
+        m_sbVert.SetRange(-sClientY, -sClientY);
+    }
 
-	// If viewable area is smaller than list area . . .
-	if (m_lcContents.m_im.m_sWidth > sClientW - sScrollBarW)
-		{
-		m_sbHorz.SetRange(
-			-sClientX,
-			(m_lcContents.m_im.m_sWidth - (sClientW - sScrollBarW)) - sClientX); 
-		}
-	else
-		{
-		m_sbHorz.SetRange(
-			-sClientX,
-			-sClientX);
-		}
+    // If the vertical scrollbar is visible . . .
+    short sScrollBarW = 0;
+    if (m_sbVert.m_sVisible != FALSE)
+    {
+        // Compensation:
+        sScrollBarW = m_sbVert.m_im.m_sWidth;
+    }
 
-	// Calculate average height of item.
-	long	lAvgHeight	= 0;
-	if (lTotalItems > 0)
-		{
-		lAvgHeight	= (short)(lTotalHeight / lTotalItems);
-		}
-	
-	// Update vertical scroll bar increments:
-	
-	// Clicking buttons should scroll one item at a time.
-	m_sbVert.m_lButtonIncDec	= lAvgHeight;
-	// Clicking tray should scroll visible items - 1 at a time.
-	m_sbVert.m_lTrayIncDec		= (sClientH - sScrollBarH) - lAvgHeight;
+    // If viewable area is smaller than list area . . .
+    if (m_lcContents.m_im.m_sWidth > sClientW - sScrollBarW)
+    {
+        m_sbHorz.SetRange(-sClientX, (m_lcContents.m_im.m_sWidth - (sClientW - sScrollBarW)) - sClientX);
+    }
+    else
+    {
+        m_sbHorz.SetRange(-sClientX, -sClientX);
+    }
 
-	// Safety . . .
-	if (m_sbVert.m_lTrayIncDec <= 0)
-		{
-		m_sbVert.m_lTrayIncDec	= lAvgHeight;
-		}
+    // Calculate average height of item.
+    long lAvgHeight = 0;
+    if (lTotalItems > 0)
+    {
+        lAvgHeight = (short)(lTotalHeight / lTotalItems);
+    }
 
-	// Update scroll positions.
-	UpdateScrollBars();
-	}
+    // Update vertical scroll bar increments:
+
+    // Clicking buttons should scroll one item at a time.
+    m_sbVert.m_lButtonIncDec = lAvgHeight;
+    // Clicking tray should scroll visible items - 1 at a time.
+    m_sbVert.m_lTrayIncDec = (sClientH - sScrollBarH) - lAvgHeight;
+
+    // Safety . . .
+    if (m_sbVert.m_lTrayIncDec <= 0)
+    {
+        m_sbVert.m_lTrayIncDec = lAvgHeight;
+    }
+
+    // Update scroll positions.
+    UpdateScrollBars();
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
-// Update scrollbars' positions.  This function is called by 
+// Update scrollbars' positions.  This function is called by
 // AdjustContents() and EnsureVisible(), so there is no need to call it
 // after calling one of those functions.
 //
 ////////////////////////////////////////////////////////////////////////
 void RListBox::UpdateScrollBars(void)
-	{
-	m_sbVert.SetPos(-m_lcContents.m_sY);
-	m_sbHorz.SetPos(-m_lcContents.m_sX);
-	}
+{
+    m_sbVert.SetPos(-m_lcContents.m_sY);
+    m_sbHorz.SetPos(-m_lcContents.m_sX);
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Querries.
@@ -864,63 +851,63 @@ void RListBox::UpdateScrollBars(void)
 ////////////////////////////////////////////////////////////////////////
 // Get the first child item.
 ////////////////////////////////////////////////////////////////////////
-RGuiItem* RListBox::GetFirst(void)	// Returns the first child item or
-												// NULL.
-	{
-	// Find first encapsulator.
-	RGuiItem*	pguiFirst	= m_lcContents.m_listguiChildren.GetHead();
-	while (pguiFirst != NULL)
-		{
-		if (IsEncapsulator(pguiFirst) != FALSE)
-			{
-			break;
-			}
+RGuiItem *RListBox::GetFirst(void) // Returns the first child item or
+                                   // NULL.
+{
+    // Find first encapsulator.
+    RGuiItem *pguiFirst = m_lcContents.m_listguiChildren.GetHead();
+    while (pguiFirst != NULL)
+    {
+        if (IsEncapsulator(pguiFirst) != FALSE)
+        {
+            break;
+        }
 
-		pguiFirst	= m_lcContents.m_listguiChildren.GetNext();
-		}
+        pguiFirst = m_lcContents.m_listguiChildren.GetNext();
+    }
 
-	return pguiFirst;
-	}
+    return pguiFirst;
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Get the next child item after the specified item.
 ////////////////////////////////////////////////////////////////////////
-RGuiItem* RListBox::GetNext(		// Returns the next child item.
-	RGuiItem*	pgui)					// In:  Child item that precedes the next.
-	{
-	RGuiItem*	pguiNext	= m_lcContents.m_listguiChildren.GetNext(pgui);
-	while (pguiNext != NULL)
-		{
-		if (IsEncapsulator(pguiNext) != FALSE)
-			{
-			break;
-			}
+RGuiItem *RListBox::GetNext( // Returns the next child item.
+  RGuiItem *pgui)            // In:  Child item that precedes the next.
+{
+    RGuiItem *pguiNext = m_lcContents.m_listguiChildren.GetNext(pgui);
+    while (pguiNext != NULL)
+    {
+        if (IsEncapsulator(pguiNext) != FALSE)
+        {
+            break;
+        }
 
-		pguiNext	= m_lcContents.m_listguiChildren.GetNext();
-		}
+        pguiNext = m_lcContents.m_listguiChildren.GetNext();
+    }
 
-	return pguiNext;
-	}
+    return pguiNext;
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Get the child item before the specified item.
 ////////////////////////////////////////////////////////////////////////
-RGuiItem* RListBox::GetPrev(		// Returns the previous child item or NULL.
-	RGuiItem*	pgui)					// In:  Child item that follows the prev.
-	{
-	RGuiItem*	pguiPrev	= m_lcContents.m_listguiChildren.GetPrev(pgui);
-	while (pguiPrev != NULL)
-		{
-		if (IsEncapsulator(pguiPrev) != FALSE)
-			{
-			break;
-			}
+RGuiItem *RListBox::GetPrev( // Returns the previous child item or NULL.
+  RGuiItem *pgui)            // In:  Child item that follows the prev.
+{
+    RGuiItem *pguiPrev = m_lcContents.m_listguiChildren.GetPrev(pgui);
+    while (pguiPrev != NULL)
+    {
+        if (IsEncapsulator(pguiPrev) != FALSE)
+        {
+            break;
+        }
 
-		pguiPrev	= m_lcContents.m_listguiChildren.GetPrev();
-		}
+        pguiPrev = m_lcContents.m_listguiChildren.GetPrev();
+    }
 
-	return pguiPrev;
-	}
+    return pguiPrev;
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Internals.
@@ -932,167 +919,137 @@ RGuiItem* RListBox::GetPrev(		// Returns the previous child item or NULL.
 // a child of this listbox.
 //
 ////////////////////////////////////////////////////////////////////////
-RGuiItem* RListBox::CreateStringItem(	// Returns new item on success;
-													// NULL, otherwise.
-	char* pszString)							// Text for new item.
-	{
-	RGuiItem*	pgui		= NULL;	// Assume nothing.
-	short	sError	= 0;
+RGuiItem *RListBox::CreateStringItem( // Returns new item on success;
+                                      // NULL, otherwise.
+  char *pszString)                    // Text for new item.
+{
+    RGuiItem *pgui = NULL; // Assume nothing.
+    short sError = 0;
 
-	// We'll need a font and a print for this.
-	ASSERT(m_pprint != NULL);
-	ASSERT(m_pprint->GetFont() != NULL);
+    // We'll need a font and a print for this.
+    ASSERT(m_pprint != NULL);
+    ASSERT(m_pprint->GetFont() != NULL);
 
-	// Allocate a new item . . .
-	pgui	= CreateGuiItem(m_typeEncapsulator);
-	if (pgui != NULL)
-		{
-		// Copy parms to new item.
-		CopyParms(pgui);
+    // Allocate a new item . . .
+    pgui = CreateGuiItem(m_typeEncapsulator);
+    if (pgui != NULL)
+    {
+        // Copy parms to new item.
+        CopyParms(pgui);
 
-		// Set callback.
-		pgui->m_bcUser				= PressedCall;
-		pgui->m_ulUserInstance	= (ULONG)this;
+        // Set callback.
+        pgui->m_bcUser = PressedCall;
+        pgui->m_ulUserInstance = (ULONG)this;
 
-		// Get thickness of border.
-		short sBorder	= pgui->GetTopLeftBorderThickness()
-			+ pgui->GetBottomRightBorderThickness();
+        // Get thickness of border.
+        short sBorder = pgui->GetTopLeftBorderThickness() + pgui->GetBottomRightBorderThickness();
 
-		// Get the width of the desired string.
-		short	sWidth	= m_pprint->GetWidth(pszString);
-		short	sHeight	= m_sFontCellHeight;
+        // Get the width of the desired string.
+        short sWidth = m_pprint->GetWidth(pszString);
+        short sHeight = m_sFontCellHeight;
 
-		// Adjust by border thickness.
-		sWidth	+= sBorder;
-		sHeight	+= sBorder;
+        // Adjust by border thickness.
+        sWidth += sBorder;
+        sHeight += sBorder;
 
-		// Set text for item before Create() (Create() calls Compose()).
-		pgui->SetText(pszString);
+        // Set text for item before Create() (Create() calls Compose()).
+        pgui->SetText(pszString);
 
-		// Create item . . .
-		if (pgui->Create(0, 0, sWidth, sHeight, m_im.m_sDepth) == 0)
-			{
-			// Make child of list area.
-			pgui->SetParent(&m_lcContents);
-			// Remember to delete this item.
-			MakeEncapsulator(pgui);
-			// Item position is not set until the next AdjustContents() call.
-			}
-		else
-			{
-			TRACE("CreateStringItem(): ptxt->Create() failed.\n");
-			sError	= 2;
-			}
+        // Create item . . .
+        if (pgui->Create(0, 0, sWidth, sHeight, m_im.m_sDepth) == 0)
+        {
+            // Make child of list area.
+            pgui->SetParent(&m_lcContents);
+            // Remember to delete this item.
+            MakeEncapsulator(pgui);
+            // Item position is not set until the next AdjustContents() call.
+        }
+        else
+        {
+            TRACE("CreateStringItem(): ptxt->Create() failed.\n");
+            sError = 2;
+        }
 
-		// If any errors occurred after allocation . . .
-		if (sError != 0)
-			{
-			delete pgui;
-			pgui	= NULL;
-			}
-		}
-	else
-		{
-		TRACE("CreateStringItem(): Failed to allocate encapsulator of type %s.\n",
-			ms_apszTypes[m_typeEncapsulator]);
-		sError	= 1;
-		}
+        // If any errors occurred after allocation . . .
+        if (sError != 0)
+        {
+            delete pgui;
+            pgui = NULL;
+        }
+    }
+    else
+    {
+        TRACE("CreateStringItem(): Failed to allocate encapsulator of type %s.\n", ms_apszTypes[m_typeEncapsulator]);
+        sError = 1;
+    }
 
-	return pgui;
-	}
+    return pgui;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Creates an encapsulator object for the specified GUI.
 //
 ////////////////////////////////////////////////////////////////////////
-RGuiItem* RListBox::CreateEncapsulator(	// Returns new item on success; NULL,
-														// otherwise.
-	RGuiItem*	pgui)								// Item to encapsulate.
-	{
-	RGuiItem*	pguiRes		= NULL;	// Assume nothing.
-	short	sError	= 0;
+RGuiItem *RListBox::CreateEncapsulator( // Returns new item on success; NULL,
+                                        // otherwise.
+  RGuiItem *pgui)                       // Item to encapsulate.
+{
+    RGuiItem *pguiRes = NULL; // Assume nothing.
+    short sError = 0;
 
-	// Allocate a new item . . .
-	pguiRes	= new RGuiItem;
-	if (pguiRes != NULL)
-		{
-		// Copy parms to new item.
-		CopyParms(pguiRes);
+    // Allocate a new item . . .
+    pguiRes = new RGuiItem;
+    if (pguiRes != NULL)
+    {
+        // Copy parms to new item.
+        CopyParms(pguiRes);
 
-		// Set callback.
-		pguiRes->m_bcUser				= PressedCall;
-		pguiRes->m_ulUserInstance	= (ULONG)this;
+        // Set callback.
+        pguiRes->m_bcUser = PressedCall;
+        pguiRes->m_ulUserInstance = (ULONG)this;
 
-		// Get thickness of border.
-		short sBorder	= pguiRes->GetTopLeftBorderThickness()
-			+ pguiRes->GetBottomRightBorderThickness();
+        // Get thickness of border.
+        short sBorder = pguiRes->GetTopLeftBorderThickness() + pguiRes->GetBottomRightBorderThickness();
 
-		// Get the width and height of the encapsulated item.
-		short	sWidth	= pgui->m_im.m_sWidth;
-		short	sHeight	= pgui->m_im.m_sHeight;
+        // Get the width and height of the encapsulated item.
+        short sWidth = pgui->m_im.m_sWidth;
+        short sHeight = pgui->m_im.m_sHeight;
 
-		// Adjust by border thickness.
-		sWidth	+= sBorder;
-		sHeight	+= sBorder;
+        // Adjust by border thickness.
+        sWidth += sBorder;
+        sHeight += sBorder;
 
-		// Create item . . .
-		if (pguiRes->Create(0, 0, sWidth, sHeight, m_im.m_sDepth) == 0)
-			{
-			// Make item a child of encapsulator.
-			pgui->SetParent(pguiRes);
-			// Mark item as an encapsulator.
-			MakeEncapsulator(pguiRes);
-			// Item position is not set until the next AdjustContents() call.
-			}
-		else
-			{
-			TRACE("CreateEncapsulator(): pguiRes->Create() failed.\n");
-			sError	= 2;
-			}
+        // Create item . . .
+        if (pguiRes->Create(0, 0, sWidth, sHeight, m_im.m_sDepth) == 0)
+        {
+            // Make item a child of encapsulator.
+            pgui->SetParent(pguiRes);
+            // Mark item as an encapsulator.
+            MakeEncapsulator(pguiRes);
+            // Item position is not set until the next AdjustContents() call.
+        }
+        else
+        {
+            TRACE("CreateEncapsulator(): pguiRes->Create() failed.\n");
+            sError = 2;
+        }
 
-		// If any errors occurred after allocation . . .
-		if (sError != 0)
-			{
-			delete pguiRes;
-			pguiRes	= NULL;
-			}
-		}
-	else
-		{
-		TRACE("CreateEncapsulator(): Failed to allocate RTxt.\n");
-		sError	= 1;
-		}
+        // If any errors occurred after allocation . . .
+        if (sError != 0)
+        {
+            delete pguiRes;
+            pguiRes = NULL;
+        }
+    }
+    else
+    {
+        TRACE("CreateEncapsulator(): Failed to allocate RTxt.\n");
+        sError = 1;
+    }
 
-	return pguiRes;
-	}
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// Place item at specified location in list of container's child items.
-// Under new pretenses, this should not fail.
-//
-//////////////////////////////////////////////////////////////////////////////
-void RListBox::AddAfter(		// Returns nothing.
-	RGuiItem*	pgui,				// Item to add.
-	RGuiItem*	pguiAfter)		// Item to add after or NULL to add at
-										// end.
-	{
-	// Reposition the new item.  Under new pretenses, this SHOULD not fail.
-	m_lcContents.m_listguiChildren.Remove(pgui);
-
-	// If none specified . . .
-	if (pguiAfter == NULL)
-		{
-		// Insert new item.  Under new pretenses, this SHOULD not fail.
-		m_lcContents.m_listguiChildren.AddTail(pgui);
-		}
-	else
-		{
-		// Insert new item.  Under new pretenses, this SHOULD not fail.
-		m_lcContents.m_listguiChildren.InsertAfter(pguiAfter, pgui);
-		}
-	}
+    return pguiRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -1100,50 +1057,77 @@ void RListBox::AddAfter(		// Returns nothing.
 // Under new pretenses, this should not fail.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RListBox::InsertBefore(	// Returns nothing.
-	RGuiItem*	pgui,				// Item to insert.
-	RGuiItem*	pguiBefore)		// Item to insert before or NULL to insert
-										// at beginning.
-	{
-	// Reposition the new item.  Under new pretenses, this SHOULD not fail.
-	m_lcContents.m_listguiChildren.Remove(pgui);
+void RListBox::AddAfter( // Returns nothing.
+  RGuiItem *pgui,        // Item to add.
+  RGuiItem *pguiAfter)   // Item to add after or NULL to add at
+                         // end.
+{
+    // Reposition the new item.  Under new pretenses, this SHOULD not fail.
+    m_lcContents.m_listguiChildren.Remove(pgui);
 
-	// If none specified . . .
-	if (pguiBefore == NULL)
-		{
-		// Insert new item.  Under new pretenses, this SHOULD not fail.
-		m_lcContents.m_listguiChildren.InsertHead(pgui);
-		}
-	else
-		{
-		// Insert new item.  Under new pretenses, this SHOULD not fail.
-		m_lcContents.m_listguiChildren.InsertBefore(pguiBefore, pgui);
-		}
-	}
+    // If none specified . . .
+    if (pguiAfter == NULL)
+    {
+        // Insert new item.  Under new pretenses, this SHOULD not fail.
+        m_lcContents.m_listguiChildren.AddTail(pgui);
+    }
+    else
+    {
+        // Insert new item.  Under new pretenses, this SHOULD not fail.
+        m_lcContents.m_listguiChildren.InsertAfter(pguiAfter, pgui);
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Place item at specified location in list of container's child items.
+// Under new pretenses, this should not fail.
+//
+//////////////////////////////////////////////////////////////////////////////
+void RListBox::InsertBefore( // Returns nothing.
+  RGuiItem *pgui,            // Item to insert.
+  RGuiItem *pguiBefore)      // Item to insert before or NULL to insert
+                             // at beginning.
+{
+    // Reposition the new item.  Under new pretenses, this SHOULD not fail.
+    m_lcContents.m_listguiChildren.Remove(pgui);
+
+    // If none specified . . .
+    if (pguiBefore == NULL)
+    {
+        // Insert new item.  Under new pretenses, this SHOULD not fail.
+        m_lcContents.m_listguiChildren.InsertHead(pgui);
+    }
+    else
+    {
+        // Insert new item.  Under new pretenses, this SHOULD not fail.
+        m_lcContents.m_listguiChildren.InsertBefore(pguiBefore, pgui);
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // [Un]Select the specified item.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RListBox::SelectItem(		// Returns nothing.
-	RGuiItem*	pguiSel,			// Item to [un]select.
-	short			sSelect)			// If TRUE, item is selected; if FALSE,
-										// item is unselected.
-	{
-	// If there was previously a selection . . .
-	if (pguiSel != NULL)
-		{
-		// If this is an encapsulation . . .
-		if (IsEncapsulator(pguiSel) != FALSE)
-			{
-			// Toggle border.
-			pguiSel->m_sInvertedBorder	= sSelect;
-			// Recompose item with new border effect.
-			pguiSel->Compose();
-			}
-		}
-	}
+void RListBox::SelectItem( // Returns nothing.
+  RGuiItem *pguiSel,       // Item to [un]select.
+  short sSelect)           // If TRUE, item is selected; if FALSE,
+                           // item is unselected.
+{
+    // If there was previously a selection . . .
+    if (pguiSel != NULL)
+    {
+        // If this is an encapsulation . . .
+        if (IsEncapsulator(pguiSel) != FALSE)
+        {
+            // Toggle border.
+            pguiSel->m_sInvertedBorder = sSelect;
+            // Recompose item with new border effect.
+            pguiSel->Compose();
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1152,73 +1136,71 @@ void RListBox::SelectItem(		// Returns nothing.
 // (protected).
 //
 ////////////////////////////////////////////////////////////////////////
-short RListBox::LoadChildren(	// Returns 0 on success.
-	RFile*	pfile)				// File to load from.
-	{
-	short	sRes	= 0;	// Assume success.
+short RListBox::LoadChildren( // Returns 0 on success.
+  RFile *pfile)               // File to load from.
+{
+    short sRes = 0; // Assume success.
 
-	ASSERT(pfile->IsOpen() != FALSE);
+    ASSERT(pfile->IsOpen() != FALSE);
 
-	short	sNum;
-	// Read number of children.
-	pfile->Read(&sNum);
+    short sNum;
+    // Read number of children.
+    pfile->Read(&sNum);
 
-	// The first three are our scrollbars and frame.
-	ASSERT(sNum >= 3);
+    // The first three are our scrollbars and frame.
+    ASSERT(sNum >= 3);
 
-	// Load directly into these special children.
-	if (m_sbVert.Load(pfile) == 0)
-		{
-		if (m_sbHorz.Load(pfile) == 0)
-			{
-			// m_lcContents needs to know its parent during Load() (specifically
-			// LoadChildren() needs to know).
-			m_lcContents.SetParent(this);
+    // Load directly into these special children.
+    if (m_sbVert.Load(pfile) == 0)
+    {
+        if (m_sbHorz.Load(pfile) == 0)
+        {
+            // m_lcContents needs to know its parent during Load() (specifically
+            // LoadChildren() needs to know).
+            m_lcContents.SetParent(this);
 
-			if (m_lcContents.Load(pfile) == 0)
-				{
-				// Subtract these three children from total.
-				sNum	-= 3;
-				}
-			else
-				{
-				TRACE("LoadChildren(): m_sbVert.Load() failed.\n");
-				sRes	= -3;
-				}
-			}
-		else
-			{
-			TRACE("LoadChildren(): m_sbHorz.Load() failed.\n");
-			sRes	= -2;
-			}
-		}
-	else
-		{
-		TRACE("LoadChildren(): m_lcContents.Load() failed.\n");
-		sRes	= -1;
-		}
+            if (m_lcContents.Load(pfile) == 0)
+            {
+                // Subtract these three children from total.
+                sNum -= 3;
+            }
+            else
+            {
+                TRACE("LoadChildren(): m_sbVert.Load() failed.\n");
+                sRes = -3;
+            }
+        }
+        else
+        {
+            TRACE("LoadChildren(): m_sbHorz.Load() failed.\n");
+            sRes = -2;
+        }
+    }
+    else
+    {
+        TRACE("LoadChildren(): m_lcContents.Load() failed.\n");
+        sRes = -1;
+    }
 
-	// Instantiate rest of children.
-	RGuiItem* pgui;
-	short	sCurChild;
-	for (	sCurChild	= 0; 
-			sCurChild < sNum && sRes == 0 && pfile->Error() == FALSE; 
-			sCurChild++)
-		{
-		pgui	= LoadInstantiate(pfile);
-		if (pgui != NULL)
-			{
-			pgui->SetParent(this);
-			}
-		else
-			{
-			TRACE("LoadChildren(): LoadInstantiate() failed.\n");
-			sRes	= -1;
-			}
-		}
+    // Instantiate rest of children.
+    RGuiItem *pgui;
+    short sCurChild;
+    for (sCurChild = 0; sCurChild < sNum && sRes == 0 && pfile->Error() == FALSE; sCurChild++)
+    {
+        pgui = LoadInstantiate(pfile);
+        if (pgui != NULL)
+        {
+            pgui->SetParent(this);
+        }
+        else
+        {
+            TRACE("LoadChildren(): LoadInstantiate() failed.\n");
+            sRes = -1;
+        }
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1227,80 +1209,80 @@ short RListBox::LoadChildren(	// Returns 0 on success.
 // (protected).
 //
 ////////////////////////////////////////////////////////////////////////
-short RListBox::SaveChildren(	// Returns 0 on success.
-	RFile*	pfile)				// File to save to.
-	{
-	short	sRes	= 0;	// Assume success.
+short RListBox::SaveChildren( // Returns 0 on success.
+  RFile *pfile)               // File to save to.
+{
+    short sRes = 0; // Assume success.
 
-	ASSERT(pfile->IsOpen() != FALSE);
+    ASSERT(pfile->IsOpen() != FALSE);
 
-	// Determine number of child items.
-	short	sNum	= 0;
-	RGuiItem*	pgui = m_listguiChildren.GetHead();
-	while (pgui != NULL)
-		{
-		sNum++;
+    // Determine number of child items.
+    short sNum = 0;
+    RGuiItem *pgui = m_listguiChildren.GetHead();
+    while (pgui != NULL)
+    {
+        sNum++;
 
-		pgui	= m_listguiChildren.GetNext();
-		}
+        pgui = m_listguiChildren.GetNext();
+    }
 
-	// Write number of children.
-	pfile->Write(sNum);
+    // Write number of children.
+    pfile->Write(sNum);
 
-	// These should definitely be children of 'this' item.
-	ASSERT(m_sbVert.GetParent()		== this);
-	ASSERT(m_sbHorz.GetParent()		== this);
-	ASSERT(m_lcContents.GetParent()	== this);
+    // These should definitely be children of 'this' item.
+    ASSERT(m_sbVert.GetParent() == this);
+    ASSERT(m_sbHorz.GetParent() == this);
+    ASSERT(m_lcContents.GetParent() == this);
 
-	// Always write our 3 special children (scrollbars & frame) first so we know
-	// where to get them on load.
-	if (m_sbVert.Save(pfile) == 0)
-		{
-		if (m_sbHorz.Save(pfile) == 0)
-			{
-			if (m_lcContents.Save(pfile) == 0)
-				{
-				// Subtract these three children from total.
-				// Currently this number is not used during save,
-				// but just in case it ever is.
-				sNum	-= 3;
-				}
-			else
-				{
-				TRACE("SaveChildren(): m_lcContents.Save() failed.\n");
-				sRes	= -3;
-				}
-			}
-		else
-			{
-			TRACE("SaveChildren(): m_sbHorz.Save() failed.\n");
-			sRes	= -2;
-			}
-		}
-	else
-		{
-		TRACE("SaveChildren(): m_sbVert.Save() failed.\n");
-		sRes	= -1;
-		}
+    // Always write our 3 special children (scrollbars & frame) first so we know
+    // where to get them on load.
+    if (m_sbVert.Save(pfile) == 0)
+    {
+        if (m_sbHorz.Save(pfile) == 0)
+        {
+            if (m_lcContents.Save(pfile) == 0)
+            {
+                // Subtract these three children from total.
+                // Currently this number is not used during save,
+                // but just in case it ever is.
+                sNum -= 3;
+            }
+            else
+            {
+                TRACE("SaveChildren(): m_lcContents.Save() failed.\n");
+                sRes = -3;
+            }
+        }
+        else
+        {
+            TRACE("SaveChildren(): m_sbHorz.Save() failed.\n");
+            sRes = -2;
+        }
+    }
+    else
+    {
+        TRACE("SaveChildren(): m_sbVert.Save() failed.\n");
+        sRes = -1;
+    }
 
-	// Save children.  Note that we go through the children in reverse
-	// order so they, on load, get added back to their parent in the
-	// order they were originally added to this parent.
-	pgui	= m_listguiChildren.GetTail();
-	while (pgui != NULL && sRes == 0 && pfile->Error() == FALSE)
-		{
-		// Don't write these 3 again . . .
-		if (pgui != &m_sbVert && pgui != &m_sbHorz && pgui != &m_lcContents)
-			{
-			// Save child.
-			sRes	= pgui->Save(pfile);
-			}
+    // Save children.  Note that we go through the children in reverse
+    // order so they, on load, get added back to their parent in the
+    // order they were originally added to this parent.
+    pgui = m_listguiChildren.GetTail();
+    while (pgui != NULL && sRes == 0 && pfile->Error() == FALSE)
+    {
+        // Don't write these 3 again . . .
+        if (pgui != &m_sbVert && pgui != &m_sbHorz && pgui != &m_lcContents)
+        {
+            // Save child.
+            sRes = pgui->Save(pfile);
+        }
 
-		pgui	= m_listguiChildren.GetPrev();
-		}
+        pgui = m_listguiChildren.GetPrev();
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1308,59 +1290,59 @@ short RListBox::SaveChildren(	// Returns 0 on success.
 // (virtual/protected (overriden here)).
 //
 ////////////////////////////////////////////////////////////////////////
-short RListBox::ReadMembers(	// Returns 0 on success.
-	RFile*	pfile,					// File to read from.
-	U32		u32Version)				// File format version to use.
-	{
-	short	sRes	= 0;	// Assume success.
+short RListBox::ReadMembers( // Returns 0 on success.
+  RFile *pfile,              // File to read from.
+  U32 u32Version)            // File format version to use.
+{
+    short sRes = 0; // Assume success.
 
-	// Invoke base class to read base members.
-	sRes	= RGuiItem::ReadMembers(pfile, u32Version);
+    // Invoke base class to read base members.
+    sRes = RGuiItem::ReadMembers(pfile, u32Version);
 
-	// If okay so far . . .
-	if (sRes == 0)
-		{
-		ASSERT(pfile != NULL);
-		ASSERT(pfile->IsOpen() != FALSE);
-		
-		U32	u32Temp;
-		
-		// Switch on version.
-		switch (u32Version)
-			{
-			default:
-			// Insert additional version numbers here!
-			// case 4:	// Version 4 stuff.
-			// case 3:	// Version 3 stuff.
-			case 2:	// Version 2 added encapsulator type.
-				pfile->Read(&u32Temp);
-				m_typeEncapsulator	= (Type)u32Temp;
+    // If okay so far . . .
+    if (sRes == 0)
+    {
+        ASSERT(pfile != NULL);
+        ASSERT(pfile->IsOpen() != FALSE);
 
-			case 1:
-				// Read this class's members.
-				pfile->Read(&u32Temp);
-				m_sbvVert	= (ScrollBarVisibility)u32Temp;
+        U32 u32Temp;
 
-				pfile->Read(&u32Temp);
-				m_sbvHorz	= (ScrollBarVisibility)u32Temp;
+        // Switch on version.
+        switch (u32Version)
+        {
+            default:
+            // Insert additional version numbers here!
+            // case 4:	// Version 4 stuff.
+            // case 3:	// Version 3 stuff.
+            case 2: // Version 2 added encapsulator type.
+                pfile->Read(&u32Temp);
+                m_typeEncapsulator = (Type)u32Temp;
 
-			case 0:	// In version 0, only base class RGuiItem members were stored.
-				// If successful . . .
-				if (pfile->Error() == FALSE)
-					{
-					// Success.
-					}
-				else
-					{
-					TRACE("ReadMembers(): Error reading RListBox members.\n");
-					sRes	= -1;
-					}
-				break;
-			}
-		}
+            case 1:
+                // Read this class's members.
+                pfile->Read(&u32Temp);
+                m_sbvVert = (ScrollBarVisibility)u32Temp;
 
-	return sRes;
-	}
+                pfile->Read(&u32Temp);
+                m_sbvHorz = (ScrollBarVisibility)u32Temp;
+
+            case 0: // In version 0, only base class RGuiItem members were stored.
+                // If successful . . .
+                if (pfile->Error() == FALSE)
+                {
+                    // Success.
+                }
+                else
+                {
+                    TRACE("ReadMembers(): Error reading RListBox members.\n");
+                    sRes = -1;
+                }
+                break;
+        }
+    }
+
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1368,43 +1350,42 @@ short RListBox::ReadMembers(	// Returns 0 on success.
 // (virtual/protected (overriden here)).
 //
 ////////////////////////////////////////////////////////////////////////
-short RListBox::WriteMembers(	// Returns 0 on success.
-	RFile*	pfile)					// File to write to.
-	{
-	short	sRes	= 0;	// Assume success.
+short RListBox::WriteMembers( // Returns 0 on success.
+  RFile *pfile)               // File to write to.
+{
+    short sRes = 0; // Assume success.
 
-	// Invoke base class to read base members.
-	sRes	= RGuiItem::WriteMembers(pfile);
+    // Invoke base class to read base members.
+    sRes = RGuiItem::WriteMembers(pfile);
 
-	// If okay so far . . .
-	if (sRes == 0)
-		{
-		ASSERT(pfile != NULL);
-		ASSERT(pfile->IsOpen() != FALSE);
-		
+    // If okay so far . . .
+    if (sRes == 0)
+    {
+        ASSERT(pfile != NULL);
+        ASSERT(pfile->IsOpen() != FALSE);
 
-		// Write this class's members.
-		////////////// Version 2 ////////////////////
-		pfile->Write((U32)m_typeEncapsulator);	
-		////////////// Version 1 ////////////////////
-		pfile->Write((U32)m_sbvVert);
-		pfile->Write((U32)m_sbvHorz);
-		////////////// Version 0 ////////////////////
+        // Write this class's members.
+        ////////////// Version 2 ////////////////////
+        pfile->Write((U32)m_typeEncapsulator);
+        ////////////// Version 1 ////////////////////
+        pfile->Write((U32)m_sbvVert);
+        pfile->Write((U32)m_sbvHorz);
+        ////////////// Version 0 ////////////////////
 
-		// If successful . . .
-		if (pfile->Error() == FALSE)
-			{
-			// Success.
-			}
-		else
-			{
-			TRACE("WriteMembers(): Error writing RListBox members.\n");
-			sRes	= -1;
-			}
-		}
+        // If successful . . .
+        if (pfile->Error() == FALSE)
+        {
+            // Success.
+        }
+        else
+        {
+            TRACE("WriteMembers(): Error writing RListBox members.\n");
+            sRes = -1;
+        }
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // EOF

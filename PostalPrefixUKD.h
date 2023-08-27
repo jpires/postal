@@ -24,8 +24,7 @@
 #include "PostalPrefixD.h"
 
 // Define the locale (US, UK, FRENCH, or GERMAN are currently supported)
-#define LOCALE				UK
-
+#define LOCALE UK
 
 ////////////////////////////////////////////////////////////////////////////////
 // EOF

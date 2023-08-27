@@ -28,12 +28,12 @@
 // Things included in this file will be in the precompiled header.
 // For a CPP to use the precompiled header it must:
 //
-// - All headers included here must be included in the CPP in the same 
+// - All headers included here must be included in the CPP in the same
 // order they are here and must be the first includes in that CPP.
 // - Check the 'Use precompiled header file' option in the Settings|C/C++|
 // Precompiled Headers settings dialog with 'Through header:' set to RSPiX.h.
 //
-// 
+//
 // If your CPP does not like utilizing the precompiled header (i.e., it does
 // not include these headers or it does not include them first):
 //

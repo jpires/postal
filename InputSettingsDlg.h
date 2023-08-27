@@ -17,7 +17,7 @@
 //
 // InputSettingsDlg.h
 // Project: Nostril (aka Postal)
-// 
+//
 // History:
 //		07/03/97 JMI	Started.
 //
@@ -31,34 +31,33 @@
 
 #include "RSPiX.h"
 
-
 //////////////////////////////////////////////////////////////////////////////
 // Called to setup an input settings menu.
 //////////////////////////////////////////////////////////////////////////////
-extern short InputSettingsDlg_InitMenu(	// Returns 0 on success.
-	Menu* pmenu);									// In:  Menu to setup.
+extern short InputSettingsDlg_InitMenu( // Returns 0 on success.
+  Menu *pmenu);                         // In:  Menu to setup.
 
 //////////////////////////////////////////////////////////////////////////////
 // Called to clean up an input settings menu.
 //////////////////////////////////////////////////////////////////////////////
-extern short InputSettingsDlg_KillMenu(	// Returns 0 on success.
-	Menu* pmenu);									// In:  Menu to clean up.  
+extern short InputSettingsDlg_KillMenu( // Returns 0 on success.
+  Menu *pmenu);                         // In:  Menu to clean up.
 
 //////////////////////////////////////////////////////////////////////////////
 // Called when a choice is made or a selection is changed on an input
 // setttings menu.
 //////////////////////////////////////////////////////////////////////////////
-void InputSettingsDlg_Choice(	// Returns nothing.
-	Menu*	pmenuCurrent,			// In:  Current menu.
-	short sMenuItem);				// In:  Menu item chosen or -1 if selection 
-										// change.
+void InputSettingsDlg_Choice( // Returns nothing.
+  Menu *pmenuCurrent,         // In:  Current menu.
+  short sMenuItem);           // In:  Menu item chosen or -1 if selection
+                              // change.
 
 //////////////////////////////////////////////////////////////////////////////
 // Edit the input settings via menu.
 //////////////////////////////////////////////////////////////////////////////
-extern short EditInputSettings(void);	// Returns nothing.
+extern short EditInputSettings(void); // Returns nothing.
 
-#endif	// INPUTSETTINGSDLG_H
+#endif // INPUTSETTINGSDLG_H
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

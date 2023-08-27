@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // InputEvent.H
-// 
+//
 // History:
 //		01/16/96 JMI	Started.
 //
@@ -42,7 +42,7 @@
 // paths to a header file.  In this case we generally go off of our
 // RSPiX root directory.  System.h MUST be included before this macro
 // is evaluated.  System.h is the header that, based on the current
-// platform (or more so in this case on the compiler), defines 
+// platform (or more so in this case on the compiler), defines
 // PATHS_IN_INCLUDES.  Blue.h includes system.h so you can include that
 // instead.
 ///////////////////////////////////////////////////////////////////////////////
@@ -64,38 +64,38 @@
 
 // Input event structure for rsp*InputEvent[s]() functions.
 typedef struct
-	{
-	typedef enum
-		{
-		None,		// No event.  Use this value to indicate no event.
-		Mouse,	// Mouse event.
-		Key,		// Keyboard event.
-		Joy		// Joystick event (NYI) ???
-		} Type;
+{
+    typedef enum
+    {
+        None,  // No event.  Use this value to indicate no event.
+        Mouse, // Mouse event.
+        Key,   // Keyboard event.
+        Joy    // Joystick event (NYI) ???
+    } Type;
 
-	Type	type;		// Type of event { Mouse, Key, Joy }.
-	long	lTime;	// Time at which event occurred.
-	short	sUsed;	// Indicates that this event has been used.
-						// Set this if your API utilizes this event so that others
-						// know that it's already been absorbed.
-	long	lUser;	// User value.  Use as you please.
+    Type type;   // Type of event { Mouse, Key, Joy }.
+    long lTime;  // Time at which event occurred.
+    short sUsed; // Indicates that this event has been used.
+                 // Set this if your API utilizes this event so that others
+                 // know that it's already been absorbed.
+    long lUser;  // User value.  Use as you please.
 
-	union
-		{
-		struct	// Mouse event.
-			{
-			short sPosX;		// X position of event.
-			short	sPosY;		// Y position of event.
-			short	sButtons;	// Buttons status at event (ala rspGetMouseEvent).
-			short	sEvent;		// Event type (ala rspGetMouseEvent).
-			};
-		
-		struct	// Keyboard event.
-			{
-			long	lKey;			// Key value and modifiers (ala rspGetKey).
-			};
-		};
-	} RInputEvent;
+    union
+    {
+        struct // Mouse event.
+        {
+            short sPosX;    // X position of event.
+            short sPosY;    // Y position of event.
+            short sButtons; // Buttons status at event (ala rspGetMouseEvent).
+            short sEvent;   // Event type (ala rspGetMouseEvent).
+        };
+
+        struct // Keyboard event.
+        {
+            long lKey; // Key value and modifiers (ala rspGetKey).
+        };
+    };
+} RInputEvent;
 
 // Input event structure for XInput events. (Used only for menu navigation)
 const int XInputButtons = 18;
@@ -114,15 +114,15 @@ const int XInputAxes = 12;
 #define XINPUT_BUTTON_BACK2 g_InputSettings.m_sJoyMenuBackButton2
 typedef struct
 {
-	typedef enum
-	{
-		None,		// Nothing to report on this button.
-		Press,		// This button was pressed.
-		Release		// This button was released.
-	} EButtonState;	// State of button (pushed, released, or None)
+    typedef enum
+    {
+        None,       // Nothing to report on this button.
+        Press,      // This button was pressed.
+        Release     // This button was released.
+    } EButtonState; // State of button (pushed, released, or None)
 
-	EButtonState ButtonState[XInputButtons];	// States of all 16 buttons
-	EButtonState AxisState[XInputAxes];			// States of all 6 axes
+    EButtonState ButtonState[XInputButtons]; // States of all 16 buttons
+    EButtonState AxisState[XInputAxes];      // States of all 6 axes
 } XInputState;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -131,18 +131,17 @@ typedef struct
 
 // Clears any pending input events.  Calls rspClearMouseEvents() and
 // rspClearKeyEvents().
-void rspClearAllInputEvents(void);	// Returns nothing.
+void rspClearAllInputEvents(void); // Returns nothing.
 
 // Clears any pending key input events.  Calls rspClearKeyEvents().
-void rspClearKeyInputEvents(void);	// Returns nothing.
+void rspClearKeyInputEvents(void); // Returns nothing.
 
 // Clears any pending mouse input events.  Calls rspClearMouseEvents().
-void rspClearMouseInputEvents(void);	// Returns nothing.
+void rspClearMouseInputEvents(void); // Returns nothing.
 
 // Gets the next input event.
-short rspGetNextInputEvent(	// Returns 1 if there is an event, 0 if none.
-	RInputEvent*	pie);			// Out: Filled with input event type and details.
-
+short rspGetNextInputEvent( // Returns 1 if there is an event, 0 if none.
+  RInputEvent *pie);        // Out: Filled with input event type and details.
 
 // XInput menu controls.
 
@@ -150,14 +149,14 @@ short rspGetNextInputEvent(	// Returns 1 if there is an event, 0 if none.
 void ClearXInputState();
 
 // Gets the next XInput state.
-short GetXInputState(XInputState* xis); // Returns 1 on success, 0 if failure or controller not present.
-short GetXInputStateNoUpdate(XInputState* xis);
-short GetLastXInputState(XInputState* xis);	// Returns the last known XInputState
+short GetXInputState(XInputState *xis); // Returns 1 on success, 0 if failure or controller not present.
+short GetXInputStateNoUpdate(XInputState *xis);
+short GetLastXInputState(XInputState *xis); // Returns the last known XInputState
 
 // Returns 1 if any button on the controller is pressed.
 short IsXInputButtonPressed();
 
-#endif	// INPUT_EVENT_H
+#endif // INPUT_EVENT_H
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////

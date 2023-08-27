@@ -30,28 +30,24 @@
 #include "Blue.h"
 #include "../cyan.h"
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // Macros, types, enums, etc.
 ////////////////////////////////////////////////////////////////////////////////
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Data, variables, etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-static unsigned char m_aucWin32R1[10] = {   0, 128,   0, 128,   0, 128,   0, 128, 192, 166 };
-static unsigned char m_aucWin32G1[10] = {   0,   0, 128, 128,   0,   0, 128, 128, 220, 202 };
-static unsigned char m_aucWin32B1[10] = {   0,   0,   0,   0, 128, 128, 128, 128, 192, 240 };
-static unsigned char m_aucWin32R2[10] = { 255, 160, 128, 255,   0, 255,   0, 255,   0, 255 };
-static unsigned char m_aucWin32G2[10] = { 251, 160, 128,   0, 255, 255,   0,   0, 255, 255 };
-static unsigned char m_aucWin32B2[10] = { 240, 164, 128,   0,   0,   0, 255, 255, 255, 255 };
-
+static unsigned char m_aucWin32R1[10] = { 0, 128, 0, 128, 0, 128, 0, 128, 192, 166 };
+static unsigned char m_aucWin32G1[10] = { 0, 0, 128, 128, 0, 0, 128, 128, 220, 202 };
+static unsigned char m_aucWin32B1[10] = { 0, 0, 0, 0, 128, 128, 128, 128, 192, 240 };
+static unsigned char m_aucWin32R2[10] = { 255, 160, 128, 255, 0, 255, 0, 255, 0, 255 };
+static unsigned char m_aucWin32G2[10] = { 251, 160, 128, 0, 255, 255, 0, 0, 255, 255 };
+static unsigned char m_aucWin32B2[10] = { 240, 164, 128, 0, 0, 0, 255, 255, 255, 255 };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Function Prototypes
 ////////////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -70,29 +66,27 @@ static unsigned char m_aucWin32B2[10] = { 240, 164, 128,   0,   0,   0, 255, 255
 // and those used by newer Mac apps that use the "3D" GUI look.
 //
 ///////////////////////////////////////////////////////////////////////////////
-void rspSetWin32StaticColors(
-	short sLock /*= 0*/)										// In:  1 means lock colors, 0 means don't
-	{
-	// Make sure display module is alive before we call it
-	if (1) //( (SDL_WasInit(SDL_INIT_VIDEO)) && (SDL_GetVideoSurface() != NULL) )
-		{
-		// Set the colors (note that colors 0 and 255 can't really be changed!)
-		rspSetPaletteEntries(  0, 10, m_aucWin32R1, m_aucWin32G1, m_aucWin32B1, 1);
-		rspSetPaletteEntries(246, 10, m_aucWin32R2, m_aucWin32G2, m_aucWin32B2, 1);
+void rspSetWin32StaticColors(short sLock /*= 0*/) // In:  1 means lock colors, 0 means don't
+{
+    // Make sure display module is alive before we call it
+    if (1) //( (SDL_WasInit(SDL_INIT_VIDEO)) && (SDL_GetVideoSurface() != NULL) )
+    {
+        // Set the colors (note that colors 0 and 255 can't really be changed!)
+        rspSetPaletteEntries(0, 10, m_aucWin32R1, m_aucWin32G1, m_aucWin32B1, 1);
+        rspSetPaletteEntries(246, 10, m_aucWin32R2, m_aucWin32G2, m_aucWin32B2, 1);
 
-		// Check if we need to lock the colors
-		if (sLock)
-			{
-			rspLockPaletteEntries(  0, 10);
-			rspLockPaletteEntries(246, 10);
-			}
-		}
-	else
-		{
-		TRACE("rspSetWin32StaticColors(): rspInitBlue() must be called before using this function!\n");
-		}
-	}
-
+        // Check if we need to lock the colors
+        if (sLock)
+        {
+            rspLockPaletteEntries(0, 10);
+            rspLockPaletteEntries(246, 10);
+        }
+    }
+    else
+    {
+        TRACE("rspSetWin32StaticColors(): rspInitBlue() must be called before using this function!\n");
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // EOF

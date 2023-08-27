@@ -18,8 +18,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 //	IMAGECON.H
-//   
-//	Created on 		09/28/95	BRH 
+//
+//	Created on 		09/28/95	BRH
 // Implemented on 09/28/95 BRH
 //
 // 09/28/95	BRH	Standard conversion functions for the standard
@@ -35,7 +35,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // This header is no longer used.
-#pragma message ( __FILE__ " : Do not include this header.  It is no longer used." )
+#pragma message(__FILE__ " : Do not include this header.  It is no longer used.")
 
 #ifndef IMAGECON_H
 #define IMAGECON_H
@@ -45,21 +45,21 @@
 // paths to a header file.  In this case we generally go off of our
 // RSPiX root directory.  System.h MUST be included before this macro
 // is evaluated.  System.h is the header that, based on the current
-// platform (or more so in this case on the compiler), defines 
+// platform (or more so in this case on the compiler), defines
 // PATHS_IN_INCLUDES.  Blue.h includes system.h so you can include that
 // instead.
 
 // Green include files
 #ifdef PATHS_IN_INCLUDES
-	#include "GREEN/Image/Image.h"
+#include "GREEN/Image/Image.h"
 #else
-	#include "Image.h"
+#include "Image.h"
 #endif // PATHS_IN_INCLUDES
 
 // Orange include files
-//#include "dynalink/dynalink.h"
+// #include "dynalink/dynalink.h"
 
-class CImage;		// forward declaration
+class CImage; // forward declaration
 
 // Conversion from extended to standard function typedef.
 ////typedef short (*CONVFROMFUNC)(CImage* pImage);
@@ -82,8 +82,8 @@ class CImage;		// forward declaration
 // LINK_IMAGECONV_FROM(ConvertFromBMP8, BMP8);
 /*
 #define LINK_IMAGECONV_FROM(pUserFromFunc, lUserFromFuncIndex)		\
-	LINKLATE(CONVFROMFUNC, CImage, MAX_IMAGE_FROMCONVERTORS,				\
-				pUserFromFunc, lUserFromFuncIndex)
+    LINKLATE(CONVFROMFUNC, CImage, MAX_IMAGE_FROMCONVERTORS,				\
+                pUserFromFunc, lUserFromFuncIndex)
 */
 // Use this to link a new Image Convertor that converts _TO_ an extended
 // format from a standard.
@@ -92,8 +92,8 @@ class CImage;		// forward declaration
 // LINK_IMAGECONV_TO(ConvertToBMP8, BMP8);
 /*
 #define LINK_IMAGECONV_TO(pUserToFunc, lUserToFuncIndex)		\
-	LINKLATE(CONVTOFUNC, CImage, MAX_IMAGE_TOCONVERTORS,			\
-				pUserToFunc, lUserToFuncIndex)
+    LINKLATE(CONVTOFUNC, CImage, MAX_IMAGE_TOCONVERTORS,			\
+                pUserToFunc, lUserToFuncIndex)
 */
 ///////////////////////////////////////////////////////////////////////////////
 // Internal Image use:
@@ -101,13 +101,13 @@ class CImage;		// forward declaration
 // Use this to get a "to" function.
 /*
 #define GETTOFUNC(lIndex)		\
-	GETLINKFUNC(CONVTOFUNC, CImage, MAX_IMAGE_TOCONVERTORS, lIndex)
+    GETLINKFUNC(CONVTOFUNC, CImage, MAX_IMAGE_TOCONVERTORS, lIndex)
 
 // Use this to get a "from" function.
 #define GETFROMFUNC(lIndex)	\
-	GETLINKFUNC(CONVFROMFUNC, CImage, MAX_IMAGE_FROMCONVERTORS, lIndex)
+    GETLINKFUNC(CONVFROMFUNC, CImage, MAX_IMAGE_FROMCONVERTORS, lIndex)
 */
-#endif //IMAGECON_H
+#endif // IMAGECON_H
 
 ///////////////////////////////////////////////////////////////////////////////
 // EOF

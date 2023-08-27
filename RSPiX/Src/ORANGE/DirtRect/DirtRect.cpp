@@ -18,13 +18,13 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // DirtRect.CPP
-// 
+//
 // History:
 //		04/26/96 JMI	Started.
 //
 //		06/19/96	JMI	Added intialization constructors.
 //
-//		07/08/96	JMI	Converted to new CList that does not convert your 
+//		07/08/96	JMI	Converted to new CList that does not convert your
 //							template type into a poiter.
 //
 //		10/30/96	JMI	Changed:
@@ -36,7 +36,7 @@
 //							CList				RList
 //
 //		11/15/96	JMI	Add() was clipping the actual passed in RDRect.  Instead
-//							we now clip an intermediate RDRect so that the user's 
+//							we now clip an intermediate RDRect so that the user's
 //							will not be altered.
 //
 //		01/23/97	JMI	Clip() was not considering that an object might need to
@@ -79,9 +79,9 @@
 // Blue headers.
 //////////////////////////////////////////////////////////////////////////////
 #ifdef PATHS_IN_INCLUDES
-	#include "BLUE/system.h"
+#include "BLUE/system.h"
 #else
-	#include "System.h"
+#include "System.h"
 #endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////////////
@@ -92,9 +92,9 @@
 // Orange headers.
 //////////////////////////////////////////////////////////////////////////////
 #ifdef PATHS_IN_INCLUDES
-	#include "ORANGE/DirtRect/DirtRect.h"
+#include "ORANGE/DirtRect/DirtRect.h"
 #else
-	#include "DirtRect.h"
+#include "DirtRect.h"
 #endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////////////
@@ -123,26 +123,25 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 RDirtyRects::RDirtyRects()
-	{
-	m_sMinDistanceX	= 0;
-	m_sMinDistanceY	= 0;
+{
+    m_sMinDistanceX = 0;
+    m_sMinDistanceY = 0;
 
-	m_sClipX				= -1;
-	m_sClipY				= -1;
-	}
+    m_sClipX = -1;
+    m_sClipY = -1;
+}
 
-RDirtyRects::RDirtyRects(	
-				short sMinDistX,				// Copied into m_sMinDistanceX.
-				short sMinDistY,				// Copied into m_sMinDistanceY.
-				short sClipX	/*= -1*/,	// Copied into m_sClipX.
-				short	sClipY	/*= -1*/)	// Copied into m_sClipY.
-	{
-	m_sMinDistanceX	= sMinDistX;
-	m_sMinDistanceY	= sMinDistY;
+RDirtyRects::RDirtyRects(short sMinDistX,       // Copied into m_sMinDistanceX.
+                         short sMinDistY,       // Copied into m_sMinDistanceY.
+                         short sClipX /*= -1*/, // Copied into m_sClipX.
+                         short sClipY /*= -1*/) // Copied into m_sClipY.
+{
+    m_sMinDistanceX = sMinDistX;
+    m_sMinDistanceY = sMinDistY;
 
-	m_sClipX	= sClipX;
-	m_sClipY	= sClipY;
-	}
+    m_sClipX = sClipX;
+    m_sClipY = sClipY;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -150,9 +149,9 @@ RDirtyRects::RDirtyRects(
 //
 //////////////////////////////////////////////////////////////////////////////
 RDirtyRects::~RDirtyRects()
-	{
-	Empty();
-	}
+{
+    Empty();
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // Implementation.
@@ -165,75 +164,75 @@ RDirtyRects::~RDirtyRects()
 // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RDirtyRects::Add(RDRect* pdr)
-	{
-	short	sRes	= 0;	// Assume success.
+short RDirtyRects::Add(RDRect *pdr)
+{
+    short sRes = 0; // Assume success.
 
-	short		sClippedOut	= FALSE;
-	RDRect	drTemp		= *pdr;	
-	
-	if (m_sClipX >= 0)
-		{
-		// If not clipped out in x direction . . .
-		if (Clip(&drTemp.sX, &drTemp.sW, m_sClipX) == 0)
-			{
-			}
-		else
-			{
-			sClippedOut	= TRUE;
-			}
-		}
+    short sClippedOut = FALSE;
+    RDRect drTemp = *pdr;
 
-	if (m_sClipY >= 0)
-		{
-		// If not clipped out in y direction . . .
-		if (Clip(&drTemp.sY, &drTemp.sH, m_sClipY) == 0)
-			{
-			}
-		else
-			{
-			sClippedOut	= TRUE;
-			}
-		}
-	
-	if (sClippedOut == FALSE)
-		{
-		if (Combine(&drTemp) == 0)
-			{
-			// Combined into an existing rectangle.
-			}
-		else
-			{
-			// No existing rectangle was close enough.
-			RDRect*	pdrNew	= new RDRect;
-			if (pdrNew != NULL)
-				{
-				if (RList<RDRect>::Add(pdrNew) == 0)
-					{
-					*pdrNew = drTemp;
-					}
-				else
-					{
-					TRACE("Add(): Unable to add *RDRect to list.\n");
-					sRes = -2;
-					}
+    if (m_sClipX >= 0)
+    {
+        // If not clipped out in x direction . . .
+        if (Clip(&drTemp.sX, &drTemp.sW, m_sClipX) == 0)
+        {
+        }
+        else
+        {
+            sClippedOut = TRUE;
+        }
+    }
 
-				// If any errors occurred after allocation . . .
-				if (sRes != 0)
-					{
-					delete pdrNew;
-					}
-				}
-			else
-				{
-				TRACE("Add(): Unable to allocate new RDRect.\n");
-				sRes = -1;
-				}
-			}
-		}
+    if (m_sClipY >= 0)
+    {
+        // If not clipped out in y direction . . .
+        if (Clip(&drTemp.sY, &drTemp.sH, m_sClipY) == 0)
+        {
+        }
+        else
+        {
+            sClippedOut = TRUE;
+        }
+    }
 
-	return sRes;
-	}
+    if (sClippedOut == FALSE)
+    {
+        if (Combine(&drTemp) == 0)
+        {
+            // Combined into an existing rectangle.
+        }
+        else
+        {
+            // No existing rectangle was close enough.
+            RDRect *pdrNew = new RDRect;
+            if (pdrNew != NULL)
+            {
+                if (RList<RDRect>::Add(pdrNew) == 0)
+                {
+                    *pdrNew = drTemp;
+                }
+                else
+                {
+                    TRACE("Add(): Unable to add *RDRect to list.\n");
+                    sRes = -2;
+                }
+
+                // If any errors occurred after allocation . . .
+                if (sRes != 0)
+                {
+                    delete pdrNew;
+                }
+            }
+            else
+            {
+                TRACE("Add(): Unable to allocate new RDRect.\n");
+                sRes = -1;
+            }
+        }
+    }
+
+    return sRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -243,11 +242,11 @@ short RDirtyRects::Add(RDRect* pdr)
 //
 //////////////////////////////////////////////////////////////////////////////
 short RDirtyRects::Add(short sX, short sY, short sW, short sH)
-	{
-	RDRect	dr	= { sX, sY, sW, sH };
-		
-	return Add(&dr);
-	}
+{
+    RDRect dr = { sX, sY, sW, sH };
+
+    return Add(&dr);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -255,16 +254,16 @@ short RDirtyRects::Add(short sX, short sY, short sW, short sH)
 //
 //////////////////////////////////////////////////////////////////////////////
 void RDirtyRects::Empty(void)
-	{
-	RDRect*	pdr	= GetHead();
-	while (pdr != NULL)
-		{
-		Remove();
-		delete pdr;
+{
+    RDRect *pdr = GetHead();
+    while (pdr != NULL)
+    {
+        Remove();
+        delete pdr;
 
-		pdr	= GetNext();
-		}
-	}
+        pdr = GetNext();
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -273,99 +272,99 @@ void RDirtyRects::Empty(void)
 // Returns 0 if combined.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RDirtyRects::Combine(RDRect* pdr)
-	{
-	short	sRes	= 1;	// Assume not combined.
+short RDirtyRects::Combine(RDRect *pdr)
+{
+    short sRes = 1; // Assume not combined.
 
-	// If combinable . . .
-	if (m_sMinDistanceX >= 0)
-		{
-		RDRect*	pdrExisting	= GetHead();
-		while (pdrExisting != NULL)
-			{
-			if (pdrExisting->sX - (pdr->sX + pdr->sW) <= m_sMinDistanceX)
-				{
-				if (pdr->sX < pdrExisting->sX + pdrExisting->sW + m_sMinDistanceX)
-					{
-					if (pdrExisting->sY - (pdr->sY + pdr->sH) <= m_sMinDistanceY)
-						{
-						if (pdr->sY < pdrExisting->sY + pdrExisting->sH + m_sMinDistanceY)
-							{
-							Expand(pdrExisting, pdr);
-							
-							// Remove temporarily.
-							Remove();
-							// This new rectangle may combine further.
-							// If it does . . .
-							if (Combine(pdrExisting) == 0)
-								{
-								// We can delete it.
-								delete pdrExisting;
-								}
-							else
-								{
-								// Re-insert . . .
-								if (RList<RDRect>::Add(pdrExisting) == 0)
-									{
-									// Success.
-									}
-								else
-									{
-									TRACE("Combine(): Unable to reAdd rectangle.\n");
-									delete pdrExisting;
-									}
-								}
-							
-							sRes = 0;
-							break;
-							}
-						}
-					}
-				}
+    // If combinable . . .
+    if (m_sMinDistanceX >= 0)
+    {
+        RDRect *pdrExisting = GetHead();
+        while (pdrExisting != NULL)
+        {
+            if (pdrExisting->sX - (pdr->sX + pdr->sW) <= m_sMinDistanceX)
+            {
+                if (pdr->sX < pdrExisting->sX + pdrExisting->sW + m_sMinDistanceX)
+                {
+                    if (pdrExisting->sY - (pdr->sY + pdr->sH) <= m_sMinDistanceY)
+                    {
+                        if (pdr->sY < pdrExisting->sY + pdrExisting->sH + m_sMinDistanceY)
+                        {
+                            Expand(pdrExisting, pdr);
 
-			pdrExisting	= GetNext();
-			}
-		}
+                            // Remove temporarily.
+                            Remove();
+                            // This new rectangle may combine further.
+                            // If it does . . .
+                            if (Combine(pdrExisting) == 0)
+                            {
+                                // We can delete it.
+                                delete pdrExisting;
+                            }
+                            else
+                            {
+                                // Re-insert . . .
+                                if (RList<RDRect>::Add(pdrExisting) == 0)
+                                {
+                                    // Success.
+                                }
+                                else
+                                {
+                                    TRACE("Combine(): Unable to reAdd rectangle.\n");
+                                    delete pdrExisting;
+                                }
+                            }
 
-	return sRes;
-	}
+                            sRes = 0;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            pdrExisting = GetNext();
+        }
+    }
+
+    return sRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Expand pdrExpand by pdrNew.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RDirtyRects::Expand(RDRect* pdrExpand, RDRect* pdrNew)
-	{
-	short	sExpandRight	= pdrExpand->sX + pdrExpand->sW;
-	short	sExpandBottom	= pdrExpand->sY + pdrExpand->sH;
+void RDirtyRects::Expand(RDRect *pdrExpand, RDRect *pdrNew)
+{
+    short sExpandRight = pdrExpand->sX + pdrExpand->sW;
+    short sExpandBottom = pdrExpand->sY + pdrExpand->sH;
 
-	short sNewRight		= pdrNew->sX + pdrNew->sW;
-	short	sNewBottom		= pdrNew->sY + pdrNew->sH;
+    short sNewRight = pdrNew->sX + pdrNew->sW;
+    short sNewBottom = pdrNew->sY + pdrNew->sH;
 
-	if (pdrNew->sX < pdrExpand->sX)
-		{
-		pdrExpand->sX	= pdrNew->sX;
-		}
+    if (pdrNew->sX < pdrExpand->sX)
+    {
+        pdrExpand->sX = pdrNew->sX;
+    }
 
-	if (pdrNew->sY < pdrExpand->sY)
-		{
-		pdrExpand->sY	= pdrNew->sY;
-		}
+    if (pdrNew->sY < pdrExpand->sY)
+    {
+        pdrExpand->sY = pdrNew->sY;
+    }
 
-	if (sNewRight > sExpandRight)
-		{
-		sExpandRight	= sNewRight;
-		}
+    if (sNewRight > sExpandRight)
+    {
+        sExpandRight = sNewRight;
+    }
 
-	if (sNewBottom > sExpandBottom)
-		{
-		sExpandBottom	= sNewBottom;
-		}
+    if (sNewBottom > sExpandBottom)
+    {
+        sExpandBottom = sNewBottom;
+    }
 
-	pdrExpand->sW	= sExpandRight		- pdrExpand->sX;
-	pdrExpand->sH	= sExpandBottom	- pdrExpand->sY;
-	}
+    pdrExpand->sW = sExpandRight - pdrExpand->sX;
+    pdrExpand->sH = sExpandBottom - pdrExpand->sY;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -373,47 +372,47 @@ void RDirtyRects::Expand(RDRect* pdrExpand, RDRect* pdrNew)
 // Returns non-zero if clipped out.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RDirtyRects::Clip(short* psPos, short* psDistance, short sClipDistance)
-	{
-	short	sRes	= 0;	// Assume not clipped out.
+short RDirtyRects::Clip(short *psPos, short *psDistance, short sClipDistance)
+{
+    short sRes = 0; // Assume not clipped out.
 
-	if (*psPos > sClipDistance)
-		{
-		sRes = 1;
-		}
-	else
-		{
-		if (*psPos < 0)
-			{
-			// Reduce by *psPos's underflow.
-			*psDistance	+= *psPos;
-			*psPos		= 0;
+    if (*psPos > sClipDistance)
+    {
+        sRes = 1;
+    }
+    else
+    {
+        if (*psPos < 0)
+        {
+            // Reduce by *psPos's underflow.
+            *psDistance += *psPos;
+            *psPos = 0;
 
-			// If clipped out . . .
-			if (*psDistance <= 0)
-				{
-				sRes	= 1;
-				}
-			}
+            // If clipped out . . .
+            if (*psDistance <= 0)
+            {
+                sRes = 1;
+            }
+        }
 
-		// Get amount clipped out.
-		short	sClippedEnd	= (*psPos + *psDistance) - sClipDistance;
+        // Get amount clipped out.
+        short sClippedEnd = (*psPos + *psDistance) - sClipDistance;
 
-		// If anything clipped out . . .
-		if (sClippedEnd > 0)
-			{
-			*psDistance	-= sClippedEnd;
+        // If anything clipped out . . .
+        if (sClippedEnd > 0)
+        {
+            *psDistance -= sClippedEnd;
 
-			// If clipped out . . .
-			if (*psDistance <= 0)
-				{
-				sRes	= 1;
-				}
-			}
-		}
+            // If clipped out . . .
+            if (*psDistance <= 0)
+            {
+                sRes = 1;
+            }
+        }
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // EOF

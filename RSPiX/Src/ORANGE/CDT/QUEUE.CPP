@@ -17,7 +17,7 @@
 //
 //
 // QUEUE.CPP
-// 
+//
 // History:
 //		06/12/94 MR		Added this comment block and made things safe
 //						for interrupt-driven usage.

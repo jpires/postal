@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // RES.CPP
-// 
+//
 // History:
 //		09/22/95 JMI	Started.
 //
@@ -75,28 +75,27 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 CResItem::CResItem()
-	{
-	m_pszName	= NULL;
-	m_puc			= NULL;
-	m_lSize		= 0L;
-	m_sRefCnt	= 0;
-	m_pRes		= NULL;
-	}
+{
+    m_pszName = NULL;
+    m_puc = NULL;
+    m_lSize = 0L;
+    m_sRefCnt = 0;
+    m_pRes = NULL;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Constructura Especial! Ole!
 //
 //////////////////////////////////////////////////////////////////////////////
-CResItem::CResItem(char* pszName, UCHAR* puc, long lSize, CRes* pRes)
-	{
-	m_pszName	= pszName;
-	m_puc			= puc;
-	m_lSize		= lSize;
-	m_sRefCnt	= 0;
-	m_pRes		= pRes;
-	}
-
+CResItem::CResItem(char *pszName, UCHAR *puc, long lSize, CRes *pRes)
+{
+    m_pszName = pszName;
+    m_puc = puc;
+    m_lSize = lSize;
+    m_sRefCnt = 0;
+    m_pRes = pRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -104,22 +103,21 @@ CResItem::CResItem(char* pszName, UCHAR* puc, long lSize, CRes* pRes)
 //
 //////////////////////////////////////////////////////////////////////////////
 CResItem::~CResItem()
-	{
-	if (m_sRefCnt != 0)
-		{
-		TRACE("~CResItem(): Destroyed with reference count of %d!\n",
-				m_sRefCnt);
-		}
+{
+    if (m_sRefCnt != 0)
+    {
+        TRACE("~CResItem(): Destroyed with reference count of %d!\n", m_sRefCnt);
+    }
 
-	if (m_pszName != NULL)
-		{
-		// Remember that the name is the ptr that was allocated and includes
-		// the resource data (where m_puc points).
-		free(m_pszName);
-		m_pszName	= NULL;
-		m_puc			= NULL;
-		}
-	}
+    if (m_pszName != NULL)
+    {
+        // Remember that the name is the ptr that was allocated and includes
+        // the resource data (where m_puc points).
+        free(m_pszName);
+        m_pszName = NULL;
+        m_puc = NULL;
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // Methods.
@@ -132,9 +130,9 @@ CResItem::~CResItem()
 //
 //////////////////////////////////////////////////////////////////////////////
 short CResItem::Lock(void)
-	{
-	return ++m_sRefCnt;
-	}
+{
+    return ++m_sRefCnt;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -143,11 +141,11 @@ short CResItem::Lock(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 short CResItem::Unlock(void)
-	{
-	ASSERT(m_sRefCnt > 0);
+{
+    ASSERT(m_sRefCnt > 0);
 
-	return --m_sRefCnt;
-	}
+    return --m_sRefCnt;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // Internal Functions.

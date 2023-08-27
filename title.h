@@ -21,7 +21,7 @@
 // History:
 //		12/04/96 MJR	Started.
 //
-//		04/14/97	JMI	You can select the starting bitmap on the call to 
+//		04/14/97	JMI	You can select the starting bitmap on the call to
 //							StartTitle().
 //
 //		06/04/97	JMI	Now you can select a title page relative to the last one
@@ -29,7 +29,7 @@
 //
 //		07/23/97 BRH	Added a function to return the number of titles in use.
 //
-//		08/08/97	JMI	Added parameter specifying whether to play musak to 
+//		08/08/97	JMI	Added parameter specifying whether to play musak to
 //							StartTitle().
 //
 //		08/18/97 BRH	Added the end of game sequence function.
@@ -50,24 +50,23 @@
 // may or may not (hopefully not) look like a standard progress meter.  The
 // total range of the progress bar is determined by lTotalUnits.  As far as
 // this module is concerned, these units are completely abstract.
-extern short StartTitle(						// Returns 0 if successfull, non-zero otherwise
-	short	sStartImage = 1,						// In:  Image to start with.  Values less
-														// than 1 indicate a page relative to the
-														// end.
-	bool	bPlayMusak = false,					// In:  true to play title musak.
-	SampleMaster::SoundInstance* psi = 0);	// Out:  Sound instance of musak.
-														
+extern short StartTitle(                 // Returns 0 if successfull, non-zero otherwise
+  short sStartImage = 1,                 // In:  Image to start with.  Values less
+                                         // than 1 indicate a page relative to the
+                                         // end.
+  bool bPlayMusak = false,               // In:  true to play title musak.
+  SampleMaster::SoundInstance *psi = 0); // Out:  Sound instance of musak.
 
 // Update the title sequence.  The specified number of units are added to a
 // running total.  The ration between the running total and the value passed to
 // StartTitle() determines the new position of the progress meter.
-extern short DoTitle(						// Returns 0 if successfull, non-zero otherwise
-	long lUnits);								// In:  Additional progess units
+extern short DoTitle( // Returns 0 if successfull, non-zero otherwise
+  long lUnits);       // In:  Additional progess units
 
 // When you are completely done, call EndTitle().  This gives the title sequence
 // a chance to fully complete the progess meter (in case it never reached 100%
 // due to an overestimated lTotalUnits) and allows all resources to be freed.
-extern short EndTitle(void);				// Returns 0 if successfull, non-zero otherwise
+extern short EndTitle(void); // Returns 0 if successfull, non-zero otherwise
 
 // Return number of title screens in use
 extern short TitleGetNumTitles(void);
@@ -78,7 +77,7 @@ extern void Title_GameEndSequence(void);
 // Disable RipCord static logo.
 extern void Title_DisableRipcordStaticLogo(void);
 
-#endif //TITLE_H
+#endif // TITLE_H
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

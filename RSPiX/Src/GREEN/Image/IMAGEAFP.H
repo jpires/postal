@@ -16,8 +16,8 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
 //	IMAGEAFP.H
-//   
-//	Created on 		10/17/95	BRH 
+//
+//	Created on 		10/17/95	BRH
 // Implemented on 10/17/95 BRH
 //
 // 10/17/95	BRH	Split this from imagetyp.h to avoid multiple
@@ -32,7 +32,7 @@
 //	just before END_OF_TYPES and then add your convert function to
 // the afpConvert array in the proper place.  Your convert function
 //	will be indexed by your image type, for example image type BMP8
-// = 1 in the enumerated type list and so afpConvert[1] = 
+// = 1 in the enumerated type list and so afpConvert[1] =
 // ConvertToBMP8.  Then you can add your function prototype to
 // imagecon.h and the implementation to imagecon.cpp, or you can
 // put your convert function in your own files.  In that case you
@@ -45,25 +45,15 @@
 
 #include "imagecon.h"
 
-typedef short (*CONVFUNC)(CImage* pImage);
+typedef short (*CONVFUNC)(CImage *pImage);
 
 // These are "convert to..." functions which should first check the current image type
 // to see if it can convert from the current type to the specified type
-CONVFUNC afpConvert[255] = 
-{
-	ConvertNoSupport,
-	ConvertToBMP8,
-	ConvertToSystem,	
-	ConvertToSCREEN8_555,	
-	ConvertToSCREEN8_565,
-	ConvertToSCREEN8_888,
-	ConvertToBMP24,
-	ConvertToSCREEN16_555,
-	ConvertToSCREEN16_565,
-	ConvertToSCREEN24_RGB,
-	ConvertToSCREEN32_ARGB,
-	ConvertToBKD8
+CONVFUNC afpConvert[255] = { ConvertNoSupport,      ConvertToBMP8,          ConvertToSystem,
+                             ConvertToSCREEN8_555,  ConvertToSCREEN8_565,   ConvertToSCREEN8_888,
+                             ConvertToBMP24,        ConvertToSCREEN16_555,  ConvertToSCREEN16_565,
+                             ConvertToSCREEN24_RGB, ConvertToSCREEN32_ARGB, ConvertToBKD8
 
 };
 
-#endif //IMAGEAFP_H
+#endif // IMAGEAFP_H

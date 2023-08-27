@@ -25,13 +25,13 @@
 //	10/04/96 BRH	Started this class for use in several utilities
 //						dealing with multiple layer Photoshop images.
 //						This class loads a Photoshop file and creates
-//						a CImage for each layer and provides way of 
+//						a CImage for each layer and provides way of
 //						accessing specific layers.
 //
 // 10/10/96 BRH	Put in basic support which includes loading a
 //						layered Photoshop file and converting it to
 //						a CLaymage in memory.  GetLayer functions provide
-//						access to the layers either by name or number, 
+//						access to the layers either by name or number,
 //						and GetLayerName will give the names of a
 //						specific layer number.
 //
@@ -40,19 +40,19 @@
 //						the layer names, and saves file positions for
 //						the layers header section and layers channel
 //						data section.  Then GetLayer is called, if the
-//						layers are all in memory because of LoadPSD, 
+//						layers are all in memory because of LoadPSD,
 //						then it will return the pointer to that CImage
 //						layer.  If SetPSD was called, then it will read
 //						from the Photoshop, the requested layer and
 //						create the CImage.  Once the user is done with
 //						a layer, they can call FreeLayer() with the layer
-//						name or number and it will free that CImage.  
+//						name or number and it will free that CImage.
 //						These features were added to avoid problems with
 //						large Photoshop images which expanded to fill all
-//						available RAM.  
+//						available RAM.
 //
 //	10/22/96	JMI	Moved #include <stdlib.h> and #include <string.h> to
-//						before #include "System.h".               
+//						before #include "System.h".
 //
 //	10/28/96 MJR	Minor tweaks to make it compile correctly and with
 //						warnings under CodeWarrior.  No functional changes.
@@ -79,8 +79,8 @@
 //						just one layer.
 //
 //	02/27/97 BRH	Fixed bug in ReadLayerInfo where the channel IDs
-//						were being read into only the last Channel ID, 
-//						causing many channels to be skipped.  Also 
+//						were being read into only the last Channel ID,
+//						causing many channels to be skipped.  Also
 //						ConvertToImage now initializes the image data buffer
 //						to white pixels that are transparent (in Photoshop
 //						fashion) to match Photoshop layers that may contain
@@ -94,15 +94,15 @@
 #include "System.h"
 
 #ifdef PATHS_IN_INCLUDES
-	#include "GREEN/Image/Image.h"
-	#include "ORANGE/File/file.h"
-	#include "ORANGE/Laymage/laymage.h"
-	#include "BLUE/Blue.h"
+#include "GREEN/Image/Image.h"
+#include "ORANGE/File/file.h"
+#include "ORANGE/Laymage/laymage.h"
+#include "BLUE/Blue.h"
 #else
-	#include "Image.h"
-	#include "FILE.H"
-	#include "LAYMAGE.H"
-	#include "Blue.h"
+#include "Image.h"
+#include "FILE.H"
+#include "LAYMAGE.H"
+#include "Blue.h"
 #endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////
@@ -122,17 +122,17 @@
 
 RLaymage::RLaymage()
 {
-	short i;
+    short i;
 
-	for (i = 0; i < LAYMAGE_MAXCHANNELS; i++)
-		m_pcChannels[i] = NULL;
+    for (i = 0; i < LAYMAGE_MAXCHANNELS; i++)
+        m_pcChannels[i] = NULL;
 
-	m_sNumLayers = 0;
-	m_apImages = NULL;
-	m_apszLayerNames = NULL;
-	m_lTellLayers = 0;
-	m_lTellChannels = 0;
-} 
+    m_sNumLayers = 0;
+    m_apImages = NULL;
+    m_apszLayerNames = NULL;
+    m_lTellLayers = 0;
+    m_lTellChannels = 0;
+}
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -151,7 +151,7 @@ RLaymage::RLaymage()
 
 RLaymage::~RLaymage()
 {
-	Reset();
+    Reset();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -171,15 +171,15 @@ RLaymage::~RLaymage()
 
 void RLaymage::Reset()
 {
-	ClearChannelBuffers();	
-	FreeAllLayers();
-	FreeLayerArrays();
+    ClearChannelBuffers();
+    FreeAllLayers();
+    FreeLayerArrays();
 
-	m_sNumLayers = 0;
-	m_apImages = NULL;
-	m_apszLayerNames = NULL;
-	m_lTellLayers = 0;
-	m_lTellChannels = 0;
+    m_sNumLayers = 0;
+    m_apImages = NULL;
+    m_apszLayerNames = NULL;
+    m_lTellLayers = 0;
+    m_lTellChannels = 0;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -191,7 +191,7 @@ void RLaymage::Reset()
 //
 // Parameters:
 //		none
-// 
+//
 // Returns:
 //		none
 //
@@ -199,14 +199,14 @@ void RLaymage::Reset()
 
 void RLaymage::ClearChannelBuffers(void)
 {
-	short i;
+    short i;
 
-	for (i = 0; i < LAYMAGE_MAXCHANNELS; i++)
-		if (m_pcChannels[i])
-		{
-			free(m_pcChannels[i]);
-			m_pcChannels[i] = NULL;
-		}
+    for (i = 0; i < LAYMAGE_MAXCHANNELS; i++)
+        if (m_pcChannels[i])
+        {
+            free(m_pcChannels[i]);
+            m_pcChannels[i] = NULL;
+        }
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -215,7 +215,7 @@ void RLaymage::ClearChannelBuffers(void)
 //
 // Description:
 //		Allocate the 4 standard channel buffers, Red, Green, Blue, and
-//		Alpha.  
+//		Alpha.
 //
 // Parameters:
 //		Number of bytes to be allocated for each buffer
@@ -228,26 +228,24 @@ void RLaymage::ClearChannelBuffers(void)
 
 short RLaymage::AllocateChannelBuffers(ULONG ulSize)
 {
-	short sReturn = SUCCESS;
+    short sReturn = SUCCESS;
 
-	ClearChannelBuffers();
+    ClearChannelBuffers();
 
-	m_pcChannels[LAYMAGE_RED] = (char*) calloc(ulSize, 1);
-	m_pcChannels[LAYMAGE_GREEN] = (char*) calloc(ulSize, 1);
-	m_pcChannels[LAYMAGE_BLUE] = (char*) calloc(ulSize, 1);
-	m_pcChannels[LAYMAGE_ALPHA] = (char*) calloc(ulSize, 1);
+    m_pcChannels[LAYMAGE_RED] = (char *)calloc(ulSize, 1);
+    m_pcChannels[LAYMAGE_GREEN] = (char *)calloc(ulSize, 1);
+    m_pcChannels[LAYMAGE_BLUE] = (char *)calloc(ulSize, 1);
+    m_pcChannels[LAYMAGE_ALPHA] = (char *)calloc(ulSize, 1);
 
-	if (m_pcChannels[LAYMAGE_RED] &&
-	    m_pcChannels[LAYMAGE_GREEN] &&
-		 m_pcChannels[LAYMAGE_BLUE] &&
-		 m_pcChannels[LAYMAGE_ALPHA])
-		sReturn = SUCCESS;
-	else
-	{
-		sReturn = FAILURE;
-		ClearChannelBuffers();
-	}
-	return sReturn;
+    if (m_pcChannels[LAYMAGE_RED] && m_pcChannels[LAYMAGE_GREEN] && m_pcChannels[LAYMAGE_BLUE] &&
+        m_pcChannels[LAYMAGE_ALPHA])
+        sReturn = SUCCESS;
+    else
+    {
+        sReturn = FAILURE;
+        ClearChannelBuffers();
+    }
+    return sReturn;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -256,7 +254,7 @@ short RLaymage::AllocateChannelBuffers(ULONG ulSize)
 //
 // Description:
 //		Opens the given Photoshop file and reads it layer names and
-//		saves poistions to key points in the Photoshop file.  It 
+//		saves poistions to key points in the Photoshop file.  It
 //		does not load any layers.  When the user requests a layer
 //		using GetLayer(), it will load that layer from this Photoshop
 //		file.
@@ -270,48 +268,48 @@ short RLaymage::AllocateChannelBuffers(ULONG ulSize)
 //
 //////////////////////////////////////////////////////////////////////
 
-short RLaymage::SetPSD(char* pszFilename)
+short RLaymage::SetPSD(char *pszFilename)
 {
-	RFile cf;
-	RFile cfChannel;
-	short sReturn = SUCCESS;
-	short i;
+    RFile cf;
+    RFile cfChannel;
+    short sReturn = SUCCESS;
+    short i;
 
-	strcpy(m_szPhotoshopFilename, pszFilename);
+    strcpy(m_szPhotoshopFilename, pszFilename);
 
-	if (ReadPSDHeader(pszFilename) != SUCCESS)
-	{
-		TRACE("RLaymage::SetPSD - Failed - header could not be read\n");
-		goto error;		
-	}
+    if (ReadPSDHeader(pszFilename) != SUCCESS)
+    {
+        TRACE("RLaymage::SetPSD - Failed - header could not be read\n");
+        goto error;
+    }
 
-	if (cf.Open(pszFilename, "rb", RFile::BigEndian) != SUCCESS)
-	{
-		TRACE("RLaymage::SetPSD - Error cannot open file %s\n", pszFilename);
-		goto error;
-	}
+    if (cf.Open(pszFilename, "rb", RFile::BigEndian) != SUCCESS)
+    {
+        TRACE("RLaymage::SetPSD - Error cannot open file %s\n", pszFilename);
+        goto error;
+    }
 
-	if (cfChannel.Open(pszFilename, "rb", RFile::BigEndian) != SUCCESS)
-	{
-		TRACE("RLaymage::SetPSD - Error cannot open channel file %s\n", pszFilename);
-		goto error;
-	}	
+    if (cfChannel.Open(pszFilename, "rb", RFile::BigEndian) != SUCCESS)
+    {
+        TRACE("RLaymage::SetPSD - Error cannot open channel file %s\n", pszFilename);
+        goto error;
+    }
 
-	cf.Seek(m_lTellLayers, SEEK_SET);
-	cfChannel.Seek(m_lTellChannels, SEEK_SET);
+    cf.Seek(m_lTellLayers, SEEK_SET);
+    cfChannel.Seek(m_lTellChannels, SEEK_SET);
 
-	i = 0;
-	while (i < m_sNumLayers)
-		ReadLayerName(i++, &cf);
+    i = 0;
+    while (i < m_sNumLayers)
+        ReadLayerName(i++, &cf);
 
-	cf.Close();
-	cfChannel.Close();
-	return SUCCESS;
+    cf.Close();
+    cfChannel.Close();
+    return SUCCESS;
 
 error:
-	cf.Close();
-	cfChannel.Close();
-	return FAILURE;
+    cf.Close();
+    cfChannel.Close();
+    return FAILURE;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -327,51 +325,51 @@ error:
 //
 // Returns:
 //		SUCCESS if the file was loaded and converted
-//		
+//
 //////////////////////////////////////////////////////////////////////
 
-short RLaymage::LoadPSD(char* pszFilename)
+short RLaymage::LoadPSD(char *pszFilename)
 {
-	RFile cf;
-	RFile cfChannel;
-	short sReturn = SUCCESS;
-	short i;
+    RFile cf;
+    RFile cfChannel;
+    short sReturn = SUCCESS;
+    short i;
 
-	strcpy(m_szPhotoshopFilename, pszFilename);
+    strcpy(m_szPhotoshopFilename, pszFilename);
 
-	if (ReadPSDHeader(pszFilename) != SUCCESS)
-	{
-		TRACE("RLaymage::LoadPSD - Failed - header could not be read\n");
-		goto error;		
-	}
+    if (ReadPSDHeader(pszFilename) != SUCCESS)
+    {
+        TRACE("RLaymage::LoadPSD - Failed - header could not be read\n");
+        goto error;
+    }
 
-	if (cf.Open(pszFilename, "rb", RFile::BigEndian) != SUCCESS)
-	{
-		TRACE("RLaymage::LoadPSD - Error cannot open file %s\n", pszFilename);
-		goto error;
-	}
+    if (cf.Open(pszFilename, "rb", RFile::BigEndian) != SUCCESS)
+    {
+        TRACE("RLaymage::LoadPSD - Error cannot open file %s\n", pszFilename);
+        goto error;
+    }
 
-	if (cfChannel.Open(pszFilename, "rb", RFile::BigEndian) != SUCCESS)
-	{
-		TRACE("RLaymage::LoadPSD - Error cannot open channel file %s\n", pszFilename);
-		goto error;
-	}	
+    if (cfChannel.Open(pszFilename, "rb", RFile::BigEndian) != SUCCESS)
+    {
+        TRACE("RLaymage::LoadPSD - Error cannot open channel file %s\n", pszFilename);
+        goto error;
+    }
 
-	cf.Seek(m_lTellLayers, SEEK_SET);
-	cfChannel.Seek(m_lTellChannels, SEEK_SET);
+    cf.Seek(m_lTellLayers, SEEK_SET);
+    cfChannel.Seek(m_lTellChannels, SEEK_SET);
 
-	i = 0;
-	while (i < m_sNumLayers)
-		ReadLayerInfo(i++, &cf, &cfChannel);
+    i = 0;
+    while (i < m_sNumLayers)
+        ReadLayerInfo(i++, &cf, &cfChannel);
 
-	cf.Close();
-	cfChannel.Close();
-	return SUCCESS;
+    cf.Close();
+    cfChannel.Close();
+    return SUCCESS;
 
 error:
-	cf.Close();
-	cfChannel.Close();
-	return FAILURE;
+    cf.Close();
+    cfChannel.Close();
+    return FAILURE;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -379,9 +377,9 @@ error:
 // ReadPSDHeader
 //
 // Description:
-//		Reads in the header for the Photoshop file and sets the 
+//		Reads in the header for the Photoshop file and sets the
 //		width, height, number of layers and the file positions to
-//		the beginning of the layers header information, and the 
+//		the beginning of the layers header information, and the
 //		beginning of the channel data.  This routine can be called
 //		from either LoadPSD or SetPSD to get this information.  SetPSD
 //		will then just read the names of the layers, and LoadPSD
@@ -397,127 +395,127 @@ error:
 //
 //////////////////////////////////////////////////////////////////////
 
-short RLaymage::ReadPSDHeader(char* pszFilename)
+short RLaymage::ReadPSDHeader(char *pszFilename)
 {
-	RFile cf;
-	RFile cfChannel;
-	short sReturn = SUCCESS;
-	ULONG ulData;
-	USHORT usData;
+    RFile cf;
+    RFile cfChannel;
+    short sReturn = SUCCESS;
+    ULONG ulData;
+    USHORT usData;
 
-	if (cf.Open(pszFilename, "rb", RFile::BigEndian) != SUCCESS)
-	{
-		TRACE("RLaymage::ReadPSDHeader - Error cannot open file %s\n", pszFilename);
-		goto error;
-	}
+    if (cf.Open(pszFilename, "rb", RFile::BigEndian) != SUCCESS)
+    {
+        TRACE("RLaymage::ReadPSDHeader - Error cannot open file %s\n", pszFilename);
+        goto error;
+    }
 
-	if (cfChannel.Open(pszFilename, "rb", RFile::BigEndian) != SUCCESS)
-	{
-		TRACE("RLaymage::ReadPSDHeader - Error cannot open channel file %s\n", pszFilename);
-		goto error;
-	}	
-	
-	//-----------------------------------------------------------------
-	// Read in Photoshop header
-	//-----------------------------------------------------------------
-	
-	// Read file signature to make sure it is a Photoshop file
-	cf.Read(&ulData);
-	if (ulData != LAYMAGE_PHOTOSHOP_SIGNATURE)
-	{
-		TRACE("RLaymage::ReadPSDHeader - Error - File signature is not 8BPS\n");
-		goto error;
-	}			
+    if (cfChannel.Open(pszFilename, "rb", RFile::BigEndian) != SUCCESS)
+    {
+        TRACE("RLaymage::ReadPSDHeader - Error cannot open channel file %s\n", pszFilename);
+        goto error;
+    }
 
-	// Read version number and make sure it matches
-	cf.Read(&usData);
-	if (usData != 1)
-	{
-		TRACE("RLaymage::ReadPSDHeader - Error - File version is not 1\n");
-		goto error;
-	}
+    //-----------------------------------------------------------------
+    // Read in Photoshop header
+    //-----------------------------------------------------------------
 
-	// Skip over reserved space
-	cf.Seek(6, SEEK_CUR);
+    // Read file signature to make sure it is a Photoshop file
+    cf.Read(&ulData);
+    if (ulData != LAYMAGE_PHOTOSHOP_SIGNATURE)
+    {
+        TRACE("RLaymage::ReadPSDHeader - Error - File signature is not 8BPS\n");
+        goto error;
+    }
 
-	// Read number of channels
-	cf.Read(&m_sSpecialNumChannels);
+    // Read version number and make sure it matches
+    cf.Read(&usData);
+    if (usData != 1)
+    {
+        TRACE("RLaymage::ReadPSDHeader - Error - File version is not 1\n");
+        goto error;
+    }
 
-	// Read image size
-	cf.Read(&m_lHeight);
-	cf.Read(&m_lWidth);
+    // Skip over reserved space
+    cf.Seek(6, SEEK_CUR);
 
-	// Skip Depth of channels field
-	cf.Seek(2, SEEK_CUR);
+    // Read number of channels
+    cf.Read(&m_sSpecialNumChannels);
 
-	// Read mode and make sure it is RGB
-	cf.Read(&usData);
-	if (usData != 3)
-	{
-		TRACE("RLaymage::ReadPSDHeader - Error - file not in RGB color mode\n");
-		goto error;
-	}	
+    // Read image size
+    cf.Read(&m_lHeight);
+    cf.Read(&m_lWidth);
 
-	// Read the size of the color mode data section and skip it
-	cf.Read(&ulData);
-	cf.Seek(ulData, SEEK_CUR);
+    // Skip Depth of channels field
+    cf.Seek(2, SEEK_CUR);
 
-	// Read the size of the image resource section and skip it
-	cf.Read(&ulData);
-	cf.Seek(ulData, SEEK_CUR);
+    // Read mode and make sure it is RGB
+    cf.Read(&usData);
+    if (usData != 3)
+    {
+        TRACE("RLaymage::ReadPSDHeader - Error - file not in RGB color mode\n");
+        goto error;
+    }
 
-	// Read the size of the misc info section.  If the section exists,
-	// then the image probably has more than one layer.  If it doesn't,
-	// then the image has just one layer.
-	cf.Read(&ulData);
-	if (ulData > 0)
-		{
-		// This file has layer info
-		m_sHasLayerInfo = 1;
+    // Read the size of the color mode data section and skip it
+    cf.Read(&ulData);
+    cf.Seek(ulData, SEEK_CUR);
 
-		// Read the size of the layers section
-		cf.Read(&ulData);
+    // Read the size of the image resource section and skip it
+    cf.Read(&ulData);
+    cf.Seek(ulData, SEEK_CUR);
 
-		// Get the number of layers (if negative, get absolute value)
-		cf.Read(&m_sNumLayers);
-		if (m_sNumLayers < 0)
-			m_sNumLayers = -m_sNumLayers;
+    // Read the size of the misc info section.  If the section exists,
+    // then the image probably has more than one layer.  If it doesn't,
+    // then the image has just one layer.
+    cf.Read(&ulData);
+    if (ulData > 0)
+    {
+        // This file has layer info
+        m_sHasLayerInfo = 1;
 
-		// Read through the Layer info once to find the end of the
-		// headers and the beginning of the channel data.  
-		cfChannel.Seek(cf.Tell(), SEEK_SET);
-		SetChannelPointer(m_sNumLayers, &cfChannel);
-		}
-	else
-		{
-		// This file has no layer info
-		m_sHasLayerInfo = 0;
+        // Read the size of the layers section
+        cf.Read(&ulData);
 
-		// There's only one layer
-		m_sNumLayers = 1;
+        // Get the number of layers (if negative, get absolute value)
+        cf.Read(&m_sNumLayers);
+        if (m_sNumLayers < 0)
+            m_sNumLayers = -m_sNumLayers;
 
-		// The misc info section is empty, and what follows is basically
-		// the channel data for the one and only layer.
-		cfChannel.Seek(cf.Tell(), SEEK_SET);
-		}
-	m_lTellLayers = cf.Tell();
-	m_lTellChannels = cfChannel.Tell();
+        // Read through the Layer info once to find the end of the
+        // headers and the beginning of the channel data.
+        cfChannel.Seek(cf.Tell(), SEEK_SET);
+        SetChannelPointer(m_sNumLayers, &cfChannel);
+    }
+    else
+    {
+        // This file has no layer info
+        m_sHasLayerInfo = 0;
 
-	// Allocate RImage and name arrays for each layer
-	if (AllocateLayerArrays(m_sNumLayers) != SUCCESS)
-		{
-		TRACE("RLaymage::ReadPSDHeader - Error allocating layer arrays\n");
-		goto error;
-		}
+        // There's only one layer
+        m_sNumLayers = 1;
 
-	cf.Close();
-	cfChannel.Close();
-	return SUCCESS;
+        // The misc info section is empty, and what follows is basically
+        // the channel data for the one and only layer.
+        cfChannel.Seek(cf.Tell(), SEEK_SET);
+    }
+    m_lTellLayers = cf.Tell();
+    m_lTellChannels = cfChannel.Tell();
+
+    // Allocate RImage and name arrays for each layer
+    if (AllocateLayerArrays(m_sNumLayers) != SUCCESS)
+    {
+        TRACE("RLaymage::ReadPSDHeader - Error allocating layer arrays\n");
+        goto error;
+    }
+
+    cf.Close();
+    cfChannel.Close();
+    return SUCCESS;
 
 error:
-	cf.Close();
-	cfChannel.Close();
-	return FAILURE;
+    cf.Close();
+    cfChannel.Close();
+    return FAILURE;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -545,46 +543,46 @@ error:
 
 short RLaymage::ReadLayer(short sRequestedLayer)
 {
-	RFile cf;
-	RFile cfChannel;
-	short sReturn = SUCCESS;
-	short i;
+    RFile cf;
+    RFile cfChannel;
+    short sReturn = SUCCESS;
+    short i;
 
-	if (cf.Open(m_szPhotoshopFilename, "rb", RFile::BigEndian) != SUCCESS)
-	{
-		TRACE("RLaymage::ReadLayer - Error cannot open file %s\n", m_szPhotoshopFilename);
-		goto error;
-	}
+    if (cf.Open(m_szPhotoshopFilename, "rb", RFile::BigEndian) != SUCCESS)
+    {
+        TRACE("RLaymage::ReadLayer - Error cannot open file %s\n", m_szPhotoshopFilename);
+        goto error;
+    }
 
-	if (cfChannel.Open(m_szPhotoshopFilename, "rb", RFile::BigEndian) != SUCCESS)
-	{
-		TRACE("RLaymage::ReadPSDHeader - Error cannot open channel file %s\n", m_szPhotoshopFilename);
-		goto error;
-	}	
-	
-	cf.Seek(m_lTellLayers, SEEK_SET);
-	cfChannel.Seek(m_lTellChannels, SEEK_SET);
+    if (cfChannel.Open(m_szPhotoshopFilename, "rb", RFile::BigEndian) != SUCCESS)
+    {
+        TRACE("RLaymage::ReadPSDHeader - Error cannot open channel file %s\n", m_szPhotoshopFilename);
+        goto error;
+    }
 
-	i = 0;
-	while (i < sRequestedLayer)
-	{
-		if (ReadLayerInfo(i, &cf, &cfChannel) != SUCCESS)
-			goto error;
-		FreeLayer(i);
-		i++;
-	}
-	if (i == sRequestedLayer)
-		if (ReadLayerInfo(i, &cf, &cfChannel) != SUCCESS)
-			goto error;
+    cf.Seek(m_lTellLayers, SEEK_SET);
+    cfChannel.Seek(m_lTellChannels, SEEK_SET);
 
-	cf.Close();
-	cfChannel.Close();
-	return SUCCESS;
+    i = 0;
+    while (i < sRequestedLayer)
+    {
+        if (ReadLayerInfo(i, &cf, &cfChannel) != SUCCESS)
+            goto error;
+        FreeLayer(i);
+        i++;
+    }
+    if (i == sRequestedLayer)
+        if (ReadLayerInfo(i, &cf, &cfChannel) != SUCCESS)
+            goto error;
+
+    cf.Close();
+    cfChannel.Close();
+    return SUCCESS;
 
 error:
-	cf.Close();
-	cfChannel.Close();
-	return FAILURE;
+    cf.Close();
+    cfChannel.Close();
+    return FAILURE;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -592,14 +590,14 @@ error:
 // SetChannelPointer
 //
 // Description:
-//		Private function to set a second file pointer to the 
-//		beginning of the Channel data so that two pointers 
+//		Private function to set a second file pointer to the
+//		beginning of the Channel data so that two pointers
 //		working together can read both the layer header information
-//		and the data.  This routine gets an open RFile pointer 
+//		and the data.  This routine gets an open RFile pointer
 //		at the start of the layer header information and it will
 //		skip through the header information for all of the layers
 //		and will be left at the beginning of the channel data for
-//		the first layer.  
+//		the first layer.
 //
 // Parameters:
 //		sNumLayers = number of layers to be skipped
@@ -614,60 +612,60 @@ error:
 //
 //////////////////////////////////////////////////////////////////////
 
-short RLaymage::SetChannelPointer(short sNumLayers, RFile* pcfChannel)
+short RLaymage::SetChannelPointer(short sNumLayers, RFile *pcfChannel)
 {
-	ULONG ulData;
-	USHORT usNumChannels = 0;
-	USHORT i;
-	UCHAR ucData;
-	short sReturn = FAILURE;
-	short sLayer;
+    ULONG ulData;
+    USHORT usNumChannels = 0;
+    USHORT i;
+    UCHAR ucData;
+    short sReturn = FAILURE;
+    short sLayer;
 
-	if (pcfChannel && pcfChannel->IsOpen())
-	{
-		pcfChannel->ClearError();
+    if (pcfChannel && pcfChannel->IsOpen())
+    {
+        pcfChannel->ClearError();
 
-		for (sLayer = 0; sLayer < sNumLayers; sLayer++)
-		{
-			// Skip over 4 longs of layer bounding rectangle
-			pcfChannel->Seek(16, SEEK_CUR);
+        for (sLayer = 0; sLayer < sNumLayers; sLayer++)
+        {
+            // Skip over 4 longs of layer bounding rectangle
+            pcfChannel->Seek(16, SEEK_CUR);
 
-			pcfChannel->Read(&usNumChannels);
+            pcfChannel->Read(&usNumChannels);
 
-			// For each channel skip over chennel ID and length of data
-			for (i = 0; i < usNumChannels; i++)
-				pcfChannel->Seek(6, SEEK_CUR);
+            // For each channel skip over chennel ID and length of data
+            for (i = 0; i < usNumChannels; i++)
+                pcfChannel->Seek(6, SEEK_CUR);
 
-			// Skip over blend mode signature, blend info, opacity, clip,
-			// flags, and extra data size
-			pcfChannel->Seek(16, SEEK_CUR);
+            // Skip over blend mode signature, blend info, opacity, clip,
+            // flags, and extra data size
+            pcfChannel->Seek(16, SEEK_CUR);
 
-			// Get size of layer mask data and skip over it
-			pcfChannel->Read(&ulData);
-			pcfChannel->Seek(ulData, SEEK_CUR);
+            // Get size of layer mask data and skip over it
+            pcfChannel->Read(&ulData);
+            pcfChannel->Seek(ulData, SEEK_CUR);
 
-			// Get size of blending ranges and skip over it
-			pcfChannel->Read(&ulData);
-			pcfChannel->Seek(ulData, SEEK_CUR);
+            // Get size of blending ranges and skip over it
+            pcfChannel->Read(&ulData);
+            pcfChannel->Seek(ulData, SEEK_CUR);
 
-			// Get the pascal formatted layer name string
-			// and skip over it
-			pcfChannel->Read(&ucData);
-			char* pszName = (char*) malloc(ucData);
-			pcfChannel->Read(pszName, ucData);
-			free (pszName);
+            // Get the pascal formatted layer name string
+            // and skip over it
+            pcfChannel->Read(&ucData);
+            char *pszName = (char *)malloc(ucData);
+            pcfChannel->Read(pszName, ucData);
+            free(pszName);
 
-			// The name should be padded to a multiple of 4 bytes
-			// so skip the pad bytes if any.
-			if ((ucData+1) % 4)
-				pcfChannel->Seek((4-((ucData+1) % 4)), SEEK_CUR);
-		}
+            // The name should be padded to a multiple of 4 bytes
+            // so skip the pad bytes if any.
+            if ((ucData + 1) % 4)
+                pcfChannel->Seek((4 - ((ucData + 1) % 4)), SEEK_CUR);
+        }
 
-		if (!pcfChannel->Error())	
-			sReturn = SUCCESS;
-	}
+        if (!pcfChannel->Error())
+            sReturn = SUCCESS;
+    }
 
-	return sReturn;	
+    return sReturn;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -690,230 +688,229 @@ short RLaymage::SetChannelPointer(short sNumLayers, RFile* pcfChannel)
 //
 //////////////////////////////////////////////////////////////////////
 
-short RLaymage::ReadLayerInfo(short sLayerNum, RFile* pcfLayer, 
-                              RFile* pcfChannel)
+short RLaymage::ReadLayerInfo(short sLayerNum, RFile *pcfLayer, RFile *pcfChannel)
 {
-	ULONG ulData;
-	USHORT usData;
-	UCHAR ucData;
-	short asChannelID[LAYMAGE_MAXCHANNELS];
-	USHORT usNextChannel = 0;
-	USHORT usNumChannels = 0;
-	ULONG ulTop;
-	ULONG ulBottom;
-	ULONG ulLeft;
-	ULONG ulRight;
-	USHORT k;
-	USHORT i;
-	short sReturn = SUCCESS;
+    ULONG ulData;
+    USHORT usData;
+    UCHAR ucData;
+    short asChannelID[LAYMAGE_MAXCHANNELS];
+    USHORT usNextChannel = 0;
+    USHORT usNumChannels = 0;
+    ULONG ulTop;
+    ULONG ulBottom;
+    ULONG ulLeft;
+    ULONG ulRight;
+    USHORT k;
+    USHORT i;
+    short sReturn = SUCCESS;
 
-	pcfLayer->ClearError();
-	pcfChannel->ClearError();
-	
-	if (m_sHasLayerInfo)
-		{
-		// Read the bounding rectangle for this layer
-		pcfLayer->Read(&ulTop);
-		pcfLayer->Read(&ulLeft);
-		pcfLayer->Read(&ulBottom);
-		pcfLayer->Read(&ulRight);
+    pcfLayer->ClearError();
+    pcfChannel->ClearError();
 
-		// Read number of channels
-		pcfLayer->Read(&usNumChannels);
+    if (m_sHasLayerInfo)
+    {
+        // Read the bounding rectangle for this layer
+        pcfLayer->Read(&ulTop);
+        pcfLayer->Read(&ulLeft);
+        pcfLayer->Read(&ulBottom);
+        pcfLayer->Read(&ulRight);
 
-		// Get channel ID's (and skip channel sizes)
-		for (i = 0; i < usNumChannels; i++)
-			{
-			pcfLayer->Read(&asChannelID[i]);
-			pcfLayer->Read(&ulData);
-			}
+        // Read number of channels
+        pcfLayer->Read(&usNumChannels);
 
-		// Skip blend mode signature, blend info, opacity, clip, flags and extra data size
-		pcfLayer->Seek(16, SEEK_CUR);
+        // Get channel ID's (and skip channel sizes)
+        for (i = 0; i < usNumChannels; i++)
+        {
+            pcfLayer->Read(&asChannelID[i]);
+            pcfLayer->Read(&ulData);
+        }
 
-		// Get size of layer mask data and skip over it
-		pcfLayer->Read(&ulData);
-		pcfLayer->Seek(ulData, SEEK_CUR);
+        // Skip blend mode signature, blend info, opacity, clip, flags and extra data size
+        pcfLayer->Seek(16, SEEK_CUR);
 
-		// Get size of layer blending ranges and skip over it
-		pcfLayer->Read(&ulData);
-		pcfLayer->Seek(ulData, SEEK_CUR);
+        // Get size of layer mask data and skip over it
+        pcfLayer->Read(&ulData);
+        pcfLayer->Seek(ulData, SEEK_CUR);
 
-		// Get the pascal formatted layer name string
-		// Get the length of the string
-		pcfLayer->Read(&ucData);
-		// If the layer name has already been read, seek over it and
-		// leave the string alone.
-		if (m_apszLayerNames[sLayerNum])
-			pcfLayer->Seek(ucData, SEEK_CUR);
-		else
-			{
-			m_apszLayerNames[sLayerNum] = new char[ucData+1];
-			pcfLayer->Read(m_apszLayerNames[sLayerNum], ucData);
-			m_apszLayerNames[sLayerNum][ucData] = 0;
-			}
-		// Skip to multiple of 4 following string
-		if ((ucData+1) % 4)
-			pcfLayer->Seek((4 - (ucData+1) % 4), SEEK_CUR);
+        // Get size of layer blending ranges and skip over it
+        pcfLayer->Read(&ulData);
+        pcfLayer->Seek(ulData, SEEK_CUR);
 
-		// Allocate 4 channel buffers for Alpha, R, G, and B channels
-		if (AllocateChannelBuffers((ulBottom-ulTop)*(ulRight-ulLeft)) == SUCCESS)
-			{
+        // Get the pascal formatted layer name string
+        // Get the length of the string
+        pcfLayer->Read(&ucData);
+        // If the layer name has already been read, seek over it and
+        // leave the string alone.
+        if (m_apszLayerNames[sLayerNum])
+            pcfLayer->Seek(ucData, SEEK_CUR);
+        else
+        {
+            m_apszLayerNames[sLayerNum] = new char[ucData + 1];
+            pcfLayer->Read(m_apszLayerNames[sLayerNum], ucData);
+            m_apszLayerNames[sLayerNum][ucData] = 0;
+        }
+        // Skip to multiple of 4 following string
+        if ((ucData + 1) % 4)
+            pcfLayer->Seek((4 - (ucData + 1) % 4), SEEK_CUR);
 
-			// Read the channel data into buffers
-			short sChannelSel;
-			for (k = 0; k < usNumChannels; k++)
-				{
-				// If the channel is Alpha or R G or B, read the data
-				if (asChannelID[k] > -2 && asChannelID[k] < 3)
-					{
-					switch (asChannelID[k])
-						{
-						case -1:
-							sChannelSel = LAYMAGE_ALPHA;
-							break;
-						case 0:
-							sChannelSel = LAYMAGE_RED;
-							break;
-						case 1:
-							sChannelSel = LAYMAGE_GREEN;
-							break;
-						case 2:
-							sChannelSel = LAYMAGE_BLUE;
-							break;
-						default:
-							sChannelSel = LAYMAGE_IGNORE;
-							break;
-						}
+        // Allocate 4 channel buffers for Alpha, R, G, and B channels
+        if (AllocateChannelBuffers((ulBottom - ulTop) * (ulRight - ulLeft)) == SUCCESS)
+        {
 
-					// Read compression type
-					pcfChannel->Read(&usData);
-					if (usData == 0)
-						{
-						// Read RAW uncompressed data
-						if (!m_pcChannels[sChannelSel])
-							TRACE("RLaymage::ReadLayerInfo - Error allocating memory for channel buffer\n");
-						else
-							pcfChannel->Read(m_pcChannels[sChannelSel], (ulBottom-ulTop)*(ulRight-ulLeft));
-						}
-					else
-						{
-						// Read RLE compressed data
-						USHORT m;
-						ULONG ulCompSize = 0;
-						for (m = 0; m < ulBottom-ulTop; m++)
-							{
-							pcfChannel->Read(&usData);
-							ulCompSize += usData;
-							}
-						if (!m_pcChannels[sChannelSel])
-							TRACE("RLaymage::ReadLayerInfo - Error allocating memory for channel buffer\n");
-						else
-							RLE_Decompress(m_pcChannels[sChannelSel], ulCompSize, pcfChannel);
-						}
-					}
-				else
-					{
-					// discard the channel
+            // Read the channel data into buffers
+            short sChannelSel;
+            for (k = 0; k < usNumChannels; k++)
+            {
+                // If the channel is Alpha or R G or B, read the data
+                if (asChannelID[k] > -2 && asChannelID[k] < 3)
+                {
+                    switch (asChannelID[k])
+                    {
+                        case -1:
+                            sChannelSel = LAYMAGE_ALPHA;
+                            break;
+                        case 0:
+                            sChannelSel = LAYMAGE_RED;
+                            break;
+                        case 1:
+                            sChannelSel = LAYMAGE_GREEN;
+                            break;
+                        case 2:
+                            sChannelSel = LAYMAGE_BLUE;
+                            break;
+                        default:
+                            sChannelSel = LAYMAGE_IGNORE;
+                            break;
+                    }
 
-					// Read compression type
-					pcfChannel->Read(&usData);
-					if (usData == 0)
-						{
-						// If uncompressed, skip the size of the image given by
-						// the bounding rectangle
-						pcfChannel->Seek((ulBottom-ulTop)*(ulRight-ulLeft), SEEK_CUR);
-						}
-					else
-						{
-						// If compressed, the length of each line is stored at
-						// this position in the file.  Get the total size of 
-						// compressed data and then skip over it.
-						USHORT j;
-						ULONG ulSkip = 0;
-						for (j = 0; j < ulBottom - ulTop; j++)
-							{
-							pcfChannel->Read(&usData);
-							ulSkip += usData;
-							}
-						pcfChannel->Seek(ulSkip, SEEK_CUR);
-						}						
-					}
-				}
+                    // Read compression type
+                    pcfChannel->Read(&usData);
+                    if (usData == 0)
+                    {
+                        // Read RAW uncompressed data
+                        if (!m_pcChannels[sChannelSel])
+                            TRACE("RLaymage::ReadLayerInfo - Error allocating memory for channel buffer\n");
+                        else
+                            pcfChannel->Read(m_pcChannels[sChannelSel], (ulBottom - ulTop) * (ulRight - ulLeft));
+                    }
+                    else
+                    {
+                        // Read RLE compressed data
+                        USHORT m;
+                        ULONG ulCompSize = 0;
+                        for (m = 0; m < ulBottom - ulTop; m++)
+                        {
+                            pcfChannel->Read(&usData);
+                            ulCompSize += usData;
+                        }
+                        if (!m_pcChannels[sChannelSel])
+                            TRACE("RLaymage::ReadLayerInfo - Error allocating memory for channel buffer\n");
+                        else
+                            RLE_Decompress(m_pcChannels[sChannelSel], ulCompSize, pcfChannel);
+                    }
+                }
+                else
+                {
+                    // discard the channel
 
-			// Convert color planes into a 32-bit ARGB RImage
-			ConvertToImage(sLayerNum, ulTop, ulBottom, ulLeft, ulRight);
-			}
-		else
-			{
-			sReturn = FAILURE;
-			TRACE("RLaymage::ReadLayerInfo - Error allocating channel buffers\n");
-			}
-		}
-	else
-		{
-		// If the layer name hasn't been set, set it to "background" to match the photoshop default name
-		if (m_apszLayerNames[sLayerNum] == 0)
-			{
-			m_apszLayerNames[sLayerNum] = new char[20+1];
-			strcpy(m_apszLayerNames[sLayerNum], "background");
-			}
+                    // Read compression type
+                    pcfChannel->Read(&usData);
+                    if (usData == 0)
+                    {
+                        // If uncompressed, skip the size of the image given by
+                        // the bounding rectangle
+                        pcfChannel->Seek((ulBottom - ulTop) * (ulRight - ulLeft), SEEK_CUR);
+                    }
+                    else
+                    {
+                        // If compressed, the length of each line is stored at
+                        // this position in the file.  Get the total size of
+                        // compressed data and then skip over it.
+                        USHORT j;
+                        ULONG ulSkip = 0;
+                        for (j = 0; j < ulBottom - ulTop; j++)
+                        {
+                            pcfChannel->Read(&usData);
+                            ulSkip += usData;
+                        }
+                        pcfChannel->Seek(ulSkip, SEEK_CUR);
+                    }
+                }
+            }
 
-		// Allocate 4 channel buffers for Alpha, R, G, and B channels
-		if (AllocateChannelBuffers(m_lWidth * m_lHeight) == SUCCESS)
-			{
+            // Convert color planes into a 32-bit ARGB RImage
+            ConvertToImage(sLayerNum, ulTop, ulBottom, ulLeft, ulRight);
+        }
+        else
+        {
+            sReturn = FAILURE;
+            TRACE("RLaymage::ReadLayerInfo - Error allocating channel buffers\n");
+        }
+    }
+    else
+    {
+        // If the layer name hasn't been set, set it to "background" to match the photoshop default name
+        if (m_apszLayerNames[sLayerNum] == 0)
+        {
+            m_apszLayerNames[sLayerNum] = new char[20 + 1];
+            strcpy(m_apszLayerNames[sLayerNum], "background");
+        }
 
-			// Read compression type
-			USHORT usComp;
-			pcfChannel->Read(&usComp);
+        // Allocate 4 channel buffers for Alpha, R, G, and B channels
+        if (AllocateChannelBuffers(m_lWidth * m_lHeight) == SUCCESS)
+        {
 
-			// Read the channel data into buffers.  The order of the channels seems to be fixed in this
-			// type of file: RED, GREEN, BLUE, followed by any user-defined channels, and we assume the
-			// first one after BLUE is ALPHA.
-			if (usComp == 0)
-				{
-				// Read RAW uncompressed data for each channel
-				pcfChannel->Read(m_pcChannels[LAYMAGE_RED], m_lWidth * m_lHeight);
-				pcfChannel->Read(m_pcChannels[LAYMAGE_GREEN], m_lWidth * m_lHeight);
-				pcfChannel->Read(m_pcChannels[LAYMAGE_BLUE], m_lWidth * m_lHeight);
-				pcfChannel->Read(m_pcChannels[LAYMAGE_ALPHA], m_lWidth * m_lHeight);
-				}
-			else
-				{
-				// Read RLE compressed data.  This starts with a byte count for every row of every
-				// channel (in other words, there are row * channel number of byte counts) followed
-				// by the compressed data for all the rows.  Our compression is oriented towards
-				// doing each channel separately, so we have to jump around in the file alot.
-				ULONG ulCompSize[4] = { 0, 0, 0, 0 };
-				for (k = 0; k < 4; k++)
-					{
-					for (USHORT m = 0; m < m_lHeight; m++)
-						{
-						pcfChannel->Read(&usData);
-						ulCompSize[k] += usData;
-						}
-					}
+            // Read compression type
+            USHORT usComp;
+            pcfChannel->Read(&usComp);
 
-				RLE_Decompress(m_pcChannels[LAYMAGE_RED], ulCompSize[0], pcfChannel);
-				RLE_Decompress(m_pcChannels[LAYMAGE_GREEN], ulCompSize[1], pcfChannel);
-				RLE_Decompress(m_pcChannels[LAYMAGE_BLUE], ulCompSize[2], pcfChannel);
-				RLE_Decompress(m_pcChannels[LAYMAGE_ALPHA], ulCompSize[3], pcfChannel);
-				}
+            // Read the channel data into buffers.  The order of the channels seems to be fixed in this
+            // type of file: RED, GREEN, BLUE, followed by any user-defined channels, and we assume the
+            // first one after BLUE is ALPHA.
+            if (usComp == 0)
+            {
+                // Read RAW uncompressed data for each channel
+                pcfChannel->Read(m_pcChannels[LAYMAGE_RED], m_lWidth * m_lHeight);
+                pcfChannel->Read(m_pcChannels[LAYMAGE_GREEN], m_lWidth * m_lHeight);
+                pcfChannel->Read(m_pcChannels[LAYMAGE_BLUE], m_lWidth * m_lHeight);
+                pcfChannel->Read(m_pcChannels[LAYMAGE_ALPHA], m_lWidth * m_lHeight);
+            }
+            else
+            {
+                // Read RLE compressed data.  This starts with a byte count for every row of every
+                // channel (in other words, there are row * channel number of byte counts) followed
+                // by the compressed data for all the rows.  Our compression is oriented towards
+                // doing each channel separately, so we have to jump around in the file alot.
+                ULONG ulCompSize[4] = { 0, 0, 0, 0 };
+                for (k = 0; k < 4; k++)
+                {
+                    for (USHORT m = 0; m < m_lHeight; m++)
+                    {
+                        pcfChannel->Read(&usData);
+                        ulCompSize[k] += usData;
+                    }
+                }
 
-			// Convert color planes into a 32-bit ARGB RImage
-			ConvertToImage(sLayerNum, 0, m_lHeight, 0, m_lWidth);
-			}
-		else
-			{
-			sReturn = FAILURE;
-			TRACE("RLaymage::ReadLayerInfo - Error allocating channel buffers\n");
-			}
-		}
+                RLE_Decompress(m_pcChannels[LAYMAGE_RED], ulCompSize[0], pcfChannel);
+                RLE_Decompress(m_pcChannels[LAYMAGE_GREEN], ulCompSize[1], pcfChannel);
+                RLE_Decompress(m_pcChannels[LAYMAGE_BLUE], ulCompSize[2], pcfChannel);
+                RLE_Decompress(m_pcChannels[LAYMAGE_ALPHA], ulCompSize[3], pcfChannel);
+            }
 
-	ClearChannelBuffers();
+            // Convert color planes into a 32-bit ARGB RImage
+            ConvertToImage(sLayerNum, 0, m_lHeight, 0, m_lWidth);
+        }
+        else
+        {
+            sReturn = FAILURE;
+            TRACE("RLaymage::ReadLayerInfo - Error allocating channel buffers\n");
+        }
+    }
 
-	return sReturn;
-	}
+    ClearChannelBuffers();
+
+    return sReturn;
+}
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -921,8 +918,8 @@ short RLaymage::ReadLayerInfo(short sLayerNum, RFile* pcfLayer,
 //
 // Description:
 //		Read the name of the given layer.  This will be called in
-//		a loop much like ReadLayerInfo, but it only gets the names, 
-//		it does not read the channel data.  
+//		a loop much like ReadLayerInfo, but it only gets the names,
+//		it does not read the channel data.
 //
 // Parameters:
 //		sLayer = layer number to read
@@ -934,77 +931,77 @@ short RLaymage::ReadLayerInfo(short sLayerNum, RFile* pcfLayer,
 //
 //////////////////////////////////////////////////////////////////////
 
-short RLaymage::ReadLayerName(short sLayerNum, RFile* pcfLayer)
+short RLaymage::ReadLayerName(short sLayerNum, RFile *pcfLayer)
 {
-	ULONG ulData;
-	USHORT usData;
-	UCHAR ucData;
-	ULONG* pulChannelLength = NULL;
-	short* psChannelID = NULL;
-	USHORT usNextChannel = 0;
-	USHORT usNumChannels = 0;
-	ULONG ulTop;
-	ULONG ulBottom;
-	ULONG ulLeft;
-	ULONG ulRight;
-	USHORT i;
-	short sReturn = SUCCESS;
+    ULONG ulData;
+    USHORT usData;
+    UCHAR ucData;
+    ULONG *pulChannelLength = NULL;
+    short *psChannelID = NULL;
+    USHORT usNextChannel = 0;
+    USHORT usNumChannels = 0;
+    ULONG ulTop;
+    ULONG ulBottom;
+    ULONG ulLeft;
+    ULONG ulRight;
+    USHORT i;
+    short sReturn = SUCCESS;
 
-	pcfLayer->ClearError();
-	
-	// Read the bounding rectangle for this layer
-	pcfLayer->Read(&ulTop);
-	pcfLayer->Read(&ulLeft);
-	pcfLayer->Read(&ulBottom);
-	pcfLayer->Read(&ulRight);
-	pcfLayer->Read(&usNumChannels);
+    pcfLayer->ClearError();
 
-	pulChannelLength = (ULONG*) calloc(usNumChannels, sizeof(ULONG));
-	psChannelID = (short*) calloc(usNumChannels, sizeof(short));
-	if (pulChannelLength == NULL || psChannelID == NULL)
-	{
-		TRACE("RLaymage::ReadLayerInfo - Error allocating buffers for channel data\n");
-		sReturn = FAILURE;
-	}
+    // Read the bounding rectangle for this layer
+    pcfLayer->Read(&ulTop);
+    pcfLayer->Read(&ulLeft);
+    pcfLayer->Read(&ulBottom);
+    pcfLayer->Read(&ulRight);
+    pcfLayer->Read(&usNumChannels);
 
-	for (i = 0; i < usNumChannels; i++)
-	{
-		// Get channel ID
-		pcfLayer->Read(&usData);
-		psChannelID[i] = usData;
-		pcfLayer->Read(&ulData);
-		pulChannelLength[usNextChannel++] = ulData;
-	}
+    pulChannelLength = (ULONG *)calloc(usNumChannels, sizeof(ULONG));
+    psChannelID = (short *)calloc(usNumChannels, sizeof(short));
+    if (pulChannelLength == NULL || psChannelID == NULL)
+    {
+        TRACE("RLaymage::ReadLayerInfo - Error allocating buffers for channel data\n");
+        sReturn = FAILURE;
+    }
 
-	// Read the blend mode signature which is always 8BIM
-	pcfLayer->Read(&ulData);
+    for (i = 0; i < usNumChannels; i++)
+    {
+        // Get channel ID
+        pcfLayer->Read(&usData);
+        psChannelID[i] = usData;
+        pcfLayer->Read(&ulData);
+        pulChannelLength[usNextChannel++] = ulData;
+    }
 
-	// Skip Blend info, opacity, clip, flags and extra data size
-	pcfLayer->Seek(12, SEEK_CUR);
+    // Read the blend mode signature which is always 8BIM
+    pcfLayer->Read(&ulData);
 
-	// Get size of layer mask data and skip over it
-	pcfLayer->Read(&ulData);
-	pcfLayer->Seek(ulData, SEEK_CUR);
+    // Skip Blend info, opacity, clip, flags and extra data size
+    pcfLayer->Seek(12, SEEK_CUR);
 
-	// Get size of layer blending ranges and skip over it
-	pcfLayer->Read(&ulData);
-	pcfLayer->Seek(ulData, SEEK_CUR);
+    // Get size of layer mask data and skip over it
+    pcfLayer->Read(&ulData);
+    pcfLayer->Seek(ulData, SEEK_CUR);
 
-	// Get the pascal formatted layer name string
-	// Get the length of the string
-	pcfLayer->Read(&ucData);
-	m_apszLayerNames[sLayerNum] = new char[ucData+1];
-	pcfLayer->Read(m_apszLayerNames[sLayerNum], ucData);
-	m_apszLayerNames[sLayerNum][ucData] = 0;
-	// Skip to multiple of 4 following string
-	if ((ucData+1) % 4)
-		pcfLayer->Seek((4 - (ucData+1) % 4), SEEK_CUR);
+    // Get size of layer blending ranges and skip over it
+    pcfLayer->Read(&ulData);
+    pcfLayer->Seek(ulData, SEEK_CUR);
 
-	// Allocate 4 channel buffers for Alpha, R, G, and B channels
-	if (AllocateChannelBuffers((ulBottom-ulTop)*(ulRight-ulLeft)) != SUCCESS)
-		TRACE("RLaymage::ReadLayerInfo - Error allocating channel buffers\n");
+    // Get the pascal formatted layer name string
+    // Get the length of the string
+    pcfLayer->Read(&ucData);
+    m_apszLayerNames[sLayerNum] = new char[ucData + 1];
+    pcfLayer->Read(m_apszLayerNames[sLayerNum], ucData);
+    m_apszLayerNames[sLayerNum][ucData] = 0;
+    // Skip to multiple of 4 following string
+    if ((ucData + 1) % 4)
+        pcfLayer->Seek((4 - (ucData + 1) % 4), SEEK_CUR);
 
-	return sReturn;
+    // Allocate 4 channel buffers for Alpha, R, G, and B channels
+    if (AllocateChannelBuffers((ulBottom - ulTop) * (ulRight - ulLeft)) != SUCCESS)
+        TRACE("RLaymage::ReadLayerInfo - Error allocating channel buffers\n");
+
+    return sReturn;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1034,65 +1031,64 @@ short RLaymage::ReadLayerName(short sLayerNum, RFile* pcfLayer)
 //
 //////////////////////////////////////////////////////////////////////
 
-short RLaymage::RLE_Decompress(char* pcBuffer, ULONG ulCompSize, RFile* pcfRLE)
+short RLaymage::RLE_Decompress(char *pcBuffer, ULONG ulCompSize, RFile *pcfRLE)
 {
-	short sReturn;
-	ULONG ulRead = 0;
-	ULONG ulBufferPos = 0;
-	ULONG ulBufferFill = 0;
-	signed char cData;
-	signed char cFlag;
-	UCHAR ucRun;
-	USHORT i;
+    short sReturn;
+    ULONG ulRead = 0;
+    ULONG ulBufferPos = 0;
+    ULONG ulBufferFill = 0;
+    signed char cData;
+    signed char cFlag;
+    UCHAR ucRun;
+    USHORT i;
 
-	if (pcfRLE && pcfRLE->IsOpen())
-	{
-		pcfRLE->ClearError();
+    if (pcfRLE && pcfRLE->IsOpen())
+    {
+        pcfRLE->ClearError();
 
-		while (ulRead < ulCompSize)
-		{
-			pcfRLE->Read(&cFlag);
-			ulRead++;
-			if (cFlag < 0)
-			{
-				if (cFlag == 0x80)
-				{
-					pcfRLE->Read(&cData);
-					ulRead++;
-				}
-				else
-				{
-					// Calculate number of a single byte pattern
-					ucRun = -cFlag + 1;
-					// Read the pattern
-					pcfRLE->Read(&cData);
-					ulRead++;
-					for (i = 0; i < ucRun; i++)
-						pcBuffer[ulBufferPos++] = cData;
-					ulBufferFill += ucRun;
-				}
-			}
-			else
-			{
-				// Read number of discrete bytes that follow
-				ucRun = cFlag + 1;
-				pcfRLE->Read(&(pcBuffer[ulBufferPos]), ucRun);
-				ulBufferPos += ucRun;
-				ulRead += ucRun;
-				ulBufferFill += ucRun;			
-			}	
-		}
+        while (ulRead < ulCompSize)
+        {
+            pcfRLE->Read(&cFlag);
+            ulRead++;
+            if (cFlag < 0)
+            {
+                if (cFlag == 0x80)
+                {
+                    pcfRLE->Read(&cData);
+                    ulRead++;
+                }
+                else
+                {
+                    // Calculate number of a single byte pattern
+                    ucRun = -cFlag + 1;
+                    // Read the pattern
+                    pcfRLE->Read(&cData);
+                    ulRead++;
+                    for (i = 0; i < ucRun; i++)
+                        pcBuffer[ulBufferPos++] = cData;
+                    ulBufferFill += ucRun;
+                }
+            }
+            else
+            {
+                // Read number of discrete bytes that follow
+                ucRun = cFlag + 1;
+                pcfRLE->Read(&(pcBuffer[ulBufferPos]), ucRun);
+                ulBufferPos += ucRun;
+                ulRead += ucRun;
+                ulBufferFill += ucRun;
+            }
+        }
 
-		if (pcfRLE->Error())
-			sReturn = FAILURE;
-		else
-			sReturn = SUCCESS;
-	}
-	else
-		sReturn = FAILURE;
+        if (pcfRLE->Error())
+            sReturn = FAILURE;
+        else
+            sReturn = SUCCESS;
+    }
+    else
+        sReturn = FAILURE;
 
-
-	return sReturn;
+    return sReturn;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1116,62 +1112,59 @@ short RLaymage::RLE_Decompress(char* pcBuffer, ULONG ulCompSize, RFile* pcfRLE)
 //
 //////////////////////////////////////////////////////////////////////
 
-short RLaymage::ConvertToImage(short sLayerNum, ULONG ulTop, ULONG ulBottom, 
-                               ULONG ulLeft, ULONG ulRight)
+short RLaymage::ConvertToImage(short sLayerNum, ULONG ulTop, ULONG ulBottom, ULONG ulLeft, ULONG ulRight)
 {
-	short sReturn = SUCCESS;
-	RImage* pImage;
-	ULONG row;
-	ULONG col;
-	ULONG i;
-	ULONG ulPixel;
+    short sReturn = SUCCESS;
+    RImage *pImage;
+    ULONG row;
+    ULONG col;
+    ULONG i;
+    ULONG ulPixel;
 
-	pImage = m_apImages[sLayerNum] = new RImage(m_lWidth*m_lHeight*4);
-	if (pImage)
-	{
-		// Initialize buffer to Photoshop's style of blank which is 
-		// white pixels that are totally transparent.  This way if we read
-		// in a layer with a rectangle smaller than the total picture size, 
-		// the outer regions will match.
-		U32* pu32 = (U32*) pImage->m_pData;
-		for (i = 0; i < pImage->m_ulSize / 4; i++)
-			pu32[i] = 0x00ffffff;
-		pImage->m_type = pImage->m_typeDestination = RImage::SCREEN32_ARGB;
-		pImage->m_sWidth = (short)m_lWidth;
-		pImage->m_sHeight = (short)m_lHeight;	
-		pImage->m_sDepth = 32;
-		pImage->m_lPitch = (long)pImage->m_sWidth * (pImage->m_sDepth/8);
+    pImage = m_apImages[sLayerNum] = new RImage(m_lWidth * m_lHeight * 4);
+    if (pImage)
+    {
+        // Initialize buffer to Photoshop's style of blank which is
+        // white pixels that are totally transparent.  This way if we read
+        // in a layer with a rectangle smaller than the total picture size,
+        // the outer regions will match.
+        U32 *pu32 = (U32 *)pImage->m_pData;
+        for (i = 0; i < pImage->m_ulSize / 4; i++)
+            pu32[i] = 0x00ffffff;
+        pImage->m_type = pImage->m_typeDestination = RImage::SCREEN32_ARGB;
+        pImage->m_sWidth = (short)m_lWidth;
+        pImage->m_sHeight = (short)m_lHeight;
+        pImage->m_sDepth = 32;
+        pImage->m_lPitch = (long)pImage->m_sWidth * (pImage->m_sDepth / 8);
 
-		ULONG* ulp32 = (ULONG*) pImage->m_pData;
-		long lDestPitch = pImage->m_lPitch / 4;
+        ULONG *ulp32 = (ULONG *)pImage->m_pData;
+        long lDestPitch = pImage->m_lPitch / 4;
 
-		i = 0;
-		for (row = ulTop; row < ulBottom; row++)
-			for (col = ulLeft; col < ulRight; col++)
-			{
-				ulPixel = ((UCHAR) m_pcChannels[LAYMAGE_ALPHA][i]) * 0x01000000 |
-							 ((UCHAR) m_pcChannels[LAYMAGE_RED][i])   * 0x00010000 |
-							 ((UCHAR) m_pcChannels[LAYMAGE_GREEN][i]) * 0x00000100 |
-							 ((UCHAR) m_pcChannels[LAYMAGE_BLUE][i]);
-				i++;
+        i = 0;
+        for (row = ulTop; row < ulBottom; row++)
+            for (col = ulLeft; col < ulRight; col++)
+            {
+                ulPixel = ((UCHAR)m_pcChannels[LAYMAGE_ALPHA][i]) * 0x01000000 |
+                          ((UCHAR)m_pcChannels[LAYMAGE_RED][i]) * 0x00010000 |
+                          ((UCHAR)m_pcChannels[LAYMAGE_GREEN][i]) * 0x00000100 | ((UCHAR)m_pcChannels[LAYMAGE_BLUE][i]);
+                i++;
 
-				ulp32[row*lDestPitch + col] = ulPixel;
-			}
-	}
+                ulp32[row * lDestPitch + col] = ulPixel;
+            }
+    }
 
-
-	return sReturn;
+    return sReturn;
 }
 //////////////////////////////////////////////////////////////////////
 //
 // Load
 //
 // Description:
-//		The load functions take either a filename or an open RFile 
+//		The load functions take either a filename or an open RFile
 //		pointer and begin loading a CLamage file (,IML)
 //
 // Parameters:
-//		pszFilename = filename of the .IML file to be loaded - OR - 
+//		pszFilename = filename of the .IML file to be loaded - OR -
 //		CFile* pcf = pointer to open RFile where image loading starts
 //
 // Returns:
@@ -1180,77 +1173,79 @@ short RLaymage::ConvertToImage(short sLayerNum, ULONG ulTop, ULONG ulBottom,
 //
 //////////////////////////////////////////////////////////////////////
 
-short RLaymage::Load(char* pszFilename)
+short RLaymage::Load(char *pszFilename)
 {
-	RFile cf;
-	short sReturn = SUCCESS;
+    RFile cf;
+    short sReturn = SUCCESS;
 
-	if (cf.Open(pszFilename, "rb", RFile::LittleEndian) != SUCCESS)
-	{
-		TRACE("RLaymage::Load - could not open file %s\n", pszFilename);
-		return FAILURE;
-	}
+    if (cf.Open(pszFilename, "rb", RFile::LittleEndian) != SUCCESS)
+    {
+        TRACE("RLaymage::Load - could not open file %s\n", pszFilename);
+        return FAILURE;
+    }
 
-	sReturn = Load(&cf);
+    sReturn = Load(&cf);
 
-	cf.Close();
+    cf.Close();
 
-	return sReturn;
+    return sReturn;
 }
 
-short RLaymage::Load(RFile* pcf)
+short RLaymage::Load(RFile *pcf)
 {
-	short sReturn = SUCCESS;
-	ULONG ulFileType = 0;
-	ULONG ulVersion = 0;
+    short sReturn = SUCCESS;
+    ULONG ulFileType = 0;
+    ULONG ulVersion = 0;
 
-	if (pcf && pcf->IsOpen())
-	{
-		if (pcf->Read(&ulFileType) == 1)
-		{
-			if (ulFileType == LAYMAGE_COOKIE)
-			{
-				if (pcf->Read(&ulVersion) == 1)
-				{
-					if (ulVersion == LAYMAGE_CURRENT_VERSION)
-					{
-						// Read number of layers and allocate memory
+    if (pcf && pcf->IsOpen())
+    {
+        if (pcf->Read(&ulFileType) == 1)
+        {
+            if (ulFileType == LAYMAGE_COOKIE)
+            {
+                if (pcf->Read(&ulVersion) == 1)
+                {
+                    if (ulVersion == LAYMAGE_CURRENT_VERSION)
+                    {
+                        // Read number of layers and allocate memory
 
-						// Read layer names
+                        // Read layer names
 
-						// Use RImage to load the images
-					}
-					else
-					{
-						TRACE("RLaymage::Load - Error: File version is %d Current code version is %d\n", ulVersion, LAYMAGE_CURRENT_VERSION);
-						sReturn = FAILURE;
-					}
-				}
-				else
-				{
-					TRACE("RLaymage::Load - Error reading file version\n");
-					sReturn = FAILURE;
-				}
-			}
-			else
-			{
-				TRACE("RLaymage::Load - Error: File typs is not \"IML \"\n");
-				sReturn = FAILURE;
-			}
-		}
-		else
-		{
-			TRACE("RLaymage::Load - Error reading file type\n");
-			sReturn = FAILURE;
-		}
-	}
-	else
-	{
-		TRACE("RLaymage::Load - Error RFile pointer does not refer to an open file\n");
-		sReturn = FAILURE;
-	}
+                        // Use RImage to load the images
+                    }
+                    else
+                    {
+                        TRACE("RLaymage::Load - Error: File version is %d Current code version is %d\n",
+                              ulVersion,
+                              LAYMAGE_CURRENT_VERSION);
+                        sReturn = FAILURE;
+                    }
+                }
+                else
+                {
+                    TRACE("RLaymage::Load - Error reading file version\n");
+                    sReturn = FAILURE;
+                }
+            }
+            else
+            {
+                TRACE("RLaymage::Load - Error: File typs is not \"IML \"\n");
+                sReturn = FAILURE;
+            }
+        }
+        else
+        {
+            TRACE("RLaymage::Load - Error reading file type\n");
+            sReturn = FAILURE;
+        }
+    }
+    else
+    {
+        TRACE("RLaymage::Load - Error RFile pointer does not refer to an open file\n");
+        sReturn = FAILURE;
+    }
 
-	return sReturn;
+    return sReturn;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1270,32 +1265,32 @@ short RLaymage::Load(RFile* pcf)
 //
 // Returns:
 //		SUCCESS if the file was saved
-//		FAILURE is there was an error - 
+//		FAILURE is there was an error -
 //				  TRACE message will help pinpoint failure
 //
 //////////////////////////////////////////////////////////////////////
 
-short RLaymage::Save(char* pszFilename)
+short RLaymage::Save(char *pszFilename)
 {
-	RFile cf;
-	short sReturn = SUCCESS;
+    RFile cf;
+    short sReturn = SUCCESS;
 
-	if (cf.Open(pszFilename, "wb", RFile::LittleEndian) != SUCCESS)
-	{
-		TRACE("RLaymage::Save - could not open file %s for output\n", pszFilename);
-		return FAILURE;
-	}	
+    if (cf.Open(pszFilename, "wb", RFile::LittleEndian) != SUCCESS)
+    {
+        TRACE("RLaymage::Save - could not open file %s for output\n", pszFilename);
+        return FAILURE;
+    }
 
-	sReturn = Save(&cf);
+    sReturn = Save(&cf);
 
-	cf.Close();
+    cf.Close();
 
-	return sReturn;
+    return sReturn;
 }
 
-short RLaymage::Save(RFile* /*pcf*/)
+short RLaymage::Save(RFile * /*pcf*/)
 {
-	return FAILURE;
+    return FAILURE;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1303,7 +1298,7 @@ short RLaymage::Save(RFile* /*pcf*/)
 // GetLayer
 //
 // Description:
-//		Returns a pointer to the RImage for the requested layer.  
+//		Returns a pointer to the RImage for the requested layer.
 //		This version of the function takes a string and tries to
 //		find a layer with the same name.  If it finds it, it returns
 //		a pointer to the RImage for that layer.
@@ -1317,27 +1312,27 @@ short RLaymage::Save(RFile* /*pcf*/)
 //
 //////////////////////////////////////////////////////////////////////
 
-RImage* RLaymage::GetLayer(char* pszLayerName)
+RImage *RLaymage::GetLayer(char *pszLayerName)
 {
-	short i = 0;
-	RImage* pLayerImage = NULL;
+    short i = 0;
+    RImage *pLayerImage = NULL;
 
-	while (i < m_sNumLayers && pLayerImage == NULL)
-	{
-		if (strcmp(pszLayerName, m_apszLayerNames[i]) == 0)
-		{
-			pLayerImage = m_apImages[i];
-			if (pLayerImage == NULL)
-			{
-				ReadLayer(i);
-				pLayerImage = m_apImages[i];
-			}
-		}
-		else
-			i++;
-	}
+    while (i < m_sNumLayers && pLayerImage == NULL)
+    {
+        if (strcmp(pszLayerName, m_apszLayerNames[i]) == 0)
+        {
+            pLayerImage = m_apImages[i];
+            if (pLayerImage == NULL)
+            {
+                ReadLayer(i);
+                pLayerImage = m_apImages[i];
+            }
+        }
+        else
+            i++;
+    }
 
-	return pLayerImage;
+    return pLayerImage;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1359,22 +1354,22 @@ RImage* RLaymage::GetLayer(char* pszLayerName)
 //
 //////////////////////////////////////////////////////////////////////
 
-RImage* RLaymage::GetLayer(short sLayerNumber)
+RImage *RLaymage::GetLayer(short sLayerNumber)
 {
-	RImage* pLayerImage = NULL;
+    RImage *pLayerImage = NULL;
 
-	if (sLayerNumber >= 0 && sLayerNumber < m_sNumLayers)
-	{
-		pLayerImage = m_apImages[sLayerNumber];
-		// If this layer is not in memory, load it in now
-		if (pLayerImage == NULL)
-		{
-			ReadLayer(sLayerNumber);
-			pLayerImage = m_apImages[sLayerNumber];
-		}
-	}
+    if (sLayerNumber >= 0 && sLayerNumber < m_sNumLayers)
+    {
+        pLayerImage = m_apImages[sLayerNumber];
+        // If this layer is not in memory, load it in now
+        if (pLayerImage == NULL)
+        {
+            ReadLayer(sLayerNumber);
+            pLayerImage = m_apImages[sLayerNumber];
+        }
+    }
 
-	return pLayerImage;
+    return pLayerImage;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1394,24 +1389,24 @@ RImage* RLaymage::GetLayer(short sLayerNumber)
 //
 //////////////////////////////////////////////////////////////////////
 
-void RLaymage::FreeLayer(char* pszLayerName)
+void RLaymage::FreeLayer(char *pszLayerName)
 {
-	short i = 0;
-	short bFound = FALSE;
+    short i = 0;
+    short bFound = FALSE;
 
-	while (i < m_sNumLayers && !bFound)
-	{
-		if (strcmp(pszLayerName, m_apszLayerNames[i]) == 0)
-			bFound = TRUE;
-		else
-			i++;
-	}
+    while (i < m_sNumLayers && !bFound)
+    {
+        if (strcmp(pszLayerName, m_apszLayerNames[i]) == 0)
+            bFound = TRUE;
+        else
+            i++;
+    }
 
-	if (bFound && m_apImages[i] != NULL)
-	{
-			delete m_apImages[i];
-			m_apImages[i] = NULL;
-	}
+    if (bFound && m_apImages[i] != NULL)
+    {
+        delete m_apImages[i];
+        m_apImages[i] = NULL;
+    }
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1433,12 +1428,12 @@ void RLaymage::FreeLayer(char* pszLayerName)
 
 void RLaymage::FreeLayer(short sLayerNumber)
 {
-	if (sLayerNumber >= 0 && sLayerNumber < m_sNumLayers)
-		if (m_apImages[sLayerNumber])
-		{
-			delete m_apImages[sLayerNumber];
-			m_apImages[sLayerNumber] = NULL;
-		}
+    if (sLayerNumber >= 0 && sLayerNumber < m_sNumLayers)
+        if (m_apImages[sLayerNumber])
+        {
+            delete m_apImages[sLayerNumber];
+            m_apImages[sLayerNumber] = NULL;
+        }
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1458,16 +1453,16 @@ void RLaymage::FreeLayer(short sLayerNumber)
 
 void RLaymage::FreeAllLayers(void)
 {
-	short i;
+    short i;
 
-	for (i = 0; i < m_sNumLayers; i++)
-	{
-		if (m_apImages[i])
-		{
-			delete m_apImages[i];
-			m_apImages[i] = NULL;
-		}
-	}
+    for (i = 0; i < m_sNumLayers; i++)
+    {
+        if (m_apImages[i])
+        {
+            delete m_apImages[i];
+            m_apImages[i] = NULL;
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1488,17 +1483,17 @@ void RLaymage::FreeAllLayers(void)
 //
 //////////////////////////////////////////////////////////////////////
 
-short RLaymage::GetLayerName(short sLayer, char* pszNameBuffer)
+short RLaymage::GetLayerName(short sLayer, char *pszNameBuffer)
 {
-	short sReturn = FAILURE;
-	
-	if (pszNameBuffer && sLayer >= 0 && sLayer < m_sNumLayers)
-	{
-		strcpy(pszNameBuffer, m_apszLayerNames[sLayer]);	
-		sReturn = SUCCESS;
-	}
-		
-	return sReturn;
+    short sReturn = FAILURE;
+
+    if (pszNameBuffer && sLayer >= 0 && sLayer < m_sNumLayers)
+    {
+        strcpy(pszNameBuffer, m_apszLayerNames[sLayer]);
+        sReturn = SUCCESS;
+    }
+
+    return sReturn;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1507,7 +1502,7 @@ short RLaymage::GetLayerName(short sLayer, char* pszNameBuffer)
 //
 // Description:
 //		Frees the array of pointers to RImage and layer names along
-//		with the things they were pointing to.  This is called to 
+//		with the things they were pointing to.  This is called to
 //		clean up the memory either by the destructor or if a new
 //		file is set or loaded.
 //
@@ -1521,22 +1516,22 @@ short RLaymage::GetLayerName(short sLayer, char* pszNameBuffer)
 
 void RLaymage::FreeLayerArrays(void)
 {
-	if (m_apImages)
-	{
-		FreeAllLayers();
-		delete []m_apImages;
-		m_apImages = NULL;
-	}
+    if (m_apImages)
+    {
+        FreeAllLayers();
+        delete[] m_apImages;
+        m_apImages = NULL;
+    }
 
-	if (m_apszLayerNames)
-	{
-		short i;
-		for (i = 0; i < m_sNumLayers; i++)
-			if (m_apszLayerNames[i])
-				delete []m_apszLayerNames[i];
-		delete []m_apszLayerNames;
-		m_apszLayerNames = NULL;
-	}
+    if (m_apszLayerNames)
+    {
+        short i;
+        for (i = 0; i < m_sNumLayers; i++)
+            if (m_apszLayerNames[i])
+                delete[] m_apszLayerNames[i];
+        delete[] m_apszLayerNames;
+        m_apszLayerNames = NULL;
+    }
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1559,34 +1554,33 @@ void RLaymage::FreeLayerArrays(void)
 
 short RLaymage::AllocateLayerArrays(short sNumLayers)
 {
-	short sReturn = SUCCESS;
-	short i;
+    short sReturn = SUCCESS;
+    short i;
 
-	FreeLayerArrays();
-	
-	m_apImages = new RImage*[m_sNumLayers];
-	if (m_apImages)
-	{
-		m_apszLayerNames = new char*[m_sNumLayers];
-			if (!m_apszLayerNames)
-				sReturn = FAILURE;
-	}
-	else
-		sReturn = FAILURE;
+    FreeLayerArrays();
 
-	if (sReturn == SUCCESS)
-	{
-		for (i = 0; i < sNumLayers; i++)
-		{
-			m_apImages[i] = NULL;
-			m_apszLayerNames[i] = NULL;
-		}
-	}
+    m_apImages = new RImage *[m_sNumLayers];
+    if (m_apImages)
+    {
+        m_apszLayerNames = new char *[m_sNumLayers];
+        if (!m_apszLayerNames)
+            sReturn = FAILURE;
+    }
+    else
+        sReturn = FAILURE;
 
-	return sReturn;		
+    if (sReturn == SUCCESS)
+    {
+        for (i = 0; i < sNumLayers; i++)
+        {
+            m_apImages[i] = NULL;
+            m_apszLayerNames[i] = NULL;
+        }
+    }
+
+    return sReturn;
 }
 
 //////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////
-

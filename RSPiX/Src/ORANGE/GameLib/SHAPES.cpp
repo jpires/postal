@@ -19,7 +19,7 @@
 //
 // shapes.cpp
 //
-// 
+//
 // History:
 //		12/08/95	BRH	Started.
 //		12/11/95	BRH	Added Ray constructor that takes two points and
@@ -55,56 +55,54 @@
 
 R2DRay::R2DRay(long lX1, long lY1, long lX2, long lY2)
 {
-	X = lX1;
-	Y = lY1;
+    X = lX1;
+    Y = lY1;
 
-	fXVect = (float) lX2 - lX1;
-	fYVect = (float) lY2 - lY1;
+    fXVect = (float)lX2 - lX1;
+    fYVect = (float)lY2 - lY1;
 
-	if (fXVect > fYVect)
-	{
-		fYVect /= fXVect;
-		fXVect = (float) 1.0; //dx /= dx;
-	}
-	else
-	{
-		fXVect /= fYVect;
-		fYVect = (float) 1.0; //dy /= dy;
-	}
+    if (fXVect > fYVect)
+    {
+        fYVect /= fXVect;
+        fXVect = (float)1.0; // dx /= dx;
+    }
+    else
+    {
+        fXVect /= fYVect;
+        fYVect = (float)1.0; // dy /= dy;
+    }
 }
 
 R3DRay::R3DRay(long lX1, long lY1, long lZ1, long lX2, long lY2, long lZ2)
 {
-	X = lX1;
-	Y = lY1;
-	Z = lZ1;
+    X = lX1;
+    Y = lY1;
+    Z = lZ1;
 
-	fXVect = (float) lX2 - lX1;
-	fYVect = (float) lY2 - lY1;
-	fZVect = (float) lZ2 - lZ1;
+    fXVect = (float)lX2 - lX1;
+    fYVect = (float)lY2 - lY1;
+    fZVect = (float)lZ2 - lZ1;
 
-	if (fXVect > fYVect && fXVect > fZVect)
-	{
-		fYVect /= fXVect;
-		fZVect /= fXVect;
-		fXVect = (float) 1.0; // fXVect /= fXVect;
-	}
-	else
-		if (fYVect > fXVect && fYVect > fZVect)
-		{
-			fXVect /= fYVect;
-			fZVect /= fYVect;
-			fYVect = (float) 1.0; // fYVect /= fYVect;
-		}
-		else
-		{
-			fXVect /= fZVect;
-			fYVect /= fZVect;
-			fZVect = (float) 1.0; // fZVect /= fZVect;
-		}
+    if (fXVect > fYVect && fXVect > fZVect)
+    {
+        fYVect /= fXVect;
+        fZVect /= fXVect;
+        fXVect = (float)1.0; // fXVect /= fXVect;
+    }
+    else if (fYVect > fXVect && fYVect > fZVect)
+    {
+        fXVect /= fYVect;
+        fZVect /= fYVect;
+        fYVect = (float)1.0; // fYVect /= fYVect;
+    }
+    else
+    {
+        fXVect /= fZVect;
+        fYVect /= fZVect;
+        fZVect = (float)1.0; // fZVect /= fZVect;
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////
-

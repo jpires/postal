@@ -18,7 +18,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 //	snd.cpp
-// 
+//
 // History:
 //		04/28/95 JMI	Started.
 //
@@ -41,7 +41,7 @@
 //		08/30/96	JMI	Abort() now calls m_mix.Suspend() as it should have been.
 //
 //		09/03/96	JMI	Adapted to newest revision of Blue Sound API (which
-//							removed rspStart/StopSoundOutCallbacks, 
+//							removed rspStart/StopSoundOutCallbacks,
 //							rspIsSoundOutCallingBack, and callback messages
 //							(RSP_SNDMSG_DONE and RSP_SNDMSG_DATA).
 //
@@ -73,7 +73,7 @@
 //							sure callbacks updated volume levels and all levels
 //							were passed on.
 //
-//		07/30/97	JMI	Added ASSERTs so stupid people (let's call one of them 
+//		07/30/97	JMI	Added ASSERTs so stupid people (let's call one of them
 //							JMI) don't pass loop points that exceed the overall size
 //							of the sample buffer causing cool music.
 //							Also, added if's to check these in non-TRACENASSERT mode.
@@ -98,13 +98,12 @@
 #include "System.h"
 
 #ifdef PATHS_IN_INCLUDES
-	#include "GREEN/Snd/snd.h"
-	#include "BLUE/Blue.h"
+#include "GREEN/Snd/snd.h"
+#include "BLUE/Blue.h"
 #else
-	#include "snd.h"
-	#include "Blue.h"
+#include "snd.h"
+#include "Blue.h"
 #endif // PATHS_IN_INCLUDES
-
 
 //////////////////////////////////////////////////////////////////////////////
 // Initialize static member variables.
@@ -113,8 +112,8 @@
 //////////////////////////////////////////////////////////////////////////////
 // Macros.
 //////////////////////////////////////////////////////////////////////////////
-#define SND_TYPE_UNKNOWN	0x0000
-#define SND_TYPE_WAVE		0x0001
+#define SND_TYPE_UNKNOWN 0x0000
+#define SND_TYPE_WAVE 0x0001
 
 //////////////////////////////////////////////////////////////////////////////
 // Functions.
@@ -128,9 +127,9 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 RSnd::RSnd()
-	{
-	Init();
-	}
+{
+    Init();
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -140,10 +139,10 @@ RSnd::RSnd()
 //
 //////////////////////////////////////////////////////////////////////////////
 RSnd::~RSnd()
-	{
-	// Reset and free.
-	Reset();
-	}
+{
+    // Reset and free.
+    Reset();
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -153,19 +152,19 @@ RSnd::~RSnd()
 //
 //////////////////////////////////////////////////////////////////////////////
 void RSnd::Init(void)
-	{
-	// Initialize members.
-	m_lBufSize			= 0L;
-	m_sState				= Stopped;
-	m_psample			= NULL;
-	m_sOwnSample		= FALSE;
-	m_sLoop				= FALSE;
-	m_dcUser				= NULL;
-	m_lLoopStartPos	= 0;	
-	m_lLoopEndPos		= 0;
-	m_sTypeVolume		= 255;	// should be overwritten by Play
-	m_sChannelVolume	= 255;	// should be overwritten by Play
-	}
+{
+    // Initialize members.
+    m_lBufSize = 0L;
+    m_sState = Stopped;
+    m_psample = NULL;
+    m_sOwnSample = FALSE;
+    m_sLoop = FALSE;
+    m_dcUser = NULL;
+    m_lLoopStartPos = 0;
+    m_lLoopEndPos = 0;
+    m_sTypeVolume = 255;    // should be overwritten by Play
+    m_sChannelVolume = 255; // should be overwritten by Play
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -175,30 +174,30 @@ void RSnd::Init(void)
 //
 ///////////////////////////////////////////////////////////////////////////////
 void RSnd::Reset(void)
-	{
-	ASSERT(GetState() == Stopped);
+{
+    ASSERT(GetState() == Stopped);
 
-	if (GetState() == Stopped)
-		{
-		if (m_psample != NULL)
-			{
-			// Unlock the sample.
-			m_psample->Unlock();
-			// If we are responsible for the sample . . .
-			if (m_sOwnSample == TRUE)
-				{
-				delete m_psample;
-				m_psample = NULL;
-				}
-			}
-		
-		Init();
-		}
-	else
-		{
-		TRACE("Reset():  Attempt to Reset a playing WAVE!\n");
-		}
-	}
+    if (GetState() == Stopped)
+    {
+        if (m_psample != NULL)
+        {
+            // Unlock the sample.
+            m_psample->Unlock();
+            // If we are responsible for the sample . . .
+            if (m_sOwnSample == TRUE)
+            {
+                delete m_psample;
+                m_psample = NULL;
+            }
+        }
+
+        Init();
+    }
+    else
+    {
+        TRACE("Reset():  Attempt to Reset a playing WAVE!\n");
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -213,85 +212,88 @@ void RSnd::Reset(void)
 // (public)
 //
 ///////////////////////////////////////////////////////////////////////////////
-short RSnd::Stream(	char* pszSampleName, long lPlayBufSize, long lReadBufSize,
-						 UCHAR	ucMainVolume /* = 255 */, UCHAR ucVolume2 /* = 255 */)
-	{
-	short sRes = 0;
-	
-	// Reset variables and free data if any.
-	Reset();
-	
-	// Attempt to create RSample . . .
-	m_psample = new RSample;
-	if (m_psample != NULL)
-		{
-		// Remember we're responsible for de-allocating this RSample.
-		m_sOwnSample	= TRUE;
-		if (m_psample->Open(pszSampleName, lReadBufSize) > 0L)
-			{
-			// Attempt to open a sound channel . . .
-			if (m_mix.OpenChannel(	m_psample->m_lSamplesPerSec, 
-											m_psample->m_sBitsPerSample, 
-											m_psample->m_sNumChannels) == 0)
-				{
-				// Store the buffer size to stream with.
-				m_lBufSize	= lPlayBufSize;
-				// Attempt to start the mixing . . .
-				if (m_mix.Start(StreamCallStatic, (ULONG)this) == 0)
-					{
-					// Success.  Set state to starting.
-					m_sState	= Starting;
-					}
-				else
-					{
-					TRACE("Stream(\"%s\"): Unable to start mixer.\n", pszSampleName);
-					sRes = -7;
-					}
+short RSnd::Stream(char *pszSampleName,
+                   long lPlayBufSize,
+                   long lReadBufSize,
+                   UCHAR ucMainVolume /* = 255 */,
+                   UCHAR ucVolume2 /* = 255 */)
+{
+    short sRes = 0;
 
-				// If any failures . . .
-				if (sRes != 0)
-					{
-					if (m_mix.CloseChannel() != 0)
-						{
-						TRACE("Stream(\"%s\"): Unable to close sound channel.\n", pszSampleName);
-						}
-					}
-				}
-			else
-				{
-				TRACE("Stream(\"%s\"): Unable to open sound channel.\n", pszSampleName);
-				sRes = -6;
-				}
+    // Reset variables and free data if any.
+    Reset();
 
-			// If any failures . . .
-			if (sRes != 0)
-				{
-				// Close sample.
-				m_psample->Close();
-				}
-			}
-		else
-			{
-			TRACE("Stream(\"%s\"): Unable to open sample file.\n", pszSampleName);
-			sRes = -5;
-			}
+    // Attempt to create RSample . . .
+    m_psample = new RSample;
+    if (m_psample != NULL)
+    {
+        // Remember we're responsible for de-allocating this RSample.
+        m_sOwnSample = TRUE;
+        if (m_psample->Open(pszSampleName, lReadBufSize) > 0L)
+        {
+            // Attempt to open a sound channel . . .
+            if (m_mix.OpenChannel(m_psample->m_lSamplesPerSec,
+                                  m_psample->m_sBitsPerSample,
+                                  m_psample->m_sNumChannels) == 0)
+            {
+                // Store the buffer size to stream with.
+                m_lBufSize = lPlayBufSize;
+                // Attempt to start the mixing . . .
+                if (m_mix.Start(StreamCallStatic, (ULONG)this) == 0)
+                {
+                    // Success.  Set state to starting.
+                    m_sState = Starting;
+                }
+                else
+                {
+                    TRACE("Stream(\"%s\"): Unable to start mixer.\n", pszSampleName);
+                    sRes = -7;
+                }
 
-		// If any failures . . .
-		if (sRes != 0)
-			{
-			delete m_psample;
-			m_psample = NULL;
-			}
-		}
-	else
-		{
-		TRACE("Stream(\"%s\"): Unable to allocate RSample.\n", pszSampleName);
-		sRes = -3;
-		}
+                // If any failures . . .
+                if (sRes != 0)
+                {
+                    if (m_mix.CloseChannel() != 0)
+                    {
+                        TRACE("Stream(\"%s\"): Unable to close sound channel.\n", pszSampleName);
+                    }
+                }
+            }
+            else
+            {
+                TRACE("Stream(\"%s\"): Unable to open sound channel.\n", pszSampleName);
+                sRes = -6;
+            }
 
-	return sRes;
-	}
-	
+            // If any failures . . .
+            if (sRes != 0)
+            {
+                // Close sample.
+                m_psample->Close();
+            }
+        }
+        else
+        {
+            TRACE("Stream(\"%s\"): Unable to open sample file.\n", pszSampleName);
+            sRes = -5;
+        }
+
+        // If any failures . . .
+        if (sRes != 0)
+        {
+            delete m_psample;
+            m_psample = NULL;
+        }
+    }
+    else
+    {
+        TRACE("Stream(\"%s\"): Unable to allocate RSample.\n", pszSampleName);
+        sRes = -3;
+    }
+
+    return sRes;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Plays RSample supplied via ptr with buffer size of lPlayBufSize
@@ -304,136 +306,134 @@ short RSnd::Stream(	char* pszSampleName, long lPlayBufSize, long lReadBufSize,
 //			lLoopStartTime									lLoopEndTime
 //
 // In a looping scenario, 1..2 of the sample is played, then 2..3
-// is repeated until m_sLoop is FALSE, at which time, once 3 is reached, 
+// is repeated until m_sLoop is FALSE, at which time, once 3 is reached,
 // 3..4 is played.
 //
 ///////////////////////////////////////////////////////////////////////////////
-short RSnd::Play(						// Returns 0 on success.
-	RSample* psample,					// In:  Sample to play.
-	long lPlayBufSize,				// In:  Size of play buffer in bytes.
-	UCHAR	ucMainVolume/* = 255 */,// In:  Primary Volume (0 - 255)
-	UCHAR ucVolume2 /* = 255 */,	// In:  Secondary Volume (0 - 255)
-	long lLoopStartTime/* = -1*/,	// In:  Where to loop back to in milliseconds.
-											//	-1 indicates no looping (unless m_sLoop is
-											// explicitly set).
-	long lLoopEndTime/* = 0*/)		// In:  Where to loop back from in milliseconds.
-											// In:  If less than 1, the end + lLoopEndTime is used.
-	{
-	short sRes = 0; // Assume success.
-	
-	ASSERT(psample != NULL);
-	ASSERT(GetState() == Stopped);
+short RSnd::Play(                 // Returns 0 on success.
+  RSample *psample,               // In:  Sample to play.
+  long lPlayBufSize,              // In:  Size of play buffer in bytes.
+  UCHAR ucMainVolume /* = 255 */, // In:  Primary Volume (0 - 255)
+  UCHAR ucVolume2 /* = 255 */,    // In:  Secondary Volume (0 - 255)
+  long lLoopStartTime /* = -1*/,  // In:  Where to loop back to in milliseconds.
+                                  //	-1 indicates no looping (unless m_sLoop is
+                                  // explicitly set).
+  long lLoopEndTime /* = 0*/)     // In:  Where to loop back from in milliseconds.
+                                  // In:  If less than 1, the end + lLoopEndTime is used.
+{
+    short sRes = 0; // Assume success.
 
-	// Use supplied sample.
-	m_psample		= psample;
-	// Remember we're not responsible for this buffer (i.e., freeing it).
-	m_sOwnSample	= FALSE;
+    ASSERT(psample != NULL);
+    ASSERT(GetState() == Stopped);
 
-	// Attempt to lock sample . . .
-	if (m_psample->Lock() == 0)
-		{
-		// Attempt to open a sound channel . . .
-		if (m_mix.OpenChannel(	m_psample->m_lSamplesPerSec, 
-										m_psample->m_sBitsPerSample,
-										m_psample->m_sNumChannels) == 0)
-			{
-			// Store the buffer size to stream with.
-			m_lBufSize = lPlayBufSize;
-			// Attempt to play buffer . . .
-			if (m_mix.Start(PlayCallStatic, (ULONG)this,ucMainVolume,ucVolume2) == 0)
-				{
-				// Success.  Set state to starting.
-				m_sState				= Starting;
-				if (lLoopStartTime > -1)
-					{
-					// Set looping parameters.
-					m_sLoop				= TRUE;
-					m_lLoopStartPos	= psample->GetPos(lLoopStartTime);
-					m_lLoopEndPos		= psample->GetPos(lLoopEndTime);
-					// If using the end . . .
-					if (lLoopEndTime < 1)
-						{
-						// Use the duration plus the specified negative time.
-						m_lLoopEndPos		+= psample->m_lBufSize;
-						}
+    // Use supplied sample.
+    m_psample = psample;
+    // Remember we're not responsible for this buffer (i.e., freeing it).
+    m_sOwnSample = FALSE;
 
-					// Cannot be off end of buffer or beginning of buffer.
-					ASSERT(m_lLoopStartPos <= psample->m_lBufSize);
-					ASSERT(m_lLoopEndPos <= psample->m_lBufSize);
-					ASSERT(m_lLoopStartPos >= 0);
-					ASSERT(m_lLoopStartPos < m_lLoopEndPos);
+    // Attempt to lock sample . . .
+    if (m_psample->Lock() == 0)
+    {
+        // Attempt to open a sound channel . . .
+        if (m_mix.OpenChannel(m_psample->m_lSamplesPerSec, m_psample->m_sBitsPerSample, m_psample->m_sNumChannels) == 0)
+        {
+            // Store the buffer size to stream with.
+            m_lBufSize = lPlayBufSize;
+            // Attempt to play buffer . . .
+            if (m_mix.Start(PlayCallStatic, (ULONG)this, ucMainVolume, ucVolume2) == 0)
+            {
+                // Success.  Set state to starting.
+                m_sState = Starting;
+                if (lLoopStartTime > -1)
+                {
+                    // Set looping parameters.
+                    m_sLoop = TRUE;
+                    m_lLoopStartPos = psample->GetPos(lLoopStartTime);
+                    m_lLoopEndPos = psample->GetPos(lLoopEndTime);
+                    // If using the end . . .
+                    if (lLoopEndTime < 1)
+                    {
+                        // Use the duration plus the specified negative time.
+                        m_lLoopEndPos += psample->m_lBufSize;
+                    }
 
-					// Fix these values in case we're in release mode.
-					if (m_lLoopStartPos > psample->m_lBufSize)
-						{
-						m_lLoopStartPos = psample->m_lBufSize;
-						}
+                    // Cannot be off end of buffer or beginning of buffer.
+                    ASSERT(m_lLoopStartPos <= psample->m_lBufSize);
+                    ASSERT(m_lLoopEndPos <= psample->m_lBufSize);
+                    ASSERT(m_lLoopStartPos >= 0);
+                    ASSERT(m_lLoopStartPos < m_lLoopEndPos);
 
-					if (m_lLoopEndPos > psample->m_lBufSize)
-						{
-						m_lLoopEndPos = psample->m_lBufSize;
-						}
+                    // Fix these values in case we're in release mode.
+                    if (m_lLoopStartPos > psample->m_lBufSize)
+                    {
+                        m_lLoopStartPos = psample->m_lBufSize;
+                    }
 
-					if (m_lLoopStartPos < 0)
-						{
-						m_lLoopStartPos = 0;
-						}
+                    if (m_lLoopEndPos > psample->m_lBufSize)
+                    {
+                        m_lLoopEndPos = psample->m_lBufSize;
+                    }
 
-					if (m_lLoopStartPos > m_lLoopEndPos)
-						{
-						m_lLoopStartPos = m_lLoopEndPos;
-						}
-					}
-				else	// Backwards compatability.
-					{
-					// If m_sLoop was set . . .
-					if (m_sLoop != FALSE)
-						{
-						m_lLoopStartPos	= 0;
-						// Use end of sample as loop back point.
-						m_lLoopEndPos		= psample->m_lBufSize;
-						}
-					}
-				}
-			else
-				{
-				TRACE("Play(): Unable to play sound buffer.\n");
-				sRes = -3;
-				}
+                    if (m_lLoopStartPos < 0)
+                    {
+                        m_lLoopStartPos = 0;
+                    }
 
-			// If any failures . . .
-			if (sRes != 0)
-				{
-				if (m_mix.CloseChannel() != 0)
-					{
-					TRACE("Play(): Unable to close sound channel.\n");
-					}
-				}
-			}
-		else
-			{
+                    if (m_lLoopStartPos > m_lLoopEndPos)
+                    {
+                        m_lLoopStartPos = m_lLoopEndPos;
+                    }
+                }
+                else // Backwards compatability.
+                {
+                    // If m_sLoop was set . . .
+                    if (m_sLoop != FALSE)
+                    {
+                        m_lLoopStartPos = 0;
+                        // Use end of sample as loop back point.
+                        m_lLoopEndPos = psample->m_lBufSize;
+                    }
+                }
+            }
+            else
+            {
+                TRACE("Play(): Unable to play sound buffer.\n");
+                sRes = -3;
+            }
+
+            // If any failures . . .
+            if (sRes != 0)
+            {
+                if (m_mix.CloseChannel() != 0)
+                {
+                    TRACE("Play(): Unable to close sound channel.\n");
+                }
+            }
+        }
+        else
+        {
             // commented out due to spam from --nosound.  --ryan.
-			//TRACE("Play(): Unable to open sound output device.\n");
-			sRes = -2;
-			}
+            // TRACE("Play(): Unable to open sound output device.\n");
+            sRes = -2;
+        }
 
-		// If any failures . . .
-		if (sRes != 0)
-			{
-			// Unlock sample.
-			m_psample->Unlock();
-			// We have no more use for this sample.
-			m_psample = NULL;
-			}
-		}
-	else
-		{
-		TRACE("Play(): Unable to lock supplied sample.\n");
-		sRes = -1;
-		}
+        // If any failures . . .
+        if (sRes != 0)
+        {
+            // Unlock sample.
+            m_psample->Unlock();
+            // We have no more use for this sample.
+            m_psample = NULL;
+        }
+    }
+    else
+    {
+        TRACE("Play(): Unable to lock supplied sample.\n");
+        sRes = -1;
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -443,52 +443,52 @@ short RSnd::Play(						// Returns 0 on success.
 //
 ///////////////////////////////////////////////////////////////////////////////
 short RSnd::Abort(void)
-	{
-	short sRes = 0; // Assume success.
+{
+    short sRes = 0; // Assume success.
 
-	ASSERT(GetState() != Stopped);
+    ASSERT(GetState() != Stopped);
 
-	// If we have a sample (i.e., we are streaming/playing) . . .
-	if (m_psample != NULL)
-		{
-		// Unlock the sample.
-		m_psample->Unlock();
-		
-		// Call callback, if specified.
-		if (m_dcUser != NULL)
-			{
-			(*m_dcUser)(this);
-			}
+    // If we have a sample (i.e., we are streaming/playing) . . .
+    if (m_psample != NULL)
+    {
+        // Unlock the sample.
+        m_psample->Unlock();
 
-		if (m_sOwnSample == TRUE)
-			{
-			// Destroy sample.
-			delete m_psample;
-			// We no longer own the sample.
-			m_sOwnSample = FALSE;
-			}
+        // Call callback, if specified.
+        if (m_dcUser != NULL)
+        {
+            (*m_dcUser)(this);
+        }
 
-		// Clear the sample ptr.  This will cause streaming/playing to end.
-		m_psample = NULL;
+        if (m_sOwnSample == TRUE)
+        {
+            // Destroy sample.
+            delete m_psample;
+            // We no longer own the sample.
+            m_sOwnSample = FALSE;
+        }
 
-		// Let RMix know we want to abort.
-		if (m_mix.Suspend() == 0)
-			{
-			}
-		else
-			{
-			TRACE("Abort(): RMix::Suspend() failed.\n");
-			}
-		}
-	else
-		{
-//		TRACE("Abort(): No current RSample.\n");
-		sRes = -1;
-		}
-	
-	return sRes;
-	}
-	
+        // Clear the sample ptr.  This will cause streaming/playing to end.
+        m_psample = NULL;
+
+        // Let RMix know we want to abort.
+        if (m_mix.Suspend() == 0)
+        {
+        }
+        else
+        {
+            TRACE("Abort(): RMix::Suspend() failed.\n");
+        }
+    }
+    else
+    {
+        //		TRACE("Abort(): No current RSample.\n");
+        sRes = -1;
+    }
+
+    return sRes;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // Gets/returns the current position of the audio in bytes.
@@ -496,9 +496,9 @@ short RSnd::Abort(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 long RSnd::GetPos(void)
-	{
-	return m_mix.GetPos();
-	}
+{
+    return m_mix.GetPos();
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -507,9 +507,9 @@ long RSnd::GetPos(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 long RSnd::GetTime(void)
-	{
-	return m_mix.GetTime();
-	}
+{
+    return m_mix.GetTime();
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -518,118 +518,115 @@ long RSnd::GetTime(void)
 // Returns pointer to next buffer to play or NULL to end.
 //
 //////////////////////////////////////////////////////////////////////////////
-void* RSnd::StreamCall(RMix::Msg	msg, 
-								void*		pData, 
-								ULONG*	pulBufSize,
-								ULONG		ulUser,
-								UCHAR*		pucVolume,
-								UCHAR*		pucVol2)
-	{
-	switch (msg)
-		{
-		case RMix::Data:
-			// If not done . . .
-			if (m_psample != NULL)
-				{
-				// If we were starting . . .
-				if (m_sState == Starting)
-					{
-					// Switch to queueing.
-					m_sState = Queueing;
-					}
+void *RSnd::StreamCall(RMix::Msg msg, void *pData, ULONG *pulBufSize, ULONG ulUser, UCHAR *pucVolume, UCHAR *pucVol2)
+{
+    switch (msg)
+    {
+        case RMix::Data:
+            // If not done . . .
+            if (m_psample != NULL)
+            {
+                // If we were starting . . .
+                if (m_sState == Starting)
+                {
+                    // Switch to queueing.
+                    m_sState = Queueing;
+                }
 
-				// Read a buffer . . .
-				(*pulBufSize) = m_psample->Read(m_lBufSize);
-				if (*pulBufSize > 0)
-					{
-					// Set pointer.  Technically, m_psample's pointer could change
-					// time we call Read().  Remember that!
-					pData = m_psample->m_pData;
+                // Read a buffer . . .
+                (*pulBufSize) = m_psample->Read(m_lBufSize);
+                if (*pulBufSize > 0)
+                {
+                    // Set pointer.  Technically, m_psample's pointer could change
+                    // time we call Read().  Remember that!
+                    pData = m_psample->m_pData;
 
-					// If the message is not queueing and our state is queueing . . .
-					if (m_sState == Queueing)
-						{
-						// Switch state to playing.
-						m_sState	= Playing;
-						}
-					}
-				else
-					{
-					// If done . . .
-					if (*pulBufSize == 0)
-						{
-						}
-					else
-						{
-						TRACE("StreamCall(): Error reading sample data.\n");
-						}
+                    // If the message is not queueing and our state is queueing . . .
+                    if (m_sState == Queueing)
+                    {
+                        // Switch state to playing.
+                        m_sState = Playing;
+                    }
+                }
+                else
+                {
+                    // If done . . .
+                    if (*pulBufSize == 0)
+                    {
+                    }
+                    else
+                    {
+                        TRACE("StreamCall(): Error reading sample data.\n");
+                    }
 
-					// End streaming.
-					pData = NULL;
-					}
-				}
-			else
-				{
-				// Aborted.
-				pData = NULL;
-				}
+                    // End streaming.
+                    pData = NULL;
+                }
+            }
+            else
+            {
+                // Aborted.
+                pData = NULL;
+            }
 
-			// If abort, done, or error . . .
-			if (pData == NULL)
-				{
-				// Set state to ending.
-				m_sState	= Ending;
-				}
-			break;
+            // If abort, done, or error . . .
+            if (pData == NULL)
+            {
+                // Set state to ending.
+                m_sState = Ending;
+            }
+            break;
 
-		case RMix::Suspended:
-			// If sample still pointed to (this is the case when the sound ends
-			// normally (i.e., Abort() was NOT called) ). . .
-			if (m_psample != NULL)
-				{
-				// Close the sample.
-				if (m_psample->Close() != 0)
-					{
-					TRACE("StreamCall(): Unable to close RSample.\n");
-					}
+        case RMix::Suspended:
+            // If sample still pointed to (this is the case when the sound ends
+            // normally (i.e., Abort() was NOT called) ). . .
+            if (m_psample != NULL)
+            {
+                // Close the sample.
+                if (m_psample->Close() != 0)
+                {
+                    TRACE("StreamCall(): Unable to close RSample.\n");
+                }
 
-				// Call callback, if specified.
-				if (m_dcUser != NULL)
-					{
-					(*m_dcUser)(this);
-					}
+                // Call callback, if specified.
+                if (m_dcUser != NULL)
+                {
+                    (*m_dcUser)(this);
+                }
 
-				// If we own the sample . . .
-				if (m_sOwnSample == TRUE)
-					{
-					// Delete it.
-					delete m_psample;
-					// No longer own it.
-					m_sOwnSample = FALSE;
-					}
+                // If we own the sample . . .
+                if (m_sOwnSample == TRUE)
+                {
+                    // Delete it.
+                    delete m_psample;
+                    // No longer own it.
+                    m_sOwnSample = FALSE;
+                }
 
-				m_psample = NULL;
-				}
+                m_psample = NULL;
+            }
 
-			// Close the sound output channel.
-			if (m_mix.CloseChannel() != 0)
-				{
-				TRACE("StreamCall(): Unable to close sound channel.\n");
-				}
+            // Close the sound output channel.
+            if (m_mix.CloseChannel() != 0)
+            {
+                TRACE("StreamCall(): Unable to close sound channel.\n");
+            }
 
-			// Set state to stopped.
-			m_sState	= Stopped;
-			
-			break;
-		}
+            // Set state to stopped.
+            m_sState = Stopped;
 
-	// Get current Sound from internal members
-	if (pucVolume) *pucVolume = m_sChannelVolume;
-	if (pucVol2) *pucVol2 = m_sTypeVolume;
+            break;
+    }
 
-	// Return next buffer to play.
-	return pData;
-	}
+    // Get current Sound from internal members
+    if (pucVolume)
+        *pucVolume = m_sChannelVolume;
+    if (pucVol2)
+        *pucVol2 = m_sTypeVolume;
+
+    // Return next buffer to play.
+    return pData;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -639,116 +636,112 @@ void* RSnd::StreamCall(RMix::Msg	msg,
 // Recursive 1 deep.
 //
 //////////////////////////////////////////////////////////////////////////////
-void* RSnd::PlayCall(RMix::Msg	msg,
-							void*			pData, 
-							ULONG*		pulBufSize,
-							UCHAR*		pucVolume,
-							UCHAR*		pucVol2)
-	{
-	switch (msg)
-		{
-		case RMix::Data:
-			// If not done . . .
-			if (m_psample != NULL)
-				{
-				// If we were starting . . .
-				if (m_sState == Starting)
-					{
-					// Switch to queueing.
-					m_sState = Queueing;
-					// Set remaining amount of data to play.
-					m_ulRemaining	= (m_sLoop == FALSE) ? m_psample->m_lBufSize : m_lLoopEndPos;
-					// Set size of data to play.
-					m_ulSampleSize	= m_ulRemaining;
-					}
+void *RSnd::PlayCall(RMix::Msg msg, void *pData, ULONG *pulBufSize, UCHAR *pucVolume, UCHAR *pucVol2)
+{
+    switch (msg)
+    {
+        case RMix::Data:
+            // If not done . . .
+            if (m_psample != NULL)
+            {
+                // If we were starting . . .
+                if (m_sState == Starting)
+                {
+                    // Switch to queueing.
+                    m_sState = Queueing;
+                    // Set remaining amount of data to play.
+                    m_ulRemaining = (m_sLoop == FALSE) ? m_psample->m_lBufSize : m_lLoopEndPos;
+                    // Set size of data to play.
+                    m_ulSampleSize = m_ulRemaining;
+                }
 
-				// Move to next buffer.
-				pData = (UCHAR*)(m_psample->m_pData) + (m_ulSampleSize - m_ulRemaining);
+                // Move to next buffer.
+                pData = (UCHAR *)(m_psample->m_pData) + (m_ulSampleSize - m_ulRemaining);
 
-				// Get next buffer size.
-				(*pulBufSize) = MIN((ULONG)m_lBufSize, m_ulRemaining);
+                // Get next buffer size.
+                (*pulBufSize) = MIN((ULONG)m_lBufSize, m_ulRemaining);
 
-				if (*pulBufSize > 0)
-					{
-					// Deduct amount to play.
-					m_ulRemaining = m_ulRemaining - (*pulBufSize);
+                if (*pulBufSize > 0)
+                {
+                    // Deduct amount to play.
+                    m_ulRemaining = m_ulRemaining - (*pulBufSize);
 
-					// If the message is not queueing and our state is queueing . . .
-					if (m_sState == Queueing)
-						{
-						// Switch state to playing.
-						m_sState	= Playing;
-						}
-					}
-				else
-					{
-					// If looping is disabled . . .
-					if (m_sLoop == FALSE)
-						{
-						// If we were NOT looping a sub region . . .
-						if (m_ulSampleSize == (ULONG)m_psample->m_lBufSize)
-							{
-							// Clear pointer.
-							pData		= NULL;
-							}
-						else
-							{
-							// Play the rest.
-							// Set remaining amount of data to play.
-							m_ulRemaining	= m_psample->m_lBufSize - m_lLoopEndPos;
-							// Set size of data to play.
-							m_ulSampleSize	= m_psample->m_lBufSize;
+                    // If the message is not queueing and our state is queueing . . .
+                    if (m_sState == Queueing)
+                    {
+                        // Switch state to playing.
+                        m_sState = Playing;
+                    }
+                }
+                else
+                {
+                    // If looping is disabled . . .
+                    if (m_sLoop == FALSE)
+                    {
+                        // If we were NOT looping a sub region . . .
+                        if (m_ulSampleSize == (ULONG)m_psample->m_lBufSize)
+                        {
+                            // Clear pointer.
+                            pData = NULL;
+                        }
+                        else
+                        {
+                            // Play the rest.
+                            // Set remaining amount of data to play.
+                            m_ulRemaining = m_psample->m_lBufSize - m_lLoopEndPos;
+                            // Set size of data to play.
+                            m_ulSampleSize = m_psample->m_lBufSize;
 
-							// Recurse.
-							pData	= PlayCall(msg, pData, pulBufSize, pucVolume, pucVol2);
-							}
-						}
-					else
-						{
-						// Restart at loop pos.
-						// Set remaining amount of data to play.
-						m_ulRemaining	= m_lLoopEndPos - m_lLoopStartPos;
-						// Set size of data to play.
-						m_ulSampleSize	= m_lLoopEndPos;
+                            // Recurse.
+                            pData = PlayCall(msg, pData, pulBufSize, pucVolume, pucVol2);
+                        }
+                    }
+                    else
+                    {
+                        // Restart at loop pos.
+                        // Set remaining amount of data to play.
+                        m_ulRemaining = m_lLoopEndPos - m_lLoopStartPos;
+                        // Set size of data to play.
+                        m_ulSampleSize = m_lLoopEndPos;
 
-						// Recurse.
-						pData	= PlayCall(msg, pData, pulBufSize, pucVolume, pucVol2);
-						}
-					}
-				}
-			else
-				{
-				// Clear pointer.
-				pData	= NULL;
-				}
+                        // Recurse.
+                        pData = PlayCall(msg, pData, pulBufSize, pucVolume, pucVol2);
+                    }
+                }
+            }
+            else
+            {
+                // Clear pointer.
+                pData = NULL;
+            }
 
-			// If done or aborted . . .
-			if (pData == NULL)
-				{
-				// Set state to ending.
-				m_sState	= Ending;
-				}
-			break;
+            // If done or aborted . . .
+            if (pData == NULL)
+            {
+                // Set state to ending.
+                m_sState = Ending;
+            }
+            break;
 
-		case RMix::Suspended:
+        case RMix::Suspended:
 
-			if (m_psample != NULL)
-				{
-				// Unlock the sample.
-				m_psample->Unlock();
+            if (m_psample != NULL)
+            {
+                // Unlock the sample.
+                m_psample->Unlock();
 
-				// Call callback, if specified.
-				if (m_dcUser != NULL)
-					{
-					(*m_dcUser)(this);
-					}
-				}
+                // Call callback, if specified.
+                if (m_dcUser != NULL)
+                {
+                    (*m_dcUser)(this);
+                }
+            }
 
-			// Close the sound output channel.
-			if (m_mix.CloseChannel() != 0)
-				{
-				TRACE("PlayCall(): Unable to close sound channel.\n");
-				}
+            // Close the sound output channel.
+            if (m_mix.CloseChannel() != 0)
+            {
+                TRACE("PlayCall(): Unable to close sound channel.\n");
+            }
 #if 0
 			TRACE("Remaining: %lu, Size: %lu, State: %s, Sample: 0x%08lx.\n",
 					m_ulRemaining, m_ulSampleSize,
@@ -761,22 +754,24 @@ void* RSnd::PlayCall(RMix::Msg	msg,
 					);
 #endif
 
-			// Set state to stopped.
-			m_sState	= Stopped;
+            // Set state to stopped.
+            m_sState = Stopped;
 
-			// Clear sample.  No longer needed.
-			m_psample = NULL;
+            // Clear sample.  No longer needed.
+            m_psample = NULL;
 
-			break;
-		}
+            break;
+    }
 
-	// Get current Sound from internal members
-	if (pucVolume) *pucVolume = m_sChannelVolume;
-	if (pucVol2) *pucVol2 = m_sTypeVolume;
+    // Get current Sound from internal members
+    if (pucVolume)
+        *pucVolume = m_sChannelVolume;
+    if (pucVol2)
+        *pucVol2 = m_sTypeVolume;
 
-	// Return next buffer to play.
-	return pData;
-	}
+    // Return next buffer to play.
+    return pData;
+}
 
 ////////////////////////////// Static functions //////////////////////////////
 
@@ -788,15 +783,15 @@ void* RSnd::PlayCall(RMix::Msg	msg,
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-void* RSnd::StreamCallStatic(	RMix::Msg	msg, 
-										void*			pData, 
-										ULONG*		pulBufSize, 
-										ULONG			ulUser,
-										UCHAR*		pucVolume,
-										UCHAR*		pucVol2)
-	{
-	return ((PSND)ulUser)->StreamCall(msg, pData, pulBufSize,ulUser,pucVolume,pucVol2);
-	}
+void *RSnd::StreamCallStatic(RMix::Msg msg,
+                             void *pData,
+                             ULONG *pulBufSize,
+                             ULONG ulUser,
+                             UCHAR *pucVolume,
+                             UCHAR *pucVol2)
+{
+    return ((PSND)ulUser)->StreamCall(msg, pData, pulBufSize, ulUser, pucVolume, pucVol2);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -806,15 +801,15 @@ void* RSnd::StreamCallStatic(	RMix::Msg	msg,
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-void* RSnd::PlayCallStatic(RMix::Msg	msg, 
-									void*			pData, 
-									ULONG*		pulBufSize, 
-									ULONG			ulUser,
-									UCHAR*		pucVolume,
-									UCHAR*		pucVol2)
-	{
-	return ((PSND)ulUser)->PlayCall(msg, pData, pulBufSize, pucVolume, pucVol2);
-	}
+void *RSnd::PlayCallStatic(RMix::Msg msg,
+                           void *pData,
+                           ULONG *pulBufSize,
+                           ULONG ulUser,
+                           UCHAR *pucVolume,
+                           UCHAR *pucVol2)
+{
+    return ((PSND)ulUser)->PlayCall(msg, pData, pulBufSize, pucVolume, pucVol2);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // EOF

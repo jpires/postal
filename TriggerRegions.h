@@ -31,24 +31,22 @@
 #include "RSPiX.h"
 #include "TriggerRgn.h"
 #ifdef PATHS_IN_INCLUDES
-	#include "ORANGE/MultiGrid/MultiGridIndirect.h"
+#include "ORANGE/MultiGrid/MultiGridIndirect.h"
 #else
-	#include "multigridindirect.h"
+#include "multigridindirect.h"
 #endif
 #include "realm.h"
 
 // See the cpp file for usage details...
 
-extern	RMultiGridIndirect*	CreateRegionMap(short sWidth,short sHeight,short sMaxPlanes,
-												 short sTileW,short sTileH);
+extern RMultiGridIndirect *CreateRegionMap(short sWidth, short sHeight, short sMaxPlanes, short sTileW, short sTileH);
 
-extern	short	StrafeAddRegion(RMultiGridIndirect* pMGI,TriggerRgn regions[256]);
+extern short StrafeAddRegion(RMultiGridIndirect *pMGI, TriggerRgn regions[256]);
 
-extern	short CompressMap(RMultiGridIndirect* pMGI,short sTileW,short sTileH);
+extern short CompressMap(RMultiGridIndirect *pMGI, short sTileW, short sTileH);
 
 // Have main guys alert pylons to their presence.
-extern	void	SpewTriggers(CRealm* pRealm,	USHORT	usDudeUID,short sX,short sZ);
-
+extern void SpewTriggers(CRealm *pRealm, USHORT usDudeUID, short sX, short sZ);
 
 ////////////////////////////////////////////////////////////////////////////////
 // EOF

@@ -21,7 +21,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // Headers.
 //////////////////////////////////////////////////////////////////////////////
-					  
+
 //////////////////////////////////////////////////////////////////////////////
 // Macros.
 //////////////////////////////////////////////////////////////////////////////
@@ -30,36 +30,36 @@
 // Typedefs.
 //////////////////////////////////////////////////////////////////////////////
 // Forward define class.
-class	CRes;
+class CRes;
 
 class CResItem
-	{
-	public:		// Construction/Destruction.
-		// Default constructor.
-		CResItem();
-		// Constructura Especial! Ole!
-		CResItem(char* pszName, UCHAR* puc, long lSize, CRes* pRes);
+{
+  public: // Construction/Destruction.
+    // Default constructor.
+    CResItem();
+    // Constructura Especial! Ole!
+    CResItem(char *pszName, UCHAR *puc, long lSize, CRes *pRes);
 
-		// Destructor.
-		~CResItem();
+    // Destructor.
+    ~CResItem();
 
-	public:	// Methods.
-		// Lock this item b4 using.
-		// Returns new reference count.
-		short Lock(void);
-		// Unlock this item when done.  Deletes object if m_sRefCnt hits 0.
-		// Returns new reference count.
-		short Unlock(void);
+  public: // Methods.
+    // Lock this item b4 using.
+    // Returns new reference count.
+    short Lock(void);
+    // Unlock this item when done.  Deletes object if m_sRefCnt hits 0.
+    // Returns new reference count.
+    short Unlock(void);
 
-	public:	// Members.
-		char*		m_pszName;		// Resource name.
-		UCHAR*	m_puc;			// Resource data.
-		long		m_lSize;			// Resource size.
-		short		m_sRefCnt;		// Number of items using this resource.
-		CRes*		m_pRes;			// Res Manager that owns this resource.
-	};
+  public:            // Members.
+    char *m_pszName; // Resource name.
+    UCHAR *m_puc;    // Resource data.
+    long m_lSize;    // Resource size.
+    short m_sRefCnt; // Number of items using this resource.
+    CRes *m_pRes;    // Res Manager that owns this resource.
+};
 
-typedef CResItem* PRESITEM;
+typedef CResItem *PRESITEM;
 
 #endif // RESITEM_H
 //////////////////////////////////////////////////////////////////////////////

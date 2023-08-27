@@ -17,7 +17,7 @@
 //
 // Reality.H
 // Project: Nostril (aka Postal)
-// 
+//
 // History:
 //		02/23/97 JMI	Started.
 //
@@ -73,7 +73,7 @@
 
 // I figure a meter is about half a man's height.  Our man is about 50 pixels
 // tall.
-const double g_dAccelerationDueToGravity	= -(25 * 9.8);	// Pixels/(sec^2) upward.
+const double g_dAccelerationDueToGravity = -(25 * 9.8); // Pixels/(sec^2) upward.
 
 ///////////////////////////////////////////////////////////////////////////////
 // Protos.
@@ -87,44 +87,44 @@ const double g_dAccelerationDueToGravity	= -(25 * 9.8);	// Pixels/(sec^2) upward
 // Adjust provided velocity by drag for the given period.
 ///////////////////////////////////////////////////////////////////////////////
 template<class VelT>
-void AdjustVel(			// Returns nothing.
-	VelT* pvel,				// In:  Velocity to affect by specified acceleration.
-								// Out: New velocity.
-	double dDeltaTime,	// In:  Duration over which acceleration affected 
-								// *pvel in seconds.
-	double dAccel = g_dAccelerationDueToGravity)	// In:  Acceleration value
-															// to apply (in Pixels/Sec^2).
-	{
-	*pvel	+= (VelT)(dAccel * dDeltaTime);
-	}
+void AdjustVel(                                // Returns nothing.
+  VelT *pvel,                                  // In:  Velocity to affect by specified acceleration.
+                                               // Out: New velocity.
+  double dDeltaTime,                           // In:  Duration over which acceleration affected
+                                               // *pvel in seconds.
+  double dAccel = g_dAccelerationDueToGravity) // In:  Acceleration value
+                                               // to apply (in Pixels/Sec^2).
+{
+    *pvel += (VelT)(dAccel * dDeltaTime);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Adjust provided vertical position and velocity by gravity for the given
 // period.
 ///////////////////////////////////////////////////////////////////////////////
 template<class PosT, class VelT>
-void AdjustPosVel(		// Returns nothing.
-	PosT* ppos,				// In:  Current position.
-								// Out: New position.
-	VelT* pvel,				// In:  Velocity to affect by drag.
-								// Out: New velocity.
-	double dDeltaTime,	// In:  Duration over which drag affected 
-								// *ppos in seconds.
-	double dAccel = g_dAccelerationDueToGravity)	// In:  Drag value to apply 
-															// (in Pixels/Sec^2).
-	{
-	VelT	velDelta	= 0;
-	AdjustVel(&velDelta, dDeltaTime, dAccel);
+void AdjustPosVel(                             // Returns nothing.
+  PosT *ppos,                                  // In:  Current position.
+                                               // Out: New position.
+  VelT *pvel,                                  // In:  Velocity to affect by drag.
+                                               // Out: New velocity.
+  double dDeltaTime,                           // In:  Duration over which drag affected
+                                               // *ppos in seconds.
+  double dAccel = g_dAccelerationDueToGravity) // In:  Drag value to apply
+                                               // (in Pixels/Sec^2).
+{
+    VelT velDelta = 0;
+    AdjustVel(&velDelta, dDeltaTime, dAccel);
 
-	// On the average during this duration, the position was affected
-	// by the average velocity change (hence velDelta / 2).
-	*ppos	+= (*pvel + velDelta / 2) * dDeltaTime;
+    // On the average during this duration, the position was affected
+    // by the average velocity change (hence velDelta / 2).
+    *ppos += (*pvel + velDelta / 2) * dDeltaTime;
 
-	// Adjust velocity.
-	*pvel += velDelta;
-	}
+    // Adjust velocity.
+    *pvel += velDelta;
+}
 
-#endif	// REALITY_H
+#endif // REALITY_H
 ///////////////////////////////////////////////////////////////////////////////
 // EOF
 ///////////////////////////////////////////////////////////////////////////////

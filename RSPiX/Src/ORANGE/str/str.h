@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // str.H
-// 
+//
 // History:
 //		05/20/97 JMI	Started.
 //
@@ -41,7 +41,7 @@
 // paths to a header file.  In this case we generally go off of our
 // RSPiX root directory.  System.h MUST be included before this macro
 // is evaluated.  System.h is the header that, based on the current
-// platform (or more so in this case on the compiler), defines 
+// platform (or more so in this case on the compiler), defines
 // PATHS_IN_INCLUDES.  Blue.h includes system.h so you can include that
 // instead.
 ///////////////////////////////////////////////////////////////////////////////
@@ -67,36 +67,36 @@
 // Excerpt from VC 5.0 Help on strnicmp():
 // "Two strings containing characters located between 'Z' and 'a' in the ASCII
 // table ('[', '\', ']', '^', '_', and '`') compare differently, depending on
-// their case. For example, the two strings "ABCDE" and "ABCD^" compare one 
-// way if the comparison is lowercase ("abcde" > "abcd^") and the other way 
+// their case. For example, the two strings "ABCDE" and "ABCD^" compare one
+// way if the comparison is lowercase ("abcde" > "abcd^") and the other way
 // ("ABCDE" < "ABCD^") if it is uppercase."
-extern short rspStricmp(	// Returns 0 if equivalent.
-									// Returns < 0 if pszStr1 less than pszStr2.
-									// Returns > 0 if pszStr1 greater than pszStr2.
-	const char* pszStr1,		// In:  First string to compare.
-	const char* pszStr2);	// In:  Second string to compare.
+extern short rspStricmp( // Returns 0 if equivalent.
+                         // Returns < 0 if pszStr1 less than pszStr2.
+                         // Returns > 0 if pszStr1 greater than pszStr2.
+  const char *pszStr1,   // In:  First string to compare.
+  const char *pszStr2);  // In:  Second string to compare.
 
 // Perform a lowercase comparison of strings up to n characters.
-// If the shorter string ends before n characters and the strings are 
+// If the shorter string ends before n characters and the strings are
 // equal up to the end of the shorter string, that string is lesser.
 // Excerpt from VC 5.0 Help on strnicmp():
 // "Two strings containing characters located between 'Z' and 'a' in the ASCII
 // table ('[', '\', ']', '^', '_', and '`') compare differently, depending on
-// their case. For example, the two strings "ABCDE" and "ABCD^" compare one 
-// way if the comparison is lowercase ("abcde" > "abcd^") and the other way 
+// their case. For example, the two strings "ABCDE" and "ABCD^" compare one
+// way if the comparison is lowercase ("abcde" > "abcd^") and the other way
 // ("ABCDE" < "ABCD^") if it is uppercase."
-extern short rspStrnicmp(	// Returns 0 if equivalent.
-									// Returns < 0 if pszStr1 less than pszStr2.
-									// Returns > 0 if pszStr1 greater than pszStr2.
-	const char* pszStr1,		// In:  First string to compare.
-	const char* pszStr2,		// In:  Second string to compare.
-	size_t count);				// In:  Number of characters to compare.
+extern short rspStrnicmp( // Returns 0 if equivalent.
+                          // Returns < 0 if pszStr1 less than pszStr2.
+                          // Returns > 0 if pszStr1 greater than pszStr2.
+  const char *pszStr1,    // In:  First string to compare.
+  const char *pszStr2,    // In:  Second string to compare.
+  size_t count);          // In:  Number of characters to compare.
 
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs.
 //////////////////////////////////////////////////////////////////////////////
 
-#endif	// STR_H
+#endif // STR_H
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////

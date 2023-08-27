@@ -19,35 +19,34 @@
 #include "QuickMath.h"
 #include "FixedPoint.h"
 
-RFixedS32 fpSINQ[csNumRotSteps],fpCOSQ[csNumRotSteps];
+RFixedS32 fpSINQ[csNumRotSteps], fpCOSQ[csNumRotSteps];
 
-void InitTrigFP() // fixed point	
-	{
-	short i;
-	double rad;
+void InitTrigFP() // fixed point
+{
+    short i;
+    double rad;
 
-	const double cdStepsToRad = 
-		rspPI * 2.0 / double(csNumRotSteps);
+    const double cdStepsToRad = rspPI * 2.0 / double(csNumRotSteps);
 
-	for (i=0;i<csNumRotSteps;i++)
-		{
-		rad = (double)i * cdStepsToRad;
-		rspfpSetValue(fpSINQ[i],SINQ[i]);
-		rspfpSetValue(fpCOSQ[i],COSQ[i]);
-		}
-	}
+    for (i = 0; i < csNumRotSteps; i++)
+    {
+        rad = (double)i * cdStepsToRad;
+        rspfpSetValue(fpSINQ[i], SINQ[i]);
+        rspfpSetValue(fpCOSQ[i], COSQ[i]);
+    }
+}
 
 // Auto init:
-RQuickTrig	dummyRQuickTrig;
+RQuickTrig dummyRQuickTrig;
 
 long RInitNum::OneOver[NUM_ONEOVER_FP32];
 RInitNum::RInitNum()
-	{
-	// Populate the oneOver array:
-	OneOver[0] = long(2147483647); // error, signed infinity!
-	OneOver[1] = long(65535); // full numbers!
-	for (short i=2;i<NUM_ONEOVER_FP32;i++) OneOver[i] = long(65536)/i;
-	}
+{
+    // Populate the oneOver array:
+    OneOver[0] = long(2147483647); // error, signed infinity!
+    OneOver[1] = long(65535);      // full numbers!
+    for (short i = 2; i < NUM_ONEOVER_FP32; i++)
+        OneOver[i] = long(65536) / i;
+}
 
 RInitNum dummyRInitNum;
-

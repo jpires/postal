@@ -29,27 +29,25 @@
 
 #include "Blue.h"
 
-#pragma warning (disable:4200) // disable warning about zero-length arrays
+#pragma warning(disable : 4200) // disable warning about zero-length arrays
 
 // A ZONE is basically just a rectangle.  The values are offsets from
 // the hotspot to the edges of the rectangle.
 typedef struct tag_ZONE
-	{
-	short sLeft;		// Offset from hotspot to left edge of zone
-	short sTop;			// Offset from hotspot to top edge of zone
-	short sRight;		// Offset from hotspot to right edge of zone
-	short sBottom;		// Offset from hotspot to bottom edge of zone
-	} ZONE;
-
+{
+    short sLeft;   // Offset from hotspot to left edge of zone
+    short sTop;    // Offset from hotspot to top edge of zone
+    short sRight;  // Offset from hotspot to right edge of zone
+    short sBottom; // Offset from hotspot to bottom edge of zone
+} ZONE;
 
 // A ZONELIST is a list of ZONEs for a particular type.  In most cases
 // a single ZONE is used, but complex shapes may require multiple ZONEs.
 typedef struct tag_ZONELIST
-	{
-	short sNumZones;	// Number of zones in array
-	ZONE aZones[];		// ZONE's (variable sized array!)
-	} ZONELIST;
-
+{
+    short sNumZones; // Number of zones in array
+    ZONE aZones[];   // ZONE's (variable sized array!)
+} ZONELIST;
 
 // A ZONESET is a list of zone types, with one entry per zone type used.
 // The number of zones actually used is determined by the generated
@@ -59,25 +57,22 @@ typedef struct tag_ZONELIST
 // Note that the number of zonetypes determines the
 // total size of this structure.
 typedef struct tag_ZONESET
-	{
-	ZONELIST* apZoneLists[];	// ZONELIST's (variable sized array!)
-	} ZONESET;
+{
+    ZONELIST *apZoneLists[]; // ZONELIST's (variable sized array!)
+} ZONESET;
 
-
-	
 // Multiple frames will likely refer to the same image
 typedef struct tag_IMAGE
-	{
-	short ucType;		// Image type
-	short sWidth;		// Image width (bounding rectangle)
-	short sHeight;		// Image height (bounding rectangle)
-	// The next part is dependant on the image type.  Perhaps
-	// we should use a UNION to define whatever parts of the
-	// various image types we can.
-	// For now, I just declare it as generic data bytes.
-	UCHAR abData[];		// Image data (as per type)
-	} IMAGE;
-
+{
+    short ucType;  // Image type
+    short sWidth;  // Image width (bounding rectangle)
+    short sHeight; // Image height (bounding rectangle)
+    // The next part is dependant on the image type.  Perhaps
+    // we should use a UNION to define whatever parts of the
+    // various image types we can.
+    // For now, I just declare it as generic data bytes.
+    UCHAR abData[]; // Image data (as per type)
+} IMAGE;
 
 // A FRAME contains offsets that describe how the hotspot should be moved
 // in order to get to the position at which the specified IMAGE should be
@@ -88,46 +83,41 @@ typedef struct tag_IMAGE
 // number of frames in the animation.  The ZONESET describes the zones
 // associated with this frame.
 typedef struct tag_FRAME
-	{
-	short sOffsetX;
-	short sOffsetY;
-	short	sOffsetZ;
-	short sHold;
-	short sRepeat;			// Bit 15 could be used to mark key frames
-								// If bit is set on frame 0, it would mean that
-								// the animation uses inter-frame deltas.
-	IMAGE* pImage;
-	ZONESET* pZoneSet;
-	} FRAME;
-
-
-
+{
+    short sOffsetX;
+    short sOffsetY;
+    short sOffsetZ;
+    short sHold;
+    short sRepeat; // Bit 15 could be used to mark key frames
+                   // If bit is set on frame 0, it would mean that
+                   // the animation uses inter-frame deltas.
+    IMAGE *pImage;
+    ZONESET *pZoneSet;
+} FRAME;
 
 // Animation structure.  Note that the number of frames determines the
 // total size of this structure.
 typedef struct tag_ANIM
-	{
-	short sNumFrames;			// Number of frames
-	FRAME aFrames[1];			// FRAME's (variable sized array!)
-	} ANIM;
+{
+    short sNumFrames; // Number of frames
+    FRAME aFrames[1]; // FRAME's (variable sized array!)
+} ANIM;
 
-
-// Animation header structure.  Note that this structure is declaired 
+// Animation header structure.  Note that this structure is declaired
 // with an array of 1 aAnims, but it is really a variable sized array.
 // Since we are allocating a block of memory for the while animation
 // data file and just casting pointers to various parts of memory within
 // that block, we don't need the size of the array.  The C compiler won't
-//	let us declair variable sized arrays containing variable sized arrays, 
+//	let us declair variable sized arrays containing variable sized arrays,
 // so we can either do it by calling it size 1 and using is as a variable
 // sized array, or by making the linker generate a constant for the total
 // number of animations.  For now I've chosen to use the size 1 method.
 
 typedef struct tag_ANIMSET
 {
- 	long lNumAnims;
-	ANIM* apAnims[1];
+    long lNumAnims;
+    ANIM *apAnims[1];
 } ANIMSET;
-
 
 // Should we use the AIFF-like format where everything is in its
 // own "chunk"?  The advantage I see is that we can then have a
@@ -149,7 +139,6 @@ typedef struct tag_ANIMSET
 //		'fram' - frame data
 //		'zset' - zone set data
 //		'zone' - zone data
-
 
 // The file contains offsets which we want to convert into pointers.
 // One way to do this is to write code that understands the file
@@ -195,48 +184,47 @@ typedef struct tag_ANIMSET
 // the number of entries, which would allow us to leave off leading
 // and trailing unused entries.  This is probably not usefull.
 
-
 // Here's the data in the file:
 
 /*
 
 // This is animation lookup table
-	dl	<number of entries in following table>
-	dl	<offset to animation #0 or 0 if it doesn't exist in this file)
- 	dl <offset to animation #1 or 0 if it doesn't exist in this file)
-	(etc.)
+    dl	<number of entries in following table>
+    dl	<offset to animation #0 or 0 if it doesn't exist in this file)
+    dl <offset to animation #1 or 0 if it doesn't exist in this file)
+    (etc.)
 
 // Data for an animation
-	dw <number of frames>
+    dw <number of frames>
 
 // Data for frame 0 (only used once - loops go back to frame 1)
-	dw	<start x>
-	dw	<start y>
-	dw	<start z>
-	dw	<hold count>
-	dw	<repeat count>
-	dl	<offset to image>
-	dl	<offset to zoneset, 0 if none>
+    dw	<start x>
+    dw	<start y>
+    dw	<start z>
+    dw	<hold count>
+    dw	<repeat count>
+    dl	<offset to image>
+    dl	<offset to zoneset, 0 if none>
 
 // Data for frame 1 through n-1
-	dw	<offset x>
-	dw	<offset y>
-	dw	<offset z>
-	dw	<hold count>
-	dw	<repeat count>
-	dl	<offset to image>
-	dl	<offset to zoneset, 0 if none>
+    dw	<offset x>
+    dw	<offset y>
+    dw	<offset z>
+    dw	<hold count>
+    dw	<repeat count>
+    dl	<offset to image>
+    dl	<offset to zoneset, 0 if none>
 
 
 // Sample access stuff.  We coerce generic pointers into pointers to specific
 // structs.
-	ANIM* pAnim = (long*)pLoadingAddress[1];
-	short sNumFrames = pAnim->sNumFrames;
-	FRAME* pFrame = pAnim->aFrames[3];
+    ANIM* pAnim = (long*)pLoadingAddress[1];
+    short sNumFrames = pAnim->sNumFrames;
+    FRAME* pFrame = pAnim->aFrames[3];
 
 */
 
-#endif //ANIMDATA_H
+#endif // ANIMDATA_H
 
 //*****************************************************************************
 // EOF

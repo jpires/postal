@@ -21,8 +21,8 @@
 // History:
 //		12/11/96	JPW	RPrefsLine created to contain ini file lines, information
 //							on the type of lines, and to help in processing of lines.
-//		12/16/96	JPW	Fixed so it will work with the STL stuff that comes with 
-//							MSVC 4.1 or newer.  Also fixed a few psz parameters that 
+//		12/16/96	JPW	Fixed so it will work with the STL stuff that comes with
+//							MSVC 4.1 or newer.  Also fixed a few psz parameters that
 //							should have been const's.
 //
 //		05/08/97	JMI	Added conditions for compiler versions' STL
@@ -55,152 +55,152 @@
 // Handy inline to parse before and after an equals into two strings.
 // The whitespace directly preceding and postceding.
 ////////////////////////////////////////////////////////////////////////////////
-inline short GetVar(	// Returns 0 on success.
-	char*	pszLine,		// In:  Line to parse.
-	char*	pszVar,		// Out: Var name, if not NULL.
-	char* pszVal)		// Out: Val, if not NULL.
-	{
-	short	sRes	= 0;	// Assume success.
+inline short GetVar( // Returns 0 on success.
+  char *pszLine,     // In:  Line to parse.
+  char *pszVar,      // Out: Var name, if not NULL.
+  char *pszVal)      // Out: Val, if not NULL.
+{
+    short sRes = 0; // Assume success.
 
-	short	j, i, k;
-	// Copy variable name to out string
-	for (j = 0, i = 0; pszLine[i] != '\0' && pszLine[i] != '='; i++, j++)
-		{
-		if (pszVar)
-			{
-			pszVar[j] = pszLine[i];
-			}
-		}
+    short j, i, k;
+    // Copy variable name to out string
+    for (j = 0, i = 0; pszLine[i] != '\0' && pszLine[i] != '='; i++, j++)
+    {
+        if (pszVar)
+        {
+            pszVar[j] = pszLine[i];
+        }
+    }
 
-	if (pszVar)
-		{
-		// Remove trailing whitespace.
-		for (k = j - 1; isspace(pszVar[k]) && k > 0; k--) ;
+    if (pszVar)
+    {
+        // Remove trailing whitespace.
+        for (k = j - 1; isspace(pszVar[k]) && k > 0; k--)
+            ;
 
-		pszVar[k + 1] = '\0';
-		}
+        pszVar[k + 1] = '\0';
+    }
 
-	if (pszLine[i] == '\0')
-		{
-		TRACE("GetVar(): Missing '=' in line: '%s'\n", pszLine);
-		sRes = 2;
-		}
-	else
-		{
-		if (pszVal)
-			{
-			// Find first non-space char after '='
-			for (i++; pszLine[i] != '\0' && isspace(pszLine[i]); i++)
-				;
-			// Did we find find anything after '='
-			if (pszLine[i] == '\0')
-				{
-// 7/10/97 MJR - Removed this TRACE() because we often use entries with nothing after the '='
-//				TRACE("GetVar(): Badly formed variable syntax.\n");
-				sRes = 3;
-				}
-			else
-				// Copy variable value to out string
-				strcpy(pszVal, &pszLine[i]);
-			}
-		}
+    if (pszLine[i] == '\0')
+    {
+        TRACE("GetVar(): Missing '=' in line: '%s'\n", pszLine);
+        sRes = 2;
+    }
+    else
+    {
+        if (pszVal)
+        {
+            // Find first non-space char after '='
+            for (i++; pszLine[i] != '\0' && isspace(pszLine[i]); i++)
+                ;
+            // Did we find find anything after '='
+            if (pszLine[i] == '\0')
+            {
+                // 7/10/97 MJR - Removed this TRACE() because we often use entries with nothing after the '='
+                //				TRACE("GetVar(): Badly formed variable syntax.\n");
+                sRes = 3;
+            }
+            else
+                // Copy variable value to out string
+                strcpy(pszVal, &pszLine[i]);
+        }
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Constructor
 ////////////////////////////////////////////////////////////////////////////////
 
-RPrefsLine::RPrefsLine (RPrefsLine::ePrefsLineType Type, const char *pszLine)
-	{
-	m_Type = Type;
-	m_pszLine = new char[strlen (pszLine) + 1];
-	assert (m_pszLine);
-	strcpy (m_pszLine, pszLine);
+RPrefsLine::RPrefsLine(RPrefsLine::ePrefsLineType Type, const char *pszLine)
+{
+    m_Type = Type;
+    m_pszLine = new char[strlen(pszLine) + 1];
+    assert(m_pszLine);
+    strcpy(m_pszLine, pszLine);
 
-	return;
-	}
+    return;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Destructor
 ////////////////////////////////////////////////////////////////////////////////
-RPrefsLine::~RPrefsLine ()
-	{
-	delete [] m_pszLine;
-	m_pszLine = NULL;
-	return;
-	}
+RPrefsLine::~RPrefsLine()
+{
+    delete[] m_pszLine;
+    m_pszLine = NULL;
+    return;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Method to get a constant pointer to the Line of text.
 ////////////////////////////////////////////////////////////////////////////////
-const char*	RPrefsLine::GetLine (void)
-	{
-	return (m_pszLine);
-	}
+const char *RPrefsLine::GetLine(void)
+{
+    return (m_pszLine);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Method to get type of line.
 ////////////////////////////////////////////////////////////////////////////////
 RPrefsLine::ePrefsLineType RPrefsLine::GetType()
-	{
-	return (m_Type);
-	}
+{
+    return (m_Type);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Get the section name. returns 0 on success
 ////////////////////////////////////////////////////////////////////////////////
 short RPrefsLine::GetSectionName(char *pszSection)
-	{
-	short sRes = 0;
-	if (m_Type != Section)
-		{
-		TRACE("RPrefsLine::GetSectionName(): Not a section line.\n");
-		sRes = 1;
-		}
-	else
-		{
-		short i, j;
-		// Find index of first char is section name
-		for (i = 0; (m_pszLine[i] != '\0') &&
-				(isspace(m_pszLine[i]) || (m_pszLine[i] == '[')); i++)
-			;
-		// Make sure there even is somthing after the '[' beside space
-		if (m_pszLine[i] == '\0')
-			sRes = 2;
-		else
-			{
-			// Copy section name to out string
-			for (j = 0; (m_pszLine[i] != '\0') && (m_pszLine[i] != ']'); i++, j++)
-				pszSection[j] = m_pszLine[i];
+{
+    short sRes = 0;
+    if (m_Type != Section)
+    {
+        TRACE("RPrefsLine::GetSectionName(): Not a section line.\n");
+        sRes = 1;
+    }
+    else
+    {
+        short i, j;
+        // Find index of first char is section name
+        for (i = 0; (m_pszLine[i] != '\0') && (isspace(m_pszLine[i]) || (m_pszLine[i] == '[')); i++)
+            ;
+        // Make sure there even is somthing after the '[' beside space
+        if (m_pszLine[i] == '\0')
+            sRes = 2;
+        else
+        {
+            // Copy section name to out string
+            for (j = 0; (m_pszLine[i] != '\0') && (m_pszLine[i] != ']'); i++, j++)
+                pszSection[j] = m_pszLine[i];
 
-			j--;
+            j--;
 
-			// Remove trailing spaces.
-			while (isspace(pszSection[j]) )
-				j--;
+            // Remove trailing spaces.
+            while (isspace(pszSection[j]))
+                j--;
 
-			pszSection[j + 1] = '\0';
-			}
-		}
-	if (sRes != 0)
-		strcpy(pszSection, "");
-	return (sRes);
-	}
-		
+            pszSection[j + 1] = '\0';
+        }
+    }
+    if (sRes != 0)
+        strcpy(pszSection, "");
+    return (sRes);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Get the variable name. returns 0 on success
 ////////////////////////////////////////////////////////////////////////////////
 short RPrefsLine::GetVariableName(char *pszVariable)
-	{
-	short sRes = 0;
-	if (m_Type != Variable)
-		{
-		TRACE("RPrefsLine::GetVariableName(): Not a variable line.\n");
-		sRes = 1;
-		}
-	else
+{
+    short sRes = 0;
+    if (m_Type != Variable)
+    {
+        TRACE("RPrefsLine::GetVariableName(): Not a variable line.\n");
+        sRes = 1;
+    }
+    else
 #if 0
 		{
 		short i, j;
@@ -224,25 +224,25 @@ short RPrefsLine::GetVariableName(char *pszVariable)
 	if (sRes != 0)
 		strcpy(pszVariable, "");
 #else
-		sRes	= GetVar(m_pszLine, pszVariable, NULL);
+        sRes = GetVar(m_pszLine, pszVariable, NULL);
 #endif
-	return (sRes);
-	}
+    return (sRes);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Get the value of the variable. returns 0 on success
 ////////////////////////////////////////////////////////////////////////////////
 short RPrefsLine::GetVariableValue(char *pszValue)
-	{
-	short sRes = 0;
+{
+    short sRes = 0;
 
-	// Make sure the prefs line is a variable
-	if (m_Type != Variable)
-		{
-		TRACE("RPrefsLine::GetVariableValue(): Not a variable line.\n");
-		sRes = 1;
-		}
-	else
+    // Make sure the prefs line is a variable
+    if (m_Type != Variable)
+    {
+        TRACE("RPrefsLine::GetVariableValue(): Not a variable line.\n");
+        sRes = 1;
+    }
+    else
 #if 0
 		{
 		short i;
@@ -274,28 +274,28 @@ short RPrefsLine::GetVariableValue(char *pszValue)
 	if (sRes != 0)
 		strcpy(pszValue, "");
 #else
-		sRes	= GetVar(m_pszLine, NULL, pszValue);
+        sRes = GetVar(m_pszLine, NULL, pszValue);
 #endif
-	return (sRes);
-	}
+    return (sRes);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Set the value of the variable
 ////////////////////////////////////////////////////////////////////////////////
 short RPrefsLine::SetVariableValue(const char *pszValue)
-	{
-	short	sRes = 0;
-	char	pszLine[128], pszVariable[64];
+{
+    short sRes = 0;
+    char pszLine[128], pszVariable[64];
 
-	ASSERT(pszValue);
-	// Make sure the prefs line is a variable
-	if (m_Type != Variable)
-		{
-		TRACE("RPrefsLine::SetVariableValue(): Not a variable line.\n");
-		sRes = 1;
-		}
-	else
-		{
+    ASSERT(pszValue);
+    // Make sure the prefs line is a variable
+    if (m_Type != Variable)
+    {
+        TRACE("RPrefsLine::SetVariableValue(): Not a variable line.\n");
+        sRes = 1;
+    }
+    else
+    {
 #if 0
 		short i;
 		for(i = 0; (m_pszLine[i] != '\0') && !isspace(m_pszLine[i]) &&
@@ -303,17 +303,17 @@ short RPrefsLine::SetVariableValue(const char *pszValue)
 			pszVariable[i] = m_pszLine[i];
 		pszVariable[i] = '\0';
 #else
-		sRes	= GetVar(m_pszLine, pszVariable, NULL);
-		if (sRes == 0)
+        sRes = GetVar(m_pszLine, pszVariable, NULL);
+        if (sRes == 0)
 #endif
-			{
-			ASSERT(m_pszLine);
-			delete [] m_pszLine;
-			m_pszLine = NULL;
-			sprintf(pszLine, "%s = %s", pszVariable, pszValue);
-			m_pszLine = new char[strlen(pszLine) + 1];
-			strcpy(m_pszLine, pszLine);
-			}
-		}
-	return (sRes);
-	}
+        {
+            ASSERT(m_pszLine);
+            delete[] m_pszLine;
+            m_pszLine = NULL;
+            sprintf(pszLine, "%s = %s", pszVariable, pszValue);
+            m_pszLine = new char[strlen(pszLine) + 1];
+            strcpy(m_pszLine, pszLine);
+        }
+    }
+    return (sRes);
+}

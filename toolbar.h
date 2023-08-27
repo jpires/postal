@@ -18,7 +18,7 @@
 // toolbar.h
 // Project: Nostril (aka Postal)
 //
-// This module augments the CDude class, which used to be soley responsible for 
+// This module augments the CDude class, which used to be soley responsible for
 // updating player and weapon status.  It currently graphically manages the
 // toolbars and sound reactions.  (Still need to add sounds)
 ////////////////////////////////////////////////////////////////////////////////
@@ -28,7 +28,7 @@
 //		08/06/97 JRD	Started.  Set bars to load in the realm
 //
 //		08/08/97 JRD	Changed methodology to a proprietary data format and abandoning
-//							attempts of a one to one interface with postal.  Tollbar will 
+//							attempts of a one to one interface with postal.  Tollbar will
 //							update an internal map of the weapon states based on events
 //							passed.
 //
@@ -46,27 +46,25 @@
 #include "RSPiX.h"
 #include "hood.h"
 
-// Because I do NOT yet want to be forced to put the entire clas in the header, I 
+// Because I do NOT yet want to be forced to put the entire clas in the header, I
 // am ALIASING the hooks to the toolbar so recompiles will be minimal:
 
 // This should be done everytime the hood's palette changes.
-extern	short	ToolBarInit(CHood* pHood);
+extern short ToolBarInit(CHood *pHood);
 
 // This does a FULL regeneration of the toolbar and draws it in yout area.
 // It returns false if it isn't time to render.
-extern	bool	ToolBarRender(
-						CHood* pHood,
-						RImage* pimDst,
-						short sDstX,
-						short sDstY,
-						CDude* pDude,
-						bool bForceRender = false
-						);
+extern bool ToolBarRender(CHood *pHood,
+                          RImage *pimDst,
+                          short sDstX,
+                          short sDstY,
+                          CDude *pDude,
+                          bool bForceRender = false);
 
-extern	short gsStatusFontForeIndex;
-extern	short gsStatusFontBackIndex;
-extern	short gsStatusFontShadowIndex;
+extern short gsStatusFontForeIndex;
+extern short gsStatusFontBackIndex;
+extern short gsStatusFontShadowIndex;
 
-extern	short gsStatusFontForeDeadIndex;
+extern short gsStatusFontForeDeadIndex;
 
 #endif

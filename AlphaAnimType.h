@@ -25,96 +25,93 @@
 
 // Simple wrapper class for each frame of alpha animation
 class CAlphaAnim
-	{
-	public:
-		short m_sNumAlphas;										// Number of alpha images (could be 0!)
-		short m_sX;													// Offset from hotspot to upper-left corner of image
-		short m_sY;													// Offset from hotspot to upper-left corner of image
-		RImage m_imColor;											// "Normal" 8-bit color image
-		RImage* m_pimAlphaArray;								// Array of alpha image's (could be empty!)
+{
+  public:
+    short m_sNumAlphas;      // Number of alpha images (could be 0!)
+    short m_sX;              // Offset from hotspot to upper-left corner of image
+    short m_sY;              // Offset from hotspot to upper-left corner of image
+    RImage m_imColor;        // "Normal" 8-bit color image
+    RImage *m_pimAlphaArray; // Array of alpha image's (could be empty!)
 
-	public:
-		CAlphaAnim()
-			{
-			m_pimAlphaArray = 0;
-			Reset();
-			};
-		
-		~CAlphaAnim()
-			{
-			Reset();
-			};
+  public:
+    CAlphaAnim()
+    {
+        m_pimAlphaArray = 0;
+        Reset();
+    };
 
-		CAlphaAnim& operator=(const CAlphaAnim& rhs)
-			{
-			Reset();
-			m_sNumAlphas = rhs.m_sNumAlphas;
-			m_sX = rhs.m_sX;
-			m_sY = rhs.m_sY;
-			m_imColor = rhs.m_imColor;
-			Alloc(m_sNumAlphas);
-			rspObjCpy(m_pimAlphaArray, rhs.m_pimAlphaArray, m_sNumAlphas);
-			return *this;
-			}
+    ~CAlphaAnim() { Reset(); };
 
-		bool operator==(const CAlphaAnim& rhs) const
-			{
-			// Comparing two of these objects is a major undertaking.  Instead,
-			// we'll always say that they are different.  This is not a great
-			// solution.  In fact, it sucks.  But what the hell...
-			return false;
-			}
+    CAlphaAnim &operator=(const CAlphaAnim &rhs)
+    {
+        Reset();
+        m_sNumAlphas = rhs.m_sNumAlphas;
+        m_sX = rhs.m_sX;
+        m_sY = rhs.m_sY;
+        m_imColor = rhs.m_imColor;
+        Alloc(m_sNumAlphas);
+        rspObjCpy(m_pimAlphaArray, rhs.m_pimAlphaArray, m_sNumAlphas);
+        return *this;
+    }
 
-		void Reset(void)
-			{
-			Free();
-			m_sNumAlphas = 0;
-			m_sX = 0;
-			m_sY = 0;
-			}
+    bool operator==(const CAlphaAnim &rhs) const
+    {
+        // Comparing two of these objects is a major undertaking.  Instead,
+        // we'll always say that they are different.  This is not a great
+        // solution.  In fact, it sucks.  But what the hell...
+        return false;
+    }
 
-		void Alloc(short sNumAlphas)
-			{
-			Free();
-			if (sNumAlphas > 0)
-				{
-				m_pimAlphaArray = new RImage[sNumAlphas];
-				ASSERT(m_pimAlphaArray != 0);
-				}
-			m_sNumAlphas = sNumAlphas;
-			}
+    void Reset(void)
+    {
+        Free();
+        m_sNumAlphas = 0;
+        m_sX = 0;
+        m_sY = 0;
+    }
 
-		void Free(void)
-			{
-			delete []m_pimAlphaArray;
-			m_pimAlphaArray = 0;
-			}
+    void Alloc(short sNumAlphas)
+    {
+        Free();
+        if (sNumAlphas > 0)
+        {
+            m_pimAlphaArray = new RImage[sNumAlphas];
+            ASSERT(m_pimAlphaArray != 0);
+        }
+        m_sNumAlphas = sNumAlphas;
+    }
 
-		short Load(RFile* pFile)
-			{
-			pFile->Read(&m_sNumAlphas);
-			pFile->Read(&m_sX);
-			pFile->Read(&m_sY);
-			m_imColor.Load(pFile);
-			Alloc(m_sNumAlphas);
-			for (short s = 0; s < m_sNumAlphas; s++)
-				m_pimAlphaArray[s].Load(pFile);
-			return pFile->Error();
-			}
+    void Free(void)
+    {
+        delete[] m_pimAlphaArray;
+        m_pimAlphaArray = 0;
+    }
 
-		short Save(RFile* pFile)
-			{
-			pFile->Write(m_sNumAlphas);
-			pFile->Write(m_sX);
-			pFile->Write(m_sY);
-			m_imColor.Save(pFile);
-			for (short s = 0; s < m_sNumAlphas; s++)
-				m_pimAlphaArray[s].Save(pFile);
-			return pFile->Error();
-			}
-	};
+    short Load(RFile *pFile)
+    {
+        pFile->Read(&m_sNumAlphas);
+        pFile->Read(&m_sX);
+        pFile->Read(&m_sY);
+        m_imColor.Load(pFile);
+        Alloc(m_sNumAlphas);
+        for (short s = 0; s < m_sNumAlphas; s++)
+            m_pimAlphaArray[s].Load(pFile);
+        return pFile->Error();
+    }
 
-#endif //ALPHAANIMTYPE_H
+    short Save(RFile *pFile)
+    {
+        pFile->Write(m_sNumAlphas);
+        pFile->Write(m_sX);
+        pFile->Write(m_sY);
+        m_imColor.Save(pFile);
+        for (short s = 0; s < m_sNumAlphas; s++)
+            m_pimAlphaArray[s].Save(pFile);
+        return pFile->Error();
+    }
+};
+
+#endif // ALPHAANIMTYPE_H
 
 ////////////////////////////////////////////////////////////////////////////////
 // EOF

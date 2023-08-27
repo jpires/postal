@@ -57,7 +57,7 @@
 //
 //		07/03/97	JMI	Added Game_ControlsMenu().
 //
-//		07/11/97 BRH	Finished up the expiration date checking for the 
+//		07/11/97 BRH	Finished up the expiration date checking for the
 //							Registry.  Still need to add something for the Mac
 //							version.  Verified that it works with different times
 //							and dates.
@@ -121,9 +121,9 @@
 
 #include "RSPiX.h"
 #ifdef PATHS_IN_INCLUDES
-	#include "WishPiX/ResourceManager/resmgr.h"
+#include "WishPiX/ResourceManager/resmgr.h"
 #else
-	#include "resmgr.h"
+#include "resmgr.h"
 #endif
 
 #include "settings.h"
@@ -142,7 +142,7 @@ extern CGameSettings g_GameSettings;
 extern long g_lCookieMonster;
 
 // Global screen buffer
-extern RImage* g_pimScreenBuf;
+extern RImage *g_pimScreenBuf;
 
 // Global big font
 extern RFont g_fontBig;
@@ -150,7 +150,7 @@ extern RFont g_fontBig;
 // Global Postal font.
 extern RFont g_fontPostal;
 
-// Global flag for end of level 
+// Global flag for end of level
 extern bool g_bLastLevelDemo;
 
 // Resource manager for game resources.  These are resources used by the actual
@@ -160,14 +160,14 @@ extern bool g_bLastLevelDemo;
 // resources, g_fontBig, or anything not specific to the real game.
 // Note:  Realm specifc data, such as alpha effects, etc., should be loaded
 // through prealm->m_resmgr.
-extern RResMgr	g_resmgrGame;
+extern RResMgr g_resmgrGame;
 
 // Resource manager for shell resources.  Do not use this to load things like
 // the main dudes' sprites.
-extern RResMgr	g_resmgrShell;
+extern RResMgr g_resmgrShell;
 
 // Resource manager for non-SAK resources.
-extern RResMgr	g_resmgrRes;
+extern RResMgr g_resmgrRes;
 
 // Time codes for registry values and expiration date
 extern long g_lRegTime;
@@ -178,10 +178,9 @@ extern long g_lReleaseTime;
 
 // Loaded and saved games use this stockpile to transfer to/from the
 // dude's stockpile
-extern CStockPile	g_stockpile;
-extern bool       g_bTransferStockpile;
-extern short	   g_sRealmNumToSave;
-
+extern CStockPile g_stockpile;
+extern bool g_bTransferStockpile;
+extern short g_sRealmNumToSave;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -193,59 +192,48 @@ extern short	   g_sRealmNumToSave;
 ////////////////////////////////////////////////////////////////////////////////
 extern void TheGame(void);
 
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Callback for the "Start Single Player Game" menu
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void Game_StartSinglePlayerGame(
-	short sMenuItem);
-
+extern void Game_StartSinglePlayerGame(short sMenuItem);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Callback for the "Start MultiPlayer Game" menu
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern bool Game_StartMultiPlayerGame(
-	short sMenuItem);
-
+extern bool Game_StartMultiPlayerGame(short sMenuItem);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Callback for the "Join MultiPlayer Game" menu
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void Game_JoinMultiPlayerGame(
-	short sMenuItem);
-
+extern void Game_JoinMultiPlayerGame(short sMenuItem);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Callback for the "Host MultiPlayer Game" menu
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void Game_HostMultiPlayerGame(
-	short sMenuItem);
+extern void Game_HostMultiPlayerGame(short sMenuItem);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Callback for the Main Menu init/kill.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void Game_InitMainMenu(	// Returns nothing.
-	short sInit);						// In:  TRUE, if initializing; FALSE, if killing.
-
+extern void Game_InitMainMenu( // Returns nothing.
+  short sInit);                // In:  TRUE, if initializing; FALSE, if killing.
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Callback for the "Start Demo Game" menu
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void Game_StartDemoGame(
-	short sMenuItem);
-
+extern void Game_StartDemoGame(short sMenuItem);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -266,25 +254,24 @@ extern void Game_Buy(void);
 // Callback for the "Controls" menu.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void Game_ControlsMenu(	// Returns nothing.
-	short sMenuItem);					// In:  Chosen menu item.
+extern void Game_ControlsMenu( // Returns nothing.
+  short sMenuItem);            // In:  Chosen menu item.
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Callback for the "Start Challenge" menu.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void Game_StartChallengeGame(	// Returns nothing.
-	short sMenuItem);							// In:  Chosen menu item.
+extern void Game_StartChallengeGame( // Returns nothing.
+  short sMenuItem);                  // In:  Chosen menu item.
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Callback for "Audio Options" menu.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void Game_AudioOptionsChoice(	// Returns nothing.
-	short sMenuItem);							// In:  Chosen item.
-
+extern void Game_AudioOptionsChoice( // Returns nothing.
+  short sMenuItem);                  // In:  Chosen item.
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -293,9 +280,9 @@ extern void Game_AudioOptionsChoice(	// Returns nothing.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-extern short Game_SavePlayersGame(	// Returns SUCCESS if all goes well
-				char* pszSaveName,		// In:  Name of the save file
-				short sDifficulty);		// In:  Current realm difficulty.
+extern short Game_SavePlayersGame( // Returns SUCCESS if all goes well
+  char *pszSaveName,               // In:  Name of the save file
+  short sDifficulty);              // In:  Current realm difficulty.
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -303,9 +290,7 @@ extern short Game_SavePlayersGame(	// Returns SUCCESS if all goes well
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define SeedRand SeedRandom
-extern void SeedRandom(
-	long lSeed);
-
+extern void SeedRandom(long lSeed);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -316,14 +301,14 @@ extern void SeedRandom(
 
 #if defined(_DEBUG) || defined(TRACENASSERT)
 
-	#define GetRandom()	GetRandomDebug(__FILE__, __LINE__)
-	extern long GetRandomDebug(char* FILE_MACRO, long LINE_MACRO);
+#define GetRandom() GetRandomDebug(__FILE__, __LINE__)
+extern long GetRandomDebug(char *FILE_MACRO, long LINE_MACRO);
 
 #else
 
-	extern long GetRandom(void);
+extern long GetRandom(void);
 
-#endif	// defined(_DEBUG) || defined(TRACENASSERT)
+#endif // defined(_DEBUG) || defined(TRACENASSERT)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Synchronization logger -- Call this function to log an expression and a user
@@ -334,32 +319,32 @@ extern void SeedRandom(
 // a discrepancy occurs, a modal dialog box will pop up with the pertinent info
 // followed by an ASSERT(0) for easy debugging.
 ////////////////////////////////////////////////////////////////////////////////
-extern int SynchLog(		// Result of expr.
-	double	expr,			// In:  Expression to evaluate.
-	char*		pszFile,		// In:  Calling file.
-	long		lLine,		// In:  Calling line.
-	char*		pszExpr,		// In:  Original C++ source expression.
-	U32		u32User);	// In:  A user value that is intended to be consistent.
+extern int SynchLog( // Result of expr.
+  double expr,       // In:  Expression to evaluate.
+  char *pszFile,     // In:  Calling file.
+  long lLine,        // In:  Calling line.
+  char *pszExpr,     // In:  Original C++ source expression.
+  U32 u32User);      // In:  A user value that is intended to be consistent.
 
 ////////////////////////////////////////////////////////////////////////////////
-// If 'LOG_IFS' macro is defined, this will redefine 'if' such that it will 
+// If 'LOG_IFS' macro is defined, this will redefine 'if' such that it will
 // still perform its comparison but will also SynchLog() the expression.
 ////////////////////////////////////////////////////////////////////////////////
 #if defined(LOG_IFS)
-	#define if(expr)		if (SynchLog(double(expr != 0), __FILE__, __LINE__, #expr, 0 ) )
+#define if(expr) if (SynchLog(double(expr != 0), __FILE__, __LINE__, #expr, 0))
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
-// If 'LOG_LOGS' macro is defined, this will define 'LOG' such that it will 
+// If 'LOG_LOGS' macro is defined, this will define 'LOG' such that it will
 // SynchLog() the expression.
 // If the macro is not defined, this macro expands into absolutely nothing using
 // no CPU time or memory.  Note that the expression will __NOT__ be evaluated
 // at all.
 ////////////////////////////////////////////////////////////////////////////////
 #if defined(LOG_LOGS)
-	#define LOG(expr, user_val)		SynchLog(expr, __FILE__, __LINE__, #expr, user_val)
+#define LOG(expr, user_val) SynchLog(expr, __FILE__, __LINE__, #expr, user_val)
 #else
-	#define LOG(expr, user_val)
+#define LOG(expr, user_val)
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -368,9 +353,7 @@ extern int SynchLog(		// Result of expr.
 // NOTE: There must be a matching PalTranOff() for each PalTranOn()!!!
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void PalTranOn(
-	long lTime = -1);											// In:  How long transition should take (or -1 for default)
-
+extern void PalTranOn(long lTime = -1); // In:  How long transition should take (or -1 for default)
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -378,7 +361,6 @@ extern void PalTranOn(
 //
 ////////////////////////////////////////////////////////////////////////////////
 extern void PalTranOff(void);
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -397,38 +379,38 @@ extern void PalTranOff(void);
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#define GAME_PATH_CD			0
-#define GAME_PATH_HD			1
-#define GAME_PATH_VD			2
-#define GAME_PATH_SOUND		3
-#define GAME_PATH_GAME		4
-#define GAME_PATH_HOODS		5
+#define GAME_PATH_CD 0
+#define GAME_PATH_HD 1
+#define GAME_PATH_VD 2
+#define GAME_PATH_SOUND 3
+#define GAME_PATH_GAME 4
+#define GAME_PATH_HOODS 5
 
-extern char* FullPath(									// Returns full path in system format
-	short sPathType,										// In:  PATH_CD, PATH_HD, or PATH_VD
-	char* pszPartialPath);								// In:  Partial path in RSPiX format
+extern char *FullPath(   // Returns full path in system format
+  short sPathType,       // In:  PATH_CD, PATH_HD, or PATH_VD
+  char *pszPartialPath); // In:  Partial path in RSPiX format
 
-extern char* FullPathCD(								// Returns full path in system format
-	char* pszPartialPath);								// In:  Partial path in RSPiX format
+extern char *FullPathCD( // Returns full path in system format
+  char *pszPartialPath); // In:  Partial path in RSPiX format
 
-extern char* FullPathHD(								// Returns full path in system format
-	const char* pszPartialPath);						// In:  Partial path in RSPiX format
+extern char *FullPathHD(       // Returns full path in system format
+  const char *pszPartialPath); // In:  Partial path in RSPiX format
 
-extern char* FullPathVD(								// Returns full path in system format
-	char* pszPartialPath);								// In:  Partial path in RSPiX format
+extern char *FullPathVD( // Returns full path in system format
+  char *pszPartialPath); // In:  Partial path in RSPiX format
 
-extern char* FullPathSound(							// Returns full path in system format
-	char* pszPartialPath);								// In:  Partial path in RSPiX format
+extern char *FullPathSound( // Returns full path in system format
+  char *pszPartialPath);    // In:  Partial path in RSPiX format
 
-extern char* FullPathGame(								// Returns full path in system format
-	char* pszPartialPath);								// In:  Partial path in RSPiX format
+extern char *FullPathGame( // Returns full path in system format
+  char *pszPartialPath);   // In:  Partial path in RSPiX format
 
-extern char* FullPathHoods(							// Returns full path in system format
-	char* pszPartialPath);								// In:  Partial path in RSPiX format
+extern char *FullPathHoods( // Returns full path in system format
+  char *pszPartialPath);    // In:  Partial path in RSPiX format
 
-extern char* FullPathCustom(							// Returns full path in system format
-	char*	pszFullPath,									// In:  Full path in in RSPiX format.
-	char* pszPartialPath);								// In:  Partial path in RSPiX format.
+extern char *FullPathCustom( // Returns full path in system format
+  char *pszFullPath,         // In:  Full path in in RSPiX format.
+  char *pszPartialPath);     // In:  Partial path in RSPiX format.
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -439,33 +421,32 @@ extern char* FullPathCustom(							// Returns full path in system format
 // character, depending on which system we're running on.
 //
 ////////////////////////////////////////////////////////////////////////////////
-short CorrectifyBasePath(								// Returns 0 if successfull, non-zero otherwise
-	char* pszBasePath,									// I/O: Base path to be corrected
-	short sMaxPathLen);									// In:  Maximum length of base path
+short CorrectifyBasePath( // Returns 0 if successfull, non-zero otherwise
+  char *pszBasePath,      // I/O: Base path to be corrected
+  short sMaxPathLen);     // In:  Maximum length of base path
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Get a subpath relative to the specified game path.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern short SubPathOpenBox(		// Returns 0 on success, negative on error, 1 if 
-											// not subpathable (i.e., returned path is full path).
-	char*	pszFullPath,				// In:  Full path to be relative to.
-	char* pszBoxTitle,				// In:  Title of box.
-	char*	pszDefFileName,			// In:  Default filename.
-	char* pszChosenFileName,		// Out: User's choice.
-	short sStrSize,					// In:  Amount of memory pointed to by pszChosenFileName.
-	char*	pszFilter = NULL);		// In:  If not NULL, '.' delimited extension based filename
-											//	filter specification.  Ex: ".cpp.h.exe.lib" or "cpp.h.exe.lib"
-											// Note: Cannot use '.' in filter.  Preceding '.' ignored.
+extern short SubPathOpenBox( // Returns 0 on success, negative on error, 1 if
+                             // not subpathable (i.e., returned path is full path).
+  char *pszFullPath,         // In:  Full path to be relative to.
+  char *pszBoxTitle,         // In:  Title of box.
+  char *pszDefFileName,      // In:  Default filename.
+  char *pszChosenFileName,   // Out: User's choice.
+  short sStrSize,            // In:  Amount of memory pointed to by pszChosenFileName.
+  char *pszFilter = NULL);   // In:  If not NULL, '.' delimited extension based filename
+                             //	filter specification.  Ex: ".cpp.h.exe.lib" or "cpp.h.exe.lib"
+                             // Note: Cannot use '.' in filter.  Preceding '.' ignored.
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Set gamma/brighten-effect value.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void SetGammaLevel(
-	short sBase);											// In:  New brighten value
+extern void SetGammaLevel(short sBase); // In:  New brighten value
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -473,17 +454,16 @@ extern void SetGammaLevel(
 // curve.  Valid input is from -1 to 1.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern	void	SetBrightnessContrast(
-						double dBrightness,	// -1.0 = dim, 0.0 = normal, 1.0 = bright
-						double dContrast		// -1.0 = low contrast, 0.0 = normal, 1.0 = high
-						);
+extern void SetBrightnessContrast(double dBrightness, // -1.0 = dim, 0.0 = normal, 1.0 = bright
+                                  double dContrast    // -1.0 = low contrast, 0.0 = normal, 1.0 = high
+);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Get gamma/brighten-effect value from palette map (not from settings).
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern short GetGammaLevel(void);					// Returns current brighten value
+extern short GetGammaLevel(void); // Returns current brighten value
 
 #ifdef WIN32
 #define snprintf _snprintf
@@ -510,27 +490,27 @@ extern int Stat_LevelsPlayed;
 extern long playthroughMS;
 
 extern ULONG Flag_Achievements;
-#define FLAG_USED_M16             (1<<0)
-#define FLAG_USED_SHOTGUN         (1<<1)
-#define FLAG_USED_DBL_SHOTGUN     (1<<2)
-#define FLAG_USED_GRENADE         (1<<3)
-#define FLAG_USED_ROCKET          (1<<4)
-#define FLAG_USED_MOLOTOV         (1<<5)
-#define FLAG_USED_NAPALM          (1<<6)
-#define FLAG_USED_FLAMETHROWER    (1<<7)
-#define FLAG_USED_PROXIMITY_MINE  (1<<8)
-#define FLAG_USED_TIMED_MINE      (1<<9)
-#define FLAG_USED_REMOTE_MINE     (1<<10)
-#define FLAG_USED_BETTY_MINE      (1<<11)
-#define FLAG_USED_HEATSEEKER      (1<<12)
-#define FLAG_USED_SPRAY_CANNON    (1<<13)
-#define FLAG_USED_DEATHWAD        (1<<14)
-#define FLAG_MASK_WEAPONS         0x3bfb // everything but dbl_shotgun, remote_mine and deathwad //((1<<15)-1)
+#define FLAG_USED_M16 (1 << 0)
+#define FLAG_USED_SHOTGUN (1 << 1)
+#define FLAG_USED_DBL_SHOTGUN (1 << 2)
+#define FLAG_USED_GRENADE (1 << 3)
+#define FLAG_USED_ROCKET (1 << 4)
+#define FLAG_USED_MOLOTOV (1 << 5)
+#define FLAG_USED_NAPALM (1 << 6)
+#define FLAG_USED_FLAMETHROWER (1 << 7)
+#define FLAG_USED_PROXIMITY_MINE (1 << 8)
+#define FLAG_USED_TIMED_MINE (1 << 9)
+#define FLAG_USED_REMOTE_MINE (1 << 10)
+#define FLAG_USED_BETTY_MINE (1 << 11)
+#define FLAG_USED_HEATSEEKER (1 << 12)
+#define FLAG_USED_SPRAY_CANNON (1 << 13)
+#define FLAG_USED_DEATHWAD (1 << 14)
+#define FLAG_MASK_WEAPONS 0x3bfb // everything but dbl_shotgun, remote_mine and deathwad //((1<<15)-1)
 
-#define FLAG_USED_CHEATS          (1<<15)
-#define FLAG_KILLED_EVERYTHING    (1<<16)
-#define FLAG_KILLED_ONLY_HOSTILES (1<<17)
-#define FLAG_HIGHEST_DIFFICULTY   (1<<18)
+#define FLAG_USED_CHEATS (1 << 15)
+#define FLAG_KILLED_EVERYTHING (1 << 16)
+#define FLAG_KILLED_ONLY_HOSTILES (1 << 17)
+#define FLAG_HIGHEST_DIFFICULTY (1 << 18)
 
 // max time that still qualifies for the "Two Pump Chump" achievement in milliseconds.
 #define MAX_PLAYTHROUGH_ACHIEVEMENT_MS 60 * (1000 * 60)
@@ -566,7 +546,7 @@ enum Achievement
     ACHIEVEMENT_TOUCH_SOMEONE_WHILE_BURNING,  // "Bad touch!"
     ACHIEVEMENT_COMPLETE_GAME_IN_X_MINUTES,   // "Two Pump Chump"
     ACHIEVEMENT_COMPLETE_GAME_ON_HARDEST,     // "Solid as a rock"
-    ACHIEVEMENT_MAX  // not an achievement, just the total count.
+    ACHIEVEMENT_MAX                           // not an achievement, just the total count.
 };
 
 #if WITH_STEAMWORKS
@@ -574,8 +554,14 @@ extern void UnlockAchievement(const Achievement ach);
 extern void RunSteamworksUpkeep();
 extern void RequestSteamStatsStore();
 #else
-#define UnlockAchievement(x) do {} while (0)
-#define RunSteamworksUpkeep() do {} while (0)
+#define UnlockAchievement(x)                                                                                           \
+    do                                                                                                                 \
+    {                                                                                                                  \
+    } while (0)
+#define RunSteamworksUpkeep()                                                                                          \
+    do                                                                                                                 \
+    {                                                                                                                  \
+    } while (0)
 #endif
 
 #endif // GAME_H

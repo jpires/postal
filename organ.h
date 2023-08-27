@@ -16,7 +16,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
 // Organ.h
-// 
+//
 // History:
 //		08/17/97 JMI	Started this header.
 //
@@ -30,9 +30,9 @@
 #include "WishPiX/Menu/menu.h"
 
 // Choice callback from menu.
-extern bool Organ_MenuChoice(	// Returns true to accept choice, false to deny.
-	Menu*	pmenuCurrent,			// Current menu.
-	short	sMenuItem);				// Item chosen.
+extern bool Organ_MenuChoice( // Returns true to accept choice, false to deny.
+  Menu *pmenuCurrent,         // Current menu.
+  short sMenuItem);           // Item chosen.
 
 //////////////////////////////////////////////////////////////////////////////
 // EOF

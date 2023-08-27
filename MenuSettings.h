@@ -27,9 +27,9 @@
 
 #include "RSPiX.h"
 #ifdef PATHS_IN_INCLUDES
-	#include "WishPiX/Prefs/prefs.h"
+#include "WishPiX/Prefs/prefs.h"
 #else
-	#include "prefs.h"
+#include "prefs.h"
 #endif
 
 #include "settings.h"
@@ -37,40 +37,33 @@
 
 // Game settings
 class CMenuSettings : CSettings
-	{
-	public:
+{
+  public:
+  public:
+    // Set settings to default values
+    CMenuSettings(void);
 
-	public:
-		// Set settings to default values
-		CMenuSettings(void);
+    // Destructor
+    ~CMenuSettings();
 
-		// Destructor
-		~CMenuSettings();
+    // Read settings that are stored in preference file
+    short LoadPrefs(RPrefs *pPrefs);
 
-		// Read settings that are stored in preference file
-		short LoadPrefs(
-			RPrefs* pPrefs);
+    // Write settings that are stored in preference file
+    short SavePrefs(RPrefs *pPrefs);
 
-		// Write settings that are stored in preference file
-		short SavePrefs(
-			RPrefs* pPrefs);
+    // Load settings that are stored in game file
+    short LoadGame(RFile *pFile);
 
-		// Load settings that are stored in game file
-		short LoadGame(
-			RFile* pFile);
+    // Save settings that are stored in game file
+    short SaveGame(RFile *pFile);
 
-		// Save settings that are stored in game file
-		short SaveGame(
-			RFile* pFile);
+    // Temporarily set settings for demo mode (file is for saving current settings)
+    short PreDemo(RFile *pFile);
 
-		// Temporarily set settings for demo mode (file is for saving current settings)
-		short PreDemo(
-			RFile* pFile);
-
-		// Restore settings to what they were prior to demo mode
-		short PostDemo(
-			RFile* pFile);
-	};
+    // Restore settings to what they were prior to demo mode
+    short PostDemo(RFile *pFile);
+};
 
 #endif // MENUSETTINGS_H
 ////////////////////////////////////////////////////////////////////////////////

@@ -17,7 +17,7 @@
 //
 // Score.h
 // Project: Postal
-// 
+//
 // History:
 //
 //		06/11/97 BRH	Started this module
@@ -35,7 +35,7 @@
 //
 //		07/22/97 BRH	Added ScoreDisplayHighScores.
 //
-//		07/26/97 BRH	Added ScoreGetName to get the name of the player when 
+//		07/26/97 BRH	Added ScoreGetName to get the name of the player when
 //							they better one of the high scores.
 //
 //		08/10/97	JRD	Added a hood to the score status to allow graphical
@@ -54,113 +54,101 @@
 #include "net.h"
 #include "netclient.h"
 
-
 class CScoreboard
 {
-	//---------------------------------------------------------------------------
-	// typedefs
-	//---------------------------------------------------------------------------
-	public:
-		
-		typedef enum
-		{
-			SinglePlayer,
-			MultiPlayer,
-			Timed,
-			Goal,
-			CaptureFlag,
-			TimeBonus
-		} ScoringMode;
+    //---------------------------------------------------------------------------
+    // typedefs
+    //---------------------------------------------------------------------------
+  public:
+    typedef enum
+    {
+        SinglePlayer,
+        MultiPlayer,
+        Timed,
+        Goal,
+        CaptureFlag,
+        TimeBonus
+    } ScoringMode;
 
-	//---------------------------------------------------------------------------
-	// Variables
-	//---------------------------------------------------------------------------
-	public:
-		
-		short	m_asScores[Net::MaxNumIDs+1];			// Score for each player
-//		U16	m_au16PlayerIDs[Net::MaxNumIDs+1];	// ID of each player
-		long	m_lLastScoreDrawTime;						// Time since last update
-		long	m_lLastStatusDrawTime;						// Time since last update
+    //---------------------------------------------------------------------------
+    // Variables
+    //---------------------------------------------------------------------------
+  public:
+    short m_asScores[Net::MaxNumIDs + 1]; // Score for each player
+                                          //		U16	m_au16PlayerIDs[Net::MaxNumIDs+1];	// ID of each player
+    long m_lLastScoreDrawTime;            // Time since last update
+    long m_lLastStatusDrawTime;           // Time since last update
 
-	protected:
-		ScoringMode m_ScoringMode;						// Mode of scoring
+  protected:
+    ScoringMode m_ScoringMode; // Mode of scoring
 
-	//---------------------------------------------------------------------------
-	// Constructor(s) / destructor
-	//---------------------------------------------------------------------------
-	public:
+    //---------------------------------------------------------------------------
+    // Constructor(s) / destructor
+    //---------------------------------------------------------------------------
+  public:
+    CScoreboard()
+    {
+        short i;
+        for (i = 0; i <= Net::MaxNumIDs; i++)
+        {
+            m_asScores[i] = 0;
+            //				m_au16PlayerIDs[i] = 0;
+        }
+    }
 
-		CScoreboard()
-		{
-			short i;
-			for (i = 0; i <= Net::MaxNumIDs; i++)
-			{
-				m_asScores[i] = 0;
-//				m_au16PlayerIDs[i] = 0;
-			}
-		}
+    ~CScoreboard() {}
 
-		~CScoreboard()
-		{
+    //---------------------------------------------------------------------------
+    // Functions
+    //---------------------------------------------------------------------------
+  public:
+    // Return the indes of the player or -1 if not found
+    //		short GetPlayerIndex(U16 uInstanceID)
+    //		{
+    //			short sPlayerIndex = Net::MaxNumIDs;
+    //
+    //			CThing* pShooter = GetItemById(uInstanceID)
+    //			if (pShooter && pShooter->m_id == CThing::CDudeID)
+    //			{
+    //				sPlayerIndex = MIN(((CDude*) pShooter)->m_sDudeNum, Net::MaxNumIDs);
+    //			}
+    //		}
 
-		}
+    void Reset(void)
+    {
+        short i;
+        for (i = 0; i < Net::MaxNumIDs; i++)
+            m_asScores[i] = 0;
 
-	//---------------------------------------------------------------------------
-	// Functions
-	//---------------------------------------------------------------------------
-	public:
+        m_lLastStatusDrawTime = 0;
+        m_lLastScoreDrawTime = 0;
+    }
 
-		// Return the indes of the player or -1 if not found
-//		short GetPlayerIndex(U16 uInstanceID)
-//		{
-//			short sPlayerIndex = Net::MaxNumIDs;
- //
-//			CThing* pShooter = GetItemById(uInstanceID)
-//			if (pShooter && pShooter->m_id == CThing::CDudeID)
-//			{
-//				sPlayerIndex = MIN(((CDude*) pShooter)->m_sDudeNum, Net::MaxNumIDs);
-//			}	
-//		}
+    // Subtract one from the score of the indicated guy
+    void SubtractOne(short sPlayerIndex)
+    {
+        // If it is beyond the number of players, set it to the
+        // overflow bin.
+        if (sPlayerIndex > Net::MaxNumIDs)
+            sPlayerIndex = Net::MaxNumIDs;
 
-		void Reset(void)
-		{
-			short i;
-			for (i = 0; i < Net::MaxNumIDs; i++)
-				m_asScores[i] = 0;
+        m_asScores[sPlayerIndex]--;
+    }
 
-			m_lLastStatusDrawTime = 0;
-			m_lLastScoreDrawTime = 0;
-		}
-		
-		// Subtract one from the score of the indicated guy
-		void SubtractOne(short sPlayerIndex)
-		{
-			// If it is beyond the number of players, set it to the
-			// overflow bin.
-			if (sPlayerIndex > Net::MaxNumIDs)
-				sPlayerIndex = Net::MaxNumIDs;
+    // Add one to the score of the indicated guy
+    void AddOne(short sPlayerIndex)
+    {
+        // If it is beyond the number of players, set it to the
+        // overflow bin.
+        if (sPlayerIndex > Net::MaxNumIDs)
+            sPlayerIndex = Net::MaxNumIDs;
 
-			m_asScores[sPlayerIndex]--;
-		}		
+        m_asScores[sPlayerIndex]++;
+    }
 
+    void SetScoringMode(ScoringMode Mode) { m_ScoringMode = Mode; };
 
-		// Add one to the score of the indicated guy
-		void AddOne(short sPlayerIndex)
-		{
-			// If it is beyond the number of players, set it to the
-			// overflow bin.
-			if (sPlayerIndex > Net::MaxNumIDs)
-				sPlayerIndex = Net::MaxNumIDs;
-
-			m_asScores[sPlayerIndex]++;
-		}		
-
-		void SetScoringMode(ScoringMode Mode)
-			{m_ScoringMode = Mode;};
-
-		short GetScoringMode(void)
-			{return m_ScoringMode;};
-	
+    short GetScoringMode(void) { return m_ScoringMode; };
 };
 
 // Set up the RPrint for the score
@@ -173,38 +161,42 @@ void ScoreReset(void);
 void ScoreResetDisplay(void);
 
 // Function called by Characters when they die
-void ScoreRegisterKill(CRealm* pRealm, U16 u16DeadGuy, U16 u16Killer);
+void ScoreRegisterKill(CRealm *pRealm, U16 u16DeadGuy, U16 u16Killer);
 
 // Function called by play to update the score display
 // Returns true, if pImage was updated; false otherwise.
-bool ScoreUpdateDisplay(RImage* pImage, RRect* pRect, CRealm* pRealm, 
-								CNetClient* pclient, short sDstX, short sDstY, CHood* pHood);
+bool ScoreUpdateDisplay(RImage *pImage,
+                        RRect *pRect,
+                        CRealm *pRealm,
+                        CNetClient *pclient,
+                        short sDstX,
+                        short sDstY,
+                        CHood *pHood);
 
 // Function to set the scoring mode (ie multiplayer, single, timed etc)
 void ScoreSetMode(CScoreboard::ScoringMode Mode);
 
 // Call this function to show the status line or mission goal for a few
 // seconds.  This can be called when the "show mission" key is pressed.
-void ScoreDisplayStatus(CRealm* pRealm);
+void ScoreDisplayStatus(CRealm *pRealm);
 
 // Call this function at the end of the level and if it is a challenge level,
 // it will display the high scores for that level and give the user a chance
 //	to enter their name if they beat one of the top scores.
-void ScoreDisplayHighScores(			// Returns nothing.
-	CRealm* pRealm,						// In:  Realm won.
-	CNetClient* pclient	= NULL,		// In:  Client ptr for MP mode, or NULL in SP mode.
-	long lMaxTimeOut	= -1);			// In:  Max time on score screen (quits after this
-												// duration, if not -1).
+void ScoreDisplayHighScores(  // Returns nothing.
+  CRealm *pRealm,             // In:  Realm won.
+  CNetClient *pclient = NULL, // In:  Client ptr for MP mode, or NULL in SP mode.
+  long lMaxTimeOut = -1);     // In:  Max time on score screen (quits after this
+                              // duration, if not -1).
 
 // Get the name for a new high score
-short ScoreGetName(char* pszName);
+short ScoreGetName(char *pszName);
 
 // Returns the highest multiplayer score.
-short ScoreHighestKills(CRealm* pRealm);
+short ScoreHighestKills(CRealm *pRealm);
 
-#endif //SCORE_H
+#endif // SCORE_H
 
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////
-

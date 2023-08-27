@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // TXT.CPP
-// 
+//
 // History:
 //		08/07/96 JMI	Started.
 //
@@ -37,7 +37,7 @@
 //		11/27/96	JMI	Added initialization of m_type to identify this type
 //							of GUI item.
 //
-//		01/01/96	JMI	Compose() no longer sets hot area (now done by base 
+//		01/01/96	JMI	Compose() no longer sets hot area (now done by base
 //							class).
 //
 //		01/04/96	JMI	Upgraded HotCall() to new CursorEvent().  This upgrade
@@ -60,7 +60,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 //
-// This a GUI item that is based on the basic RGuiItem. 
+// This a GUI item that is based on the basic RGuiItem.
 // This overrides HotCall() to get information about where a click in its RHot
 // occurred.
 // This overrides Compose() to add text.
@@ -79,9 +79,9 @@
 #include "Blue.h"
 
 #ifdef PATHS_IN_INCLUDES
-	#include "ORANGE/GUI/txt.h"
+#include "ORANGE/GUI/txt.h"
 #else
-	#include "txt.h"
+#include "txt.h"
 #endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////////////
@@ -89,7 +89,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Sets val to def if val is -1.
-#define DEF(val, def)	((val == -1) ? def : val)
+#define DEF(val, def) ((val == -1) ? def : val)
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -109,18 +109,16 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 RTxt::RTxt()
-	{
-	m_type					= Txt;	// Indicates type of GUI item.
-	}
+{
+    m_type = Txt; // Indicates type of GUI item.
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Destructor.
 //
 //////////////////////////////////////////////////////////////////////////////
-RTxt::~RTxt()
-	{
-	}
+RTxt::~RTxt() {}
 
 ////////////////////////////////////////////////////////////////////////
 // Methods.
@@ -131,25 +129,25 @@ RTxt::~RTxt()
 // Compose item.
 //
 ////////////////////////////////////////////////////////////////////////
-void RTxt::Compose(			// Returns nothing.
-	RImage* pim /*= NULL*/)	// Dest image, uses m_im if NULL.
-	{
-	if (pim == NULL)
-		{
-		pim	= &m_im;
-		}
+void RTxt::Compose(       // Returns nothing.
+  RImage *pim /*= NULL*/) // Dest image, uses m_im if NULL.
+{
+    if (pim == NULL)
+    {
+        pim = &m_im;
+    }
 
-	// Call base (draws border and background).
-	RGuiItem::Compose(pim);
+    // Call base (draws border and background).
+    RGuiItem::Compose(pim);
 
-	// Draw txt stuff.
-	short	sX, sY, sW, sH;
-	// Get client relative to border so we know where to put the text.
-	GetClient(&sX, &sY, &sW, &sH);
+    // Draw txt stuff.
+    short sX, sY, sW, sH;
+    // Get client relative to border so we know where to put the text.
+    GetClient(&sX, &sY, &sW, &sH);
 
-	// Draw text.
-	DrawText(sX, sY, sW, sH, pim);
-	}
+    // Draw text.
+    DrawText(sX, sY, sW, sH, pim);
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Querries.

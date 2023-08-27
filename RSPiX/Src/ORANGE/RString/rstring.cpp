@@ -175,7 +175,7 @@
 // decide whether to validate positions beforehand or to check results
 // afterwards.
 //
-// Put another way, functions will generally clip lengths to fit 
+// Put another way, functions will generally clip lengths to fit
 // When an RString function takes a length as a parameter, that length will
 // be truncated if necessary to avoid going past the end of the string.  When
 // a function takes a position as a parameter, the function won't do anything
@@ -191,12 +191,10 @@
 #include <ctype.h>
 #include "rstring.h"
 
-
 // Static pointer that is initialized to point at an empty string.  Used
 // in cases where string is being cast as char* but doesn't have a buffer
 // of it's own.
-char* RString::ms_pszEmpty = "";
-
+char *RString::ms_pszEmpty = "";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Grow the buffer to the specified size.  If the buffer is already greater than
@@ -204,31 +202,30 @@ char* RString::ms_pszEmpty = "";
 // the buffer is grown to the specified size.  The string is unaffected.
 ////////////////////////////////////////////////////////////////////////////////
 void RString::Grow(long lMinimumSize)
-	{
-	// New size must be greater than current size (which might be 0)
-	// (This comparison also filters out negative sizes, which are stupid)
-	if (lMinimumSize > m_lBufSize)
-		{
-		if (m_lBufSize > 0)
-			{
-			// Change buffer size
-			char* pOld = m_pBuf;
-			m_pBuf = (char*)malloc(lMinimumSize);
-			ASSERT(m_pBuf != 0); // should be caught by new_handler, but just in case...
-			memcpy(m_pBuf, pOld, m_lBufSize);
-			free(pOld);
-			}
-		else
-			{
-			// Create new buffer
-			m_pBuf = (char*)malloc(lMinimumSize);
-			ASSERT(m_pBuf != 0); // should be caught by new_handler, but just in case...
-			*m_pBuf = 0;	// write terminating null (string length must be 0 at this point)
-			}
-		m_lBufSize = lMinimumSize;
-		}
-	}
-
+{
+    // New size must be greater than current size (which might be 0)
+    // (This comparison also filters out negative sizes, which are stupid)
+    if (lMinimumSize > m_lBufSize)
+    {
+        if (m_lBufSize > 0)
+        {
+            // Change buffer size
+            char *pOld = m_pBuf;
+            m_pBuf = (char *)malloc(lMinimumSize);
+            ASSERT(m_pBuf != 0); // should be caught by new_handler, but just in case...
+            memcpy(m_pBuf, pOld, m_lBufSize);
+            free(pOld);
+        }
+        else
+        {
+            // Create new buffer
+            m_pBuf = (char *)malloc(lMinimumSize);
+            ASSERT(m_pBuf != 0); // should be caught by new_handler, but just in case...
+            *m_pBuf = 0;         // write terminating null (string length must be 0 at this point)
+        }
+        m_lBufSize = lMinimumSize;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Shrink the buffer to the specified size.  If the buffer is already less than
@@ -241,54 +238,52 @@ void RString::Grow(long lMinimumSize)
 // empty string since there will only be room for the terminating null.
 ////////////////////////////////////////////////////////////////////////////////
 void RString::Shrink(long lMaximumSize)
-	{
-	// Guard against stupid values
-	if (lMaximumSize >= 0)
-		{
-		// New size must be less than current size
-		// (This comparison also ensures that m_lBufSize > 0, meaning there is a buffer)
-		if (lMaximumSize < m_lBufSize)
-			{
-			if (lMaximumSize == 0)
-				{
-				FreeBuf();
-				}
-			else
-				{
-				// Change buffer size
-				char* pOld = m_pBuf;
-				m_pBuf = (char*)malloc(lMaximumSize);
-				ASSERT(m_pBuf != 0); // should be caught by new_handler, but just in case...
-				memcpy(m_pBuf, pOld, m_lBufSize);
-				free(pOld);
-				m_lBufSize = lMaximumSize;
-				// See if we truncated the string
-				if (m_lBufSize <= m_lStrLen)
-					{
-					// Write new terminating null at end of buffer
-					m_pBuf[m_lBufSize - 1] = 0;
-					// Set new string length
-					m_lStrLen = m_lBufSize - 1;
-					}
-				}
-			}
-		}
-	}
-
+{
+    // Guard against stupid values
+    if (lMaximumSize >= 0)
+    {
+        // New size must be less than current size
+        // (This comparison also ensures that m_lBufSize > 0, meaning there is a buffer)
+        if (lMaximumSize < m_lBufSize)
+        {
+            if (lMaximumSize == 0)
+            {
+                FreeBuf();
+            }
+            else
+            {
+                // Change buffer size
+                char *pOld = m_pBuf;
+                m_pBuf = (char *)malloc(lMaximumSize);
+                ASSERT(m_pBuf != 0); // should be caught by new_handler, but just in case...
+                memcpy(m_pBuf, pOld, m_lBufSize);
+                free(pOld);
+                m_lBufSize = lMaximumSize;
+                // See if we truncated the string
+                if (m_lBufSize <= m_lStrLen)
+                {
+                    // Write new terminating null at end of buffer
+                    m_pBuf[m_lBufSize - 1] = 0;
+                    // Set new string length
+                    m_lStrLen = m_lBufSize - 1;
+                }
+            }
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Compact the buffer to the minimum size required to hold the current string.
 // If the string is empty, the buffer is freed.
 ////////////////////////////////////////////////////////////////////////////////
 void RString::Compact(void)
-	{
-	// If there's a string, shrink buffer to fit it, otherwise get rid of it
-	if (m_lStrLen > 0)
-		Shrink(m_lStrLen + 1); // shrink buffer (if necessary) to 1 larger than string
-	else
-		FreeBuf();
-	}
-
+{
+    // If there's a string, shrink buffer to fit it, otherwise get rid of it
+    if (m_lStrLen > 0)
+        Shrink(m_lStrLen + 1); // shrink buffer (if necessary) to 1 larger than string
+    else
+        FreeBuf();
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Format string using sprintf-like method.  The specified size is used to make
@@ -315,47 +310,46 @@ void RString::Compact(void)
 // Returns number of characters written, or -1 if an error occurred (this is
 // basically the value returned by vsprintf.)
 ////////////////////////////////////////////////////////////////////////////////
-long RString::Format(long lMinimumSize, char* format, ...)
-	{
-	long lWritten = 0;
-	if (lMinimumSize >= 0)
-		{
-		// Grow buffer
-		Grow(lMinimumSize);
-		// Since minimum size might be 0, we have to make sure buffer exists
-		if (m_lBufSize > 0)
-			{
-			va_list varp;
-			va_start(varp, format);
-			#ifdef _MSC_VER
-				lWritten = _vsnprintf(m_pBuf, m_lBufSize - 1, format, varp);
-			#else
-				lWritten = vsprintf(m_pBuf, format, varp);
-				#ifdef _DEBUG
-					if ((lWritten >= 0) && ((lWritten + 1) > m_lBufSize))
-						{
-						TRACE("RString::Format(): String buffer was overwritten!  String will be cleared!\n");
-						Clear();
-						ASSERT(0); // memory has been corrupted!
-						}
-				#endif
-			#endif
-			va_end(varp);
+long RString::Format(long lMinimumSize, char *format, ...)
+{
+    long lWritten = 0;
+    if (lMinimumSize >= 0)
+    {
+        // Grow buffer
+        Grow(lMinimumSize);
+        // Since minimum size might be 0, we have to make sure buffer exists
+        if (m_lBufSize > 0)
+        {
+            va_list varp;
+            va_start(varp, format);
+#ifdef _MSC_VER
+            lWritten = _vsnprintf(m_pBuf, m_lBufSize - 1, format, varp);
+#else
+            lWritten = vsprintf(m_pBuf, format, varp);
+#ifdef _DEBUG
+            if ((lWritten >= 0) && ((lWritten + 1) > m_lBufSize))
+            {
+                TRACE("RString::Format(): String buffer was overwritten!  String will be cleared!\n");
+                Clear();
+                ASSERT(0); // memory has been corrupted!
+            }
+#endif
+#endif
+            va_end(varp);
 
-			if (lWritten >= 0)
-				{
-				m_lStrLen = lWritten;
-				}
-			else
-				{
-				TRACE("RString::Format(): Error returned by vsprintf()! String will be cleared!\n");
-				Clear();
-				}
-			}
-		}
-	return lWritten;
-	}
-
+            if (lWritten >= 0)
+            {
+                m_lStrLen = lWritten;
+            }
+            else
+            {
+                TRACE("RString::Format(): Error returned by vsprintf()! String will be cleared!\n");
+                Clear();
+            }
+        }
+    }
+    return lWritten;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Create a new RString based on this string's first 'lLen' characters.  If
@@ -363,20 +357,19 @@ long RString::Format(long lMinimumSize, char* format, ...)
 // string's length will be lLen or this string's length, whichever is less.
 ////////////////////////////////////////////////////////////////////////////////
 RString RString::Left(long lLen) const
-	{
-	RString str;
-	if ((lLen > 0) && (m_lStrLen > 0))
-		{
-		if (lLen > m_lStrLen)
-			lLen = m_lStrLen;
-		str.Grow(lLen + 1); // size is always > 0, so this will always return with a valid buffer
-		memcpy(str.m_pBuf, m_pBuf, lLen);
-		str.m_pBuf[lLen] = 0;
-		str.m_lStrLen = lLen;
-		}
-	return str;
-	}
-
+{
+    RString str;
+    if ((lLen > 0) && (m_lStrLen > 0))
+    {
+        if (lLen > m_lStrLen)
+            lLen = m_lStrLen;
+        str.Grow(lLen + 1); // size is always > 0, so this will always return with a valid buffer
+        memcpy(str.m_pBuf, m_pBuf, lLen);
+        str.m_pBuf[lLen] = 0;
+        str.m_lStrLen = lLen;
+    }
+    return str;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Create a new RString based on this string's last 'lLen' characters.  If lLen
@@ -384,20 +377,19 @@ RString RString::Left(long lLen) const
 // string's length will be lLen or this string's length, whichever is less.
 ////////////////////////////////////////////////////////////////////////////////
 RString RString::Right(long lLen) const
-	{
-	RString str;
-	if ((lLen > 0) && (m_lStrLen > 0))
-		{
-		if (lLen > m_lStrLen)
-			lLen = m_lStrLen;
-		str.Grow(lLen + 1); // size is always > 0, so this will always return with a valid buffer
-		memcpy(str.m_pBuf, m_pBuf + (m_lStrLen - lLen), lLen);
-		str.m_pBuf[lLen] = 0;
-		str.m_lStrLen = lLen;
-		}
-	return str;
-	}
-
+{
+    RString str;
+    if ((lLen > 0) && (m_lStrLen > 0))
+    {
+        if (lLen > m_lStrLen)
+            lLen = m_lStrLen;
+        str.Grow(lLen + 1); // size is always > 0, so this will always return with a valid buffer
+        memcpy(str.m_pBuf, m_pBuf + (m_lStrLen - lLen), lLen);
+        str.m_pBuf[lLen] = 0;
+        str.m_lStrLen = lLen;
+    }
+    return str;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Create a new RString based on a portion of this string, starting at lPos and
@@ -407,20 +399,19 @@ RString RString::Right(long lLen) const
 // of this string.
 ////////////////////////////////////////////////////////////////////////////////
 RString RString::Mid(long lPos, long lLen) const
-	{
-	RString str;
-	if ((lPos >= 0) && (lPos < m_lStrLen) && (lLen > 0)) // implies m_lStrLen > 0
-		{
-		if ((lPos + lLen) > m_lStrLen)
-			lLen = m_lStrLen - lPos;
-		str.Grow(lLen + 1); // size is always > 0, so this will always return with a valid buffer
-		memcpy(str.m_pBuf, m_pBuf + lPos, lLen);
-		str.m_pBuf[lLen] = 0;
-		str.m_lStrLen = lLen;
-		}
-	return str;
-	}
-
+{
+    RString str;
+    if ((lPos >= 0) && (lPos < m_lStrLen) && (lLen > 0)) // implies m_lStrLen > 0
+    {
+        if ((lPos + lLen) > m_lStrLen)
+            lLen = m_lStrLen - lPos;
+        str.Grow(lLen + 1); // size is always > 0, so this will always return with a valid buffer
+        memcpy(str.m_pBuf, m_pBuf + lPos, lLen);
+        str.m_pBuf[lLen] = 0;
+        str.m_lStrLen = lLen;
+    }
+    return str;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Create a new RString based on the specified range of characters from this
@@ -429,21 +420,20 @@ RString RString::Mid(long lPos, long lLen) const
 // must be less than or equal to lPos2.
 ////////////////////////////////////////////////////////////////////////////////
 RString RString::Range(long lPos1, long lPos2) const
-	{
-	RString str;
-	if ((lPos1 >= 0) && (lPos1 <= lPos2) && (lPos1 < m_lStrLen)) // implies m_lStrLen > 0
-		{
-		if (lPos2 >= m_lStrLen)
-			lPos2 = m_lStrLen - 1;
-		long lLen = (lPos2 - lPos1) + 1;
-		str.Grow(lLen + 1); // size is always > 0, so this will always return with a valid buffer
-		memcpy(str.m_pBuf, m_pBuf + lPos1, lLen);
-		str.m_pBuf[lLen] = 0;
-		str.m_lStrLen = lLen;
-		}
-	return str;
-	}
-
+{
+    RString str;
+    if ((lPos1 >= 0) && (lPos1 <= lPos2) && (lPos1 < m_lStrLen)) // implies m_lStrLen > 0
+    {
+        if (lPos2 >= m_lStrLen)
+            lPos2 = m_lStrLen - 1;
+        long lLen = (lPos2 - lPos1) + 1;
+        str.Grow(lLen + 1); // size is always > 0, so this will always return with a valid buffer
+        memcpy(str.m_pBuf, m_pBuf + lPos1, lLen);
+        str.m_pBuf[lLen] = 0;
+        str.m_lStrLen = lLen;
+    }
+    return str;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Insert any of the supported types into the string at the specified position.
@@ -456,167 +446,163 @@ RString RString::Range(long lPos1, long lPos2) const
 // position is negative or greater than the string length, then this function
 // will do nothing.
 ////////////////////////////////////////////////////////////////////////////////
-void RString::Insert(long lPos, const RString& str)
-	{
-	if ((lPos >= 0) && (lPos <= m_lStrLen) && (str.m_lStrLen > 0))
-		{
-		Grow(m_lStrLen + str.m_lStrLen + 1);
-		// Shift existing characters to the right (including terminating null!)
-		memmove(m_pBuf + lPos + str.m_lStrLen, m_pBuf + lPos, (m_lStrLen + 1) - lPos);
-		// Copy new characters
-		memcpy(m_pBuf + lPos, str.m_pBuf, str.m_lStrLen);
-		m_lStrLen += str.m_lStrLen;
-		}
-	}
+void RString::Insert(long lPos, const RString &str)
+{
+    if ((lPos >= 0) && (lPos <= m_lStrLen) && (str.m_lStrLen > 0))
+    {
+        Grow(m_lStrLen + str.m_lStrLen + 1);
+        // Shift existing characters to the right (including terminating null!)
+        memmove(m_pBuf + lPos + str.m_lStrLen, m_pBuf + lPos, (m_lStrLen + 1) - lPos);
+        // Copy new characters
+        memcpy(m_pBuf + lPos, str.m_pBuf, str.m_lStrLen);
+        m_lStrLen += str.m_lStrLen;
+    }
+}
 
-void RString::Insert(long lPos, const char* psz)
-	{
-	long lLen = strlen(psz);
-	if ((lPos >= 0) && (lPos <= m_lStrLen) && (lLen > 0))
-		{
-		Grow(m_lStrLen + lLen + 1);
-		// Shift existing characters to the right (including terminating null!)
-		memmove(m_pBuf + lPos + lLen, m_pBuf + lPos, (m_lStrLen + 1) - lPos);
-		// Copy new characters
-		memcpy(m_pBuf + lPos, psz, lLen);
-		m_lStrLen += lLen;
-		}
-	}
+void RString::Insert(long lPos, const char *psz)
+{
+    long lLen = strlen(psz);
+    if ((lPos >= 0) && (lPos <= m_lStrLen) && (lLen > 0))
+    {
+        Grow(m_lStrLen + lLen + 1);
+        // Shift existing characters to the right (including terminating null!)
+        memmove(m_pBuf + lPos + lLen, m_pBuf + lPos, (m_lStrLen + 1) - lPos);
+        // Copy new characters
+        memcpy(m_pBuf + lPos, psz, lLen);
+        m_lStrLen += lLen;
+    }
+}
 
 void RString::Insert(long lPos, char c)
-	{
-	if ((lPos >= 0) && (lPos <= m_lStrLen))
-		{
-		Grow(m_lStrLen + 1 + 1);
-		// Shift existing characters to the right (including terminating null!)
-		memmove(m_pBuf + lPos + 1, m_pBuf + lPos, (m_lStrLen + 1) - lPos);
-		// Copy new character
-		m_pBuf[lPos] = c;
-		m_lStrLen++;
-		}
-	}
-
+{
+    if ((lPos >= 0) && (lPos <= m_lStrLen))
+    {
+        Grow(m_lStrLen + 1 + 1);
+        // Shift existing characters to the right (including terminating null!)
+        memmove(m_pBuf + lPos + 1, m_pBuf + lPos, (m_lStrLen + 1) - lPos);
+        // Copy new character
+        m_pBuf[lPos] = c;
+        m_lStrLen++;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Delete the specified number of characters starting at the specified position.
 // If the position or length are negative, the string is left unmodified.
 ////////////////////////////////////////////////////////////////////////////////
 void RString::Delete(long lPos, long lLen)
-	{
-	if ((lPos >= 0) && (lPos < m_lStrLen) && (lLen > 0)) // implies m_lStrLen > 0
-		{
-		if ((lPos + lLen) > m_lStrLen)
-			lLen = m_lStrLen - lPos;
-		// Shift existing characters to the left (including terminating null!)
-		memmove(m_pBuf + lPos, m_pBuf + lPos + lLen, (m_lStrLen + 1) - (lPos + lLen));
-		m_lStrLen -= lLen;
-		}
-	}
-
+{
+    if ((lPos >= 0) && (lPos < m_lStrLen) && (lLen > 0)) // implies m_lStrLen > 0
+    {
+        if ((lPos + lLen) > m_lStrLen)
+            lLen = m_lStrLen - lPos;
+        // Shift existing characters to the left (including terminating null!)
+        memmove(m_pBuf + lPos, m_pBuf + lPos + lLen, (m_lStrLen + 1) - (lPos + lLen));
+        m_lStrLen -= lLen;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Convert string to upper case
 ////////////////////////////////////////////////////////////////////////////////
 void RString::ToUpper(void)
-	{
-	long lLen = m_lStrLen;
-	char* p = m_pBuf;
-	if (lLen > 0)
-		{
-		do	{
-			*p = toupper(*p);
-			p++;
-			} while (--lLen);
-		}
-	}
-
+{
+    long lLen = m_lStrLen;
+    char *p = m_pBuf;
+    if (lLen > 0)
+    {
+        do
+        {
+            *p = toupper(*p);
+            p++;
+        } while (--lLen);
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Convert string to lower case
 ////////////////////////////////////////////////////////////////////////////////
 void RString::ToLower(void)
-	{
-	long lLen = m_lStrLen;
-	char* p = m_pBuf;
-	if (lLen > 0)
-		{
-		do {
-			*p = tolower(*p);
-			p++;
-			} while (--lLen);
-		}
-	}
-
+{
+    long lLen = m_lStrLen;
+    char *p = m_pBuf;
+    if (lLen > 0)
+    {
+        do
+        {
+            *p = tolower(*p);
+            p++;
+        } while (--lLen);
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load a previously saved string from the specified RFile.  Calls Clear() if
 // an error occurs while loading.  Returns 0 if successfull, non-zero otherwise.
 ////////////////////////////////////////////////////////////////////////////////
-short RString::Load(RFile* pFile)
-	{
-	short sResult = 0;
+short RString::Load(RFile *pFile)
+{
+    short sResult = 0;
 
-	// Read length to separate var to avoid corrupting real one in case of read error
-	long lLen;
-	if (pFile->Read(&lLen) == 1)
-		{
-		// Check if there's more to read
-		if (lLen > 0)
-			{
-			// Grow buffer
-			Grow(lLen + 1);
-			if (pFile->Read(m_pBuf, lLen) == lLen)
-				{
-				// Add null and set length
-				m_pBuf[lLen] = 0;
-				m_lStrLen = lLen;
-				}
-			else
-				{
-				Clear();
-				TRACE("RString::Load(): Error reading string!\n");
-				sResult = -1;
-				}
-			}
-		else
-			{
-			Clear();
-			}
-		}
-	else
-		{
-		Clear();
-		TRACE("RString::Load(): Error reading string length!\n");
-		sResult = -1;
-		}
+    // Read length to separate var to avoid corrupting real one in case of read error
+    long lLen;
+    if (pFile->Read(&lLen) == 1)
+    {
+        // Check if there's more to read
+        if (lLen > 0)
+        {
+            // Grow buffer
+            Grow(lLen + 1);
+            if (pFile->Read(m_pBuf, lLen) == lLen)
+            {
+                // Add null and set length
+                m_pBuf[lLen] = 0;
+                m_lStrLen = lLen;
+            }
+            else
+            {
+                Clear();
+                TRACE("RString::Load(): Error reading string!\n");
+                sResult = -1;
+            }
+        }
+        else
+        {
+            Clear();
+        }
+    }
+    else
+    {
+        Clear();
+        TRACE("RString::Load(): Error reading string length!\n");
+        sResult = -1;
+    }
 
-	return sResult;
-	}
-
+    return sResult;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Save this string to the specified RFile.  This RString is not modified by the
 // save, even if an error occurs.  Returns 0 if successfull, non-zero otherwise.
 ////////////////////////////////////////////////////////////////////////////////
-short RString::Save(RFile* pFile) const
-	{
-	// Save string length
-	pFile->Write(m_lStrLen);
+short RString::Save(RFile *pFile) const
+{
+    // Save string length
+    pFile->Write(m_lStrLen);
 
-	// See if there's more to save
-	if (m_lStrLen > 0)
-		pFile->Write(m_pBuf, m_lStrLen);
+    // See if there's more to save
+    if (m_lStrLen > 0)
+        pFile->Write(m_pBuf, m_lStrLen);
 
-	// Check for errors
-	if (pFile->Error())
-		{
-		TRACE("RString::Save(): Error writing string!\n");
-		return -1; // error
-		}
+    // Check for errors
+    if (pFile->Error())
+    {
+        TRACE("RString::Save(): Error writing string!\n");
+        return -1; // error
+    }
 
-	return 0; // success
-	}
-
+    return 0; // success
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // EOF

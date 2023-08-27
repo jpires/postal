@@ -23,75 +23,68 @@
 
 #include "System.h"
 #ifdef PATHS_IN_INCLUDES
-	#include "ORANGE/CDT/flist.h"
-	#include "ORANGE/GameLib/SPRITE.H"
+#include "ORANGE/CDT/flist.h"
+#include "ORANGE/GameLib/SPRITE.H"
 #else
-	#include "flist.h"
-	#include "sprite.h"
+#include "flist.h"
+#include "sprite.h"
 #endif
 
-
 class RSpry
-	{
-	//---------------------------------------------------------------------------
-	// Types, enums, etc.
-	//---------------------------------------------------------------------------
+{
+    //---------------------------------------------------------------------------
+    // Types, enums, etc.
+    //---------------------------------------------------------------------------
 
     // This is accessed externally in hood.cpp.  --ryan.
-	//private:
-	public:
-		// Typedef for list of RSprite's
-		typedef RFList<RSprite*> ListOfSprites;
+    // private:
+  public:
+    // Typedef for list of RSprite's
+    typedef RFList<RSprite *> ListOfSprites;
 
-		// Miscellaneous enums
-		enum
-			{
-			FileID = 0x59525053,
-			FileVersion = 1
-			};
+    // Miscellaneous enums
+    enum
+    {
+        FileID = 0x59525053,
+        FileVersion = 1
+    };
 
-	//---------------------------------------------------------------------------
-	// Member variables
-	//---------------------------------------------------------------------------
-	public:
-		ListOfSprites m_listSprites;
+    //---------------------------------------------------------------------------
+    // Member variables
+    //---------------------------------------------------------------------------
+  public:
+    ListOfSprites m_listSprites;
 
-	//---------------------------------------------------------------------------
-	// Member functions
-	//---------------------------------------------------------------------------
-	public:
-		// Default (and only) constructor
-		RSpry();
+    //---------------------------------------------------------------------------
+    // Member functions
+    //---------------------------------------------------------------------------
+  public:
+    // Default (and only) constructor
+    RSpry();
 
-		// Destructor
-		~RSpry();
+    // Destructor
+    ~RSpry();
 
-		// Clear
-		short Clear(void);
+    // Clear
+    short Clear(void);
 
-		// Load from specified file
-		short Load(
-			char* pszFile);
+    // Load from specified file
+    short Load(char *pszFile);
 
-		// Load from already-open file
-		short Load(
-			RFile* pFile);
+    // Load from already-open file
+    short Load(RFile *pFile);
 
-		// Save to specified file
-		short Save(
-			char* pszFile);
+    // Save to specified file
+    short Save(char *pszFile);
 
-		// Save to already-open file
-		short Save(
-			RFile* pFile);
+    // Save to already-open file
+    short Save(RFile *pFile);
 
-		// Convert to specified RImage type
-		short Convert(
-			RImage::Type type);
-	};
+    // Convert to specified RImage type
+    short Convert(RImage::Type type);
+};
 
-
-#endif //SPRY_H
+#endif // SPRY_H
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

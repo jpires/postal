@@ -20,7 +20,7 @@
 //
 // This module implements the CRocket weapon class which is an unguided
 //	rocket missile.
-// 
+//
 //
 // History:
 //		01/17/97 BRH	Started this weapon object.
@@ -47,7 +47,7 @@
 //							object before play begins.
 //
 //		02/23/97 BRH	Added State_Hide so that the rocket can be created but
-//							is not shown.  
+//							is not shown.
 //
 //		02/24/97	JMI	No longer sets the m_type member of the m_sprite b/c it
 //							is set by m_sprite's constructor.
@@ -79,13 +79,13 @@
 //							Character.
 //							Also, changed layer priority to simply use Z position.
 //
-//		04/24/97	JMI	Now when it hits something, it does not update its 
+//		04/24/97	JMI	Now when it hits something, it does not update its
 //							position (i.e., it keeps its old valid position).
 //
 //		04/24/97 BRH	Added puffs of smoke in addition to the explosion.
 //
 //		04/29/97 BRH	Added an off screen distance at which the rocket will self
-//							destruct.  
+//							destruct.
 //
 //		05/26/97 BRH	Changed the check for wall collisions to ignore the
 //							NOT_WALKABLE attribute which caused it to blow up in
@@ -94,7 +94,7 @@
 //		05/29/97	JMI	Removed ASSERT on m_pRealm->m_pAttribMap which no longer
 //							exists.
 //
-//		06/10/97 BRH	Increased the rocket arming time from 200ms to 500ms to 
+//		06/10/97 BRH	Increased the rocket arming time from 200ms to 500ms to
 //							avoid killing yourself when you are moving & shooting.
 //
 //		06/11/97 BRH	Passes shooter ID to the explosion that is created.
@@ -121,7 +121,7 @@
 //							position.  Fixed.
 //
 //		07/07/97	JMI	In ProcessMessages(), it was deleting this.  Then, once
-//							ProcessMessages() returned to Update(), it would check 
+//							ProcessMessages() returned to Update(), it would check
 //							m_eState to see if it had been deleted and then return.
 //							The problem is that once deleted you cannot access m_eState.
 //							Changed it so ProcessMessages() does not delete this but
@@ -136,13 +136,13 @@
 //		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
 //							as a parameter.
 //
-//		07/16/97 BRH	Retuned, or untuned the hotspot for the smoke trails.  
+//		07/16/97 BRH	Retuned, or untuned the hotspot for the smoke trails.
 //							Now that the hotspot for the smoke is correct, the
 //							smoke does not need to be adjusted here.
 //
 //		07/18/97	JMI	Added m_siThrust to track our thrust play instance so we
 //							can loop it and then terminate the looping when we explode.
-//							The sound tapers way too much to be loopable now.  
+//							The sound tapers way too much to be loopable now.
 //							Hopefully, we can get a better one.
 //
 //		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
@@ -171,7 +171,7 @@
 //		08/26/97 BRH	Fixed bug with brackets where rocket always went back to
 //							its previous position when fired by a sentry gun.
 //
-//		08/27/97	JMI	No longer sets the smash radius to m_sCurRadius during 
+//		08/27/97	JMI	No longer sets the smash radius to m_sCurRadius during
 //							Render().
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -186,602 +186,598 @@
 #include "fire.h"
 #include "SampleMaster.h"
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define SMALL_SHADOW_FILE	"smallshadow.img"
+#define SMALL_SHADOW_FILE "smallshadow.img"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
 ////////////////////////////////////////////////////////////////////////////////
 
 // These are default values -- actually values are set using the editor!
-double CRocket::ms_dAccUser     = 250.0;				// Acceleration due to user
-double CRocket::ms_dMaxVelFore  = 250.0;				// Maximum forward velocity
-double CRocket::ms_dMaxVelBack  = -250.0;				// Maximum backward velocity
-double CRocket::ms_dCloseDistance = 30.0;			// Close enough to hit CDude
-long CRocket::ms_lArmingTime = 500;					// Time before weapon arms.
-short CRocket::ms_sOffScreenDist = 200;				// Go off screen this far before blowing up
-long CRocket::ms_lSmokeTrailInterval = 10;			// Time to emit smoke trail.
-long CRocket::ms_lSmokeTimeToLive = 1000;				// Time for smoke to stick around.
-
+double CRocket::ms_dAccUser = 250.0;       // Acceleration due to user
+double CRocket::ms_dMaxVelFore = 250.0;    // Maximum forward velocity
+double CRocket::ms_dMaxVelBack = -250.0;   // Maximum backward velocity
+double CRocket::ms_dCloseDistance = 30.0;  // Close enough to hit CDude
+long CRocket::ms_lArmingTime = 500;        // Time before weapon arms.
+short CRocket::ms_sOffScreenDist = 200;    // Go off screen this far before blowing up
+long CRocket::ms_lSmokeTrailInterval = 10; // Time to emit smoke trail.
+long CRocket::ms_lSmokeTimeToLive = 1000;  // Time for smoke to stick around.
 
 // Let this auto-init to 0
 short CRocket::ms_sFileCount;
 
 /// Rocket Animation Files
-static char* ms_apszResNames[] = 
-{
-	"3d/missile.sop",
-	"3d/missile.mesh",
-	"3d/missile.tex",
-	"3d/missile.hot",
-	"3d/missile.bounds",
-	"3d/missile.floor",
-	NULL,
-	NULL
-};
+static char *ms_apszResNames[] = { "3d/missile.sop",
+                                   "3d/missile.mesh",
+                                   "3d/missile.tex",
+                                   "3d/missile.hot",
+                                   "3d/missile.bounds",
+                                   "3d/missile.floor",
+                                   NULL,
+                                   NULL };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load object (should call base class version!)
 ////////////////////////////////////////////////////////////////////////////////
-short CRocket::Load(										// Returns 0 if successfull, non-zero otherwise
-	RFile* pFile,											// In:  File to load from
-	bool bEditMode,										// In:  True for edit mode, false otherwise
-	short sFileCount,										// In:  File count (unique per file, never 0)
-	ULONG	ulFileVersion)									// In:  Version of file format to load.
+short CRocket::Load(   // Returns 0 if successfull, non-zero otherwise
+  RFile *pFile,        // In:  File to load from
+  bool bEditMode,      // In:  True for edit mode, false otherwise
+  short sFileCount,    // In:  File count (unique per file, never 0)
+  ULONG ulFileVersion) // In:  Version of file format to load.
 {
-	short sResult = CWeapon::Load(pFile, bEditMode, sFileCount, ulFileVersion);
+    short sResult = CWeapon::Load(pFile, bEditMode, sFileCount, ulFileVersion);
 
-	if (sResult == SUCCESS)
-	{
-		// Load common data just once per file (not with each object)
-		if (ms_sFileCount != sFileCount)
-		{
-			ms_sFileCount = sFileCount;
+    if (sResult == SUCCESS)
+    {
+        // Load common data just once per file (not with each object)
+        if (ms_sFileCount != sFileCount)
+        {
+            ms_sFileCount = sFileCount;
 
-			// Load static data
-			switch (ulFileVersion)
-			{
-				default:
-				case 1:
-					pFile->Read(&ms_dAccUser);
-					pFile->Read(&ms_dMaxVelFore);
-					pFile->Read(&ms_dMaxVelBack);
-					pFile->Read(&ms_dCloseDistance);
-					break;
-			}
-		}
+            // Load static data
+            switch (ulFileVersion)
+            {
+                default:
+                case 1:
+                    pFile->Read(&ms_dAccUser);
+                    pFile->Read(&ms_dMaxVelFore);
+                    pFile->Read(&ms_dMaxVelBack);
+                    pFile->Read(&ms_dCloseDistance);
+                    break;
+            }
+        }
 
-		// Load object data
-		switch (ulFileVersion)
-		{
-			default:
-			case 1:
-				break;
-		}
-		
-		// Make sure there were no file errors
-		if (!pFile->Error())
-		{
-			// Get resources
-			sResult = GetResources();
-		}
-		else
-		{
-			sResult = -1;
-			TRACE("CRocket::Load(): Error reading from file!\n");
-		}
-	}
+        // Load object data
+        switch (ulFileVersion)
+        {
+            default:
+            case 1:
+                break;
+        }
 
-	return sResult;
+        // Make sure there were no file errors
+        if (!pFile->Error())
+        {
+            // Get resources
+            sResult = GetResources();
+        }
+        else
+        {
+            sResult = -1;
+            TRACE("CRocket::Load(): Error reading from file!\n");
+        }
+    }
+
+    return sResult;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Save object (should call base class version!)
 ////////////////////////////////////////////////////////////////////////////////
-short CRocket::Save(										// Returns 0 if successfull, non-zero otherwise
-	RFile* pFile,											// In:  File to save to
-	short sFileCount)										// In:  File count (unique per file, never 0)
+short CRocket::Save( // Returns 0 if successfull, non-zero otherwise
+  RFile *pFile,      // In:  File to save to
+  short sFileCount)  // In:  File count (unique per file, never 0)
 {
-	// In most cases, the base class Save() should be called.  In this case it
-	// isn't because the base class doesn't have a Save()!
+    // In most cases, the base class Save() should be called.  In this case it
+    // isn't because the base class doesn't have a Save()!
 
-	// Save common data just once per file (not with each object)
-	if (ms_sFileCount != sFileCount)
-	{
-		ms_sFileCount = sFileCount;
+    // Save common data just once per file (not with each object)
+    if (ms_sFileCount != sFileCount)
+    {
+        ms_sFileCount = sFileCount;
 
-		// Save static data
-		pFile->Write(&ms_dAccUser);
-		pFile->Write(&ms_dMaxVelFore);
-		pFile->Write(&ms_dMaxVelBack);
-		pFile->Write(&ms_dCloseDistance);
-	}
+        // Save static data
+        pFile->Write(&ms_dAccUser);
+        pFile->Write(&ms_dMaxVelFore);
+        pFile->Write(&ms_dMaxVelBack);
+        pFile->Write(&ms_dCloseDistance);
+    }
 
-	// Save object data
+    // Save object data
 
-	return 0;
+    return 0;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
 void CRocket::Update(void)
 {
-	USHORT usAttrib;
-	short sHeight;
-	double dNewX;
-	double dNewZ;
-	double dPrevX = 0; // compiler warning "not initialized before being used"
-	double dPrevZ = 0; // compiler warning "not initialized before being used"
+    USHORT usAttrib;
+    short sHeight;
+    double dNewX;
+    double dNewZ;
+    double dPrevX = 0; // compiler warning "not initialized before being used"
+    double dPrevZ = 0; // compiler warning "not initialized before being used"
 
-	if (!m_sSuspend)
-		{
-		// Get new time
-		long lThisTime = m_pRealm->m_time.GetGameTime(); 
+    if (!m_sSuspend)
+    {
+        // Get new time
+        long lThisTime = m_pRealm->m_time.GetGameTime();
 
-		// Calculate elapsed time in seconds
-		double dSeconds = (double)(lThisTime - m_lPrevTime) / 1000.0;
+        // Calculate elapsed time in seconds
+        double dSeconds = (double)(lThisTime - m_lPrevTime) / 1000.0;
 
-		ProcessMessages();
-		// If we're to be deleted . . .
-		// Note that this could be a case in the switch below, but, if
-		// for whatever reason, that moves or something else is inserted
-		// between here and the switch that might change the state, we 
-		// might not get deleted.
-		if (m_eState == State_Deleted)
-			{
-			// We are to be deleted.  Do it.
-			delete this;
-			// Must get out of here before we touch any of our invalidated 
-			// this.
-			return;
-			}
+        ProcessMessages();
+        // If we're to be deleted . . .
+        // Note that this could be a case in the switch below, but, if
+        // for whatever reason, that moves or something else is inserted
+        // between here and the switch that might change the state, we
+        // might not get deleted.
+        if (m_eState == State_Deleted)
+        {
+            // We are to be deleted.  Do it.
+            delete this;
+            // Must get out of here before we touch any of our invalidated
+            // this.
+            return;
+        }
 
-		// Check the current state
-		switch (m_eState)
-		{
-			case CWeapon::State_Hide:
-			case CWeapon::State_Idle:
-				dPrevX = m_dX;
-				dPrevZ = m_dZ;
-				break;
+        // Check the current state
+        switch (m_eState)
+        {
+            case CWeapon::State_Hide:
+            case CWeapon::State_Idle:
+                dPrevX = m_dX;
+                dPrevZ = m_dZ;
+                break;
 
-			case CWeapon::State_Fire:
-				PlaySample(										// Returns nothing.
-																	// Does not fail.
-					g_smidRocketFire,							// In:  Identifier of sample you want played.
-					SampleMaster::Weapon,					// In:  Sound Volume Category for user adjustment
-					DistanceToVolume(m_dX, m_dY, m_dZ, LaunchSndHalfLife),	// In:  Initial Sound Volume (0 - 255)
-					&m_siThrust,								// Out: Handle for adjusting sound volume
-					NULL,											// Out: Sample duration in ms, if not NULL.
-					2841,											// In:  Where to loop back to in milliseconds.
-																	//	-1 indicates no looping (unless m_sLoop is
-																	// explicitly set).
-					3090,											// In:  Where to loop back from in milliseconds.
-																	// In:  If less than 1, the end + lLoopEndTime is used.
-					false);										// In:  Call ReleaseAndPurge rather than Release after playing
-// Old Call:	PlaySample(g_smidRocketFire);
-				m_lTimer = lThisTime + ms_lArmingTime;
-				m_eState = State_Chase;
-				break;
+            case CWeapon::State_Fire:
+                PlaySample(             // Returns nothing.
+                                        // Does not fail.
+                  g_smidRocketFire,     // In:  Identifier of sample you want played.
+                  SampleMaster::Weapon, // In:  Sound Volume Category for user adjustment
+                  DistanceToVolume(m_dX, m_dY, m_dZ, LaunchSndHalfLife), // In:  Initial Sound Volume (0 - 255)
+                  &m_siThrust,                                           // Out: Handle for adjusting sound volume
+                  NULL,                                                  // Out: Sample duration in ms, if not NULL.
+                  2841,                                                  // In:  Where to loop back to in milliseconds.
+                                                                         //	-1 indicates no looping (unless m_sLoop is
+                                                                         // explicitly set).
+                  3090,   // In:  Where to loop back from in milliseconds.
+                          // In:  If less than 1, the end + lLoopEndTime is used.
+                  false); // In:  Call ReleaseAndPurge rather than Release after playing
+                          // Old Call:	PlaySample(g_smidRocketFire);
+                m_lTimer = lThisTime + ms_lArmingTime;
+                m_eState = State_Chase;
+                break;
 
-//-----------------------------------------------------------------------
-// Chase
-//-----------------------------------------------------------------------
-			case CWeapon::State_Chase:
+                //-----------------------------------------------------------------------
+                // Chase
+                //-----------------------------------------------------------------------
+            case CWeapon::State_Chase:
 
-				// Accelerate toward the target and check for proximity
-				// and obstacles
+                // Accelerate toward the target and check for proximity
+                // and obstacles
 
-				// Accelerate doofus up to max velocity
-				m_dHorizVel += ms_dAccUser * dSeconds;
+                // Accelerate doofus up to max velocity
+                m_dHorizVel += ms_dAccUser * dSeconds;
 
-				// Limit to maximum velocity
-				if (m_dHorizVel > ms_dMaxVelFore)
-					m_dHorizVel = ms_dMaxVelFore;
-				else if (m_dHorizVel < ms_dMaxVelBack)
-					m_dHorizVel = ms_dMaxVelBack;
+                // Limit to maximum velocity
+                if (m_dHorizVel > ms_dMaxVelFore)
+                    m_dHorizVel = ms_dMaxVelFore;
+                else if (m_dHorizVel < ms_dMaxVelBack)
+                    m_dHorizVel = ms_dMaxVelBack;
 
-				// Adjust position based on velocity (this will clearly be optimized later on!)
-				dNewX = m_dX + COSQ[(short)m_dRot] * (m_dHorizVel * dSeconds);
-				dNewZ = m_dZ - SINQ[(short)m_dRot] * (m_dHorizVel * dSeconds);
+                // Adjust position based on velocity (this will clearly be optimized later on!)
+                dNewX = m_dX + COSQ[(short)m_dRot] * (m_dHorizVel * dSeconds);
+                dNewZ = m_dZ - SINQ[(short)m_dRot] * (m_dHorizVel * dSeconds);
 
-				// Check for obstacles
-				sHeight = m_pRealm->GetHeight((short) dNewX, (short) dNewZ);
-				usAttrib = m_pRealm->GetFloorAttribute((short) dNewX, (short) dNewZ);
+                // Check for obstacles
+                sHeight = m_pRealm->GetHeight((short)dNewX, (short)dNewZ);
+                usAttrib = m_pRealm->GetFloorAttribute((short)dNewX, (short)dNewZ);
 
-				// If the new position's height is too high, the new position is a ways
-				// off screen, or the path to the new position is not clear of terrain . . .
-				if (sHeight > m_dY                     || 
-					 m_dZ > ms_sOffScreenDist + m_pRealm->GetRealmHeight() ||
-					 m_dZ < -ms_sOffScreenDist ||
-					 m_dX > ms_sOffScreenDist + m_pRealm->GetRealmWidth() ||
-					 m_dX < -ms_sOffScreenDist ||
-					 !m_pRealm->IsPathClear(	// Returns true, if the entire path is clear.                 
-														// Returns false, if only a portion of the path is clear.     
-														// (see *psX, *psY, *psZ).                                    
-						(short) m_dX, 				// In:  Starting X.                                           
-						(short) m_dY, 				// In:  Starting Y.                                           
-						(short) m_dZ, 				// In:  Starting Z.                                           
-						3.0, 							// In:  Rate at which to scan ('crawl') path in pixels per    
-														// iteration.                                                 
-														// NOTE: Values less than 1.0 are inefficient.                
-														// NOTE: We scan terrain using GetHeight()                    
-														// at only one pixel.                                         
-														// NOTE: We could change this to a speed in pixels per second 
-														// where we'd assume a certain frame rate.                    
-						(short) dNewX, 			// In:  Destination X.                                        
-						(short) dNewZ,				// In:  Destination Z.                                        
-						0,								// In:  Max traverser can step up.                      
-						NULL,							// Out: If not NULL, last clear point on path.                
-						NULL,							// Out: If not NULL, last clear point on path.                
-						NULL,							// Out: If not NULL, last clear point on path.                
-						false) )						// In:  If true, will consider the edge of the realm a path
-														// inhibitor.  If false, reaching the edge of the realm    
-														// indicates a clear path.                                 
-				{
-					// Blow Up
-					m_eState = CWeapon::State_Explode;
-					// Note that these need to be set even if we explode; otherwise, they
-					// never get initialized and totally hosened values are sent to
-					// pSmoke-Setup() which makes Alpha unhappy.
-					dPrevX = m_dX;
-					dPrevZ = m_dZ;
-				}
-				else
-				{
-					dPrevX = m_dX;
-					dPrevZ = m_dZ;
-					m_dX = dNewX;
-					m_dZ = dNewZ;
-				}
+                // If the new position's height is too high, the new position is a ways
+                // off screen, or the path to the new position is not clear of terrain . . .
+                if (sHeight > m_dY || m_dZ > ms_sOffScreenDist + m_pRealm->GetRealmHeight() ||
+                    m_dZ < -ms_sOffScreenDist || m_dX > ms_sOffScreenDist + m_pRealm->GetRealmWidth() ||
+                    m_dX < -ms_sOffScreenDist ||
+                    !m_pRealm->IsPathClear( // Returns true, if the entire path is clear.
+                                            // Returns false, if only a portion of the path is clear.
+                                            // (see *psX, *psY, *psZ).
+                      (short)m_dX,          // In:  Starting X.
+                      (short)m_dY,          // In:  Starting Y.
+                      (short)m_dZ,          // In:  Starting Z.
+                      3.0,                  // In:  Rate at which to scan ('crawl') path in pixels per
+                                            // iteration.
+                                            // NOTE: Values less than 1.0 are inefficient.
+                                            // NOTE: We scan terrain using GetHeight()
+                                            // at only one pixel.
+                                            // NOTE: We could change this to a speed in pixels per second
+                                            // where we'd assume a certain frame rate.
+                      (short)dNewX,         // In:  Destination X.
+                      (short)dNewZ,         // In:  Destination Z.
+                      0,                    // In:  Max traverser can step up.
+                      NULL,                 // Out: If not NULL, last clear point on path.
+                      NULL,                 // Out: If not NULL, last clear point on path.
+                      NULL,                 // Out: If not NULL, last clear point on path.
+                      false))               // In:  If true, will consider the edge of the realm a path
+                                            // inhibitor.  If false, reaching the edge of the realm
+                                            // indicates a clear path.
+                {
+                    // Blow Up
+                    m_eState = CWeapon::State_Explode;
+                    // Note that these need to be set even if we explode; otherwise, they
+                    // never get initialized and totally hosened values are sent to
+                    // pSmoke-Setup() which makes Alpha unhappy.
+                    dPrevX = m_dX;
+                    dPrevZ = m_dZ;
+                }
+                else
+                {
+                    dPrevX = m_dX;
+                    dPrevZ = m_dZ;
+                    m_dX = dNewX;
+                    m_dZ = dNewZ;
+                }
 
-				// Check for collisions with other characters if
-				// the weapon is armed, else see if it is time to arm
-				// the weapon yet.
-				if (m_bArmed)
-				{
-					CSmash* pSmashed = NULL;
-					m_pRealm->m_smashatorium.QuickCheckReset(
-						&m_smash, 
-						m_u32CollideIncludeBits,
-						m_u32CollideDontcareBits,
-						m_u32CollideExcludeBits & ~CSmash::Ducking);
+                // Check for collisions with other characters if
+                // the weapon is armed, else see if it is time to arm
+                // the weapon yet.
+                if (m_bArmed)
+                {
+                    CSmash *pSmashed = NULL;
+                    m_pRealm->m_smashatorium.QuickCheckReset(&m_smash,
+                                                             m_u32CollideIncludeBits,
+                                                             m_u32CollideDontcareBits,
+                                                             m_u32CollideExcludeBits & ~CSmash::Ducking);
 
-					while (m_pRealm->m_smashatorium.QuickCheckNext(&pSmashed))
-					{
-						ASSERT(pSmashed->m_pThing);
+                    while (m_pRealm->m_smashatorium.QuickCheckNext(&pSmashed))
+                    {
+                        ASSERT(pSmashed->m_pThing);
 
-						const bool bIsPlayer = (pSmashed->m_pThing->GetClassID() == CDudeID);
+                        const bool bIsPlayer = (pSmashed->m_pThing->GetClassID() == CDudeID);
 
-						// we need to check ducking collisions unconditionally so we can unlock an achievement, but then we carry on if it should have missed.
-						if ((m_u32CollideExcludeBits & CSmash::Ducking) && (pSmashed->m_bits & CSmash::Ducking))
-							{
-							if (bIsPlayer)
-								UnlockAchievement(ACHIEVEMENT_DUCK_UNDER_ROCKET);
-							continue;  // keep going.
-							}
+                        // we need to check ducking collisions unconditionally so we can unlock an achievement, but then
+                        // we carry on if it should have missed.
+                        if ((m_u32CollideExcludeBits & CSmash::Ducking) && (pSmashed->m_bits & CSmash::Ducking))
+                        {
+                            if (bIsPlayer)
+                                UnlockAchievement(ACHIEVEMENT_DUCK_UNDER_ROCKET);
+                            continue; // keep going.
+                        }
 
-						if (bIsPlayer)
-							UnlockAchievement(ACHIEVEMENT_ROCKET_TO_THE_FACE);
+                        if (bIsPlayer)
+                            UnlockAchievement(ACHIEVEMENT_ROCKET_TO_THE_FACE);
 
-						CThing* pShooter;
-						m_pRealm->m_idbank.GetThingByID(&pShooter, m_u16ShooterID);
-						if (pShooter)
-						{
-							// If a Sentry gun shot this weapon, and it hit another Sentry gun, then 
-							// ignore the collision.
-							if (!(pSmashed->m_pThing->GetClassID() == CSentryID && pShooter->GetClassID() == CSentryID))
-							{
-								m_eState = CWeapon::State_Explode;
-								// Move back to previous position where expolosion should appear
-								m_dX = dPrevX;
-								m_dZ = dPrevZ;
-							}
-						}
-						// Can't determine the shooter,but we did collide, so blow up.
-						else
-						{
-							m_eState = CWeapon::State_Explode;
-							// Move back to the previous position before doing the explosion so
-							// that the explosion doesn't always go off behind the thing it
-							// hits and blow it forward.
-							m_dX = dPrevX;
-							m_dZ = dPrevZ;
-						}
-					}
-				}
-				else
-				{
-					// Check for collision with self and if no collision, then arm
-					CThing* pShooter = NULL;
-					m_pRealm->m_idbank.GetThingByID(&pShooter, m_u16ShooterID);
-					// If the shooter is valid, then arm when it clears the shooter
-					if (pShooter)
-					{
-						CSmash* pSmashed = pShooter->GetSmash();
-						if (pSmashed)
-						{
-							pSmashed = (CSmash*) &(((CThing3d*) pShooter)->m_smash);
-							if (!(m_pRealm->m_smashatorium.QuickCheck(&m_smash, pSmashed)))
-								m_bArmed = true;
-						}
-						else
-						{
-							if (lThisTime > m_lTimer)
-								m_bArmed = true;
-						}
-					}
-					// else do it the old fashioned way, so at least it will arm
-					else
-					{
-						if (lThisTime > m_lTimer)
-							m_bArmed = true;
-					}
-				}
+                        CThing *pShooter;
+                        m_pRealm->m_idbank.GetThingByID(&pShooter, m_u16ShooterID);
+                        if (pShooter)
+                        {
+                            // If a Sentry gun shot this weapon, and it hit another Sentry gun, then
+                            // ignore the collision.
+                            if (!(pSmashed->m_pThing->GetClassID() == CSentryID && pShooter->GetClassID() == CSentryID))
+                            {
+                                m_eState = CWeapon::State_Explode;
+                                // Move back to previous position where expolosion should appear
+                                m_dX = dPrevX;
+                                m_dZ = dPrevZ;
+                            }
+                        }
+                        // Can't determine the shooter,but we did collide, so blow up.
+                        else
+                        {
+                            m_eState = CWeapon::State_Explode;
+                            // Move back to the previous position before doing the explosion so
+                            // that the explosion doesn't always go off behind the thing it
+                            // hits and blow it forward.
+                            m_dX = dPrevX;
+                            m_dZ = dPrevZ;
+                        }
+                    }
+                }
+                else
+                {
+                    // Check for collision with self and if no collision, then arm
+                    CThing *pShooter = NULL;
+                    m_pRealm->m_idbank.GetThingByID(&pShooter, m_u16ShooterID);
+                    // If the shooter is valid, then arm when it clears the shooter
+                    if (pShooter)
+                    {
+                        CSmash *pSmashed = pShooter->GetSmash();
+                        if (pSmashed)
+                        {
+                            pSmashed = (CSmash *)&(((CThing3d *)pShooter)->m_smash);
+                            if (!(m_pRealm->m_smashatorium.QuickCheck(&m_smash, pSmashed)))
+                                m_bArmed = true;
+                        }
+                        else
+                        {
+                            if (lThisTime > m_lTimer)
+                                m_bArmed = true;
+                        }
+                    }
+                    // else do it the old fashioned way, so at least it will arm
+                    else
+                    {
+                        if (lThisTime > m_lTimer)
+                            m_bArmed = true;
+                    }
+                }
 
-				// See if its time to create a new puff of smoke
-				if (lThisTime > m_lSmokeTimer)
-				{
-					m_lSmokeTimer = lThisTime + ms_lSmokeTrailInterval;
-					CFire* pSmoke = NULL;
-					if (CThing::Construct(CThing::CFireID, m_pRealm, (CThing**) &pSmoke) == 0)
-					{
-						// This needs to be fixed by calculating the position of the back end of
-						// the rocket in 3D based on the rotation.  
-						pSmoke->Setup(dPrevX, m_dY, dPrevZ, ms_lSmokeTimeToLive, true, CFire::SmallSmoke);
-						pSmoke->m_u16ShooterID = m_u16ShooterID;
-					}
-				}
+                // See if its time to create a new puff of smoke
+                if (lThisTime > m_lSmokeTimer)
+                {
+                    m_lSmokeTimer = lThisTime + ms_lSmokeTrailInterval;
+                    CFire *pSmoke = NULL;
+                    if (CThing::Construct(CThing::CFireID, m_pRealm, (CThing **)&pSmoke) == 0)
+                    {
+                        // This needs to be fixed by calculating the position of the back end of
+                        // the rocket in 3D based on the rotation.
+                        pSmoke->Setup(dPrevX, m_dY, dPrevZ, ms_lSmokeTimeToLive, true, CFire::SmallSmoke);
+                        pSmoke->m_u16ShooterID = m_u16ShooterID;
+                    }
+                }
 
-				// Update sound position.
-				SetInstanceVolume(m_siThrust, DistanceToVolume(m_dX, m_dY, m_dZ, LaunchSndHalfLife) );
-				break;
+                // Update sound position.
+                SetInstanceVolume(m_siThrust, DistanceToVolume(m_dX, m_dY, m_dZ, LaunchSndHalfLife));
+                break;
 
-//-----------------------------------------------------------------------
-// RemoteControl 
-//-----------------------------------------------------------------------
+                //-----------------------------------------------------------------------
+                // RemoteControl
+                //-----------------------------------------------------------------------
 
-			case CWeapon::State_RemoteControl:
+            case CWeapon::State_RemoteControl:
 
-				m_bArmed = true;
-				{
-					CSmash* pSmashed = NULL;
-					if (m_pRealm->m_smashatorium.QuickCheck(&m_smash, 
-																	m_u32CollideIncludeBits, 
-																	m_u32CollideDontcareBits,
-																	m_u32CollideExcludeBits, &pSmashed))
-						m_eState = CWeapon::State_Explode;
-				}
+                m_bArmed = true;
+                {
+                    CSmash *pSmashed = NULL;
+                    if (m_pRealm->m_smashatorium.QuickCheck(&m_smash,
+                                                            m_u32CollideIncludeBits,
+                                                            m_u32CollideDontcareBits,
+                                                            m_u32CollideExcludeBits,
+                                                            &pSmashed))
+                        m_eState = CWeapon::State_Explode;
+                }
 
-				// See if its time to create a new puff of smoke
-				if (lThisTime > m_lSmokeTimer)
-				{
-					m_lSmokeTimer = lThisTime + ms_lSmokeTrailInterval;
-					CFire* pSmoke = NULL;
-					if (CThing::Construct(CThing::CFireID, m_pRealm, (CThing**) &pSmoke) == 0)
-					{
-						// This needs to be fixed by calculating the position of the back end of
-						// the rocket in 3D based on the rotation.  
-						pSmoke->Setup(dPrevX, m_dY, dPrevZ, ms_lSmokeTimeToLive, true, CFire::SmallSmoke);
-						pSmoke->m_u16ShooterID = m_u16ShooterID;
-					}
-				}
+                // See if its time to create a new puff of smoke
+                if (lThisTime > m_lSmokeTimer)
+                {
+                    m_lSmokeTimer = lThisTime + ms_lSmokeTrailInterval;
+                    CFire *pSmoke = NULL;
+                    if (CThing::Construct(CThing::CFireID, m_pRealm, (CThing **)&pSmoke) == 0)
+                    {
+                        // This needs to be fixed by calculating the position of the back end of
+                        // the rocket in 3D based on the rotation.
+                        pSmoke->Setup(dPrevX, m_dY, dPrevZ, ms_lSmokeTimeToLive, true, CFire::SmallSmoke);
+                        pSmoke->m_u16ShooterID = m_u16ShooterID;
+                    }
+                }
 
-				dPrevX = m_dX;
-				dPrevZ = m_dZ;
+                dPrevX = m_dX;
+                dPrevZ = m_dZ;
 
-				// Update sound position.
-				SetInstanceVolume(m_siThrust, DistanceToVolume(m_dX, m_dY, m_dZ, LaunchSndHalfLife) );
-				break;
+                // Update sound position.
+                SetInstanceVolume(m_siThrust, DistanceToVolume(m_dX, m_dY, m_dZ, LaunchSndHalfLife));
+                break;
 
-//-----------------------------------------------------------------------
-// Explode
-//-----------------------------------------------------------------------
-			case CWeapon::State_Explode:
+                //-----------------------------------------------------------------------
+                // Explode
+                //-----------------------------------------------------------------------
+            case CWeapon::State_Explode:
 
+                // Start an explosion object and then kill rocket
+                // object
+                CExplode *pExplosion;
+                if (CThing::Construct(CThing::CExplodeID, m_pRealm, (CThing **)&pExplosion) == 0)
+                {
+                    pExplosion->Setup(m_dX, MAX(m_dY - 30, 0.0), m_dZ, m_u16ShooterID);
+                    PlaySample(                  // Returns nothing.
+                                                 // Does not fail.
+                      g_smidRocketExplode,       // In:  Identifier of sample you want played.
+                      SampleMaster::Destruction, // In:  Sound Volume Category for user adjustment
+                      DistanceToVolume(m_dX, m_dY, m_dZ, ExplosionSndHalfLife)); // In:  Initial Sound Volume (0 - 255)
+                    // Old call:	PlaySample(g_smidRocketExplode);
+                }
 
-				// Start an explosion object and then kill rocket
-				// object
-				CExplode* pExplosion;
-				if (CThing::Construct(CThing::CExplodeID, m_pRealm, (CThing**) &pExplosion) == 0)
-				{
-					pExplosion->Setup(m_dX, MAX(m_dY-30, 0.0), m_dZ, m_u16ShooterID);
-					PlaySample(										// Returns nothing.
-																		// Does not fail.
-						g_smidRocketExplode,						// In:  Identifier of sample you want played.
-						SampleMaster::Destruction,				// In:  Sound Volume Category for user adjustment
-						DistanceToVolume(m_dX, m_dY, m_dZ, ExplosionSndHalfLife) );	// In:  Initial Sound Volume (0 - 255)
-// Old call:	PlaySample(g_smidRocketExplode);
-				}
+                short a;
+                CFire *pSmoke;
+                for (a = 0; a < 8; a++)
+                {
+                    if (CThing::Construct(CThing::CFireID, m_pRealm, (CThing **)&pSmoke) == 0)
+                    {
+                        pSmoke->Setup(m_dX - 4 + GetRandom() % 9,
+                                      m_dY - 20,
+                                      m_dZ - 4 + GetRandom() % 9,
+                                      4000,
+                                      true,
+                                      CFire::Smoke);
+                        pSmoke->m_u16ShooterID = m_u16ShooterID;
+                    }
+                }
 
-				short a;
-				CFire* pSmoke;
-				for (a = 0; a < 8; a++)
-				{
-					if (CThing::Construct(CThing::CFireID, m_pRealm, (CThing**) &pSmoke) == 0)
-					{
-						pSmoke->Setup(m_dX - 4 + GetRandom() % 9, m_dY-20, m_dZ - 4 + GetRandom() % 9, 4000, true, CFire::Smoke);
-						pSmoke->m_u16ShooterID = m_u16ShooterID;
-					}
-				}
+                delete this;
+                return;
+                break;
+        }
 
-				delete this;
-				return;
-				break;
-		}
+        // Update sphere.
+        m_smash.m_sphere.sphere.X = m_dX;
+        m_smash.m_sphere.sphere.Y = m_dY;
+        m_smash.m_sphere.sphere.Z = m_dZ;
+        m_smash.m_sphere.sphere.lRadius = 2 * m_sprite.m_sRadius;
 
-		// Update sphere.
-		m_smash.m_sphere.sphere.X			= m_dX;
-		m_smash.m_sphere.sphere.Y			= m_dY;
-		m_smash.m_sphere.sphere.Z			= m_dZ;
-		m_smash.m_sphere.sphere.lRadius	= 2 * m_sprite.m_sRadius;
+        // Update the smash.
+        m_pRealm->m_smashatorium.Update(&m_smash);
 
-		// Update the smash.
-		m_pRealm->m_smashatorium.Update(&m_smash);
-
-		// Save time for next time
-		m_lPrevTime = lThisTime;
-	}
+        // Save time for next time
+        m_lPrevTime = lThisTime;
+    }
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
 void CRocket::Render(void)
 {
-	long lThisTime = m_pRealm->m_time.GetGameTime();
+    long lThisTime = m_pRealm->m_time.GetGameTime();
 
-	m_sprite.m_pmesh = (RMesh*) m_anim.m_pmeshes->GetAtTime(lThisTime);
-	m_sprite.m_psop = (RSop*) m_anim.m_psops->GetAtTime(lThisTime);
-	m_sprite.m_ptex = (RTexture*) m_anim.m_ptextures->GetAtTime(lThisTime);
-	m_sprite.m_psphere = (RP3d*) m_anim.m_pbounds->GetAtTime(lThisTime);
+    m_sprite.m_pmesh = (RMesh *)m_anim.m_pmeshes->GetAtTime(lThisTime);
+    m_sprite.m_psop = (RSop *)m_anim.m_psops->GetAtTime(lThisTime);
+    m_sprite.m_ptex = (RTexture *)m_anim.m_ptextures->GetAtTime(lThisTime);
+    m_sprite.m_psphere = (RP3d *)m_anim.m_pbounds->GetAtTime(lThisTime);
 
-	// Reset rotation so it is not cumulative
-	m_trans.Make1();
+    // Reset rotation so it is not cumulative
+    m_trans.Make1();
 
-	// Set its pointing direction
-	m_trans.Ry(rspMod360(m_dRot));
+    // Set its pointing direction
+    m_trans.Ry(rspMod360(m_dRot));
 
-	// Eventually this should be channel driven also
-//	m_sprite.m_sRadius = m_sCurRadius;
+    // Eventually this should be channel driven also
+    //	m_sprite.m_sRadius = m_sCurRadius;
 
-	if (m_eState == State_Hide)
-		m_sprite.m_sInFlags = CSprite::InHidden;
-	else
-		m_sprite.m_sInFlags = 0;
+    if (m_eState == State_Hide)
+        m_sprite.m_sInFlags = CSprite::InHidden;
+    else
+        m_sprite.m_sInFlags = 0;
 
-	// If we're not a child of someone else...
-	if (m_idParent == CIdBank::IdNil)
-	{
-		// Map from 3d to 2d coords
-		Map3Dto2D((short) m_dX, (short) m_dY, (short) m_dZ, &m_sprite.m_sX2, &m_sprite.m_sY2);
+    // If we're not a child of someone else...
+    if (m_idParent == CIdBank::IdNil)
+    {
+        // Map from 3d to 2d coords
+        Map3Dto2D((short)m_dX, (short)m_dY, (short)m_dZ, &m_sprite.m_sX2, &m_sprite.m_sY2);
 
-		// Priority is based on Z.
-		m_sprite.m_sPriority = m_dZ;
+        // Priority is based on Z.
+        m_sprite.m_sPriority = m_dZ;
 
-		// Layer should be based on info we get from the attribute map
-		m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short) m_dX, (short) m_dZ));
+        // Layer should be based on info we get from the attribute map
+        m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short)m_dX, (short)m_dZ));
 
-		m_sprite.m_ptrans		= &m_trans;
+        m_sprite.m_ptrans = &m_trans;
 
-		// Update sprite in scene
-		m_pRealm->m_scene.UpdateSprite(&m_sprite);
-		
-		// Render the 2D shadow sprite
-		CWeapon::Render();
-	}
-	else
-	{
-		// m_idParent is setting our transform relative to its position
-		// and we are drawn by the scene with the parent.
-	}
+        // Update sprite in scene
+        m_pRealm->m_scene.UpdateSprite(&m_sprite);
+
+        // Render the 2D shadow sprite
+        CWeapon::Render();
+    }
+    else
+    {
+        // m_idParent is setting our transform relative to its position
+        // and we are drawn by the scene with the parent.
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Setup
 ////////////////////////////////////////////////////////////////////////////////
 
-short CRocket::Setup(									// Returns 0 if successfull, non-zero otherwise
-	short sX,												// In:  New x coord
-	short sY,												// In:  New y coord
-	short sZ)												// In:  New z coord
+short CRocket::Setup( // Returns 0 if successfull, non-zero otherwise
+  short sX,           // In:  New x coord
+  short sY,           // In:  New y coord
+  short sZ)           // In:  New z coord
 {
-	short sResult = 0;
-	
-	// Use specified position
-	m_dX = (double)sX;
-	m_dY = (double)sY;
-	m_dZ = (double)sZ;
-	m_dHorizVel = 0.0;
+    short sResult = 0;
 
-	// Load resources
-	sResult = GetResources();
+    // Use specified position
+    m_dX = (double)sX;
+    m_dY = (double)sY;
+    m_dZ = (double)sZ;
+    m_dHorizVel = 0.0;
 
-	// Enable the 2D shadow sprite
-	PrepareShadow();
+    // Load resources
+    sResult = GetResources();
 
-	m_bArmed = false;
+    // Enable the 2D shadow sprite
+    PrepareShadow();
 
-	// Set the collision bits
-	m_u32CollideIncludeBits = CSmash::Character | CSmash::Misc | CSmash::Barrel;
-	m_u32CollideDontcareBits = CSmash::Good | CSmash::Bad;
-	m_u32CollideExcludeBits = CSmash::Ducking;
+    m_bArmed = false;
 
-	m_smash.m_bits = CSmash::Projectile;
-	m_smash.m_pThing = this;
+    // Set the collision bits
+    m_u32CollideIncludeBits = CSmash::Character | CSmash::Misc | CSmash::Barrel;
+    m_u32CollideDontcareBits = CSmash::Good | CSmash::Bad;
+    m_u32CollideExcludeBits = CSmash::Ducking;
 
-	m_sCurRadius = 10 * m_pRealm->m_scene.m_dScale3d;
+    m_smash.m_bits = CSmash::Projectile;
+    m_smash.m_pThing = this;
 
-	m_lSmokeTimer = 0;
+    m_sCurRadius = 10 * m_pRealm->m_scene.m_dScale3d;
 
-	return sResult;
+    m_lSmokeTimer = 0;
+
+    return sResult;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CRocket::GetResources(void)						// Returns 0 if successfull, non-zero otherwise
+short CRocket::GetResources(void) // Returns 0 if successfull, non-zero otherwise
 {
-	short sResult = 0;
+    short sResult = 0;
 
-	sResult = m_anim.Get(ms_apszResNames);
-	if (sResult == 0)
-	{
-		sResult = rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(SMALL_SHADOW_FILE), &(m_spriteShadow.m_pImage), RFile::LittleEndian);
-		if (sResult == 0)
-		{
-			// add more gets
-		}
-		else
-		{
-			TRACE("CGrenade::GetResources - Failed to open 2D shadow image\n");
-		}
-	}
-	else
-	{
-		TRACE("CRocket::GetResources - Failed to open 3D animation for rocket\n");
-	}
+    sResult = m_anim.Get(ms_apszResNames);
+    if (sResult == 0)
+    {
+        sResult = rspGetResource(&g_resmgrGame,
+                                 m_pRealm->Make2dResPath(SMALL_SHADOW_FILE),
+                                 &(m_spriteShadow.m_pImage),
+                                 RFile::LittleEndian);
+        if (sResult == 0)
+        {
+            // add more gets
+        }
+        else
+        {
+            TRACE("CGrenade::GetResources - Failed to open 2D shadow image\n");
+        }
+    }
+    else
+    {
+        TRACE("CRocket::GetResources - Failed to open 3D animation for rocket\n");
+    }
 
-	return sResult;
+    return sResult;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CRocket::FreeResources(void)						// Returns 0 if successfull, non-zero otherwise
+short CRocket::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
 {
-	m_anim.Release();
+    m_anim.Release();
 
-	return 0;
+    return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Preload - basically trick the resource manager into caching resources 
+// Preload - basically trick the resource manager into caching resources
 //				 for this object so there won't be a delay the first time it is
 //				 created.
 ////////////////////////////////////////////////////////////////////////////////
 
-short CRocket::Preload(
-	CRealm* prealm)				// In:  Calling realm.
+short CRocket::Preload(CRealm *prealm) // In:  Calling realm.
 {
-	CAnim3D anim;	
-	RImage* pimage;
-	short sResult = anim.Get(ms_apszResNames);
-	anim.Release();
-	rspGetResource(&g_resmgrGame, prealm->Make2dResPath(SMALL_SHADOW_FILE), &pimage, RFile::LittleEndian);
-	rspReleaseResource(&g_resmgrGame, &pimage);
-	CacheSample(g_smidRocketFire);
-	CacheSample(g_smidRocketExplode);
-	return sResult;	
+    CAnim3D anim;
+    RImage *pimage;
+    short sResult = anim.Get(ms_apszResNames);
+    anim.Release();
+    rspGetResource(&g_resmgrGame, prealm->Make2dResPath(SMALL_SHADOW_FILE), &pimage, RFile::LittleEndian);
+    rspReleaseResource(&g_resmgrGame, &pimage);
+    CacheSample(g_smidRocketFire);
+    CacheSample(g_smidRocketExplode);
+    return sResult;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -790,26 +786,26 @@ short CRocket::Preload(
 
 void CRocket::ProcessMessages(void)
 {
-	GameMessage msg;
+    GameMessage msg;
 
-	if (m_MessageQueue.DeQ(&msg) == true)
-	{
-		switch(msg.msg_Generic.eType)
-		{
-			case typeObjectDelete:
-				m_MessageQueue.Empty();
-				m_eState = State_Deleted;
-				// Don't delete this here.  Instead make sure the state is
-				// set so Update() knows to delete us and return immediately
-				// (before something else changes our state).
-				return;
-				break;
-		}
-	}
-	// Dump the rest of the messages
-	m_MessageQueue.Empty();
+    if (m_MessageQueue.DeQ(&msg) == true)
+    {
+        switch (msg.msg_Generic.eType)
+        {
+            case typeObjectDelete:
+                m_MessageQueue.Empty();
+                m_eState = State_Deleted;
+                // Don't delete this here.  Instead make sure the state is
+                // set so Update() knows to delete us and return immediately
+                // (before something else changes our state).
+                return;
+                break;
+        }
+    }
+    // Dump the rest of the messages
+    m_MessageQueue.Empty();
 
-	return;
+    return;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

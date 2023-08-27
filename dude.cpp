@@ -76,8 +76,8 @@
 //							For the mapping from 3D to 2D, now does not take radius
 //							into account b/c the scene actually draws relative to the
 //							origin.
-//							Added UpdateRadius() function to get the current 
-//							m_sSphereRadius of the guy.  But this is incorrect b/c 
+//							Added UpdateRadius() function to get the current
+//							m_sSphereRadius of the guy.  But this is incorrect b/c
 //							we should not be using m_sSphereRadius, but instead some-
 //							thing like m_sCylinderR and m_sCylinderH to determine
 //							the xray position, EditRect(), and EditHotSpot().
@@ -103,7 +103,7 @@
 //
 //		02/19/97	JMI	Enhanced SetState().  Not it checks via its current state
 //							if it's okay to change to the new state, and if it's okay,
-//							cleans up the old state, sets the new state, and returns 
+//							cleans up the old state, sets the new state, and returns
 //							true, if successful.
 //
 //		02/19/97	JMI	Added shoot while still and while running.
@@ -129,15 +129,15 @@
 //
 //		02/20/97	JMI	Now processes delete message.
 //
-//		02/20/97	JMI	Added blood and now sets m_sprite flags only once (in 
+//		02/20/97	JMI	Added blood and now sets m_sprite flags only once (in
 //							Init()).
 //
-//		02/21/97	JMI	Had forgotten to release the 3d/main_shot.* resource.  
+//		02/21/97	JMI	Had forgotten to release the 3d/main_shot.* resource.
 //							Fixed.
 //
 //		02/21/97	JMI	ThrowRelease was allowing any state change when it was the
 //							current state.
-//							Also, now if the dude changes animations during a throw, 
+//							Also, now if the dude changes animations during a throw,
 //							the grenade just drops instead of exploding immediately.
 //
 //		02/21/97	JMI	The grenade now rolls off randomly when dropped accidently.
@@ -172,13 +172,13 @@
 //		02/26/97	JMI	Now <Control> fires weapon and <Alt> throws grenade.
 //
 //		03/03/97	JMI	Added m_statePersistent.
-//							Now sets m_statePersistent if State_Damage interrupts 
+//							Now sets m_statePersistent if State_Damage interrupts
 //							State_Burning.
 //
 //		03/03/97	JMI	Now passes CSmash::Dead as a bit that FireDeluxe() will not
 //							hit.
 //							Now sets m_smash.m_bits to include CSmash::Dead when we
-//							reach State_Dead and removes it again when be leave 
+//							reach State_Dead and removes it again when be leave
 //							State_Dead.
 //
 //		03/03/97	JMI	Added states for strafing and multiweapon logic.
@@ -196,9 +196,9 @@
 //							Now uses real strafe animations.
 //							Moved stuff I was incorrectly doing in Render() into
 //							Update() so CDude now uses CCharacter::Render().
-//							Update() now uses functions in CCharacter (i.e., 
-//							UpdateVelocities(), GetNewPosition(), and 
-//							MakeValidPosition() ) to process acceleration, 
+//							Update() now uses functions in CCharacter (i.e.,
+//							UpdateVelocities(), GetNewPosition(), and
+//							MakeValidPosition() ) to process acceleration,
 //							velocities, and positions.
 //
 //		03/04/97	JMI	Got rid of #if 0'd out code in Update().
@@ -240,7 +240,7 @@
 //		03/06/97	JMI	Changed fudge factor delay for suicide brain splat to
 //							1400 ms (was 700 ms).
 //
-//		03/06/97	JMI	User can no longer influence velocity when dude is being 
+//		03/06/97	JMI	User can no longer influence velocity when dude is being
 //							shot.
 //
 //		03/13/97	JMI	Added EditModify() member function.
@@ -256,7 +256,7 @@
 //							Now can run out of bullets.
 //							BUG:  Wierd glitchiness when firing empty gun and running
 //							which is exaggerated by the distance between shots.  Longer
-//							times between empty shots seem to cause more noticable 
+//							times between empty shots seem to cause more noticable
 //							glitches.
 //
 //		03/13/97	JMI	Dude now takes additional burn damage while on fire.
@@ -280,7 +280,7 @@
 //							and then ignored the rotation value when dying, the net
 //							effect was the guy would snap to rotation 0, when dying.
 //							Fixed.
-//							Also, when I switched to having the guy get damaged 
+//							Also, when I switched to having the guy get damaged
 //							more than just once by the same fire, it caused the dude
 //							to react to fire even if we was previously dead.  Fixed.
 //
@@ -302,7 +302,7 @@
 //		04/01/97	JMI	UINPUT now stores the delta rotation in the first 10 bits
 //							as 0..720 representing delta values between -360 and 360.
 //
-//		04/02/97	JMI	Changed all resource animation names to use the 
+//		04/02/97	JMI	Changed all resource animation names to use the
 //							CREATERESNAMES macro that some were already using.
 //
 //		04/02/97	JMI	OnExplosionMsg() now beefs up his vertical velocity due to
@@ -363,7 +363,7 @@
 //
 //		04/22/97	JMI	Fixed my use of shadow even though currently that code does
 //							not get used.
-//							Also, changed STATUS_FONT_SIZE from 24 to 26 which is a 
+//							Also, changed STATUS_FONT_SIZE from 24 to 26 which is a
 //							currently cached scale for the g_fontBig.
 //							Also, disabled jump for current demo for GT.
 //
@@ -371,7 +371,7 @@
 //
 //		04/23/97	JMI	Now just uses a test version of IsPathClear().
 //
-//		04/23/97	JMI	Now our bullets can hit Characters, Miscs, Mines,  
+//		04/23/97	JMI	Now our bullets can hit Characters, Miscs, Mines,
 //							Barrels, and Fire.
 //
 //		04/23/97	JMI	Disabled IsPathClear() test.
@@ -402,8 +402,8 @@
 //		04/29/97	JMI	Changed CAnim3D::Get()'s over to new version that does not
 //							require an array of char pointers.
 //							Added m_animPickPut for picking up and putting things down.
-//							Also, added mine weapon.  You cannot choose the type now,  
-//							though (it's the default which is proximity).              
+//							Also, added mine weapon.  You cannot choose the type now,
+//							though (it's the default which is proximity).
 //
 //		04/29/97	JMI	I was unnecessarily making the dude go into State_Rise
 //							after the State_PutDown animation finished.  But, as it
@@ -412,16 +412,16 @@
 //
 //		04/29/97	JMI	Flame thrower would only work while not moving.  Fixed.
 //
-//		04/30/97	JMI	Changed Mine enum value to ProximityMine, TimedMine, 
+//		04/30/97	JMI	Changed Mine enum value to ProximityMine, TimedMine,
 //							RemoteMine, and BouncingBettyMine.
 //
 //		04/30/97	JMI	Changed m_animPickPut to use 'hand' instead of 'guntip'.
 //
-//		05/01/97	JMI	Now his animation speed for his run is in ratio to 
+//		05/01/97	JMI	Now his animation speed for his run is in ratio to
 //							RUN_ANIM_VELOCITY and he enters the stand state when his
-//							speed falls below MIN_RUN_VEL and there's no user 
+//							speed falls below MIN_RUN_VEL and there's no user
 //							acceleration.
-//							Also, fixed some transition bugs involving 
+//							Also, fixed some transition bugs involving
 //							strafing/standing/shooting to strafing/running/shooting and
 //							everything in between.
 //
@@ -439,7 +439,7 @@
 //
 //		05/12/97 JRD	Added a call to SpewTriggers on dude move to alert Pylons
 //
-//		05/13/97	JMI	Changed INPUT_WALK (was INPUT_RUN) from functioning as a 
+//		05/13/97	JMI	Changed INPUT_WALK (was INPUT_RUN) from functioning as a
 //							'fast' key to a 'slow' key.
 //							Also, I made the slow key affect the rate the dude turns
 //							by dividing the input rotation delta by SLOW_TURN_DIVISOR.
@@ -458,7 +458,7 @@
 //							Also, changed FireCurrentWeapon() to ArmWeapon() which
 //							takes as a parameter the weapon to fire.
 //
-//		05/23/97	JMI	Changed all the CAnim3D::Get()s to take the new 
+//		05/23/97	JMI	Changed all the CAnim3D::Get()s to take the new
 //							pszEventName parameter.
 //
 //		05/23/97	JMI	Changed names of loaded textures to "main_color%02d" (was
@@ -466,14 +466,14 @@
 //
 //		05/23/97	JMI	Now loads the "main_missile" event data and uses it to
 //							show and release the missile.
-//							Consequently, most of the time the missile seems to be in 
+//							Consequently, most of the time the missile seems to be in
 //							the wrong spot and kills us almost immediately... .
 //
 //		05/25/97	JMI	Restored main_missile anim to NOT using events b/c those
 //							events happend so much earlier than the old FUDGE method,
 //							the dude kills himself with the missiles.
 //
-//		05/26/97	JMI	Now will only repeat shot state every 
+//		05/26/97	JMI	Now will only repeat shot state every
 //							MIN_CANNOT_BE_SHOT_DURATION ms (will groan and get bloody
 //							though).
 //							Also, will only yell due to being shot or blown up every
@@ -484,7 +484,7 @@
 //
 //		05/27/97	JMI	Changed 'beers' to 'health'.
 //
-//		05/29/97	JMI	Made it so the dude can go from blownup state to blownup 
+//		05/29/97	JMI	Made it so the dude can go from blownup state to blownup
 //							state repeatedly (not sure why I limited it before).
 //							Attempted to make it so the dude does not cry out in
 //							pain while blowing up.
@@ -499,7 +499,7 @@
 //
 //		05/30/97	JMI	Added SprayCannon weapon.
 //
-//		05/30/97	JMI	Changed SHELLS_PER_SPRAY_CANNON_FIRE to 4 (was 2) and 
+//		05/30/97	JMI	Changed SHELLS_PER_SPRAY_CANNON_FIRE to 4 (was 2) and
 //							disabled the flame thrower.
 //
 //		05/30/97	JMI	Fixed Spray Cannon so it won't fire if there's less than
@@ -517,11 +517,11 @@
 //
 //		06/03/97	JMI	Changed event name from 'mainmissile' to 'mainevent' and
 //							changed the suicide to use the event for when to fire the
-//							gun (and splat is brains).  Also, now uses the 'head' 
-//							transform for the location of the source of the brain 
+//							gun (and splat is brains).  Also, now uses the 'head'
+//							transform for the location of the source of the brain
 //							splat.
 //
-//		06/05/97	JMI	Removed m_sHitPoints and m_sNum*.  Now uses CThing3d's 
+//		06/05/97	JMI	Removed m_sHitPoints and m_sNum*.  Now uses CThing3d's
 //							m_stockpile instead.
 //							Changed EditModify() to bring up the user settings for
 //							m_stockpile when the 'StockPile...' button is pressed.
@@ -603,7 +603,7 @@
 //
 //		06/12/97	JMI	Now DrawStatus() only draws once per StatusChange() call.
 //
-//		06/13/97	JMI	Now State_ThrowRelease, State_LaunchRelease, and 
+//		06/13/97	JMI	Now State_ThrowRelease, State_LaunchRelease, and
 //							State_PutDown all use WhileHoldingWeapon() to unhide and
 //							release the weapon at the appropriate event driven times.
 //
@@ -656,20 +656,20 @@
 //							before entering the execute state.  If none is found, we
 //							do not enter the state.  If we do enter the state, while
 //							he is leading up to the shooting portion of the animation,
-//							he turns toward the executee.  When he fires at the 
+//							he turns toward the executee.  When he fires at the
 //							executee, it does not use FireBullets() but instead merely
 //							creates a muzzle flare and sound for feedback and sends a
 //							message to the executee telling him he's been shot.
 //
 //		06/25/97	JMI	Now calls PrepareShadow() in Init() which loads and sets up
 //							a shadow sprite.
-//							Also, now prints 'you are dead' when you are out of 
+//							Also, now prints 'you are dead' when you are out of
 //							hitpoints.
 //
-//		06/25/97	JMI	Replaced m_lStatusUpdateDoneTime with 
+//		06/25/97	JMI	Replaced m_lStatusUpdateDoneTime with
 //							m_lNextStatusUpdateTime and removed m_bUpdateStatus.
 //							Also, changed SHELLS_PER_SPRAY_CANNON_FIRE from 4 to 1.
-//							ms_apszAmmoNames[] now contain the sprintf format 
+//							ms_apszAmmoNames[] now contain the sprintf format
 //							specifiers to provide greater to control to each type over
 //							whether to display a number and/or where to display it.
 //							The machine gun no longer uses up bullets.  So, once you
@@ -686,7 +686,7 @@
 //
 //		06/26/97	JMI	Now handles throw weapons the same way launch weapons are
 //							handled when leaving the animation early.  That is, they
-//							no longer drop, but, instead, just get deleted via a 
+//							no longer drop, but, instead, just get deleted via a
 //							message.
 //
 //		06/26/97	JMI	Re-activated foot step sound.
@@ -697,7 +697,7 @@
 //							if there's an external force that's causing him to push up
 //							against terrain, even if he is fighting the force by run-
 //							ning against it, he won't be able to accelerate until the
-//							force dissipates.  Currently, though, all external forces 
+//							force dissipates.  Currently, though, all external forces
 //							have drag.
 //
 //		06/28/97	JMI	Now scales the Dude's Z through the realm before calling
@@ -712,7 +712,7 @@
 //		07/01/97	JMI	Changed name of animation file for strafe from 'sidestep'
 //							to 'strafe' and strafe and shoot from 'sideshoot' to
 //							'strafe'.
-//							Added new rigid bodies to CDudeAnim3D and moved its 
+//							Added new rigid bodies to CDudeAnim3D and moved its
 //							function defs into dude.cpp.
 //							Also, added m_idFlagItem.
 //
@@ -767,7 +767,7 @@
 //							Also, only destroys his fire when exiting the burning state
 //							to go to other than the die state.
 //
-//		07/14/97	JMI	Was subtracting from fuel for flamethrower in both 
+//		07/14/97	JMI	Was subtracting from fuel for flamethrower in both
 //							ArmWeapon() and ShootWeapon().
 //
 //		07/15/97	JMI	Moved CDude() and ~CDude() from dude.h to dude.cpp.
@@ -819,7 +819,7 @@
 //		07/21/97	JMI	Now TakePowerUp() returns the powerup if it persisted.
 //							CreateCheat() now immediately hands the created powerup
 //							to TakePowerUp() so there's no chance we'll miss it.
-//							Also, TakePowerUp() will use the max stockpile for 
+//							Also, TakePowerUp() will use the max stockpile for
 //							backpacks not only if the dude has a backpack but, also,
 //							if the dude will have a backpack (i.e., if there's one in
 //							the powerup).
@@ -857,12 +857,12 @@
 //		07/27/97	JMI	Now, like the chunks, ricochets appear on the appropriate
 //							part of the dude's torso (based on the angle of the bullet).
 //							It might make sense to eventually put the height of the shot
-//							in the shot message so we can place the splat at the 
+//							in the shot message so we can place the splat at the
 //							appropriate height giving more feedback as to what's/who's
 //							shooting us.  It'd also be neat to adjust the damage based on
 //							the vertical position.
-//							Also, now StartAnim() does not call CRealm::Make2dResPath() 
-//							on passed in paths since CAnimThing does this 
+//							Also, now StartAnim() does not call CRealm::Make2dResPath()
+//							on passed in paths since CAnimThing does this
 //							automatically.
 //
 //		07/28/97	JMI	Now checks m_bDead (instead of m_stockpile.m_sHitPoints) to
@@ -873,9 +873,9 @@
 //							There are only two ways to leave the Die state, BlowUp and
 //							Dead.  Sometimes he would get blown up while dying skipping
 //							ever getting his m_bDead flag set.  Now the Die state sets
-//							this flag as well since we know we want him to die if he 
+//							this flag as well since we know we want him to die if he
 //							enters the die state.
-//							Since, once his dead flag is set, he can accept the 
+//							Since, once his dead flag is set, he can accept the
 //							resurection cheat, there's some misleading feedback in the
 //							Die state if that cheat is entered.
 //							To avoid this problem we could not set the flag and instead
@@ -899,20 +899,20 @@
 //							and will soon be deleted from the directories.
 //							Changed fire damage to be based on difficulty setting.
 //
-//		08/04/97	JMI	Now Damage() function will set m_bDead even if 
+//		08/04/97	JMI	Now Damage() function will set m_bDead even if
 //							SetState(State_Die) fails.  This way, he'll die when he
 //							comes out of the explosion state (he cannot go to die from
 //							explode (unless explode is done) b/c that would look really
 //							wrong).
 //
-//		08/04/97	JMI	Added array of weapon anims, m_aanimWeapons[], and 
+//		08/04/97	JMI	Added array of weapon anims, m_aanimWeapons[], and
 //							a sprite for showing the current weapon, m_spriteWeapon.
 //							Now changes weapons visually based on current weapon type.
 //
 //		08/04/97	JMI	Now uses Jeff's rspDegDelta() to better determine which
 //							direction to turn when executing.
 //
-//		08/05/97	JMI	Changed reference of m_pRealm->m_bMultiplayer to 
+//		08/05/97	JMI	Changed reference of m_pRealm->m_bMultiplayer to
 //							m_pRealm->m_flags.bMultiplayer.
 //							Changed "rthand" to "gun" for right hand rigid body trans-
 //							form.
@@ -929,7 +929,7 @@
 //
 //		08/07/97	JMI	Forgot a break in switch in GetWeaponInfo().
 //
-//		08/07/97	JMI	Added m_animBackpack and m_spriteBackpack for his backpack 
+//		08/07/97	JMI	Added m_animBackpack and m_spriteBackpack for his backpack
 //							when he has it.
 //
 //		08/07/97	JMI	Removed commented out hot channel stuff from CDudeAnim3D.
@@ -943,7 +943,7 @@
 //							Now, when he enters the dead state in multiplayer mode,
 //							he drops his schtuff.
 //
-//		08/08/97	JMI	Majorly condensed code segments for detaching flag by 
+//		08/08/97	JMI	Majorly condensed code segments for detaching flag by
 //							calling DetachChild() which does most of what we were doing
 //							here.  Also, removed some conditions that were checking to
 //							make sure m_panimCur and m_panimCur->m_ptransRigid were
@@ -959,14 +959,14 @@
 //
 //		08/10/97	JMI	Changed doubles dDistX and Z to shorts sDistX and Z.  The
 //							compiler seemed to lock up when inlining was enabled and we
-//							passed these two doubles to rspATan.  With a different 
+//							passed these two doubles to rspATan.  With a different
 //							function it worked fine and with one of the vars as a short
 //							it worked fine.  /shrug  Looking for a VC patch.
 //
 //		08/10/97	JMI	Added m_dLastCrawledToPosX, Z which are the last position
 //							successfully crawled to by the crawler (except on the
 //							first iteration where they are simply set to the dude's
-//							starting point).  In TRACENASSERT mode, an ASSERT is 
+//							starting point).  In TRACENASSERT mode, an ASSERT is
 //							generated if the position gets modified by other than the
 //							crawler.  In release mode, it sets him back to the last
 //							successful crawled position.
@@ -976,7 +976,7 @@
 //							ducking down.  When he is ducking, he won't get hit
 //							by the missiles.
 //
-//		08/12/97	JMI	Removed unused anims: m_animJump, JumpForward, Land, 
+//		08/12/97	JMI	Removed unused anims: m_animJump, JumpForward, Land,
 //							LandForward, Fall.
 //
 //		08/13/97	JMI	Temporarily shows particle effects regardless of user
@@ -993,10 +993,10 @@
 //							these default collision bits.
 //
 //		08/15/97 BRH	Set the XrayAll flag when the Dude is dead, so if he
-//							dies behind opaque, you will be able to see that he is 
+//							dies behind opaque, you will be able to see that he is
 //							dead.
 //
-//		08/17/97	JMI	Changed to only find writhers as executees and will 
+//		08/17/97	JMI	Changed to only find writhers as executees and will
 //							definitely hit the executee.
 //
 //		08/17/97	JMI	Removed all occurrences of the SetXRayAll() call as this
@@ -1005,14 +1005,14 @@
 //							to do it since it knows that.
 //
 //		08/17/97	JMI	Got rid of m_szMessages and all message related functions
-//							and variables from CDude since we are now using the toolbar 
-//							for dude status feedback to the user.  This includes:  
-//							MsgTypeInfo, m_lNextStatusUpdateTime, m_lMsgUpdateDoneTime, 
-//							m_print, m_bClearedStatus, m_szMessages[], m_sDeadMsgNum, 
+//							and variables from CDude since we are now using the toolbar
+//							for dude status feedback to the user.  This includes:
+//							MsgTypeInfo, m_lNextStatusUpdateTime, m_lMsgUpdateDoneTime,
+//							m_print, m_bClearedStatus, m_szMessages[], m_sDeadMsgNum,
 //							ms_amtfMessages[], ms_u8FontForeIndex, ms_u8FontBackIndex,
-//							ms_u8FontShadowIndex, DrawStatus(), StatusChange(), 
-//							MessageChange(), Message(), UpdateFontColors(), 
-//							CPowerUp::ms_apszPowerUpTypeNames[], 
+//							ms_u8FontShadowIndex, DrawStatus(), StatusChange(),
+//							MessageChange(), Message(), UpdateFontColors(),
+//							CPowerUp::ms_apszPowerUpTypeNames[],
 //							CPowerUp::GetDescription(), and some strings and a string
 //							array in localize.*.
 //
@@ -1046,10 +1046,10 @@
 //
 //		08/24/97	JMI	Now instead of setting his brightness to zero in the dead
 //							state, he clears it in Revive().  This way he stays charred
-//							even when laying there dead or being blown up but cannot 
+//							even when laying there dead or being blown up but cannot
 //							come back to life charred.
 //
-//		08/24/97	JMI	Now INPUT_WEAPON_0 is no weapon and INPUT_WEAPON_10 is 
+//		08/24/97	JMI	Now INPUT_WEAPON_0 is no weapon and INPUT_WEAPON_10 is
 //							mines.
 //
 //		08/28/97 BRH	Moved the caching of samples to Init() now that the
@@ -1065,7 +1065,7 @@
 //							fails to arm a weapon (either b/c of no ammo or the shoot
 //							state is not attainable).
 //
-//		09/01/97	JMI	Previous changed was hosing the shotgun so I made it a 
+//		09/01/97	JMI	Previous changed was hosing the shotgun so I made it a
 //							little less strict.
 //
 //		09/02/97	JMI	Now targets CSmash::Sentry in ms_u32CollideBitsInclude.
@@ -1073,13 +1073,13 @@
 //		09/07/97 MJR	Fixed bug in DropAllFlags() that didn't read the message
 //							properly.
 //
-//		09/08/97	JMI	Added Kevlar type for pieces of kevlar vest that 
+//		09/08/97	JMI	Added Kevlar type for pieces of kevlar vest that
 //							splatter off of dudes with vest.
 //
 //		11/21/97	JMI	Now varies whether CSmash::Good is a desirable target to
 //							our weapons based on the realm's multiplayer cooperative
 //							flag.
-//							Removed version of ShootWeapon() that took 3 default 
+//							Removed version of ShootWeapon() that took 3 default
 //							parameters and replaced it with a version that takes no
 //							parameters so we could control the defaults from within the
 //							CPP.
@@ -1087,9 +1087,9 @@
 //							SetDetectionBits() to NOT seek other players in Cooperative
 //							multiplayer mode.
 //
-//		12/08/97	JMI	Added an option for DropPowerUp() to only drop the 
+//		12/08/97	JMI	Added an option for DropPowerUp() to only drop the
 //							currently selected weapon.
-//							Also, now sets m_sHitPoints to zero before calling 
+//							Also, now sets m_sHitPoints to zero before calling
 //							SetState(State_Dead) which was previously generating a
 //							health powerup if m_sHitPoints was greater than zero which
 //							was the case for suicide.
@@ -1118,16 +1118,16 @@
 #include "chunk.h"
 #include "warp.h"
 #include "score.h"
-#include "CompileOptions.h"	// For sales cheat.
+#include "CompileOptions.h" // For sales cheat.
 #include "play.h"
 
-//#ifdef MOBILE
-bool demoCompat = false; //Set in Play.cpp
-//#endif
+// #ifdef MOBILE
+bool demoCompat = false; // Set in Play.cpp
+// #endif
 
 #if defined(ALLOW_TWINSTICK)
-void GetDudeVelocity(double* d_Velocity, double* d_Angle);
-extern bool GetDudeFireAngle(double* d_Angle);
+void GetDudeVelocity(double *d_Velocity, double *d_Angle);
+extern bool GetDudeFireAngle(double *d_Angle);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1135,1168 +1135,1148 @@ extern bool GetDudeFireAngle(double* d_Angle);
 ////////////////////////////////////////////////////////////////////////////////
 
 // Determines the number of elements in the passed array at compile time.
-#define NUM_ELEMENTS(a)		(sizeof(a) / sizeof(a[0]) )
+#define NUM_ELEMENTS(a) (sizeof(a) / sizeof(a[0]))
 
 // Tunable bullet parameters.
-#define MAX_BULLETS_PER_SEC		6
+#define MAX_BULLETS_PER_SEC 6
 
-#define MS_BETWEEN_BULLETS			(1000 / MAX_BULLETS_PER_SEC)
+#define MS_BETWEEN_BULLETS (1000 / MAX_BULLETS_PER_SEC)
 
-#define MAX_SPRAYS_PER_SEC			10
+#define MAX_SPRAYS_PER_SEC 10
 
-#define MS_BETWEEN_SPRAYS			(1000 / MAX_SPRAYS_PER_SEC)
+#define MS_BETWEEN_SPRAYS (1000 / MAX_SPRAYS_PER_SEC)
 
-#define MAX_FLAMES_PER_SEC			1000
+#define MAX_FLAMES_PER_SEC 1000
 
-#define MS_BETWEEN_FLAMETHROWS	(1000 / MAX_FLAMES_PER_SEC)
+#define MS_BETWEEN_FLAMETHROWS (1000 / MAX_FLAMES_PER_SEC)
 
-#define MODIFY_GUI_FILE				"res/editor/EditDude.gui"
+#define MODIFY_GUI_FILE "res/editor/EditDude.gui"
 
 // Random amount the fire angle can adjust.
-#define FIRE_ANGLE_Y_SWAY			15
-#define FIRE_ANGLE_Z_SWAY			10
+#define FIRE_ANGLE_Y_SWAY 15
+#define FIRE_ANGLE_Z_SWAY 10
 
 // Maximum the guy can tweak your angle while you're on fire.
-#define ON_FIRE_ROT_TWEAKAGE	22
-#define ON_FIRE_VEL_TWEAKAGE	((short)ms_dMaxVelForeFast)
+#define ON_FIRE_ROT_TWEAKAGE 22
+#define ON_FIRE_VEL_TWEAKAGE ((short)ms_dMaxVelForeFast)
 
 // Amount per damage pt that translate to velocity.
-#define VEL_PER_DAMAGE			0.5
+#define VEL_PER_DAMAGE 0.5
 
 // Gets a random between -range / 2 and range / 2.
-#define RAND_SWAY(sway)	((GetRand() % sway) - sway / 2)
+#define RAND_SWAY(sway) ((GetRand() % sway) - sway / 2)
 
 // Velocity for strafing.
-#define STRAFE_VEL				60.0
+#define STRAFE_VEL 60.0
 
-#define EXPLOSION_VERTICAL_VEL_MULTIPLIER	1.0
+#define EXPLOSION_VERTICAL_VEL_MULTIPLIER 1.0
 
 // Amount of time to suffer from shot.
-#define MIN_SHOT_DURATION				500
+#define MIN_SHOT_DURATION 500
 
 // Amount of time before we can suffer another shot.
-#define MIN_CANNOT_BE_SHOT_DURATION	3000
+#define MIN_CANNOT_BE_SHOT_DURATION 3000
 
 // Minimum duration between yells (for blown up and shot).
-#define MIN_BETWEEN_YELLS		750 // Current yell ('groan_male1.wav') is 640 ms.
+#define MIN_BETWEEN_YELLS 750 // Current yell ('groan_male1.wav') is 640 ms.
 
 // IDs for GUIs.
-#define GUI_ID_STOCKPILE		3
+#define GUI_ID_STOCKPILE 3
 
 // The color range that is the same on all hoods.
-#define CONSTANT_COLOR_START_INDEX	95
-#define NUM_CONSTANT_COLOR_INDICES	(256 - CONSTANT_COLOR_START_INDEX)
+#define CONSTANT_COLOR_START_INDEX 95
+#define NUM_CONSTANT_COLOR_INDICES (256 - CONSTANT_COLOR_START_INDEX)
 
 // Size of font used for status updates.
-#define STATUS_FONT_SIZE				15
+#define STATUS_FONT_SIZE 15
 // 0 for any of these colors is transparent.
-#define STATUS_FONT_FORE_RED			128
-#define STATUS_FONT_FORE_GREEN		0
-#define STATUS_FONT_FORE_BLUE			0
-#define STATUS_FONT_BACK_RED			0
-#define STATUS_FONT_BACK_GREEN		0
-#define STATUS_FONT_BACK_BLUE			0
-#define STATUS_FONT_SHADOW_RED		127
-#define STATUS_FONT_SHADOW_GREEN		127
-#define STATUS_FONT_SHADOW_BLUE		127
+#define STATUS_FONT_FORE_RED 128
+#define STATUS_FONT_FORE_GREEN 0
+#define STATUS_FONT_FORE_BLUE 0
+#define STATUS_FONT_BACK_RED 0
+#define STATUS_FONT_BACK_GREEN 0
+#define STATUS_FONT_BACK_BLUE 0
+#define STATUS_FONT_SHADOW_RED 127
+#define STATUS_FONT_SHADOW_GREEN 127
+#define STATUS_FONT_SHADOW_BLUE 127
 
-#define STATUS_PRINT_X					0
-#define STATUS_PRINT_Y					0
+#define STATUS_PRINT_X 0
+#define STATUS_PRINT_Y 0
 
-#define STATUS_UPDATE_DURATION		5000	// In ms.
-#define MESSAGE_UPDATE_DURATION		3000	// In ms.
+#define STATUS_UPDATE_DURATION 5000  // In ms.
+#define MESSAGE_UPDATE_DURATION 3000 // In ms.
 
-#define SHADOW_DEPTH_X					1
-#define SHADOW_DEPTH_Y					1
+#define SHADOW_DEPTH_X 1
+#define SHADOW_DEPTH_Y 1
 
 // Rate at which run animation was made to travel in pixels per second.
-// This is used to compute a ratio to the current speed.  The resulting 
+// This is used to compute a ratio to the current speed.  The resulting
 // ratio is used to tune the animation rate dynamically.
-#define RUN_ANIM_VELOCITY				85.0	// Pix/Sec.
+#define RUN_ANIM_VELOCITY 85.0 // Pix/Sec.
 
 // When below this speed, the dude will not be in his running anim.
-#define MIN_RUN_VEL						40.0	// Pix/Sec.
+#define MIN_RUN_VEL 40.0 // Pix/Sec.
 
 // Maximum springiness for crawler.
-#define MAX_CRAWLER_PUSH_X				1.5
-#define MAX_CRAWLER_PUSH_Z				1.5
+#define MAX_CRAWLER_PUSH_X 1.5
+#define MAX_CRAWLER_PUSH_Z 1.5
 
 // Time between cycling weapons that are chosen using the same input.
-#define WEAPON_CYCLE_TIME				250
+#define WEAPON_CYCLE_TIME 250
 
 // Ladder tolerance.
-#define LADDER_DIR_TOLERANCE				20	// +/- this amount in degrees.
+#define LADDER_DIR_TOLERANCE 20 // +/- this amount in degrees.
 
-#define BRAIN_SPLAT_NUM_CHUNKS		200
-#define BRAIN_SPLAT_SWAY				30
+#define BRAIN_SPLAT_NUM_CHUNKS 200
+#define BRAIN_SPLAT_SWAY 30
 
 // Reduced rate for standing still rotation.
-#define STILL_TURN_DIVISOR				2.0
+#define STILL_TURN_DIVISOR 2.0
 
 // Handy macro to define char* array with one 'base' name.
-#define CREATERESNAMES(var, base, rigid)		\
-	static char* var[]	=							\
-		{													\
-		"3d/main_" #base ".sop",					\
-		"3d/main_" #base ".mesh",					\
-		"3d/main_" #base ".tex",					\
-		"3d/main_" #base ".hot",					\
-		"3d/main_" #base ".bounds",				\
-		"3d/main_" #base ".floor",					\
-		"3d/main_" #base "_" #rigid ".trans",	\
-		NULL,	/* Safety */							\
-		};
+#define CREATERESNAMES(var, base, rigid)                                                                               \
+    static char *var[] = {                                                                                             \
+        "3d/main_" #base ".sop",                                                                                       \
+        "3d/main_" #base ".mesh",                                                                                      \
+        "3d/main_" #base ".tex",                                                                                       \
+        "3d/main_" #base ".hot",                                                                                       \
+        "3d/main_" #base ".bounds",                                                                                    \
+        "3d/main_" #base ".floor",                                                                                     \
+        "3d/main_" #base "_" #rigid ".trans",                                                                          \
+        NULL, /* Safety */                                                                                             \
+    };
 
-#define TARGETING_FILE 	"target.img"
+#define TARGETING_FILE "target.img"
 
 // IDLE_ANIM_TIMEOUT is NOT evaluated every frame.
-#define IDLE_ANIM_TIMEOUT	(5000 + (GetRand() % 5000) )
-#define IDLE_ANIM_LOOPS		1
+#define IDLE_ANIM_TIMEOUT (5000 + (GetRand() % 5000))
+#define IDLE_ANIM_LOOPS 1
 
 // This is multiplied our current number of kevlar layers and the
 // result is divided into the bullet damage to produce the damage
 // the dude receives.
-#define KEVLAR_PROTECTION_MULTIPLIER	3
+#define KEVLAR_PROTECTION_MULTIPLIER 3
 
 // Alpha level used when blit'ing the target crosshairs.
-#define TARGET_ALPHA_LEVEL					100
+#define TARGET_ALPHA_LEVEL 100
 
 // Max distance to writher when executing.
-#define EXECUTE_RADIUS						50
+#define EXECUTE_RADIUS 50
 
 // Time between constant status updates in milliseconds.
-#define STATUS_UPDATE_DELAY				500	// In ms.
+#define STATUS_UPDATE_DELAY 500 // In ms.
 // Max lag time between a known status change and the next update.
-#define MAX_STATUS_LAG						250	// In ms.
+#define MAX_STATUS_LAG 250 // In ms.
 
 // These may not be correct for now, but just to get them up and running:
 // These are the names of the rigid body transforms that are loaded for
 // every dude animation.
-#define LEFT_HAND_RIGID_ANIM_NAME	"lfhand"
-#define RIGHT_HAND_RIGID_ANIM_NAME	"gun"
-#define BACK_RIGID_ANIM_NAME			"backpack"
+#define LEFT_HAND_RIGID_ANIM_NAME "lfhand"
+#define RIGHT_HAND_RIGID_ANIM_NAME "gun"
+#define BACK_RIGID_ANIM_NAME "backpack"
 
 // This value indicates no strafe motion and must be a totally invalid
 // strafe angle value.
-#define INVALID_STRAFE_ANGLE			0x7fff
+#define INVALID_STRAFE_ANGLE 0x7fff
 
-#define VEST_HIT_SWAY					10
+#define VEST_HIT_SWAY 10
 
-#define VEST_HIT_RES_NAME				"Ricochet.aan"
+#define VEST_HIT_RES_NAME "Ricochet.aan"
 
 // This is the distance in realm units from the dude's center
 // to the outside of his jacket.  This is used to adjust things
-// like ricochets off of his kevlar vest around the outside of 
+// like ricochets off of his kevlar vest around the outside of
 // his torso.
-#define TORSO_RADIUS						5
+#define TORSO_RADIUS 5
 
 // The minimum square distance the dude wants to be back from
 // his target point when executing.
-#define MIN_SQR_DISTANCE_TO_EXECUTEE	250.0
+#define MIN_SQR_DISTANCE_TO_EXECUTEE 250.0
 
 // The backpack animation basename.
-#define BACKPACK_RES_NAME					"3d/backpack"
+#define BACKPACK_RES_NAME "3d/backpack"
 
-#define COLLISION_BITS_INCLUDE		(ms_u32CollideBitsInclude)
-#define COLLISION_BITS_DONTCARE		(ms_u32CollideBitsDontcare | (m_pRealm->m_flags.bCoopMode ? 0 : CSmash::Good) )
-#define COLLISION_BITS_EXCLUDE		(ms_u32CollideBitsExclude | (m_pRealm->m_flags.bCoopMode ? CSmash::Good : 0) )
+#define COLLISION_BITS_INCLUDE (ms_u32CollideBitsInclude)
+#define COLLISION_BITS_DONTCARE (ms_u32CollideBitsDontcare | (m_pRealm->m_flags.bCoopMode ? 0 : CSmash::Good))
+#define COLLISION_BITS_EXCLUDE (ms_u32CollideBitsExclude | (m_pRealm->m_flags.bCoopMode ? CSmash::Good : 0))
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
 ////////////////////////////////////////////////////////////////////////////////
 
 // These are default values -- actually values are set using the editor!
-double CDude::ms_dAccUser        = 1000.0; //150.0;			// Acceleration due to user
-double CDude::ms_dAccDrag        = 1000.0; //110.0;			// Acceleration due to drag
+double CDude::ms_dAccUser = 1000.0; // 150.0;			// Acceleration due to user
+double CDude::ms_dAccDrag = 1000.0; // 110.0;			// Acceleration due to drag
 
-double CDude::ms_dMaxVelFore     = 85.0;			// Maximum forward velocity
-double CDude::ms_dMaxVelBack     = -60.0;			// Maximum backward velocity
-double CDude::ms_dMaxVelForeFast = 120.0;			// Maximum forward velocity
-double CDude::ms_dMaxVelBackFast = -90.0;			// Maximum backward velocity
+double CDude::ms_dMaxVelFore = 85.0;      // Maximum forward velocity
+double CDude::ms_dMaxVelBack = -60.0;     // Maximum backward velocity
+double CDude::ms_dMaxVelForeFast = 120.0; // Maximum forward velocity
+double CDude::ms_dMaxVelBackFast = -90.0; // Maximum backward velocity
 
-double CDude::ms_dDegPerSec      = 240.0;			// Degrees of rotation per second
+double CDude::ms_dDegPerSec = 240.0; // Degrees of rotation per second
 
-double CDude::ms_dVertVelJump		= 100.0;			// Velocity of jump.
+double CDude::ms_dVertVelJump = 100.0; // Velocity of jump.
 
-U32	CDude::ms_u32CollideBitsInclude = CSmash::Character | CSmash::Barrel | CSmash::SpecialBarrel | CSmash::Sentry;
-U32	CDude::ms_u32CollideBitsDontcare = CSmash::Bad;
-U32	CDude::ms_u32CollideBitsExclude = 0;
+U32 CDude::ms_u32CollideBitsInclude = CSmash::Character | CSmash::Barrel | CSmash::SpecialBarrel | CSmash::Sentry;
+U32 CDude::ms_u32CollideBitsDontcare = CSmash::Bad;
+U32 CDude::ms_u32CollideBitsExclude = 0;
 
 // Let this auto-init to 0
 short CDude::ms_sFileCount;
 
 // Weapon details database.
-CDude::WeaponDetails	CDude::ms_awdWeapons[NumWeaponTypes]	=
-	{
-	// NoWeapon.
-		{
-		"No Weapon",										// Weapon name.
-		"bare hands",										// Ammo name.
-		"   No Weapon",									// Status format.
-		NULL,													// Weapon resource name.
-		1,														// Min ammo required.
-		},														
-																
-	// SemiAutomatic.										
-		{														
-		"Machine Gun",										// Weapon name.
-		"Bullets",											// Ammo name.
-		"   Machine Gun",									// Status format.
-		"3d/machinegun",									// Weapon resource name.
-		1,														// Min ammo required.
-		},														
-																
-	// ShotGun.												
-		{														
-		"Shotgun",											// Weapon name.
-		"Shells",											// Ammo name.
-		"   Shotgun -- %d Shells",						// Status format.
-		"3d/shotgun",										// Weapon resource name.
-		1,														// Min ammo required.
-		},														
-																
-	// SprayCannon.										
-		{														
-		"Spray Cannon",									// Weapon name.
-		"Shells",											// Ammo name.
-		"   Spray Cannon -- %d Shells",				// Status format.
-		"3d/spraygun",										// Weapon resource name.
-		1,														// Min ammo required.
-		},														
-																
-	// Grenade.												
-		{														
-		"Grenades",											// Weapon name.
-		"Grenades",											// Ammo name.
-		"   %d Grenades",									// Status format.
-		NULL,													// Weapon resource name.
-		1,														// Min ammo required.
-		},														
-																
-	// Rocket.												
-		{														
-		"Missile Launcher",								// Weapon name.
-		"Missiles",											// Ammo name.
-		"   Missile Launcher -- %d Missiles",		// Status format.
-		"3d/launcher",										// Weapon resource name.
-		1,														// Min ammo required.
-		},
+CDude::WeaponDetails CDude::ms_awdWeapons[NumWeaponTypes] = {
+    // NoWeapon.
+    {
+      "No Weapon",    // Weapon name.
+      "bare hands",   // Ammo name.
+      "   No Weapon", // Status format.
+      NULL,           // Weapon resource name.
+      1,              // Min ammo required.
+    },
 
-	// Heatseeker.       
-		{
-		"Missile Launcher",								// Weapon name.
-		"Heatseekers",										// Ammo name.
-		"   Missile Launcher -- %d Heatseekers",	// Status format.
-		"3d/launcher",										// Weapon resource name.
-		1,														// Min ammo required.
-		},
+    // SemiAutomatic.
+    {
+      "Machine Gun",    // Weapon name.
+      "Bullets",        // Ammo name.
+      "   Machine Gun", // Status format.
+      "3d/machinegun",  // Weapon resource name.
+      1,                // Min ammo required.
+    },
 
-	// FireBomb.         
-		{
-		"Cocktails",										// Weapon name.
-		"Cocktails",										// Ammo name.
-		"   %d Cocktails",								// Status format.
-		NULL,													// Weapon resource name.
-		1,														// Min ammo required.
-		},
+    // ShotGun.
+    {
+      "Shotgun",                 // Weapon name.
+      "Shells",                  // Ammo name.
+      "   Shotgun -- %d Shells", // Status format.
+      "3d/shotgun",              // Weapon resource name.
+      1,                         // Min ammo required.
+    },
 
-	// Napalm.           
-		{
-		"Napalm Launcher",								// Weapon name.
-		"Napalm Canisters",								// Ammo name.
-		"   Napalm Launcher -- %d Canisters",		// Status format.
-		"3d/napalmer",										// Weapon resource name.
-		1,														// Min ammo required.
-		},
+    // SprayCannon.
+    {
+      "Spray Cannon",                 // Weapon name.
+      "Shells",                       // Ammo name.
+      "   Spray Cannon -- %d Shells", // Status format.
+      "3d/spraygun",                  // Weapon resource name.
+      1,                              // Min ammo required.
+    },
 
-	// Fuel.             
-		{
-		"Flame Thrower",									// Weapon name.
-		"Fuel Canisters",									// Ammo name.
-		"   Flamer -- %d Fuel Canisters",			// Status format.
-		"3d/flmthrower",									// Weapon resource name.
-		1,														// Min ammo required.
-		},
+    // Grenade.
+    {
+      "Grenades",       // Weapon name.
+      "Grenades",       // Ammo name.
+      "   %d Grenades", // Status format.
+      NULL,             // Weapon resource name.
+      1,                // Min ammo required.
+    },
 
-	// ProximityMine.    
-		{
-		"Proximity Mines",								// Weapon name.
-		"Proximity Mines",								// Ammo name.
-		"   %d Proximity Mines",						// Status format.
-		NULL,													// Weapon resource name.
-		1,														// Min ammo required.
-		},
+    // Rocket.
+    {
+      "Missile Launcher",                   // Weapon name.
+      "Missiles",                           // Ammo name.
+      "   Missile Launcher -- %d Missiles", // Status format.
+      "3d/launcher",                        // Weapon resource name.
+      1,                                    // Min ammo required.
+    },
 
-	// TimedMine.        
-		{
-		"Timed Mines",										// Weapon name.
-		"Timed Mines",										// Ammo name.
-		"   %d Timed Mines",								// Status format.
-		NULL,													// Weapon resource name.
-		1,														// Min ammo required.
-		},
+    // Heatseeker.
+    {
+      "Missile Launcher",                      // Weapon name.
+      "Heatseekers",                           // Ammo name.
+      "   Missile Launcher -- %d Heatseekers", // Status format.
+      "3d/launcher",                           // Weapon resource name.
+      1,                                       // Min ammo required.
+    },
 
-	// RemoteMine.       
-		{
-		"Remote Mines",									// Weapon name.
-		"Remote Mines",									// Ammo name.
-		"   %d Remote Mines",							// Status format.
-		NULL,													// Weapon resource name.
-		1,														// Min ammo required.
-		},
+    // FireBomb.
+    {
+      "Cocktails",       // Weapon name.
+      "Cocktails",       // Ammo name.
+      "   %d Cocktails", // Status format.
+      NULL,              // Weapon resource name.
+      1,                 // Min ammo required.
+    },
 
-	// BouncingBettyMine.
-		{
-		"Bouncing Bettys",								// Weapon name.
-		"Bouncing Bettys",								// Ammo name.
-		"   %d Bouncing Bettys",						// Status format.
-		NULL,													// Weapon resource name.
-		1,														// Min ammo required.
-		},
+    // Napalm.
+    {
+      "Napalm Launcher",                    // Weapon name.
+      "Napalm Canisters",                   // Ammo name.
+      "   Napalm Launcher -- %d Canisters", // Status format.
+      "3d/napalmer",                        // Weapon resource name.
+      1,                                    // Min ammo required.
+    },
 
-	// DeathWad.         
-		{
-		"Wad Launcher",									// Weapon name.
-		"Wads",												// Ammo name.
-		"   Wad -- %d missiles, %d napalm canisters, %d fuel canisters, %d grenades",	// Status format.
-		"3d/napalmer",										// Weapon resource name.
-		1,														// Min ammo required.
-		},
+    // Fuel.
+    {
+      "Flame Thrower",                  // Weapon name.
+      "Fuel Canisters",                 // Ammo name.
+      "   Flamer -- %d Fuel Canisters", // Status format.
+      "3d/flmthrower",                  // Weapon resource name.
+      1,                                // Min ammo required.
+    },
 
-	// DoubleBarrel.
-		{														
-		"Double Barrel",									// Weapon name.
-		"Shells",											// Ammo name.
-		"   Double Barrel -- %d Shells",				// Status format.
-		"3d/shotgun",										// Weapon resource name.
-		2,														// Min ammo required.
-		},														
-	};
+    // ProximityMine.
+    {
+      "Proximity Mines",       // Weapon name.
+      "Proximity Mines",       // Ammo name.
+      "   %d Proximity Mines", // Status format.
+      NULL,                    // Weapon resource name.
+      1,                       // Min ammo required.
+    },
+
+    // TimedMine.
+    {
+      "Timed Mines",       // Weapon name.
+      "Timed Mines",       // Ammo name.
+      "   %d Timed Mines", // Status format.
+      NULL,                // Weapon resource name.
+      1,                   // Min ammo required.
+    },
+
+    // RemoteMine.
+    {
+      "Remote Mines",       // Weapon name.
+      "Remote Mines",       // Ammo name.
+      "   %d Remote Mines", // Status format.
+      NULL,                 // Weapon resource name.
+      1,                    // Min ammo required.
+    },
+
+    // BouncingBettyMine.
+    {
+      "Bouncing Bettys",       // Weapon name.
+      "Bouncing Bettys",       // Ammo name.
+      "   %d Bouncing Bettys", // Status format.
+      NULL,                    // Weapon resource name.
+      1,                       // Min ammo required.
+    },
+
+    // DeathWad.
+    {
+      "Wad Launcher",                                                               // Weapon name.
+      "Wads",                                                                       // Ammo name.
+      "   Wad -- %d missiles, %d napalm canisters, %d fuel canisters, %d grenades", // Status format.
+      "3d/napalmer",                                                                // Weapon resource name.
+      1,                                                                            // Min ammo required.
+    },
+
+    // DoubleBarrel.
+    {
+      "Double Barrel",                 // Weapon name.
+      "Shells",                        // Ammo name.
+      "   Double Barrel -- %d Shells", // Status format.
+      "3d/shotgun",                    // Weapon resource name.
+      2,                               // Min ammo required.
+    },
+};
 
 // Dude's default stockpile.
-CStockPile	CDude::ms_stockpileDefault	= 
-	{
-	DefHitPoints,				// m_sHitPoints
-					                     
-	DefNumGrenades,			// m_sNumGrenades
-	DefNumFireBombs,			// m_sNumFireBombs
-	DefNumMissiles,			// m_sNumMissiles
-	DefNumNapalms,				// m_sNumNapalms
-	DefNumBullets,				// m_sNumBullets
-	DefNumShells,				// m_sNumShells
-	DefNumFuel,					// m_sNumFuel
-	DefNumMines,				// m_sNumMines
-	DefNumHeatseekers,		// m_sNumHeatseekers
-					                     
-	DefHasMachineGun,			// m_sMachineGun
-	DefHasLauncher,			// m_sMissileLauncher
-	DefHasShotgun,				// m_sShotGun
-	DefHasSprayCannon,		// m_sSprayCannon
-	DefHasFlamer,				// m_sFlameThrower
-	DefHasNapalmLauncher,	// m_sNapalmLauncher.
-	DefHasDeathWadLauncher,	// m_sDeathWadLauncher.
-	DefHasDoubleBarrel,		// m_sDoubleBarrel.
-					                     
-	DefKevlarLayers,			// m_sKevlarLayers
-					                     
-	DefHasBackpack,			// m_sBackpack
-	};
+CStockPile CDude::ms_stockpileDefault = {
+    DefHitPoints, // m_sHitPoints
+
+    DefNumGrenades,    // m_sNumGrenades
+    DefNumFireBombs,   // m_sNumFireBombs
+    DefNumMissiles,    // m_sNumMissiles
+    DefNumNapalms,     // m_sNumNapalms
+    DefNumBullets,     // m_sNumBullets
+    DefNumShells,      // m_sNumShells
+    DefNumFuel,        // m_sNumFuel
+    DefNumMines,       // m_sNumMines
+    DefNumHeatseekers, // m_sNumHeatseekers
+
+    DefHasMachineGun,       // m_sMachineGun
+    DefHasLauncher,         // m_sMissileLauncher
+    DefHasShotgun,          // m_sShotGun
+    DefHasSprayCannon,      // m_sSprayCannon
+    DefHasFlamer,           // m_sFlameThrower
+    DefHasNapalmLauncher,   // m_sNapalmLauncher.
+    DefHasDeathWadLauncher, // m_sDeathWadLauncher.
+    DefHasDoubleBarrel,     // m_sDoubleBarrel.
+
+    DefKevlarLayers, // m_sKevlarLayers
+
+    DefHasBackpack, // m_sBackpack
+};
 
 // Nubs (a CCrawler tool).  These are the realtive points on the X/Z plane that
-// define the hard and soft 'springs' that deflect the dude from terrain 
+// define the hard and soft 'springs' that deflect the dude from terrain
 // obstacles.
-static CCrawler::Nub ms_anubs[] =
-	{
-		// Hard nubs
-		{	  8,   0, 1, 180, 1.0 },
-		{	  6,  -6, 1, 225, 1.0 },
-		{	  0,  -8, 1, 270, 1.0 },
-		{	 -6,  -6, 1, 315, 1.0 },
-		{	 -8,   0, 1,   0, 1.0 },
-		{	 -6,   6, 1,  45, 1.0 },
-		{	  0,   8, 1,  90, 1.0 },
-		{	  6,   6, 1, 135, 1.0 },
-		// Soft nubs
-		{	 12,   0, 0, 180, 1.0 },
-		{	  9,  -9, 0, 225, 1.0 },
-		{	  0, -12, 0, 270, 1.0 },
-		{	 -9,  -9, 0, 315, 1.0 },
-		{	-12,   0, 0,   0, 1.0 },
-		{	 -9,   9, 0,  45, 1.0 },
-		{	  0,  12, 0,  90, 1.0 },
-		{	  9,   9, 0, 135, 1.0 }
-	};
+static CCrawler::Nub ms_anubs[] = {
+    // Hard nubs
+    { 8, 0, 1, 180, 1.0 },
+    { 6, -6, 1, 225, 1.0 },
+    { 0, -8, 1, 270, 1.0 },
+    { -6, -6, 1, 315, 1.0 },
+    { -8, 0, 1, 0, 1.0 },
+    { -6, 6, 1, 45, 1.0 },
+    { 0, 8, 1, 90, 1.0 },
+    { 6, 6, 1, 135, 1.0 },
+    // Soft nubs
+    { 12, 0, 0, 180, 1.0 },
+    { 9, -9, 0, 225, 1.0 },
+    { 0, -12, 0, 270, 1.0 },
+    { -9, -9, 0, 315, 1.0 },
+    { -12, 0, 0, 0, 1.0 },
+    { -9, 9, 0, 45, 1.0 },
+    { 0, 12, 0, 90, 1.0 },
+    { 9, 9, 0, 135, 1.0 }
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Get the various components of this animation from the resource names
 // specified in the provided array of pointers to strings.
 ////////////////////////////////////////////////////////////////////////////////
 // virtual								// Overridden here.
-short CDude::CDudeAnim3D::Get(	// Returns 0 on success.
-	char*		pszBaseFileName,		// In:  Base string for resource filenames.
-	char*		pszRigidName,			// In:  String to add for rigid transform channel
-											// or NULL for none.
-	char*		pszEventName,			// In:  String to add for event states channel
-											// or NULL for none.
-	short		sLoopFlags)				// In:  Looping flags to apply to all channels
-											// in this anim.
-	{
-	short	sRes;
-	char	szResName[RSP_MAX_PATH];
-	sprintf(szResName, "%s.sop", pszBaseFileName);
-	sRes	=  rspGetResource(&g_resmgrGame, szResName, &m_psops);
-	sprintf(szResName, "%s.mesh", pszBaseFileName);
-	sRes	|= rspGetResource(&g_resmgrGame, szResName, &m_pmeshes);
-	sprintf(szResName, "%s.bounds", pszBaseFileName);
-	sRes	|= rspGetResource(&g_resmgrGame, szResName, &m_pbounds);
-	if (pszRigidName != NULL)
-		{
-		sprintf(szResName, "%s_%s.trans", pszBaseFileName, pszRigidName);
-		sRes	|= rspGetResource(&g_resmgrGame, szResName, &m_ptransRigid);
-		}
+short CDude::CDudeAnim3D::Get( // Returns 0 on success.
+  char *pszBaseFileName,       // In:  Base string for resource filenames.
+  char *pszRigidName,          // In:  String to add for rigid transform channel
+                               // or NULL for none.
+  char *pszEventName,          // In:  String to add for event states channel
+                               // or NULL for none.
+  short sLoopFlags)            // In:  Looping flags to apply to all channels
+                               // in this anim.
+{
+    short sRes;
+    char szResName[RSP_MAX_PATH];
+    sprintf(szResName, "%s.sop", pszBaseFileName);
+    sRes = rspGetResource(&g_resmgrGame, szResName, &m_psops);
+    sprintf(szResName, "%s.mesh", pszBaseFileName);
+    sRes |= rspGetResource(&g_resmgrGame, szResName, &m_pmeshes);
+    sprintf(szResName, "%s.bounds", pszBaseFileName);
+    sRes |= rspGetResource(&g_resmgrGame, szResName, &m_pbounds);
+    if (pszRigidName != NULL)
+    {
+        sprintf(szResName, "%s_%s.trans", pszBaseFileName, pszRigidName);
+        sRes |= rspGetResource(&g_resmgrGame, szResName, &m_ptransRigid);
+    }
 
-	if (pszEventName != NULL)
-		{
-		sprintf(szResName, "%s_%s.event", pszBaseFileName, pszEventName);
-		sRes	|= rspGetResource(&g_resmgrGame, szResName, &m_pevent);
-		}
+    if (pszEventName != NULL)
+    {
+        sprintf(szResName, "%s_%s.event", pszBaseFileName, pszEventName);
+        sRes |= rspGetResource(&g_resmgrGame, szResName, &m_pevent);
+    }
 
-	// We always load these transforms.
-	sprintf(szResName, "%s_" LEFT_HAND_RIGID_ANIM_NAME ".trans", pszBaseFileName);
-	sRes	|= rspGetResource(&g_resmgrGame, szResName, &m_ptransLeft);
-	sprintf(szResName, "%s_" RIGHT_HAND_RIGID_ANIM_NAME ".trans", pszBaseFileName);
-	sRes	|= rspGetResource(&g_resmgrGame, szResName, &m_ptransRight);
-	sprintf(szResName, "%s_" BACK_RIGID_ANIM_NAME ".trans", pszBaseFileName);
-	sRes	|= rspGetResource(&g_resmgrGame, szResName, &m_ptransBack);
+    // We always load these transforms.
+    sprintf(szResName, "%s_" LEFT_HAND_RIGID_ANIM_NAME ".trans", pszBaseFileName);
+    sRes |= rspGetResource(&g_resmgrGame, szResName, &m_ptransLeft);
+    sprintf(szResName, "%s_" RIGHT_HAND_RIGID_ANIM_NAME ".trans", pszBaseFileName);
+    sRes |= rspGetResource(&g_resmgrGame, szResName, &m_ptransRight);
+    sprintf(szResName, "%s_" BACK_RIGID_ANIM_NAME ".trans", pszBaseFileName);
+    sRes |= rspGetResource(&g_resmgrGame, szResName, &m_ptransBack);
 
-	// If successful . . .
-	if (sRes == 0)
-		{
-		m_psops->SetLooping(sLoopFlags);
-		m_pmeshes->SetLooping(sLoopFlags);
-		m_pbounds->SetLooping(sLoopFlags);
-		if (m_ptransRigid != NULL)
-			m_ptransRigid->SetLooping(sLoopFlags);
-		if (m_pevent != NULL)
-			m_pevent->SetLooping(sLoopFlags);
+    // If successful . . .
+    if (sRes == 0)
+    {
+        m_psops->SetLooping(sLoopFlags);
+        m_pmeshes->SetLooping(sLoopFlags);
+        m_pbounds->SetLooping(sLoopFlags);
+        if (m_ptransRigid != NULL)
+            m_ptransRigid->SetLooping(sLoopFlags);
+        if (m_pevent != NULL)
+            m_pevent->SetLooping(sLoopFlags);
 
-		m_ptransLeft->SetLooping(sLoopFlags);
-		m_ptransRight->SetLooping(sLoopFlags);
-		m_ptransBack->SetLooping(sLoopFlags);
-		}
+        m_ptransLeft->SetLooping(sLoopFlags);
+        m_ptransRight->SetLooping(sLoopFlags);
+        m_ptransBack->SetLooping(sLoopFlags);
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Release all resources.
 ////////////////////////////////////////////////////////////////////////////////
 // virtual										// Overridden here.
-void CDude::CDudeAnim3D::Release(void)	// Returns nothing.
-	{
-	rspReleaseResource(&g_resmgrGame, &m_psops);
-	rspReleaseResource(&g_resmgrGame, &m_pmeshes);
-	rspReleaseResource(&g_resmgrGame, &m_pbounds);
-	if (m_ptransRigid != NULL)
-		rspReleaseResource(&g_resmgrGame, &m_ptransRigid);
-	if (m_pevent != NULL)
-		rspReleaseResource(&g_resmgrGame, &m_pevent);
+void CDude::CDudeAnim3D::Release(void) // Returns nothing.
+{
+    rspReleaseResource(&g_resmgrGame, &m_psops);
+    rspReleaseResource(&g_resmgrGame, &m_pmeshes);
+    rspReleaseResource(&g_resmgrGame, &m_pbounds);
+    if (m_ptransRigid != NULL)
+        rspReleaseResource(&g_resmgrGame, &m_ptransRigid);
+    if (m_pevent != NULL)
+        rspReleaseResource(&g_resmgrGame, &m_pevent);
 
-	rspReleaseResource(&g_resmgrGame, &m_ptransLeft);
-	rspReleaseResource(&g_resmgrGame, &m_ptransRight);
-	rspReleaseResource(&g_resmgrGame, &m_ptransBack);
-	}
-
+    rspReleaseResource(&g_resmgrGame, &m_ptransLeft);
+    rspReleaseResource(&g_resmgrGame, &m_ptransRight);
+    rspReleaseResource(&g_resmgrGame, &m_ptransBack);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Constructor.
 ////////////////////////////////////////////////////////////////////////////////
-CDude::CDude(CRealm* pRealm)
-	: CCharacter(pRealm, CDudeID)
-	{
-	m_statePersistent	= State_Stand;
+CDude::CDude(CRealm *pRealm)
+  : CCharacter(pRealm, CDudeID)
+{
+    m_statePersistent = State_Stand;
 
-	// Set default stockpile.
-	m_stockpile.Copy(&ms_stockpileDefault);
+    // Set default stockpile.
+    m_stockpile.Copy(&ms_stockpileDefault);
 
-	m_weapontypeCur	= SemiAutomatic;
-	m_weaponShooting	= NoWeapon;
+    m_weapontypeCur = SemiAutomatic;
+    m_weaponShooting = NoWeapon;
 
-	m_lLastShotTime	= 0;
-	m_lLastYellTime	= 0;
+    m_lLastShotTime = 0;
+    m_lLastYellTime = 0;
 
-	m_u16IdChild		= CIdBank::IdNil;
+    m_u16IdChild = CIdBank::IdNil;
 
-	m_sTextureIndex	= 0;
+    m_sTextureIndex = 0;
 
-	m_u8LastEvent		= 0;
+    m_u8LastEvent = 0;
 
-	m_idVictim			= CIdBank::IdNil;
+    m_idVictim = CIdBank::IdNil;
 
-	m_bDead				= false;
+    m_bDead = false;
 
-	m_bInvincible		= false;
+    m_bInvincible = false;
 
-	// Base the dude number of the number of dude's in the realm.  Note that
-	// this number already includes this dude, so we subtract 1 from so the
-	// assigned dude numbers will start at 0.
-	ASSERT(m_pRealm->m_asClassNumThings[CDudeID] > 0);
-	m_sDudeNum = m_pRealm->m_asClassNumThings[CDudeID] - 1;
-	}
+    // Base the dude number of the number of dude's in the realm.  Note that
+    // this number already includes this dude, so we subtract 1 from so the
+    // assigned dude numbers will start at 0.
+    ASSERT(m_pRealm->m_asClassNumThings[CDudeID] > 0);
+    m_sDudeNum = m_pRealm->m_asClassNumThings[CDudeID] - 1;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Destructor
 ////////////////////////////////////////////////////////////////////////////////
 CDude::~CDude()
-	{
-	// Kill dude
-	Kill();
-	}
+{
+    // Kill dude
+    Kill();
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load object (should call base class version!)
 ////////////////////////////////////////////////////////////////////////////////
-short CDude::Load(										// Returns 0 if successfull, non-zero otherwise
-	RFile* pFile,											// In:  File to load from
-	bool bEditMode,										// In:  True for edit mode, false otherwise
-	short sFileCount,										// In:  File count (unique per file, never 0)
-	ULONG	ulFileVersion)									// In:  File version being loaded.
-	{
-	short sResult = 0;
+short CDude::Load(     // Returns 0 if successfull, non-zero otherwise
+  RFile *pFile,        // In:  File to load from
+  bool bEditMode,      // In:  True for edit mode, false otherwise
+  short sFileCount,    // In:  File count (unique per file, never 0)
+  ULONG ulFileVersion) // In:  File version being loaded.
+{
+    short sResult = 0;
 
-	// In most cases, the base class Load() should be called.
-	sResult	= CCharacter::Load(pFile, bEditMode, sFileCount, ulFileVersion);
-	if (sResult == 0)
-		{
-		// Load common data just once per file (not with each object)
-		if (ms_sFileCount != sFileCount)
-			{
-			ms_sFileCount = sFileCount;
+    // In most cases, the base class Load() should be called.
+    sResult = CCharacter::Load(pFile, bEditMode, sFileCount, ulFileVersion);
+    if (sResult == 0)
+    {
+        // Load common data just once per file (not with each object)
+        if (ms_sFileCount != sFileCount)
+        {
+            ms_sFileCount = sFileCount;
 
-			switch (ulFileVersion)
-				{
-				default:	// Newer versions where this format has not changed.
-				case 1:
-					// Load static data
-					pFile->Read(&ms_dAccUser);
-					pFile->Read(&ms_dAccDrag);
-					pFile->Read(&ms_dMaxVelFore);
-					pFile->Read(&ms_dMaxVelBack);
-					pFile->Read(&ms_dMaxVelForeFast);
-					pFile->Read(&ms_dMaxVelBackFast);
-					pFile->Read(&ms_dDegPerSec);
-					break;
-				}
-			}
+            switch (ulFileVersion)
+            {
+                default: // Newer versions where this format has not changed.
+                case 1:
+                    // Load static data
+                    pFile->Read(&ms_dAccUser);
+                    pFile->Read(&ms_dAccDrag);
+                    pFile->Read(&ms_dMaxVelFore);
+                    pFile->Read(&ms_dMaxVelBack);
+                    pFile->Read(&ms_dMaxVelForeFast);
+                    pFile->Read(&ms_dMaxVelBackFast);
+                    pFile->Read(&ms_dDegPerSec);
+                    break;
+            }
+        }
 
-			switch (ulFileVersion)
-				{
-				default:	// Newer versions where this format has not changed.
-				case 16:
-					// Nothing to load here.
-					break;
-				case 15:
-				case 14:
-				case 13:
-					pFile->Read(&m_stockpile.m_sNumHeatseekers);
-					pFile->Read(&m_stockpile.m_sNumMines);
-				case 12:
-				case 11:
-				case 10:
-					pFile->Read(&m_stockpile.m_sNumFuel);
-				case 9:
-					pFile->Read(&m_stockpile.m_sNumShells);
-				case 8:
-				case 7:
-				case 6:
-				case 5:
-				case 4:
-				case 3:
-				case 2:
-					pFile->Read(&m_stockpile.m_sNumBullets);
-					pFile->Read(&m_stockpile.m_sNumFireBombs);
-					pFile->Read(&m_stockpile.m_sNumMissiles);
-					pFile->Read(&m_stockpile.m_sNumNapalms);
-				case 1:
-					{
-					pFile->Read(&m_stockpile.m_sNumGrenades);
+        switch (ulFileVersion)
+        {
+            default: // Newer versions where this format has not changed.
+            case 16:
+                // Nothing to load here.
+                break;
+            case 15:
+            case 14:
+            case 13:
+                pFile->Read(&m_stockpile.m_sNumHeatseekers);
+                pFile->Read(&m_stockpile.m_sNumMines);
+            case 12:
+            case 11:
+            case 10:
+                pFile->Read(&m_stockpile.m_sNumFuel);
+            case 9:
+                pFile->Read(&m_stockpile.m_sNumShells);
+            case 8:
+            case 7:
+            case 6:
+            case 5:
+            case 4:
+            case 3:
+            case 2:
+                pFile->Read(&m_stockpile.m_sNumBullets);
+                pFile->Read(&m_stockpile.m_sNumFireBombs);
+                pFile->Read(&m_stockpile.m_sNumMissiles);
+                pFile->Read(&m_stockpile.m_sNumNapalms);
+            case 1:
+            {
+                pFile->Read(&m_stockpile.m_sNumGrenades);
 
-					U32	u32Temp;
-					pFile->Read(&u32Temp);
-					m_state	= (CCharacter::State)u32Temp;
+                U32 u32Temp;
+                pFile->Read(&u32Temp);
+                m_state = (CCharacter::State)u32Temp;
 
-					break;
-					}
-				}
+                break;
+            }
+        }
 
-		// Make sure there were no file errors or format errors . . .
-		if (!pFile->Error() && sResult == 0)
-			{
-			// Init dude
-			sResult = Init();
-			}
-		else
-			{
-			sResult = -1;
-			TRACE("CDude::Load(): Error reading from file!\n");
-			}
-		}
-	else
-		{
-		TRACE("CDude::Load(): CCharacter::Load() failed.\n");
-		}
+        // Make sure there were no file errors or format errors . . .
+        if (!pFile->Error() && sResult == 0)
+        {
+            // Init dude
+            sResult = Init();
+        }
+        else
+        {
+            sResult = -1;
+            TRACE("CDude::Load(): Error reading from file!\n");
+        }
+    }
+    else
+    {
+        TRACE("CDude::Load(): CCharacter::Load() failed.\n");
+    }
 
-	return sResult;
-	}
-
+    return sResult;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Save object (should call base class version!)
 ////////////////////////////////////////////////////////////////////////////////
-short CDude::Save(										// Returns 0 if successfull, non-zero otherwise
-	RFile* pFile,											// In:  File to save to
-	short sFileCount)										// In:  File count (unique per file, never 0)
-	{
-	short sResult = 0;
+short CDude::Save(  // Returns 0 if successfull, non-zero otherwise
+  RFile *pFile,     // In:  File to save to
+  short sFileCount) // In:  File count (unique per file, never 0)
+{
+    short sResult = 0;
 
-	// In most cases, the base class Save() should be called.
-	sResult	= CCharacter::Save(pFile, sFileCount);
-	if (sResult == 0)
-		{
-		// Save common data just once per file (not with each object)
-		if (ms_sFileCount != sFileCount)
-			{
-			ms_sFileCount = sFileCount;
+    // In most cases, the base class Save() should be called.
+    sResult = CCharacter::Save(pFile, sFileCount);
+    if (sResult == 0)
+    {
+        // Save common data just once per file (not with each object)
+        if (ms_sFileCount != sFileCount)
+        {
+            ms_sFileCount = sFileCount;
 
-			// Save static data.
-			pFile->Write(&ms_dAccUser);
-			pFile->Write(&ms_dAccDrag);
-			pFile->Write(&ms_dMaxVelFore);
-			pFile->Write(&ms_dMaxVelBack);
-			pFile->Write(&ms_dMaxVelForeFast);
-			pFile->Write(&ms_dMaxVelBackFast);
-			pFile->Write(&ms_dDegPerSec);
-			}
+            // Save static data.
+            pFile->Write(&ms_dAccUser);
+            pFile->Write(&ms_dAccDrag);
+            pFile->Write(&ms_dMaxVelFore);
+            pFile->Write(&ms_dMaxVelBack);
+            pFile->Write(&ms_dMaxVelForeFast);
+            pFile->Write(&ms_dMaxVelBackFast);
+            pFile->Write(&ms_dDegPerSec);
+        }
 
-		// Save object data.
-		sResult	= pFile->Error();
-		}
-	else
-		{
-		TRACE("CDude::Save(): CCharacter::Save() failed.\n");
-		}
+        // Save object data.
+        sResult = pFile->Error();
+    }
+    else
+    {
+        TRACE("CDude::Save(): CCharacter::Save() failed.\n");
+    }
 
-	return sResult;
-	}
-
+    return sResult;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CDude::Startup(void)						// Returns 0 if successfull, non-zero otherwise
-	{
-	short	sResult	= CCharacter::Startup();
-	
-	// Init other stuff
-	m_lNextBulletTime = m_pRealm->m_time.GetGameTime() + MS_BETWEEN_BULLETS;
+short CDude::Startup(void) // Returns 0 if successfull, non-zero otherwise
+{
+    short sResult = CCharacter::Startup();
 
-	// Set start position for crawler verification.
-	m_dLastCrawledToPosX	= m_dX; 
-	m_dLastCrawledToPosZ	= m_dZ; 
+    // Init other stuff
+    m_lNextBulletTime = m_pRealm->m_time.GetGameTime() + MS_BETWEEN_BULLETS;
 
-	return sResult;
-	}
+    // Set start position for crawler verification.
+    m_dLastCrawledToPosX = m_dX;
+    m_dLastCrawledToPosZ = m_dZ;
 
+    return sResult;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CDude::Shutdown(void)							// Returns 0 if successfull, non-zero otherwise
-	{
-	short	sResult	= CCharacter::Shutdown();
-	return sResult;
-	}
+short CDude::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+{
+    short sResult = CCharacter::Shutdown();
+    return sResult;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
 void CDude::Suspend(void)
-	{
-	if (m_sSuspend == 0)
-		{
-		// Store current delta so we can restore it.
-		long	lCurTime		= m_pRealm->m_time.GetGameTime();
-		m_lNextBulletTime	= lCurTime - m_lNextBulletTime;
-		}
+{
+    if (m_sSuspend == 0)
+    {
+        // Store current delta so we can restore it.
+        long lCurTime = m_pRealm->m_time.GetGameTime();
+        m_lNextBulletTime = lCurTime - m_lNextBulletTime;
+    }
 
-	CCharacter::Suspend();
-	}
+    CCharacter::Suspend();
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
 void CDude::Resume(void)
-	{
-	CCharacter::Resume();
+{
+    CCharacter::Resume();
 
-	if (m_sSuspend == 0)
-		{
-		long	lCurTime		= m_pRealm->m_time.GetGameTime();
-		m_lNextBulletTime	= lCurTime - m_lNextBulletTime;
-		}
-	}
-
+    if (m_sSuspend == 0)
+    {
+        long lCurTime = m_pRealm->m_time.GetGameTime();
+        m_lNextBulletTime = lCurTime - m_lNextBulletTime;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
 void CDude::Update(void)
-	{
-	if (!m_sSuspend)
-		{
-		// Get new time
-		long lThisTime = m_pRealm->m_time.GetGameTime();
+{
+    if (!m_sSuspend)
+    {
+        // Get new time
+        long lThisTime = m_pRealm->m_time.GetGameTime();
 
-		// Advance the animation timer.
-		long	lDifTime		= lThisTime - m_lAnimPrevUpdateTime;
-		m_lAnimTime			+= lDifTime;
+        // Advance the animation timer.
+        long lDifTime = lThisTime - m_lAnimPrevUpdateTime;
+        m_lAnimTime += lDifTime;
 
-		// Update prev time.
-		m_lAnimPrevUpdateTime	= lThisTime;
+        // Update prev time.
+        m_lAnimPrevUpdateTime = lThisTime;
 
-		// Process Input ////////////////////////////////////////////////////////
+        // Process Input ////////////////////////////////////////////////////////
 
-		double	dMaxForeVel;
-		double	dMaxBackVel;
-		short		sStrafeAngle	= INVALID_STRAFE_ANGLE;	// Angle of motion from strafing.
+        double dMaxForeVel;
+        double dMaxBackVel;
+        short sStrafeAngle = INVALID_STRAFE_ANGLE; // Angle of motion from strafing.
 
-		ProcessInput(
-			&dMaxForeVel,
-			&dMaxBackVel,
-			&sStrafeAngle
-			);
+        ProcessInput(&dMaxForeVel, &dMaxBackVel, &sStrafeAngle);
 
-		// Process Forces ///////////////////////////////////////////////////////
+        // Process Forces ///////////////////////////////////////////////////////
 
-		switch (m_state)
-			{
-			case State_BlownUp:
-				break;
-			default:
-				ProcessForces(
-					lThisTime,
-					dMaxForeVel,
-					dMaxBackVel,
-					sStrafeAngle);
-				break;
-			}
-		
-		// Specific transitions by state dependent on motion ////////////////////
+        switch (m_state)
+        {
+            case State_BlownUp:
+                break;
+            default:
+                ProcessForces(lThisTime, dMaxForeVel, dMaxBackVel, sStrafeAngle);
+                break;
+        }
 
-		switch (m_state)
-			{
-			default:	// Catch all.  Go to idle if NYI state.
-			case State_Idle:
-				break;
-			case State_Dead:
-			case State_Strafe:
-			case State_StrafeAndShoot:
-			case State_Stand:
-			case State_Shooting:
-				// If there's any movement . . . 
-				if (m_dAcc != 0.0)
-					{
-					// Move to running.
-					switch (m_state)
-						{
-						case State_Stand:
-						case State_Strafe:
-							SetState(State_Run);
-							break;
-						case State_StrafeAndShoot:
-						case State_Shooting:
-							SetState(State_RunAndShoot);
-							break;
-						}
-					}
-				else
-					{
-					// If there's strafe motion . . .
-					if (sStrafeAngle != INVALID_STRAFE_ANGLE)
-						{
-						switch (m_state)
-							{
-							case State_Stand:
-								SetState(State_Strafe);
-								break;
-							case State_Shooting:
-								SetState(State_StrafeAndShoot);
-								break;
-							case State_Strafe:
-							case State_StrafeAndShoot:
-								break;
-							}
-						}
-					else
-						{
-						switch (m_state)
-							{
-							case State_Stand:
-							case State_Shooting:
-								break;
-							case State_Strafe:
-								SetState(State_Stand);
-								break;
-							case State_StrafeAndShoot:
-								SetState(State_Shooting);
-								break;
-							}
-						}
-					}
-				break;
-			case State_Burning:
-				{
-				// Tweak out.
-				m_dRot	= rspMod360(m_dRot + RAND_SWAY(ON_FIRE_ROT_TWEAKAGE) );
-				m_dVel	+= RAND_SWAY(ON_FIRE_VEL_TWEAKAGE) + ON_FIRE_VEL_TWEAKAGE / 4;	// **FUDGE**
-				}
+        // Specific transitions by state dependent on motion ////////////////////
 
-				// Intentional fall through.
-			case State_Run:
-			case State_RunAndShoot:
-				// If there's little movement . . .
-				if ((m_dVel < MIN_RUN_VEL && m_dVel > -MIN_RUN_VEL && m_dAcc == 0.0))
-					{
-					// If not strafing . . .
-					if (sStrafeAngle == INVALID_STRAFE_ANGLE)
-						{
-						// Move to standing.
-						switch (m_state)
-							{
-							case State_Run:
-								SetState(State_Stand);
-								break;
-							case State_RunAndShoot:
-								SetState(State_Shooting);
-								break;
-							case State_Burning:
-								break;
-							}
-						}
-					else	// We are strafing in some way.
-						{
-						// Move to standing.
-						switch (m_state)
-							{
-							case State_Run:
-								SetState(State_Strafe);
-								break;
-							case State_RunAndShoot:
-								SetState(State_StrafeAndShoot);
-								break;
-							case State_Burning:
-								break;
-							}
-						}
-					}
-				else
-					{
-						if (GetInput(m_sDudeNum) & INPUT_RUN)
-							{
-							if (StatsAreAllowed)
-								{
-								Stat_TimeRunning += lDifTime;
-								if (Stat_TimeRunning >= (60 * 5 * 1000))
-									UnlockAchievement(ACHIEVEMENT_RUN_5_MINUTES);
-								}
-							}
-					}
-				break;
-			case State_Throw:
-			case State_ThrowRelease:
-			case State_ThrowDone:
-			case State_ThrowFinish:
-			case State_Launch:
-			case State_LaunchRelease:
-			case State_LaunchDone:
-			case State_LaunchFinish:
-				// Let's just say you can't move while throwing/launching.
-				m_dVel	= 0.0;
-				m_dAcc	= 0.0;
-				m_dDrag	= 0.0;
-				break;
-			}
+        switch (m_state)
+        {
+            default: // Catch all.  Go to idle if NYI state.
+            case State_Idle:
+                break;
+            case State_Dead:
+            case State_Strafe:
+            case State_StrafeAndShoot:
+            case State_Stand:
+            case State_Shooting:
+                // If there's any movement . . .
+                if (m_dAcc != 0.0)
+                {
+                    // Move to running.
+                    switch (m_state)
+                    {
+                        case State_Stand:
+                        case State_Strafe:
+                            SetState(State_Run);
+                            break;
+                        case State_StrafeAndShoot:
+                        case State_Shooting:
+                            SetState(State_RunAndShoot);
+                            break;
+                    }
+                }
+                else
+                {
+                    // If there's strafe motion . . .
+                    if (sStrafeAngle != INVALID_STRAFE_ANGLE)
+                    {
+                        switch (m_state)
+                        {
+                            case State_Stand:
+                                SetState(State_Strafe);
+                                break;
+                            case State_Shooting:
+                                SetState(State_StrafeAndShoot);
+                                break;
+                            case State_Strafe:
+                            case State_StrafeAndShoot:
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        switch (m_state)
+                        {
+                            case State_Stand:
+                            case State_Shooting:
+                                break;
+                            case State_Strafe:
+                                SetState(State_Stand);
+                                break;
+                            case State_StrafeAndShoot:
+                                SetState(State_Shooting);
+                                break;
+                        }
+                    }
+                }
+                break;
+            case State_Burning:
+            {
+                // Tweak out.
+                m_dRot = rspMod360(m_dRot + RAND_SWAY(ON_FIRE_ROT_TWEAKAGE));
+                m_dVel += RAND_SWAY(ON_FIRE_VEL_TWEAKAGE) + ON_FIRE_VEL_TWEAKAGE / 4; // **FUDGE**
+            }
 
-		// Service message queue ////////////////////////////////////////////////
-		ProcessMessages();
+                // Intentional fall through.
+            case State_Run:
+            case State_RunAndShoot:
+                // If there's little movement . . .
+                if ((m_dVel < MIN_RUN_VEL && m_dVel > -MIN_RUN_VEL && m_dAcc == 0.0))
+                {
+                    // If not strafing . . .
+                    if (sStrafeAngle == INVALID_STRAFE_ANGLE)
+                    {
+                        // Move to standing.
+                        switch (m_state)
+                        {
+                            case State_Run:
+                                SetState(State_Stand);
+                                break;
+                            case State_RunAndShoot:
+                                SetState(State_Shooting);
+                                break;
+                            case State_Burning:
+                                break;
+                        }
+                    }
+                    else // We are strafing in some way.
+                    {
+                        // Move to standing.
+                        switch (m_state)
+                        {
+                            case State_Run:
+                                SetState(State_Strafe);
+                                break;
+                            case State_RunAndShoot:
+                                SetState(State_StrafeAndShoot);
+                                break;
+                            case State_Burning:
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    if (GetInput(m_sDudeNum) & INPUT_RUN)
+                    {
+                        if (StatsAreAllowed)
+                        {
+                            Stat_TimeRunning += lDifTime;
+                            if (Stat_TimeRunning >= (60 * 5 * 1000))
+                                UnlockAchievement(ACHIEVEMENT_RUN_5_MINUTES);
+                        }
+                    }
+                }
+                break;
+            case State_Throw:
+            case State_ThrowRelease:
+            case State_ThrowDone:
+            case State_ThrowFinish:
+            case State_Launch:
+            case State_LaunchRelease:
+            case State_LaunchDone:
+            case State_LaunchFinish:
+                // Let's just say you can't move while throwing/launching.
+                m_dVel = 0.0;
+                m_dAcc = 0.0;
+                m_dDrag = 0.0;
+                break;
+        }
 
-		// Switch on state.
-		switch (m_state)
-			{
-			case State_Stand:
-				{
-#if 1	// No idle anim currently.
-				// If we've been idle for a while . . .
-				if (m_lAnimTime > m_lNextIdleTime)
-					{
-					// Toggle anim.
-					if (m_panimCur == &m_animStand)
-						{
-						// Switch to idle.
-						m_panimCur			= &m_animIdle;
-						// Set next timeout.
-						m_lNextIdleTime	= m_animIdle.m_psops->TotalTime() * IDLE_ANIM_LOOPS;
-						}
-					else
-						{
-						// Switch to stand.
-						m_panimCur			= &m_animStand;
-						// Set next timeout.
-						m_lNextIdleTime	= IDLE_ANIM_TIMEOUT;
-						}
+        // Service message queue ////////////////////////////////////////////////
+        ProcessMessages();
 
-					// Reset anim timer.
-					m_lAnimTime					= 0;
-					m_lAnimPrevUpdateTime	= lThisTime;
-					}
+        // Switch on state.
+        switch (m_state)
+        {
+            case State_Stand:
+            {
+#if 1 // No idle anim currently.
+      // If we've been idle for a while . . .
+                if (m_lAnimTime > m_lNextIdleTime)
+                {
+                    // Toggle anim.
+                    if (m_panimCur == &m_animStand)
+                    {
+                        // Switch to idle.
+                        m_panimCur = &m_animIdle;
+                        // Set next timeout.
+                        m_lNextIdleTime = m_animIdle.m_psops->TotalTime() * IDLE_ANIM_LOOPS;
+                    }
+                    else
+                    {
+                        // Switch to stand.
+                        m_panimCur = &m_animStand;
+                        // Set next timeout.
+                        m_lNextIdleTime = IDLE_ANIM_TIMEOUT;
+                    }
+
+                    // Reset anim timer.
+                    m_lAnimTime = 0;
+                    m_lAnimPrevUpdateTime = lThisTime;
+                }
 #endif
-				break;
-				}
-			case State_Throw:
-				{
+                break;
+            }
+            case State_Throw:
+            {
 #if 1
-				U8	u8Event	= *( (U8*)(m_panimCur->m_pevent->GetAtTime(m_lAnimTime) ) );
-				// Check for release point in animation . . .
-				if (u8Event > 0)
-					{
-					CWeapon*	pweapon;
-					if (m_pRealm->m_idbank.GetThingByID((CThing**)&pweapon, m_u16IdWeapon) == 0)
-						{
-						if (pweapon->m_eState == CWeapon::State_Hide)
-							{
-							// Unhide grenade.
-							pweapon->m_eState = CWeapon::State_Idle;
-							}
-						else if (u8Event > 1)
-							{
-							// Release projectile.
-							// Go to State_ThrowRelease which is purely transitional to State_ThrowFinish.
-							SetState(State_ThrowRelease);
-							}
-						}
-					else
-						{
-						if (u8Event > 1)
-							{
-							// Release projectile.
-							// Go to State_ThrowRelease which is purely transitional to State_ThrowFinish.
-							SetState(State_ThrowRelease);
-							}
-						}
-					}
+                U8 u8Event = *((U8 *)(m_panimCur->m_pevent->GetAtTime(m_lAnimTime)));
+                // Check for release point in animation . . .
+                if (u8Event > 0)
+                {
+                    CWeapon *pweapon;
+                    if (m_pRealm->m_idbank.GetThingByID((CThing **)&pweapon, m_u16IdWeapon) == 0)
+                    {
+                        if (pweapon->m_eState == CWeapon::State_Hide)
+                        {
+                            // Unhide grenade.
+                            pweapon->m_eState = CWeapon::State_Idle;
+                        }
+                        else if (u8Event > 1)
+                        {
+                            // Release projectile.
+                            // Go to State_ThrowRelease which is purely transitional to State_ThrowFinish.
+                            SetState(State_ThrowRelease);
+                        }
+                    }
+                    else
+                    {
+                        if (u8Event > 1)
+                        {
+                            // Release projectile.
+                            // Go to State_ThrowRelease which is purely transitional to State_ThrowFinish.
+                            SetState(State_ThrowRelease);
+                        }
+                    }
+                }
 #else
-				if (WhileHoldingWeapon(
-					COLLISION_BITS_INCLUDE, 
-					COLLISION_BITS_DONTCARE, 
-					COLLISION_BITS_EXCLUDE) == true)
-					{
-					// Go to State_ThrowFinish.
-					SetState(State_ThrowFinish);
-					}
+                if (WhileHoldingWeapon(COLLISION_BITS_INCLUDE, COLLISION_BITS_DONTCARE, COLLISION_BITS_EXCLUDE) == true)
+                {
+                    // Go to State_ThrowFinish.
+                    SetState(State_ThrowFinish);
+                }
 #endif
-				break;
-				}
-			case State_ThrowRelease:
-				{
-				ShootWeapon();
-				// Finish animation.
-				SetState(State_ThrowFinish);
-				break;
-				}
-			case State_ThrowDone:
-			case State_LaunchDone:
-				// Move on.
-				SetState(State_Persistent);
-				break;
-			case State_LaunchRelease:
-				{
-				ShootWeapon();
-				// Finish animation.
-				SetState(State_LaunchFinish);
-				break;
-				}
-			case State_ThrowFinish:
-				// Check for end of throw animation.
-				if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
-					{
-					// This will let us know to be done with throwing on the next Update.
-					SetState(State_ThrowDone);
-					}
-				break;
-			case State_Run:
-				{
-				// Remove adjustment made above.
-				m_lAnimTime	-= lDifTime;
-				// Tune the time.  Note that this is automathematically negative when
-				// velocity is negative.
-				long	lDifAnimTime	= lDifTime * (m_dVel / RUN_ANIM_VELOCITY);
+                break;
+            }
+            case State_ThrowRelease:
+            {
+                ShootWeapon();
+                // Finish animation.
+                SetState(State_ThrowFinish);
+                break;
+            }
+            case State_ThrowDone:
+            case State_LaunchDone:
+                // Move on.
+                SetState(State_Persistent);
+                break;
+            case State_LaunchRelease:
+            {
+                ShootWeapon();
+                // Finish animation.
+                SetState(State_LaunchFinish);
+                break;
+            }
+            case State_ThrowFinish:
+                // Check for end of throw animation.
+                if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
+                {
+                    // This will let us know to be done with throwing on the next Update.
+                    SetState(State_ThrowDone);
+                }
+                break;
+            case State_Run:
+            {
+                // Remove adjustment made above.
+                m_lAnimTime -= lDifTime;
+                // Tune the time.  Note that this is automathematically negative when
+                // velocity is negative.
+                long lDifAnimTime = lDifTime * (m_dVel / RUN_ANIM_VELOCITY);
 
-				m_lAnimTime	+= lDifAnimTime;
+                m_lAnimTime += lDifAnimTime;
 
-				// Play step noise if event has changed.
-				PlayStep();
+                // Play step noise if event has changed.
+                PlayStep();
 
-				break;
-				}
-			case State_RunAndShoot:
-				{
-				// Remove adjustment made above.
-				m_lAnimTime	-= lDifTime;
-				// Tune the time.  Note that this is automathematically negative when
-				// velocity is negative.
-				long	lDifAnimTime	= lDifTime * (m_dVel / RUN_ANIM_VELOCITY);
+                break;
+            }
+            case State_RunAndShoot:
+            {
+                // Remove adjustment made above.
+                m_lAnimTime -= lDifTime;
+                // Tune the time.  Note that this is automathematically negative when
+                // velocity is negative.
+                long lDifAnimTime = lDifTime * (m_dVel / RUN_ANIM_VELOCITY);
 
-				m_lAnimTime	+= lDifAnimTime;
+                m_lAnimTime += lDifAnimTime;
 
-				// Play step noise if event has changed.
-				PlayStep();
+                // Play step noise if event has changed.
+                PlayStep();
 
-				if (lThisTime >= m_lNextBulletTime)
-					{
-					// Shoot.
-					ShootWeapon();
-					}
+                if (lThisTime >= m_lNextBulletTime)
+                {
+                    // Shoot.
+                    ShootWeapon();
+                }
 
-				break;
-				}
-			case State_Shooting:
-				// If out of bullets . . .
-				if (m_stockpile.m_sNumBullets <= 0)
-					{
-					// Don't animate.
-					m_lAnimTime	-= lDifTime;
-					}
+                break;
+            }
+            case State_Shooting:
+                // If out of bullets . . .
+                if (m_stockpile.m_sNumBullets <= 0)
+                {
+                    // Don't animate.
+                    m_lAnimTime -= lDifTime;
+                }
 
-				if (lThisTime >= m_lNextBulletTime)
-					{
-					// Shoot.
-					ShootWeapon();
-					}
-				break;
-			case State_StrafeAndShoot:
+                if (lThisTime >= m_lNextBulletTime)
+                {
+                    // Shoot.
+                    ShootWeapon();
+                }
+                break;
+            case State_StrafeAndShoot:
 
-				// If going left of forwards . . .
-				if (m_dRot - sStrafeAngle < 0)
-					{
-					// Subtract twice the time to make up for fact that it was already added once above
-					m_lAnimTime	-= lDifTime * 2;
-					}
+                // If going left of forwards . . .
+                if (m_dRot - sStrafeAngle < 0)
+                {
+                    // Subtract twice the time to make up for fact that it was already added once above
+                    m_lAnimTime -= lDifTime * 2;
+                }
 
-				// Play step noise if event has changed.
-				PlayStep();
+                // Play step noise if event has changed.
+                PlayStep();
 
-				if (lThisTime >= m_lNextBulletTime)
-					{
-					// Shoot.
-					ShootWeapon();
-					}
-				break;
-			case State_Strafe:
-				// If going left of forwards . . .
-				if (m_dRot - sStrafeAngle < 0)
-					{
-					// Subtract twice the time to make up for fact that it was already added once above
-					m_lAnimTime	-= lDifTime * 2;
-					}
+                if (lThisTime >= m_lNextBulletTime)
+                {
+                    // Shoot.
+                    ShootWeapon();
+                }
+                break;
+            case State_Strafe:
+                // If going left of forwards . . .
+                if (m_dRot - sStrafeAngle < 0)
+                {
+                    // Subtract twice the time to make up for fact that it was already added once above
+                    m_lAnimTime -= lDifTime * 2;
+                }
 
-				// Play step noise if event has changed.
-				PlayStep();
+                // Play step noise if event has changed.
+                PlayStep();
 
-				break;
-			case State_Shot:
-				// Check for end of damage animation . . .
-//				if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
-				// Instead check for minimum duration since last shot time . . .
-				if (lThisTime > m_lLastShotTime + MIN_SHOT_DURATION)
-					{
-					// Stand.
-					SetState(State_Persistent);
-					}
-				break;
-			case State_BlownUp:
-				// Check for end . . .
-				if (WhileBlownUp() == false)
-					{
-					SetState(State_GetUp);
-					}
-				break;
-			case State_Suicide:
-				// Check for moment of firing weapon . . .
-				if (*((U8*)(m_panimCur->m_pevent->GetAtTime(m_lAnimTime))) > 0
-					&& m_bBrainSplatted == false)		// ***FUDGE***
-					{
-					// Play shot fire.
-					PlaySample(g_smidShotgun, SampleMaster::Weapon);
-					// Play shot received.
-					PlaySample(g_smidDyingYell, SampleMaster::Voices);
-					// Start gore.
-					StartBrainSplat();
-					// Remember.
-					m_bBrainSplatted	= true;
+                break;
+            case State_Shot:
+                // Check for end of damage animation . . .
+                //				if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
+                // Instead check for minimum duration since last shot time . . .
+                if (lThisTime > m_lLastShotTime + MIN_SHOT_DURATION)
+                {
+                    // Stand.
+                    SetState(State_Persistent);
+                }
+                break;
+            case State_BlownUp:
+                // Check for end . . .
+                if (WhileBlownUp() == false)
+                {
+                    SetState(State_GetUp);
+                }
+                break;
+            case State_Suicide:
+                // Check for moment of firing weapon . . .
+                if (*((U8 *)(m_panimCur->m_pevent->GetAtTime(m_lAnimTime))) > 0 &&
+                    m_bBrainSplatted == false) // ***FUDGE***
+                {
+                    // Play shot fire.
+                    PlaySample(g_smidShotgun, SampleMaster::Weapon);
+                    // Play shot received.
+                    PlaySample(g_smidDyingYell, SampleMaster::Voices);
+                    // Start gore.
+                    StartBrainSplat();
+                    // Remember.
+                    m_bBrainSplatted = true;
 
-					// Register the kill.
-					ScoreRegisterKill(m_pRealm, GetInstanceID(), m_u16InstanceId);
+                    // Register the kill.
+                    ScoreRegisterKill(m_pRealm, GetInstanceID(), m_u16InstanceId);
 
-					// Note that he's dead
-					m_bDead = true;
-					}
+                    // Note that he's dead
+                    m_bDead = true;
+                }
 
-				// Intentional fall through to State_Die.
-			case State_Die:
-				// Check for end of die animation . . .
-				if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
-					{
-					// Make sure we're dead for reals.  Do this before the SetState()
-					// so we doesn't end up dropping any health.
-					m_stockpile.m_sHitPoints	= 0;
+                // Intentional fall through to State_Die.
+            case State_Die:
+                // Check for end of die animation . . .
+                if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
+                {
+                    // Make sure we're dead for reals.  Do this before the SetState()
+                    // so we doesn't end up dropping any health.
+                    m_stockpile.m_sHitPoints = 0;
 
-					// Go to dead.
-					SetState(State_Dead);
-					// If he is carying the flag item, then he should drop it.
-					DropAllFlags(NULL);
-					}
-				else if (m_bGenericEvent1 == false)
-					{
-					U8	u8Event	= *( (U8*)(m_panimCur->m_pevent->GetAtTime(m_lAnimTime) ) );
+                    // Go to dead.
+                    SetState(State_Dead);
+                    // If he is carying the flag item, then he should drop it.
+                    DropAllFlags(NULL);
+                }
+                else if (m_bGenericEvent1 == false)
+                {
+                    U8 u8Event = *((U8 *)(m_panimCur->m_pevent->GetAtTime(m_lAnimTime)));
 
-					if (u8Event > 1)	// ***FUDGE***
-						{
-						PlaySample(g_smidBodyImpact2, SampleMaster::Unspecified);
-						m_bGenericEvent1	= true;
-						}
-					}
-				break;
-			case State_Burning:
-				{
-				// Play step noise if event has changed.
-				PlayStep();
+                    if (u8Event > 1) // ***FUDGE***
+                    {
+                        PlaySample(g_smidBodyImpact2, SampleMaster::Unspecified);
+                        m_bGenericEvent1 = true;
+                    }
+                }
+                break;
+            case State_Burning:
+            {
+                // Play step noise if event has changed.
+                PlayStep();
 
-				CThing*	pthingFire;
-				// If the fire's gone . . .
-				if (m_pRealm->m_idbank.GetThingByID(&pthingFire, m_u16IdFire) == 0)
-					{
-					if (!((CFire*) (pthingFire))->IsBurning())
-					// Stand.
-					SetState(State_Stand);
-					}
-					else
-					{
-					// Stand.
-					SetState(State_Stand);
-					}
-				break;
-				}
-			case State_Launch:
+                CThing *pthingFire;
+                // If the fire's gone . . .
+                if (m_pRealm->m_idbank.GetThingByID(&pthingFire, m_u16IdFire) == 0)
+                {
+                    if (!((CFire *)(pthingFire))->IsBurning())
+                        // Stand.
+                        SetState(State_Stand);
+                }
+                else
+                {
+                    // Stand.
+                    SetState(State_Stand);
+                }
+                break;
+            }
+            case State_Launch:
 #if 0
 				{
 				U8	u8Event	= *( (U8*)(m_panimCur->m_pevent->GetAtTime(m_lAnimTime) ) );
@@ -2330,110 +2310,108 @@ void CDude::Update(void)
 					}
 				}
 #else
-				if (WhileHoldingWeapon(
-					COLLISION_BITS_INCLUDE, 
-					COLLISION_BITS_DONTCARE, 
-					COLLISION_BITS_EXCLUDE) == true)
-					{
-					// Go to State_LaunchFinish.
-					SetState(State_LaunchFinish);
-					}
+                if (WhileHoldingWeapon(COLLISION_BITS_INCLUDE, COLLISION_BITS_DONTCARE, COLLISION_BITS_EXCLUDE) == true)
+                {
+                    // Go to State_LaunchFinish.
+                    SetState(State_LaunchFinish);
+                }
 #endif
-				break;
-			case State_LaunchFinish:
-				// Check for end of launch animation . . .
-				if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
-					{
-					// Go to State_LaunchDone which is purely transitional to State_Stand.
-					SetState(State_LaunchDone);
-					}
-				break;
-			case State_GetUp:
-				// check for end of getup anim . . .
-				if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
-					{
-					// Go to last persistent state.  Usually stand.
-					SetState(State_Persistent);
-					}
-				break;
-			case State_Rise:
-				// check for end of rise anim . . .
-				if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
-					{
-					// Go to last persistent state.  Usually stand.
-					SetState(State_Persistent);
-					}
-				break;
-			case State_Jump:
-			case State_JumpForward:
-				if (m_lAnimTime > 750 && m_bJumpVerticalTrigger == false)
-					{
-					// Go up.
-					m_dExtVertVel	= ms_dVertVelJump;
-					m_bJumpVerticalTrigger	= true;
-					}
+                break;
+            case State_LaunchFinish:
+                // Check for end of launch animation . . .
+                if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
+                {
+                    // Go to State_LaunchDone which is purely transitional to State_Stand.
+                    SetState(State_LaunchDone);
+                }
+                break;
+            case State_GetUp:
+                // check for end of getup anim . . .
+                if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
+                {
+                    // Go to last persistent state.  Usually stand.
+                    SetState(State_Persistent);
+                }
+                break;
+            case State_Rise:
+                // check for end of rise anim . . .
+                if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
+                {
+                    // Go to last persistent state.  Usually stand.
+                    SetState(State_Persistent);
+                }
+                break;
+            case State_Jump:
+            case State_JumpForward:
+                if (m_lAnimTime > 750 && m_bJumpVerticalTrigger == false)
+                {
+                    // Go up.
+                    m_dExtVertVel = ms_dVertVelJump;
+                    m_bJumpVerticalTrigger = true;
+                }
 
-				if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
-					{
-					// Go to fall state.
-					SetState(State_Fall);
-					}
-				else
-					{
-					break;
-					}
+                if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
+                {
+                    // Go to fall state.
+                    SetState(State_Fall);
+                }
+                else
+                {
+                    break;
+                }
 
-			// Intentional fall through to State_Fall.
-			case State_Fall:
-				// If we've reached the ground . . .
-				if (m_bAboveTerrain == false)
-					{
-					// Go to land state.
-					SetState((m_dVel == 0.0) ? State_Land : State_LandForward);
-					}
-				break;
-			case State_Land:
-			case State_LandForward:
-				// Return to last persistent state.
-				SetState(State_Persistent);
-				break;
-			case State_Execute:
-				// check for end of execute anim . . .
-				if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
-					{
-					// Go to last persistent state.  Usually stand.
-					SetState(State_Persistent);
-					UnlockAchievement(ACHIEVEMENT_PERFORM_FIRST_EXECUTION);
-					if (StatsAreAllowed) Stat_Executions++;
-					}
-				// If before point of firing . . .
-				else if (m_lAnimTime < 1350)	// ***FUDGE***.
-					{
-					// Track executee.  If we lost 'em . . .
-					if (TrackExecutee(lDifTime / 1000.0) == false)
-						{
-						// Go to last persistent state.  Usually stand.
-						SetState(State_Persistent);
-						}
-					}
-				// If in point of firing . . .
-				else if (m_lAnimTime < 1950)	// ***FUDGE***.
-					{
+            // Intentional fall through to State_Fall.
+            case State_Fall:
+                // If we've reached the ground . . .
+                if (m_bAboveTerrain == false)
+                {
+                    // Go to land state.
+                    SetState((m_dVel == 0.0) ? State_Land : State_LandForward);
+                }
+                break;
+            case State_Land:
+            case State_LandForward:
+                // Return to last persistent state.
+                SetState(State_Persistent);
+                break;
+            case State_Execute:
+                // check for end of execute anim . . .
+                if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
+                {
+                    // Go to last persistent state.  Usually stand.
+                    SetState(State_Persistent);
+                    UnlockAchievement(ACHIEVEMENT_PERFORM_FIRST_EXECUTION);
+                    if (StatsAreAllowed)
+                        Stat_Executions++;
+                }
+                // If before point of firing . . .
+                else if (m_lAnimTime < 1350) // ***FUDGE***.
+                {
+                    // Track executee.  If we lost 'em . . .
+                    if (TrackExecutee(lDifTime / 1000.0) == false)
+                    {
+                        // Go to last persistent state.  Usually stand.
+                        SetState(State_Persistent);
+                    }
+                }
+                // If in point of firing . . .
+                else if (m_lAnimTime < 1950) // ***FUDGE***.
+                {
 #if 1
-					if (lThisTime >= m_lNextBulletTime)
-						{
-						OnExecute();
-						}
+                    if (lThisTime >= m_lNextBulletTime)
+                    {
+                        OnExecute();
+                    }
 #else
-					if (lThisTime >= m_lNextBulletTime)
-						{
-						ArmWeapon(SemiAutomatic);
-						ShootWeapon();
-						}
+                    if (lThisTime >= m_lNextBulletTime)
+                    {
+                        ArmWeapon(SemiAutomatic);
+                        ShootWeapon();
+                    }
 #endif
-					}
-				break;
-			case State_PutDown:
+                }
+                break;
+            case State_PutDown:
 #if 0
 				// Check for end of anim . . .
 				if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
@@ -2457,2225 +2435,2288 @@ void CDude::Update(void)
 						}
 					}
 #else
-				if (WhileHoldingWeapon(
-					COLLISION_BITS_INCLUDE, 
-					COLLISION_BITS_DONTCARE, 
-					COLLISION_BITS_EXCLUDE) == true)
-					{
-					// Go to State_ObjectReleased.
-					SetState(State_ObjectReleased);
-					}
-				break;
-			case State_ObjectReleased:
-				// Check for end of anim . . .
-				if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
-					{
-					// Go to last persistent state.  Usually stand.
-					SetState(State_Persistent);
-					}
+                if (WhileHoldingWeapon(COLLISION_BITS_INCLUDE, COLLISION_BITS_DONTCARE, COLLISION_BITS_EXCLUDE) == true)
+                {
+                    // Go to State_ObjectReleased.
+                    SetState(State_ObjectReleased);
+                }
+                break;
+            case State_ObjectReleased:
+                // Check for end of anim . . .
+                if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
+                {
+                    // Go to last persistent state.  Usually stand.
+                    SetState(State_Persistent);
+                }
 #endif
-				break;
-			case State_PickUp:
-				{
-				CPowerUp*	ppowerup;
-				// Check for end of anim . . .
-				if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
-					{
-					// If we still have the picked up item . . .
-					if (m_pRealm->m_idbank.GetThingByID((CThing**)&ppowerup, m_u16IdChild) == 0)
-						{
-						TakePowerUp(&ppowerup);
+                break;
+            case State_PickUp:
+            {
+                CPowerUp *ppowerup;
+                // Check for end of anim . . .
+                if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
+                {
+                    // If we still have the picked up item . . .
+                    if (m_pRealm->m_idbank.GetThingByID((CThing **)&ppowerup, m_u16IdChild) == 0)
+                    {
+                        TakePowerUp(&ppowerup);
 
-						m_u16IdChild	= CIdBank::IdNil;
-						}
+                        m_u16IdChild = CIdBank::IdNil;
+                    }
 
-					// Go to last persistent state.  Usually stand.
-					SetState(State_Persistent);
-					}
-				else if (m_lAnimTime > 500 && m_bGenericEvent1 == false)
-					{
-					// This should be QuickCheckClosest, when available . . .
-					CSmash*	psmash	= NULL;	// Safety.
-					if (m_pRealm->m_smashatorium.QuickCheck(	// Returns true if collision detected, false otherwise
-						&m_smash,										// In:  CSmash to check
-						CSmash::PowerUp,								// In:  Bits that must be 1 to collide with a given CSmash
-						0,													// In:  Bits that you don't care about
-						0,													// In:  Bits that must be 0 to collide with a given CSmash
-						&psmash) == true)								// Out: Thing being smashed into if any (unless 0)
-						{
-						ASSERT(psmash->m_pThing != NULL);
+                    // Go to last persistent state.  Usually stand.
+                    SetState(State_Persistent);
+                }
+                else if (m_lAnimTime > 500 && m_bGenericEvent1 == false)
+                {
+                    // This should be QuickCheckClosest, when available . . .
+                    CSmash *psmash = NULL;                   // Safety.
+                    if (m_pRealm->m_smashatorium.QuickCheck( // Returns true if collision detected, false otherwise
+                          &m_smash,                          // In:  CSmash to check
+                          CSmash::PowerUp,                   // In:  Bits that must be 1 to collide with a given CSmash
+                          0,                                 // In:  Bits that you don't care about
+                          0,                                 // In:  Bits that must be 0 to collide with a given CSmash
+                          &psmash) == true)                  // Out: Thing being smashed into if any (unless 0)
+                    {
+                        ASSERT(psmash->m_pThing != NULL);
 
-						// Make it blit as a child.
-						ASSERT(psmash->m_pThing->GetClassID() == CPowerUpID);
-						ppowerup	= (CPowerUp*)psmash->m_pThing;
-						if (ppowerup->Grab(&m_sprite) == 0)
-							{
-							// Store/Identify child.
-							m_u16IdChild	= ppowerup->GetInstanceID();
-							}
+                        // Make it blit as a child.
+                        ASSERT(psmash->m_pThing->GetClassID() == CPowerUpID);
+                        ppowerup = (CPowerUp *)psmash->m_pThing;
+                        if (ppowerup->Grab(&m_sprite) == 0)
+                        {
+                            // Store/Identify child.
+                            m_u16IdChild = ppowerup->GetInstanceID();
+                        }
 
-						// Note we already did this.
-						m_bGenericEvent1	= true;
-						}
-					}
-				else if (m_pRealm->m_idbank.GetThingByID((CThing**)&ppowerup, m_u16IdChild) == 0)
-					{
-					// Position powerup.
-					PositionChild(
-						&(ppowerup->m_sprite),	// In:  Child sprite to detach.
-						(RTransform*) m_panimCur->m_ptransRigid->GetAtTime(m_lAnimTime),	// In:  Transform specifying position.
-						&(ppowerup->m_dX),		// Out: New position of child. 
-						&(ppowerup->m_dY),		// Out: New position of child. 
-						&(ppowerup->m_dZ) );		// Out: New position of child. 
-					}
-				break;
-				}
-			}
+                        // Note we already did this.
+                        m_bGenericEvent1 = true;
+                    }
+                }
+                else if (m_pRealm->m_idbank.GetThingByID((CThing **)&ppowerup, m_u16IdChild) == 0)
+                {
+                    // Position powerup.
+                    PositionChild(&(ppowerup->m_sprite), // In:  Child sprite to detach.
+                                  (RTransform *)m_panimCur->m_ptransRigid->GetAtTime(
+                                    m_lAnimTime),     // In:  Transform specifying position.
+                                  &(ppowerup->m_dX),  // Out: New position of child.
+                                  &(ppowerup->m_dY),  // Out: New position of child.
+                                  &(ppowerup->m_dZ)); // Out: New position of child.
+                }
+                break;
+            }
+        }
 
-		// Update sphere.
-		m_smash.m_sphere.sphere.X			= m_dX;
-		// Fudge center of sphere as half way up the dude.
-		// Doesn't work if dude's feet leave the origin.
-		m_smash.m_sphere.sphere.Y			= m_dY + m_sprite.m_sRadius;
-		m_smash.m_sphere.sphere.Z			= m_dZ;
-		m_smash.m_sphere.sphere.lRadius	= m_sprite.m_sRadius;
+        // Update sphere.
+        m_smash.m_sphere.sphere.X = m_dX;
+        // Fudge center of sphere as half way up the dude.
+        // Doesn't work if dude's feet leave the origin.
+        m_smash.m_sphere.sphere.Y = m_dY + m_sprite.m_sRadius;
+        m_smash.m_sphere.sphere.Z = m_dZ;
+        m_smash.m_sphere.sphere.lRadius = m_sprite.m_sRadius;
 
-		// Update the smash.
-		m_pRealm->m_smashatorium.Update(&m_smash);
+        // Update the smash.
+        m_pRealm->m_smashatorium.Update(&m_smash);
 
-		// Check for powerups.
-		CSmash*	psmash	= NULL;	// Safety.
-		if (m_pRealm->m_smashatorium.QuickCheck(	// Returns true if collision detected, false otherwise
-			&m_smash,										// In:  CSmash to check
-			CSmash::PowerUp,								// In:  Bits that must be 1 to collide with a given CSmash
-			0,													// In:  Bits that you don't care about
-			0,													// In:  Bits that must be 0 to collide with a given CSmash
-			&psmash) == true)								// Out: Thing being smashed into if any (unless 0)
-			{
-			ASSERT(psmash->m_pThing != NULL);
-			ASSERT(psmash->m_pThing->GetClassID() == CPowerUpID);
+        // Check for powerups.
+        CSmash *psmash = NULL;                   // Safety.
+        if (m_pRealm->m_smashatorium.QuickCheck( // Returns true if collision detected, false otherwise
+              &m_smash,                          // In:  CSmash to check
+              CSmash::PowerUp,                   // In:  Bits that must be 1 to collide with a given CSmash
+              0,                                 // In:  Bits that you don't care about
+              0,                                 // In:  Bits that must be 0 to collide with a given CSmash
+              &psmash) == true)                  // Out: Thing being smashed into if any (unless 0)
+        {
+            ASSERT(psmash->m_pThing != NULL);
+            ASSERT(psmash->m_pThing->GetClassID() == CPowerUpID);
 
-			CPowerUp* ppowerup	= (CPowerUp*)psmash->m_pThing;
+            CPowerUp *ppowerup = (CPowerUp *)psmash->m_pThing;
 
-			// If we're not dead or the powerup contains health . . .
-			if (m_bDead == false || ppowerup->m_stockpile.m_sHitPoints > 0)
-				{
-				TakePowerUp(&ppowerup);
-				}
-			}
+            // If we're not dead or the powerup contains health . . .
+            if (m_bDead == false || ppowerup->m_stockpile.m_sHitPoints > 0)
+            {
+                TakePowerUp(&ppowerup);
+            }
+        }
 
-		// Save time for next time
-		m_lPrevTime = lThisTime;
+        // Save time for next time
+        m_lPrevTime = lThisTime;
 
-		// Call the targeting aid function
-		ShowTarget();
+        // Call the targeting aid function
+        ShowTarget();
 
-		// Call base class //////////////////////////////////////////////////////
+        // Call base class //////////////////////////////////////////////////////
 
-		CCharacter::Update();
+        CCharacter::Update();
 
-		// If requested to delete self . . .
-		if (m_state == State_Delete)
-			{
-			// Good bye.
-			delete this;
-			}
-		}
-	}
-
+        // If requested to delete self . . .
+        if (m_state == State_Delete)
+        {
+            // Good bye.
+            delete this;
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Attempts user motivated state transitions.
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::ProcessInput(		// Returns nothing.
-	double*	pdMaxForeVel,		// Out: Maximum forward velocity.
-	double*	pdMaxBackVel,		// Out: Maximum backward velocity.
-	short*	psStrafeAngle)		// Out: Strafe angle.
-	{
-	UINPUT input = 0;
-	// Get user input
-	input	= GetInput(m_sDudeNum);
-
-	bool bCanMove = true;		// Flags for twinstick input so they don't override death, etc. states
-	bool bCanFire = true;
-
-	switch (m_state)
-		{
-		case State_Dead:
-			// Let's take jump as 'revive' . . .
-			if (input & INPUT_REVIVE)
-				{
-				// It's alive; alive!
-				Revive();
-				}
-
-			// Allow only one input (life cheat) . . .
-			if ( (input & INPUT_WEAPONS_MASK) == INPUT_CHEAT_15)
-				{
-				input	= INPUT_CHEAT_15;
-				}
-			else
-				{
-				// No other user control during these states.
-				input	= 0;
-				bCanMove = false;
-				bCanFire = false;
-				}
-			break;
-		case State_Die:
-		case State_Suicide:
-			// No user control during these states.
-			input	= 0;
-			bCanMove = false;
-			bCanFire = false;
-			break;
-		case State_BlownUp:
-		case State_Rise:
-		case State_GetUp:
-		case State_PutDown:
-		case State_ObjectReleased:
-		case State_PickUp:
-			// No user control during these states other than to change weapon.
-			input	&= INPUT_WEAPONS_MASK;
-			bCanMove = false;
-			bCanFire = false;
-			break;
-		case State_Throw:
-		case State_ThrowRelease:
-		case State_ThrowDone:
-		case State_ThrowFinish:
-		case State_Launch:
-		case State_LaunchRelease:
-		case State_LaunchDone:
-		case State_LaunchFinish:
-		//case State_Shot:
-			// No influence on velocity during these states.
-			input &= ~(INPUT_FORWARD | INPUT_BACKWARD | INPUT_REVIVE | INPUT_DUCK | INPUT_MOVE_UP | INPUT_MOVE_DOWN | INPUT_MOVE_LEFT | INPUT_MOVE_RIGHT);
-			bCanMove = false;
-			bCanFire = false;
-			break;
-		case State_Execute:
-		case State_Duck:
-			// No rotation or jumping.
-			input &= ~(INPUT_LEFT | INPUT_RIGHT | INPUT_REVIVE | INPUT_ROT_MASK | INPUT_FORWARD | INPUT_BACKWARD | INPUT_MOVE_UP | INPUT_MOVE_DOWN | INPUT_MOVE_LEFT | INPUT_MOVE_RIGHT);
-			bCanMove = false;
-			bCanFire = false;
-			break;
-		}
-
-	// Change weapon . . .
-	WeaponType	wtNew					= m_weapontypeCur;
-	switch (input & INPUT_WEAPONS_MASK)
-		{
-		case INPUT_WEAPON_1:
-		case INPUT_WEAPON_2:
-		case INPUT_WEAPON_3:
-		case INPUT_WEAPON_4:
-		case INPUT_WEAPON_5:
-//#ifdef MOBILE //We want weapon 5 to toggle weapon
-if (!demoCompat)
+void CDude::ProcessInput( // Returns nothing.
+  double *pdMaxForeVel,   // Out: Maximum forward velocity.
+  double *pdMaxBackVel,   // Out: Maximum backward velocity.
+  short *psStrafeAngle)   // Out: Strafe angle.
 {
-			if (((input & INPUT_WEAPONS_MASK) == INPUT_WEAPON_5)
-				&& (m_weapontypeCur == Rocket))
-			{
-				wtNew = Heatseeker;
-				break;
-			}
-}
-//#endif
-		case INPUT_WEAPON_6:
-		case INPUT_WEAPON_7:
-		case INPUT_WEAPON_8:
-		case INPUT_WEAPON_9:
-			wtNew	= (WeaponType)(NoWeapon + ( ( (input & INPUT_WEAPONS_MASK) - INPUT_WEAPON_0) >> INPUT_WEAPONS_BIT) );
-			break;
-		case INPUT_WEAPON_0:
-			switch (m_weapontypeCur)
-				{
-				case NoWeapon:
-					if (m_stockpile.m_sDeathWadLauncher)
-						{
-						wtNew	= DeathWad;
-						break;
-						}
-				case DeathWad:
-					if (m_stockpile.m_sDoubleBarrel)
-						{
-						wtNew	= DoubleBarrel;
-						break;
-						}
-				case DoubleBarrel:
-				default:
-					wtNew	= NoWeapon;
-					break;
-				}
-			break;
-		case INPUT_WEAPON_10:
-			switch (m_weapontypeCur)
-				{
-				default:
-					wtNew	= ProximityMine;
-					break;
-				case ProximityMine:
-					wtNew	= TimedMine;
-					break;
-				case TimedMine:
-#if 0	// Remote mines are not very useful currently.
+    UINPUT input = 0;
+    // Get user input
+    input = GetInput(m_sDudeNum);
+
+    bool bCanMove = true; // Flags for twinstick input so they don't override death, etc. states
+    bool bCanFire = true;
+
+    switch (m_state)
+    {
+        case State_Dead:
+            // Let's take jump as 'revive' . . .
+            if (input & INPUT_REVIVE)
+            {
+                // It's alive; alive!
+                Revive();
+            }
+
+            // Allow only one input (life cheat) . . .
+            if ((input & INPUT_WEAPONS_MASK) == INPUT_CHEAT_15)
+            {
+                input = INPUT_CHEAT_15;
+            }
+            else
+            {
+                // No other user control during these states.
+                input = 0;
+                bCanMove = false;
+                bCanFire = false;
+            }
+            break;
+        case State_Die:
+        case State_Suicide:
+            // No user control during these states.
+            input = 0;
+            bCanMove = false;
+            bCanFire = false;
+            break;
+        case State_BlownUp:
+        case State_Rise:
+        case State_GetUp:
+        case State_PutDown:
+        case State_ObjectReleased:
+        case State_PickUp:
+            // No user control during these states other than to change weapon.
+            input &= INPUT_WEAPONS_MASK;
+            bCanMove = false;
+            bCanFire = false;
+            break;
+        case State_Throw:
+        case State_ThrowRelease:
+        case State_ThrowDone:
+        case State_ThrowFinish:
+        case State_Launch:
+        case State_LaunchRelease:
+        case State_LaunchDone:
+        case State_LaunchFinish:
+            // case State_Shot:
+            //  No influence on velocity during these states.
+            input &= ~(INPUT_FORWARD | INPUT_BACKWARD | INPUT_REVIVE | INPUT_DUCK | INPUT_MOVE_UP | INPUT_MOVE_DOWN |
+                       INPUT_MOVE_LEFT | INPUT_MOVE_RIGHT);
+            bCanMove = false;
+            bCanFire = false;
+            break;
+        case State_Execute:
+        case State_Duck:
+            // No rotation or jumping.
+            input &= ~(INPUT_LEFT | INPUT_RIGHT | INPUT_REVIVE | INPUT_ROT_MASK | INPUT_FORWARD | INPUT_BACKWARD |
+                       INPUT_MOVE_UP | INPUT_MOVE_DOWN | INPUT_MOVE_LEFT | INPUT_MOVE_RIGHT);
+            bCanMove = false;
+            bCanFire = false;
+            break;
+    }
+
+    // Change weapon . . .
+    WeaponType wtNew = m_weapontypeCur;
+    switch (input & INPUT_WEAPONS_MASK)
+    {
+        case INPUT_WEAPON_1:
+        case INPUT_WEAPON_2:
+        case INPUT_WEAPON_3:
+        case INPUT_WEAPON_4:
+        case INPUT_WEAPON_5:
+            // #ifdef MOBILE //We want weapon 5 to toggle weapon
+            if (!demoCompat)
+            {
+                if (((input & INPUT_WEAPONS_MASK) == INPUT_WEAPON_5) && (m_weapontypeCur == Rocket))
+                {
+                    wtNew = Heatseeker;
+                    break;
+                }
+            }
+            // #endif
+        case INPUT_WEAPON_6:
+        case INPUT_WEAPON_7:
+        case INPUT_WEAPON_8:
+        case INPUT_WEAPON_9:
+            wtNew = (WeaponType)(NoWeapon + (((input & INPUT_WEAPONS_MASK) - INPUT_WEAPON_0) >> INPUT_WEAPONS_BIT));
+            break;
+        case INPUT_WEAPON_0:
+            switch (m_weapontypeCur)
+            {
+                case NoWeapon:
+                    if (m_stockpile.m_sDeathWadLauncher)
+                    {
+                        wtNew = DeathWad;
+                        break;
+                    }
+                case DeathWad:
+                    if (m_stockpile.m_sDoubleBarrel)
+                    {
+                        wtNew = DoubleBarrel;
+                        break;
+                    }
+                case DoubleBarrel:
+                default:
+                    wtNew = NoWeapon;
+                    break;
+            }
+            break;
+        case INPUT_WEAPON_10:
+            switch (m_weapontypeCur)
+            {
+                default:
+                    wtNew = ProximityMine;
+                    break;
+                case ProximityMine:
+                    wtNew = TimedMine;
+                    break;
+                case TimedMine:
+#if 0 // Remote mines are not very useful currently.
 					wtNew	= RemoteMine;
 					break;
 				case RemoteMine:
 #endif
-					wtNew	= BouncingBettyMine;
-					break;
-				}
-			break;
-		
-		// 'Cheats' ////////////////////////////////////////////////////
-		
-		case INPUT_CHEAT_11:	// Restore health.
-			{
-			CStockPile	stockpile	= { 0, };
-			stockpile.m_sHitPoints	= MAX(0, m_sOrigHitPoints - m_stockpile.m_sHitPoints);
+                    wtNew = BouncingBettyMine;
+                    break;
+            }
+            break;
 
-			CreateCheat(&stockpile);
-			break;
-			}
-		case INPUT_CHEAT_12:	// Full kevlar.
-			{
-			CStockPile	stockpile		= { 0, };
-			stockpile.m_sKevlarLayers	= CStockPile::ms_stockpileBackPackMax.m_sKevlarLayers;
+            // 'Cheats' ////////////////////////////////////////////////////
 
-			CreateCheat(&stockpile);
-			break;
-			}
-		case INPUT_CHEAT_13:	// Backpack.
-			{
-			CStockPile	stockpile	= { 0, };
-			stockpile.m_sBackpack	= 1;
+        case INPUT_CHEAT_11: // Restore health.
+        {
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sHitPoints = MAX(0, m_sOrigHitPoints - m_stockpile.m_sHitPoints);
 
-			CreateCheat(&stockpile);
-			break;
-			}
-		case INPUT_CHEAT_14:	// Full weaponry, full ammo, backpack, and full kevlar.
-			{
-			CStockPile	stockpile	= { 0, };
-			stockpile.m_sHitPoints	= MAX(0, m_sOrigHitPoints - m_stockpile.m_sHitPoints);
+            CreateCheat(&stockpile);
+            break;
+        }
+        case INPUT_CHEAT_12: // Full kevlar.
+        {
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sKevlarLayers = CStockPile::ms_stockpileBackPackMax.m_sKevlarLayers;
 
-			stockpile.m_sNumGrenades		= CStockPile::ms_stockpileBackPackMax.m_sNumGrenades;
-			stockpile.m_sNumFireBombs		= CStockPile::ms_stockpileBackPackMax.m_sNumFireBombs;
-			stockpile.m_sNumMissiles		= CStockPile::ms_stockpileBackPackMax.m_sNumMissiles;
-			stockpile.m_sNumNapalms			= CStockPile::ms_stockpileBackPackMax.m_sNumNapalms;
-			stockpile.m_sNumBullets			= CStockPile::ms_stockpileBackPackMax.m_sNumBullets;
-			stockpile.m_sNumShells			= CStockPile::ms_stockpileBackPackMax.m_sNumShells;
-			stockpile.m_sNumMines			= CStockPile::ms_stockpileBackPackMax.m_sNumMines;
-			stockpile.m_sNumHeatseekers	= CStockPile::ms_stockpileBackPackMax.m_sNumHeatseekers;
-			stockpile.m_sNumFuel				= CStockPile::ms_stockpileBackPackMax.m_sNumFuel;
+            CreateCheat(&stockpile);
+            break;
+        }
+        case INPUT_CHEAT_13: // Backpack.
+        {
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sBackpack = 1;
 
-			stockpile.m_sMachineGun			= 1;
-			stockpile.m_sMissileLauncher	= 1;
-			stockpile.m_sShotGun				= 1;
-			stockpile.m_sSprayCannon		= 1;
-			stockpile.m_sFlameThrower		= 1;
-			stockpile.m_sNapalmLauncher	= 1;
+            CreateCheat(&stockpile);
+            break;
+        }
+        case INPUT_CHEAT_14: // Full weaponry, full ammo, backpack, and full kevlar.
+        {
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sHitPoints = MAX(0, m_sOrigHitPoints - m_stockpile.m_sHitPoints);
 
-			stockpile.m_sKevlarLayers		= CStockPile::ms_stockpileMax.m_sKevlarLayers;
+            stockpile.m_sNumGrenades = CStockPile::ms_stockpileBackPackMax.m_sNumGrenades;
+            stockpile.m_sNumFireBombs = CStockPile::ms_stockpileBackPackMax.m_sNumFireBombs;
+            stockpile.m_sNumMissiles = CStockPile::ms_stockpileBackPackMax.m_sNumMissiles;
+            stockpile.m_sNumNapalms = CStockPile::ms_stockpileBackPackMax.m_sNumNapalms;
+            stockpile.m_sNumBullets = CStockPile::ms_stockpileBackPackMax.m_sNumBullets;
+            stockpile.m_sNumShells = CStockPile::ms_stockpileBackPackMax.m_sNumShells;
+            stockpile.m_sNumMines = CStockPile::ms_stockpileBackPackMax.m_sNumMines;
+            stockpile.m_sNumHeatseekers = CStockPile::ms_stockpileBackPackMax.m_sNumHeatseekers;
+            stockpile.m_sNumFuel = CStockPile::ms_stockpileBackPackMax.m_sNumFuel;
 
-			stockpile.m_sBackpack			= 1;
+            stockpile.m_sMachineGun = 1;
+            stockpile.m_sMissileLauncher = 1;
+            stockpile.m_sShotGun = 1;
+            stockpile.m_sSprayCannon = 1;
+            stockpile.m_sFlameThrower = 1;
+            stockpile.m_sNapalmLauncher = 1;
 
-			CreateCheat(&stockpile);
-			break;
-			}
-		case INPUT_CHEAT_15:	// Revive.
-			{
-			UnlockAchievement(ACHIEVEMENT_ENABLE_CHEATS);
-			Flag_Achievements |= FLAG_USED_CHEATS;
+            stockpile.m_sKevlarLayers = CStockPile::ms_stockpileMax.m_sKevlarLayers;
 
-			Revive(false);
-			// Let the demon know they entered a cheat code
-			GameMessage msg;
-			msg.msg_Cheater.eType = typeCheater;
-			msg.msg_Cheater.sPriority = 0;
-			CThing* pDemon = m_pRealm->m_aclassHeads[CThing::CDemonID].GetNext();
-			if (pDemon)
-				SendThingMessage(&msg, pDemon);				
-			break;
-			}
-		case INPUT_CHEAT_16:	// DeathWadLauncher and ammo.
-			{
-			CStockPile	stockpile			= { 0, };
-			stockpile.m_sNumGrenades		= CStockPile::ms_stockpileBackPackMax.m_sNumGrenades;
-			stockpile.m_sNumMissiles		= CStockPile::ms_stockpileBackPackMax.m_sNumMissiles;
-			stockpile.m_sNumNapalms			= CStockPile::ms_stockpileBackPackMax.m_sNumNapalms;
-			stockpile.m_sNumFuel				= CStockPile::ms_stockpileBackPackMax.m_sNumFuel;
-			stockpile.m_sDeathWadLauncher	= 1;
+            stockpile.m_sBackpack = 1;
 
-			CreateCheat(&stockpile);
+            CreateCheat(&stockpile);
+            break;
+        }
+        case INPUT_CHEAT_15: // Revive.
+        {
+            UnlockAchievement(ACHIEVEMENT_ENABLE_CHEATS);
+            Flag_Achievements |= FLAG_USED_CHEATS;
 
-			// Enable death wad launcher in editor as well.
-			CStockPile::ms_sEnableDeathWad	= TRUE;
-			break;
-			}
-		case INPUT_CHEAT_17:	// DoubleBarrel and shells.
-			{
-			CStockPile	stockpile			= { 0, };
-			stockpile.m_sNumShells			= CStockPile::ms_stockpileBackPackMax.m_sNumShells;
-			stockpile.m_sDoubleBarrel		= 1;
+            Revive(false);
+            // Let the demon know they entered a cheat code
+            GameMessage msg;
+            msg.msg_Cheater.eType = typeCheater;
+            msg.msg_Cheater.sPriority = 0;
+            CThing *pDemon = m_pRealm->m_aclassHeads[CThing::CDemonID].GetNext();
+            if (pDemon)
+                SendThingMessage(&msg, pDemon);
+            break;
+        }
+        case INPUT_CHEAT_16: // DeathWadLauncher and ammo.
+        {
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sNumGrenades = CStockPile::ms_stockpileBackPackMax.m_sNumGrenades;
+            stockpile.m_sNumMissiles = CStockPile::ms_stockpileBackPackMax.m_sNumMissiles;
+            stockpile.m_sNumNapalms = CStockPile::ms_stockpileBackPackMax.m_sNumNapalms;
+            stockpile.m_sNumFuel = CStockPile::ms_stockpileBackPackMax.m_sNumFuel;
+            stockpile.m_sDeathWadLauncher = 1;
 
-			CreateCheat(&stockpile);
+            CreateCheat(&stockpile);
 
-			// Enable Double Barrel in editor as well.
-			CStockPile::ms_sEnableDoubleBarrel	= TRUE;
-			break;
-			}
-		case INPUT_CHEAT_18:	// Mighty Mouse mode.
-			{
-			UnlockAchievement(ACHIEVEMENT_ENABLE_CHEATS);
-			Flag_Achievements |= FLAG_USED_CHEATS;
+            // Enable death wad launcher in editor as well.
+            CStockPile::ms_sEnableDeathWad = TRUE;
+            break;
+        }
+        case INPUT_CHEAT_17: // DoubleBarrel and shells.
+        {
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sNumShells = CStockPile::ms_stockpileBackPackMax.m_sNumShells;
+            stockpile.m_sDoubleBarrel = 1;
 
-			// Modify hood's scale.
-			m_pRealm->m_phood->m_dScale3d -= 0.10;
+            CreateCheat(&stockpile);
 
-			// Let the hood setup the pipeline. 
-			m_pRealm->m_phood->SetupPipeline();
+            // Enable Double Barrel in editor as well.
+            CStockPile::ms_sEnableDoubleBarrel = TRUE;
+            break;
+        }
+        case INPUT_CHEAT_18: // Mighty Mouse mode.
+        {
+            UnlockAchievement(ACHIEVEMENT_ENABLE_CHEATS);
+            Flag_Achievements |= FLAG_USED_CHEATS;
 
-			break;
-			}
-		case INPUT_CHEAT_19:	// Shell weapons and ammo.
-			{
-			CStockPile	stockpile			= { 0, };
-			stockpile.m_sNumShells			= CStockPile::ms_stockpileBackPackMax.m_sNumShells;
-			stockpile.m_sShotGun				= 1;
-			stockpile.m_sSprayCannon		= 1;
+            // Modify hood's scale.
+            m_pRealm->m_phood->m_dScale3d -= 0.10;
 
-			CreateCheat(&stockpile);
+            // Let the hood setup the pipeline.
+            m_pRealm->m_phood->SetupPipeline();
 
-			break;
-			}
-		case INPUT_CHEAT_20:	// Explosive weapons and ammo.
-			{
-			CStockPile	stockpile			= { 0, };
-			stockpile.m_sNumGrenades		= CStockPile::ms_stockpileBackPackMax.m_sNumGrenades;
-			stockpile.m_sNumMissiles		= CStockPile::ms_stockpileBackPackMax.m_sNumMissiles;
-			stockpile.m_sNumHeatseekers	= CStockPile::ms_stockpileBackPackMax.m_sNumHeatseekers;
-			stockpile.m_sMissileLauncher	= 1;
+            break;
+        }
+        case INPUT_CHEAT_19: // Shell weapons and ammo.
+        {
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sNumShells = CStockPile::ms_stockpileBackPackMax.m_sNumShells;
+            stockpile.m_sShotGun = 1;
+            stockpile.m_sSprayCannon = 1;
 
-			CreateCheat(&stockpile);
+            CreateCheat(&stockpile);
 
-			break;
-			}
-		case INPUT_CHEAT_21:	// Flame weapons and ammo.
-			{
-			CStockPile	stockpile			= { 0, };
-			stockpile.m_sNumFireBombs		= CStockPile::ms_stockpileBackPackMax.m_sNumFireBombs;
-			stockpile.m_sNumNapalms			= CStockPile::ms_stockpileBackPackMax.m_sNumNapalms;
-			stockpile.m_sNumFuel				= CStockPile::ms_stockpileBackPackMax.m_sNumFuel;
-			stockpile.m_sNapalmLauncher	= 1;
-			stockpile.m_sFlameThrower		= 1;
+            break;
+        }
+        case INPUT_CHEAT_20: // Explosive weapons and ammo.
+        {
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sNumGrenades = CStockPile::ms_stockpileBackPackMax.m_sNumGrenades;
+            stockpile.m_sNumMissiles = CStockPile::ms_stockpileBackPackMax.m_sNumMissiles;
+            stockpile.m_sNumHeatseekers = CStockPile::ms_stockpileBackPackMax.m_sNumHeatseekers;
+            stockpile.m_sMissileLauncher = 1;
 
-			CreateCheat(&stockpile);
+            CreateCheat(&stockpile);
 
-			break;
-			}
-		case INPUT_CHEAT_22:	// Shotgun and shells.
-			{
-			CStockPile	stockpile			= { 0, };
-			stockpile.m_sNumShells			= CStockPile::ms_stockpileBackPackMax.m_sNumShells;
-			stockpile.m_sShotGun				= 1;
-			
-			CreateCheat(&stockpile);
+            break;
+        }
+        case INPUT_CHEAT_21: // Flame weapons and ammo.
+        {
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sNumFireBombs = CStockPile::ms_stockpileBackPackMax.m_sNumFireBombs;
+            stockpile.m_sNumNapalms = CStockPile::ms_stockpileBackPackMax.m_sNumNapalms;
+            stockpile.m_sNumFuel = CStockPile::ms_stockpileBackPackMax.m_sNumFuel;
+            stockpile.m_sNapalmLauncher = 1;
+            stockpile.m_sFlameThrower = 1;
 
-			break;
-			}
-		case INPUT_CHEAT_23:	// Spray cannon and shells.
-			{
-			CStockPile	stockpile			= { 0, };
-			stockpile.m_sNumShells			= CStockPile::ms_stockpileBackPackMax.m_sNumShells;
-			stockpile.m_sSprayCannon		= 1;
+            CreateCheat(&stockpile);
 
-			CreateCheat(&stockpile);
+            break;
+        }
+        case INPUT_CHEAT_22: // Shotgun and shells.
+        {
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sNumShells = CStockPile::ms_stockpileBackPackMax.m_sNumShells;
+            stockpile.m_sShotGun = 1;
 
-			break;
-			}
-		case INPUT_CHEAT_24:	// Grenades and cocktails.
-			{
-			CStockPile	stockpile			= { 0, };
-			stockpile.m_sNumGrenades		= CStockPile::ms_stockpileBackPackMax.m_sNumGrenades;
-			stockpile.m_sNumFireBombs		= CStockPile::ms_stockpileBackPackMax.m_sNumFireBombs;
+            CreateCheat(&stockpile);
 
-			CreateCheat(&stockpile);
+            break;
+        }
+        case INPUT_CHEAT_23: // Spray cannon and shells.
+        {
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sNumShells = CStockPile::ms_stockpileBackPackMax.m_sNumShells;
+            stockpile.m_sSprayCannon = 1;
 
-			break;
-			}
-		case INPUT_CHEAT_25:	// Missile launcher and missiles (including heatseekers).
-			{
-			CStockPile	stockpile			= { 0, };
-			stockpile.m_sNumMissiles		= CStockPile::ms_stockpileBackPackMax.m_sNumMissiles;
-			stockpile.m_sNumHeatseekers	= CStockPile::ms_stockpileBackPackMax.m_sNumHeatseekers;
-			stockpile.m_sMissileLauncher	= 1;
+            CreateCheat(&stockpile);
 
-			CreateCheat(&stockpile);
+            break;
+        }
+        case INPUT_CHEAT_24: // Grenades and cocktails.
+        {
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sNumGrenades = CStockPile::ms_stockpileBackPackMax.m_sNumGrenades;
+            stockpile.m_sNumFireBombs = CStockPile::ms_stockpileBackPackMax.m_sNumFireBombs;
 
-			break;
-			}
-		case INPUT_CHEAT_26:	// Napalm launcher and napalm canisters.
-			{
-			CStockPile	stockpile			= { 0, };
-			stockpile.m_sNumNapalms			= CStockPile::ms_stockpileBackPackMax.m_sNumNapalms;
-			stockpile.m_sNapalmLauncher	= 1;
+            CreateCheat(&stockpile);
 
-			CreateCheat(&stockpile);
+            break;
+        }
+        case INPUT_CHEAT_25: // Missile launcher and missiles (including heatseekers).
+        {
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sNumMissiles = CStockPile::ms_stockpileBackPackMax.m_sNumMissiles;
+            stockpile.m_sNumHeatseekers = CStockPile::ms_stockpileBackPackMax.m_sNumHeatseekers;
+            stockpile.m_sMissileLauncher = 1;
 
-			break;
-			}
-		case INPUT_CHEAT_27:	// Flame thrower and fuel canisters.
-			{
-			CStockPile	stockpile			= { 0, };
-			stockpile.m_sNumFuel				= CStockPile::ms_stockpileBackPackMax.m_sNumFuel;
-			stockpile.m_sFlameThrower		= 1;
+            CreateCheat(&stockpile);
 
-			CreateCheat(&stockpile);
+            break;
+        }
+        case INPUT_CHEAT_26: // Napalm launcher and napalm canisters.
+        {
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sNumNapalms = CStockPile::ms_stockpileBackPackMax.m_sNumNapalms;
+            stockpile.m_sNapalmLauncher = 1;
 
-			break;
-			}
-		case INPUT_CHEAT_28:	// Mines.
-			{
-			CStockPile	stockpile			= { 0, };
-			stockpile.m_sNumMines			= CStockPile::ms_stockpileBackPackMax.m_sNumMines;
+            CreateCheat(&stockpile);
 
-			CreateCheat(&stockpile);
+            break;
+        }
+        case INPUT_CHEAT_27: // Flame thrower and fuel canisters.
+        {
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sNumFuel = CStockPile::ms_stockpileBackPackMax.m_sNumFuel;
+            stockpile.m_sFlameThrower = 1;
 
-			break;
-			}
-		case INPUT_CHEAT_29:	// Unused except for SALES demo.
-			{
+            CreateCheat(&stockpile);
+
+            break;
+        }
+        case INPUT_CHEAT_28: // Mines.
+        {
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sNumMines = CStockPile::ms_stockpileBackPackMax.m_sNumMines;
+
+            CreateCheat(&stockpile);
+
+            break;
+        }
+        case INPUT_CHEAT_29: // Unused except for SALES demo.
+        {
 #ifdef SALES_DEMO
-			CStockPile	stockpile	= { 0, };
-			stockpile.m_sHitPoints	= MAX(0, m_sOrigHitPoints - m_stockpile.m_sHitPoints);
+            CStockPile stockpile = {
+                0,
+            };
+            stockpile.m_sHitPoints = MAX(0, m_sOrigHitPoints - m_stockpile.m_sHitPoints);
 
-			stockpile.m_sNumGrenades		= CStockPile::ms_stockpileBackPackMax.m_sNumGrenades;
-			stockpile.m_sNumFireBombs		= CStockPile::ms_stockpileBackPackMax.m_sNumFireBombs;
-			stockpile.m_sNumMissiles		= CStockPile::ms_stockpileBackPackMax.m_sNumMissiles;
-			stockpile.m_sNumNapalms			= CStockPile::ms_stockpileBackPackMax.m_sNumNapalms;
-			stockpile.m_sNumBullets			= CStockPile::ms_stockpileBackPackMax.m_sNumBullets;
-			stockpile.m_sNumShells			= CStockPile::ms_stockpileBackPackMax.m_sNumShells;
-			stockpile.m_sNumMines			= CStockPile::ms_stockpileBackPackMax.m_sNumMines;
-			stockpile.m_sNumHeatseekers	= CStockPile::ms_stockpileBackPackMax.m_sNumHeatseekers;
-			stockpile.m_sNumFuel				= CStockPile::ms_stockpileBackPackMax.m_sNumFuel;
+            stockpile.m_sNumGrenades = CStockPile::ms_stockpileBackPackMax.m_sNumGrenades;
+            stockpile.m_sNumFireBombs = CStockPile::ms_stockpileBackPackMax.m_sNumFireBombs;
+            stockpile.m_sNumMissiles = CStockPile::ms_stockpileBackPackMax.m_sNumMissiles;
+            stockpile.m_sNumNapalms = CStockPile::ms_stockpileBackPackMax.m_sNumNapalms;
+            stockpile.m_sNumBullets = CStockPile::ms_stockpileBackPackMax.m_sNumBullets;
+            stockpile.m_sNumShells = CStockPile::ms_stockpileBackPackMax.m_sNumShells;
+            stockpile.m_sNumMines = CStockPile::ms_stockpileBackPackMax.m_sNumMines;
+            stockpile.m_sNumHeatseekers = CStockPile::ms_stockpileBackPackMax.m_sNumHeatseekers;
+            stockpile.m_sNumFuel = CStockPile::ms_stockpileBackPackMax.m_sNumFuel;
 
-			stockpile.m_sMachineGun			= 1;
-			stockpile.m_sMissileLauncher	= 1;
-			stockpile.m_sShotGun				= 1;
-			stockpile.m_sSprayCannon		= 1;
-			stockpile.m_sFlameThrower		= 1;
-			stockpile.m_sNapalmLauncher	= 1;
+            stockpile.m_sMachineGun = 1;
+            stockpile.m_sMissileLauncher = 1;
+            stockpile.m_sShotGun = 1;
+            stockpile.m_sSprayCannon = 1;
+            stockpile.m_sFlameThrower = 1;
+            stockpile.m_sNapalmLauncher = 1;
 
-			stockpile.m_sKevlarLayers		= CStockPile::ms_stockpileMax.m_sKevlarLayers;
+            stockpile.m_sKevlarLayers = CStockPile::ms_stockpileMax.m_sKevlarLayers;
 
-			stockpile.m_sBackpack			= 1;
+            stockpile.m_sBackpack = 1;
 
-			CreateCheat(&stockpile);
+            CreateCheat(&stockpile);
 
-			// Also, make invincible.
-			m_bInvincible							= true;
+            // Also, make invincible.
+            m_bInvincible = true;
 
-			// Also, allow level advance.
-			g_bEnableLevelAdvanceWithoutGoal	= true;
+            // Also, allow level advance.
+            g_bEnableLevelAdvanceWithoutGoal = true;
 #endif
-			break;
-			}
-		case INPUT_CHEAT_30:	// Toggle invincibility.
-			{
-			UnlockAchievement(ACHIEVEMENT_ENABLE_CHEATS);
-			Flag_Achievements |= FLAG_USED_CHEATS;
+            break;
+        }
+        case INPUT_CHEAT_30: // Toggle invincibility.
+        {
+            UnlockAchievement(ACHIEVEMENT_ENABLE_CHEATS);
+            Flag_Achievements |= FLAG_USED_CHEATS;
 
-			m_bInvincible	= !m_bInvincible;
+            m_bInvincible = !m_bInvincible;
 
-			break;
-			}
-		}
+            break;
+        }
+    }
 
-	// "Twinstick" style inputs.
-if (!demoCompat)
-{
-	if ((input & INPUT_MOVE_UP) || (input & INPUT_MOVE_DOWN) || (input & INPUT_MOVE_LEFT) || (input & INPUT_MOVE_RIGHT)
-			|| (input & INPUT_FIRE_UP) || (input & INPUT_FIRE_DOWN) || (input & INPUT_FIRE_LEFT) || (input & INPUT_FIRE_RIGHT))
-	{
-		// Say we're using twinstick mode
-		m_bUseRotTS = true;
+    // "Twinstick" style inputs.
+    if (!demoCompat)
+    {
+        if ((input & INPUT_MOVE_UP) || (input & INPUT_MOVE_DOWN) || (input & INPUT_MOVE_LEFT) ||
+            (input & INPUT_MOVE_RIGHT) || (input & INPUT_FIRE_UP) || (input & INPUT_FIRE_DOWN) ||
+            (input & INPUT_FIRE_LEFT) || (input & INPUT_FIRE_RIGHT))
+        {
+            // Say we're using twinstick mode
+            m_bUseRotTS = true;
 
-		// Turn off the normal movement inputs if present
-		input &= ~(INPUT_FORWARD | INPUT_BACKWARD | INPUT_LEFT | INPUT_RIGHT);
+            // Turn off the normal movement inputs if present
+            input &= ~(INPUT_FORWARD | INPUT_BACKWARD | INPUT_LEFT | INPUT_RIGHT);
 
-		// Determine movement direction
-		if (bCanMove)
-		{
-			if ((input & INPUT_MOVE_UP) || (input & INPUT_MOVE_DOWN) || (input & INPUT_MOVE_LEFT) || (input & INPUT_MOVE_RIGHT))
-			{
-				// Set up acceleration
-				m_dAcc = ms_dAccUser;
-				m_dDrag = 0;
+            // Determine movement direction
+            if (bCanMove)
+            {
+                if ((input & INPUT_MOVE_UP) || (input & INPUT_MOVE_DOWN) || (input & INPUT_MOVE_LEFT) ||
+                    (input & INPUT_MOVE_RIGHT))
+                {
+                    // Set up acceleration
+                    m_dAcc = ms_dAccUser;
+                    m_dDrag = 0;
 
-				// Say which direction we want to go
-				if (input & INPUT_MOVE_UP)
-					m_dRotTS = 90 + (input & INPUT_MOVE_LEFT ? 45 : 0) + (input & INPUT_MOVE_RIGHT ? -45 : 0);
-				else if (input & INPUT_MOVE_DOWN)
-					m_dRotTS = -90 + (input & INPUT_MOVE_LEFT ? -45 : 0) + (input & INPUT_MOVE_RIGHT ? 45 : 0);
-				else if (input & INPUT_MOVE_LEFT)
-					m_dRotTS = 180;
-				else if (input & INPUT_MOVE_RIGHT)
-					m_dRotTS = 0;
-			}
-			else
-			{
-				m_dAcc = 0;
-				if (m_dVel > 0)
-					m_dDrag = ms_dAccDrag;
-				else if (m_dVel < 0)
-					m_dDrag = -ms_dAccDrag;
-			}
-		}
+                    // Say which direction we want to go
+                    if (input & INPUT_MOVE_UP)
+                        m_dRotTS = 90 + (input & INPUT_MOVE_LEFT ? 45 : 0) + (input & INPUT_MOVE_RIGHT ? -45 : 0);
+                    else if (input & INPUT_MOVE_DOWN)
+                        m_dRotTS = -90 + (input & INPUT_MOVE_LEFT ? -45 : 0) + (input & INPUT_MOVE_RIGHT ? 45 : 0);
+                    else if (input & INPUT_MOVE_LEFT)
+                        m_dRotTS = 180;
+                    else if (input & INPUT_MOVE_RIGHT)
+                        m_dRotTS = 0;
+                }
+                else
+                {
+                    m_dAcc = 0;
+                    if (m_dVel > 0)
+                        m_dDrag = ms_dAccDrag;
+                    else if (m_dVel < 0)
+                        m_dDrag = -ms_dAccDrag;
+                }
+            }
 
-		// Determine fire direction
-		if (bCanFire)
-		{
-			if ((input & INPUT_FIRE_UP) || (input & INPUT_FIRE_DOWN) || (input & INPUT_FIRE_LEFT) || (input & INPUT_FIRE_RIGHT))
-			{
-				// Say we're firing our weapon
-				input |= INPUT_FIRE;
+            // Determine fire direction
+            if (bCanFire)
+            {
+                if ((input & INPUT_FIRE_UP) || (input & INPUT_FIRE_DOWN) || (input & INPUT_FIRE_LEFT) ||
+                    (input & INPUT_FIRE_RIGHT))
+                {
+                    // Say we're firing our weapon
+                    input |= INPUT_FIRE;
 
-				// Then point in the correct direction
-				if (input & INPUT_FIRE_UP)
-					m_dRot = 90 + (input & INPUT_FIRE_LEFT ? 45 : 0) + (input & INPUT_FIRE_RIGHT ? -45 : 0);
-				else if (input & INPUT_FIRE_DOWN)
-					m_dRot = -90 + (input & INPUT_FIRE_LEFT ? -45 : 0) + (input & INPUT_FIRE_RIGHT ? 45 : 0);
-				else if (input & INPUT_FIRE_LEFT)
-					m_dRot = 180;
-				else if (input & INPUT_FIRE_RIGHT)
-					m_dRot = 0;
-			}
-			else
-				// otherwise, point in the direction we're going
-				m_dRot = m_dRotTS;
-		}
-	}
-	//else
-		//m_bUseRotTS = false;
-}
+                    // Then point in the correct direction
+                    if (input & INPUT_FIRE_UP)
+                        m_dRot = 90 + (input & INPUT_FIRE_LEFT ? 45 : 0) + (input & INPUT_FIRE_RIGHT ? -45 : 0);
+                    else if (input & INPUT_FIRE_DOWN)
+                        m_dRot = -90 + (input & INPUT_FIRE_LEFT ? -45 : 0) + (input & INPUT_FIRE_RIGHT ? 45 : 0);
+                    else if (input & INPUT_FIRE_LEFT)
+                        m_dRot = 180;
+                    else if (input & INPUT_FIRE_RIGHT)
+                        m_dRot = 0;
+                }
+                else
+                    // otherwise, point in the direction we're going
+                    m_dRot = m_dRotTS;
+            }
+        }
+        // else
+        // m_bUseRotTS = false;
+    }
 #ifdef ALLOW_TWINSTICK
-if (!demoCompat)
-{
-	GetDudeVelocity(&m_dJoyMoveVel, &m_dJoyMoveAngle);
-	if (!bCanMove)
-		m_dJoyMoveVel = 0;
+    if (!demoCompat)
+    {
+        GetDudeVelocity(&m_dJoyMoveVel, &m_dJoyMoveAngle);
+        if (!bCanMove)
+            m_dJoyMoveVel = 0;
 
-	m_dJoyFireAngle = 0.f;
-	m_bJoyFire = (bCanFire && GetDudeFireAngle(&m_dJoyFireAngle));
-	if (m_dJoyMoveVel > 0 || m_bJoyFire)
-	{
-		// Setup movement
-		if (m_dJoyMoveVel > 0)
-		{
-			// Say we're using twinstick mode
-			m_bUseRotTS = true;
+        m_dJoyFireAngle = 0.f;
+        m_bJoyFire = (bCanFire && GetDudeFireAngle(&m_dJoyFireAngle));
+        if (m_dJoyMoveVel > 0 || m_bJoyFire)
+        {
+            // Setup movement
+            if (m_dJoyMoveVel > 0)
+            {
+                // Say we're using twinstick mode
+                m_bUseRotTS = true;
 
-			// Turn off the normal movement inputs if present
-			input &= ~(INPUT_FORWARD | INPUT_BACKWARD | INPUT_LEFT | INPUT_RIGHT);
+                // Turn off the normal movement inputs if present
+                input &= ~(INPUT_FORWARD | INPUT_BACKWARD | INPUT_LEFT | INPUT_RIGHT);
 
-			// Set up acceleration
-			m_dAcc = ms_dAccUser;
-			m_dDrag = 0;
+                // Set up acceleration
+                m_dAcc = ms_dAccUser;
+                m_dDrag = 0;
 
-			// Say which direction we want to go
-			m_dRotTS = m_dJoyMoveAngle;
-		}
-		else
-		{
-			// Setup drag
-			m_dAcc = 0;
-			if (m_dVel > 0)
-				m_dDrag = ms_dAccDrag;
-			else if (m_dVel < 0)
-				m_dDrag = -ms_dAccDrag;
-		}
+                // Say which direction we want to go
+                m_dRotTS = m_dJoyMoveAngle;
+            }
+            else
+            {
+                // Setup drag
+                m_dAcc = 0;
+                if (m_dVel > 0)
+                    m_dDrag = ms_dAccDrag;
+                else if (m_dVel < 0)
+                    m_dDrag = -ms_dAccDrag;
+            }
 
-		// Setup firing
-		if (m_bJoyFire)
-		{
-			// Say we're firing our weapon
-			//input |= INPUT_FIRE;
+            // Setup firing
+            if (m_bJoyFire)
+            {
+                // Say we're firing our weapon
+                // input |= INPUT_FIRE;
 
-			// Then point in the correct direction
-			m_dRot = m_dJoyFireAngle;
-		}
-		else
-			// otherwise, point in the direction we're going
-			m_dRot = m_dJoyMoveAngle;
-	}
-}
+                // Then point in the correct direction
+                m_dRot = m_dJoyFireAngle;
+            }
+            else
+                // otherwise, point in the direction we're going
+                m_dRot = m_dJoyMoveAngle;
+        }
+    }
 #endif
-	//TRACE("TSD Acc %f MA %f AA %f Fire %i\n", m_dAcc, m_dRotTS, m_dRot, m_bJoyFire);
-	//TRACE("JoyVel %f JoyAngle %f Fire %i FireAngle %f\n", m_dJoyMoveVel, m_dJoyMoveAngle, m_bJoyFire, m_dJoyFireAngle);
+    // TRACE("TSD Acc %f MA %f AA %f Fire %i\n", m_dAcc, m_dRotTS, m_dRot, m_bJoyFire);
+    // TRACE("JoyVel %f JoyAngle %f Fire %i FireAngle %f\n", m_dJoyMoveVel, m_dJoyMoveAngle, m_bJoyFire,
+    // m_dJoyFireAngle);
 
-//#ifdef MOBILE
-if (!demoCompat)
-{
-//#endif // MOBILE
-	if (input & INPUT_WEAPON_NEXT)
-	{
-		input &= ~(INPUT_FIRE);
-		NextWeapon();
-	}
+    // #ifdef MOBILE
+    if (!demoCompat)
+    {
+        // #endif // MOBILE
+        if (input & INPUT_WEAPON_NEXT)
+        {
+            input &= ~(INPUT_FIRE);
+            NextWeapon();
+        }
 
-	if (input & INPUT_WEAPON_PREV)
-	{
-		input &= ~(INPUT_FIRE);
-		PrevWeapon();
-	}
-//#ifdef MOBILE
-}
-//#endif // MOBILE
+        if (input & INPUT_WEAPON_PREV)
+        {
+            input &= ~(INPUT_FIRE);
+            PrevWeapon();
+        }
+        // #ifdef MOBILE
+    }
+    // #endif // MOBILE
 
-	// If a weapon key was pressed . . .
-	if (input & INPUT_WEAPONS_MASK)
-		{
-		// If weapon was available . . .
-		if (SetWeapon(wtNew) == true)
-			{
-			}
-		}
+    // If a weapon key was pressed . . .
+    if (input & INPUT_WEAPONS_MASK)
+    {
+        // If weapon was available . . .
+        if (SetWeapon(wtNew) == true)
+        {
+        }
+    }
 
-	// See if the guy fires his weapon . . .
-	// Check for general weapon fire . . .
-	if (input & INPUT_FIRE)
-		{
-		// If not ducking . . .
-		if (m_state != State_Duck)
-			{
-			ArmWeapon();
-			}
-		else
-			{
-			// We should get up first.
-			SetState(State_Rise);
-			}
-		
-		// Ducking is not a user option when rising for or firing.
-		input	&=	~INPUT_DUCK;
-		}
-	else
-		{
-		// If currently shooting . . .
-		switch (m_state)
-			{
-			case State_Shooting:
-				SetState(State_Stand);
-				break;
-			case State_RunAndShoot:
-				SetState(State_Run);
-				break;
-			case State_StrafeAndShoot:
-				SetState(State_Strafe);
-				break;
-			}
-		}
+    // See if the guy fires his weapon . . .
+    // Check for general weapon fire . . .
+    if (input & INPUT_FIRE)
+    {
+        // If not ducking . . .
+        if (m_state != State_Duck)
+        {
+            ArmWeapon();
+        }
+        else
+        {
+            // We should get up first.
+            SetState(State_Rise);
+        }
+
+        // Ducking is not a user option when rising for or firing.
+        input &= ~INPUT_DUCK;
+    }
+    else
+    {
+        // If currently shooting . . .
+        switch (m_state)
+        {
+            case State_Shooting:
+                SetState(State_Stand);
+                break;
+            case State_RunAndShoot:
+                SetState(State_Run);
+                break;
+            case State_StrafeAndShoot:
+                SetState(State_Strafe);
+                break;
+        }
+    }
 #ifdef MOBILE
-if (!demoCompat)
-{
-	if (input & INPUT_STRAFE)
-		{
-		if (input & INPUT_LEFT)
-			{
-			*psStrafeAngle	= m_dRot + 90;
-			}
-		else if (input & INPUT_RIGHT)
-			{
-			*psStrafeAngle	= m_dRot - 90;
-			}
-		}
+    if (!demoCompat)
+    {
+        if (input & INPUT_STRAFE)
+        {
+            if (input & INPUT_LEFT)
+            {
+                *psStrafeAngle = m_dRot + 90;
+            }
+            else if (input & INPUT_RIGHT)
+            {
+                *psStrafeAngle = m_dRot - 90;
+            }
+        }
 
-		{
-		short sRotDelta	= (short)(input & INPUT_ROT_MASK);
-		
-		if (sRotDelta != 0)
-			sRotDelta	-= 360;
+        {
+            short sRotDelta = (short)(input & INPUT_ROT_MASK);
 
-		if (input & INPUT_ROT_IS_ABS)
-			m_dRot	= (double) sRotDelta;
-		else
-			m_dRot	+= (double) sRotDelta;
+            if (sRotDelta != 0)
+                sRotDelta -= 360;
 
+            if (input & INPUT_ROT_IS_ABS)
+                m_dRot = (double)sRotDelta;
+            else
+                m_dRot += (double)sRotDelta;
 
-		// If there was any rotation while standing . . .
-		if (sRotDelta != 0 && m_state == State_Stand)
-			{
-			// Reset stand state (to make sure idle anim doesn't kick (or gets turned
-			// off if we're already in it) ).
-			SetState(State_Stand);
-			}
-		}
-}
-else
-{
+            // If there was any rotation while standing . . .
+            if (sRotDelta != 0 && m_state == State_Stand)
+            {
+                // Reset stand state (to make sure idle anim doesn't kick (or gets turned
+                // off if we're already in it) ).
+                SetState(State_Stand);
+            }
+        }
+    }
+    else
+    {
 #endif
-	if (input & INPUT_STRAFE)
-		{
-		if (input & INPUT_LEFT)
-			{
-			*psStrafeAngle	= m_dRot + 90;
-			}
-		else if (input & INPUT_RIGHT)
-			{
-			*psStrafeAngle	= m_dRot - 90;
-			}
-		}
-	else if (input & INPUT_STRAFE_LEFT)
-		*psStrafeAngle = m_dRot + 90;
-	else if (input & INPUT_STRAFE_RIGHT)
-		*psStrafeAngle = m_dRot - 90;
-	else
-		{
-		short sRotDelta	= (short)(input & INPUT_ROT_MASK);
-		
-		if (sRotDelta != 0)
-			sRotDelta	-= 360;
+        if (input & INPUT_STRAFE)
+        {
+            if (input & INPUT_LEFT)
+            {
+                *psStrafeAngle = m_dRot + 90;
+            }
+            else if (input & INPUT_RIGHT)
+            {
+                *psStrafeAngle = m_dRot - 90;
+            }
+        }
+        else if (input & INPUT_STRAFE_LEFT)
+            *psStrafeAngle = m_dRot + 90;
+        else if (input & INPUT_STRAFE_RIGHT)
+            *psStrafeAngle = m_dRot - 90;
+        else
+        {
+            short sRotDelta = (short)(input & INPUT_ROT_MASK);
 
-		// Adjust by input delta.
-		m_dRot	+= (double) sRotDelta;
+            if (sRotDelta != 0)
+                sRotDelta -= 360;
 
-//printf("dRotDelta == (%f), m_dRot == (%f)\n", (float) dRotDelta, (float) m_dRot);
+            // Adjust by input delta.
+            m_dRot += (double)sRotDelta;
 
+            // printf("dRotDelta == (%f), m_dRot == (%f)\n", (float) dRotDelta, (float) m_dRot);
 
-		// If there was any rotation while standing . . .
-		if (sRotDelta != 0 && m_state == State_Stand)
-			{
-			// Reset stand state (to make sure idle anim doesn't kick (or gets turned
-			// off if we're already in it) ).
-			SetState(State_Stand);
-			}
-		}
+            // If there was any rotation while standing . . .
+            if (sRotDelta != 0 && m_state == State_Stand)
+            {
+                // Reset stand state (to make sure idle anim doesn't kick (or gets turned
+                // off if we're already in it) ).
+                SetState(State_Stand);
+            }
+        }
 #ifdef MOBILE
-}
+    }
 #endif
-	// Set acceleration based on user input (forward has precedance over reverse)
-	if (input & INPUT_FORWARD)
-		{
-		m_dAcc	= ms_dAccUser;
-		m_dDrag	= 0;
-		m_bUseRotTS = false;
-		}
-	else if (input & INPUT_BACKWARD)
-		{
-		m_dAcc	= -ms_dAccUser;
-		m_dDrag	= 0;
-		m_bUseRotTS = false;
-		}
-	else if (!demoCompat && !((input & INPUT_MOVE_UP) || (input & INPUT_MOVE_DOWN) || (input & INPUT_MOVE_LEFT) || (input & INPUT_MOVE_RIGHT) || m_dJoyMoveVel > 0))
-		{
-		m_dAcc	= 0;
-		// If traveling forward . . .
-		if (m_dVel > 0.0)
-			{
-			m_dDrag	= -ms_dAccDrag;
-			}
-		else if (m_dVel < 0.0)
-			{
-			m_dDrag	= ms_dAccDrag;
-			}
-		}
+    // Set acceleration based on user input (forward has precedance over reverse)
+    if (input & INPUT_FORWARD)
+    {
+        m_dAcc = ms_dAccUser;
+        m_dDrag = 0;
+        m_bUseRotTS = false;
+    }
+    else if (input & INPUT_BACKWARD)
+    {
+        m_dAcc = -ms_dAccUser;
+        m_dDrag = 0;
+        m_bUseRotTS = false;
+    }
+    else if (!demoCompat && !((input & INPUT_MOVE_UP) || (input & INPUT_MOVE_DOWN) || (input & INPUT_MOVE_LEFT) ||
+                              (input & INPUT_MOVE_RIGHT) || m_dJoyMoveVel > 0))
+    {
+        m_dAcc = 0;
+        // If traveling forward . . .
+        if (m_dVel > 0.0)
+        {
+            m_dDrag = -ms_dAccDrag;
+        }
+        else if (m_dVel < 0.0)
+        {
+            m_dDrag = ms_dAccDrag;
+        }
+    }
 
-	// Limit to maximum velocity, which depends on whether "slow" key is being pressed
-	if (input & INPUT_RUN)
-		{
-		*pdMaxForeVel	= ms_dMaxVelForeFast;
-		*pdMaxBackVel	= ms_dMaxVelBackFast;
-		}
-	else
-		{
-		*pdMaxForeVel	= ms_dMaxVelFore;
-		*pdMaxBackVel	= ms_dMaxVelBack;
-		}
+    // Limit to maximum velocity, which depends on whether "slow" key is being pressed
+    if (input & INPUT_RUN)
+    {
+        *pdMaxForeVel = ms_dMaxVelForeFast;
+        *pdMaxBackVel = ms_dMaxVelBackFast;
+    }
+    else
+    {
+        *pdMaxForeVel = ms_dMaxVelFore;
+        *pdMaxBackVel = ms_dMaxVelBack;
+    }
 
-	// If jump specified . . .
-	if ((input & INPUT_REVIVE) && 0) // ***TEMPORARILY DISABLED***
-		{
-		// If on the ground . . .
-		if (m_bAboveTerrain == false)
-			{
-			// If moving forward of our own power. . .
-			if (m_dVel > 0.0)
-				{
-				SetState(State_JumpForward);
-				}
-			else
-				{
-				SetState(State_Jump);
-				}
-			}
-		}
+    // If jump specified . . .
+    if ((input & INPUT_REVIVE) && 0) // ***TEMPORARILY DISABLED***
+    {
+        // If on the ground . . .
+        if (m_bAboveTerrain == false)
+        {
+            // If moving forward of our own power. . .
+            if (m_dVel > 0.0)
+            {
+                SetState(State_JumpForward);
+            }
+            else
+            {
+                SetState(State_Jump);
+            }
+        }
+    }
 
-	// If duck specified . . .
-	if (input & INPUT_DUCK)
-		{
-		SetState(State_Duck);
-		}
-	else
-		{
-		if (m_state == State_Duck)
-			{
-			SetState(State_Rise);
-			}
-		}
+    // If duck specified . . .
+    if (input & INPUT_DUCK)
+    {
+        SetState(State_Duck);
+    }
+    else
+    {
+        if (m_state == State_Duck)
+        {
+            SetState(State_Rise);
+        }
+    }
 
-	// If suicide specified . . .
-	if (input & INPUT_SUICIDE)
-		{
-		// If we have the appropriate weapon . . .
-		if (m_stockpile.m_sMachineGun)
-			{
-			SetState(State_Suicide);
-			}
-		else
-			{
-			// Audible user feedback.
-			PlaySample(g_smidGeneralBeep, SampleMaster::UserFeedBack);
-			}
-		}
+    // If suicide specified . . .
+    if (input & INPUT_SUICIDE)
+    {
+        // If we have the appropriate weapon . . .
+        if (m_stockpile.m_sMachineGun)
+        {
+            SetState(State_Suicide);
+        }
+        else
+        {
+            // Audible user feedback.
+            PlaySample(g_smidGeneralBeep, SampleMaster::UserFeedBack);
+        }
+    }
 
-	// If execute specified . . .
-	if (input & INPUT_EXECUTE)
-		{
-		// If not already executing . . .
-		if (m_state != State_Execute)
-			{
-			// If we have the appropriate weapon . . .
-			if (m_stockpile.m_sMachineGun)
-				{
-				// If there's someone close enough to execute . . .
-				if (FindExecutee() == true)
-					{
-					// Do it.
-					SetState(State_Execute);
-					}
-				}
-			else
-				{
-				// Audible user feedback.
-				PlaySample(g_smidGeneralBeep, SampleMaster::UserFeedBack);
-				}
-			}
-		}
-	}
-
+    // If execute specified . . .
+    if (input & INPUT_EXECUTE)
+    {
+        // If not already executing . . .
+        if (m_state != State_Execute)
+        {
+            // If we have the appropriate weapon . . .
+            if (m_stockpile.m_sMachineGun)
+            {
+                // If there's someone close enough to execute . . .
+                if (FindExecutee() == true)
+                {
+                    // Do it.
+                    SetState(State_Execute);
+                }
+            }
+            else
+            {
+                // Audible user feedback.
+                PlaySample(g_smidGeneralBeep, SampleMaster::UserFeedBack);
+            }
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Applies accelerations, velocities, reacts to terrain obstructions, etc.
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::ProcessForces(	// Returns nothing.
-	long		lCurTime,		// In:  Current game time.
-	double	dMaxForeVel,	// Out: Maximum forward velocity.
-	double	dMaxBackVel,	// Out: Maximum backward velocity.
-	short		sStrafeAngle)	// Out: Strafe angle.
-	{
-	double	dNewX, dNewY, dNewZ;
-	
-	// Calculate elapsed time in seconds.
-	double dSeconds = (double)(lCurTime - m_lPrevTime) / 1000.0;
+void CDude::ProcessForces( // Returns nothing.
+  long lCurTime,           // In:  Current game time.
+  double dMaxForeVel,      // Out: Maximum forward velocity.
+  double dMaxBackVel,      // Out: Maximum backward velocity.
+  short sStrafeAngle)      // Out: Strafe angle.
+{
+    double dNewX, dNewY, dNewZ;
+
+    // Calculate elapsed time in seconds.
+    double dSeconds = (double)(lCurTime - m_lPrevTime) / 1000.0;
 
 #ifdef MOBILE
-if (!demoCompat)
-{
-	TwinStickInfo analogInfo = AndroidGetMovment();
-	if (analogInfo.velocity)
-	{
-		UpdateVelocities(dSeconds, dMaxForeVel * analogInfo.velocity, dMaxBackVel * analogInfo.velocity);
-		GetNewPositionAngle(&dNewX, &dNewY, &dNewZ, dSeconds,analogInfo.movmentAngle);
-	}
-	else
-	{
-		// Update Velocities ////////////////////////////////////////////////////////
-		UpdateVelocities(dSeconds, dMaxForeVel, dMaxBackVel);
+    if (!demoCompat)
+    {
+        TwinStickInfo analogInfo = AndroidGetMovment();
+        if (analogInfo.velocity)
+        {
+            UpdateVelocities(dSeconds, dMaxForeVel * analogInfo.velocity, dMaxBackVel * analogInfo.velocity);
+            GetNewPositionAngle(&dNewX, &dNewY, &dNewZ, dSeconds, analogInfo.movmentAngle);
+        }
+        else
+        {
+            // Update Velocities ////////////////////////////////////////////////////////
+            UpdateVelocities(dSeconds, dMaxForeVel, dMaxBackVel);
 
-		// Get New Position /////////////////////////////////////////////////////////
-		GetNewPosition(&dNewX, &dNewY, &dNewZ, dSeconds);
+            // Get New Position /////////////////////////////////////////////////////////
+            GetNewPosition(&dNewX, &dNewY, &dNewZ, dSeconds);
 
-		//GetNewPositionAngle(&dNewX, &dNewY, &dNewZ, dSeconds,angle_for_postal);
-	}
-}
-else
-{
-	// Update Velocities ////////////////////////////////////////////////////////
+            // GetNewPositionAngle(&dNewX, &dNewY, &dNewZ, dSeconds,angle_for_postal);
+        }
+    }
+    else
+    {
+        // Update Velocities ////////////////////////////////////////////////////////
 
-	UpdateVelocities(dSeconds, dMaxForeVel, dMaxBackVel);
-	
-	// Get New Position /////////////////////////////////////////////////////////
+        UpdateVelocities(dSeconds, dMaxForeVel, dMaxBackVel);
 
-	GetNewPosition(&dNewX, &dNewY, &dNewZ, dSeconds);
-}
+        // Get New Position /////////////////////////////////////////////////////////
+
+        GetNewPosition(&dNewX, &dNewY, &dNewZ, dSeconds);
+    }
 
 #else
-	// Update Velocities ////////////////////////////////////////////////////////
+    // Update Velocities ////////////////////////////////////////////////////////
 
 #if defined(ALLOW_TWINSTICK)
-	if (!demoCompat && m_dJoyMoveVel != 0)
-		UpdateVelocities(dSeconds, dMaxForeVel * m_dJoyMoveVel, dMaxBackVel * m_dJoyMoveVel);
-	else
+    if (!demoCompat && m_dJoyMoveVel != 0)
+        UpdateVelocities(dSeconds, dMaxForeVel * m_dJoyMoveVel, dMaxBackVel * m_dJoyMoveVel);
+    else
 #endif // ALLOW_TWINSTICK
-	UpdateVelocities(dSeconds, dMaxForeVel, dMaxBackVel);
-	
-	// Get New Position /////////////////////////////////////////////////////////
-	if (!demoCompat && m_bUseRotTS)
-		GetNewPositionAngle(&dNewX, &dNewY, &dNewZ, dSeconds, m_dRotTS);
-	else
-		GetNewPosition(&dNewX, &dNewY, &dNewZ, dSeconds);
+        UpdateVelocities(dSeconds, dMaxForeVel, dMaxBackVel);
+
+    // Get New Position /////////////////////////////////////////////////////////
+    if (!demoCompat && m_bUseRotTS)
+        GetNewPositionAngle(&dNewX, &dNewY, &dNewZ, dSeconds, m_dRotTS);
+    else
+        GetNewPosition(&dNewX, &dNewY, &dNewZ, dSeconds);
 #endif // MOBILE
 
+    // If strafing . . .
+    if (sStrafeAngle != INVALID_STRAFE_ANGLE)
+    {
+        // Add strafe.
+        sStrafeAngle = rspMod360(sStrafeAngle);
+        double dStrafeDistance = (STRAFE_VEL * dSeconds);
+        dNewX += COSQ[sStrafeAngle] * dStrafeDistance;
+        dNewZ -= SINQ[sStrafeAngle] * dStrafeDistance;
+    }
 
+    // Validate New Position ////////////////////////////////////////////////////
 
-	// If strafing . . .
-	if (sStrafeAngle != INVALID_STRAFE_ANGLE)
-		{
-		// Add strafe.
-		sStrafeAngle	= rspMod360(sStrafeAngle);
-		double	dStrafeDistance	= (STRAFE_VEL * dSeconds);
-		dNewX	+= COSQ[sStrafeAngle] * dStrafeDistance;
-		dNewZ	-=	SINQ[sStrafeAngle] * dStrafeDistance;
-		}
+    if (MakeValidPosition(&dNewX, &dNewY, &dNewZ, MaxStepUpThreshold) == true)
+    {
+        // Update Values /////////////////////////////////////////////////////////
 
-	// Validate New Position ////////////////////////////////////////////////////
+        m_dX = dNewX;
+        m_dY = dNewY;
+        m_dZ = dNewZ;
 
-	if (MakeValidPosition(&dNewX, &dNewY, &dNewZ, MaxStepUpThreshold) == true)
-		{
-		// Update Values /////////////////////////////////////////////////////////
+        // Map through view angle which is the angle of the trigger plane.
+        // (it is created by the user in the editor parallel with the
+        // screen).
+        double dTriggerY;
+        m_pRealm->MapZ3DtoY2D(m_dZ, &dTriggerY);
+        // Spew triggers.
+        SpewTriggers(m_pRealm, GetInstanceID(), m_dX, dTriggerY);
 
-		m_dX	= dNewX;
-		m_dY	= dNewY;
-		m_dZ	= dNewZ;
+        UpdateFirePosition();
+    }
+    else
+    {
+        // Restore Values ////////////////////////////////////////////////////////
 
-		// Map through view angle which is the angle of the trigger plane.
-		// (it is created by the user in the editor parallel with the
-		// screen).
-		double	dTriggerY;
-		m_pRealm->MapZ3DtoY2D(m_dZ, &dTriggerY);
-		// Spew triggers.
-		SpewTriggers(m_pRealm, GetInstanceID(), m_dX, dTriggerY);
-
-		UpdateFirePosition();
-		}
-	else
-		{
-		// Restore Values ////////////////////////////////////////////////////////
-		
-		// Didn't actually move and, therefore, did not actually accelerate.  
-		// Restore velocities.
-//			m_dVel			-= m_dDeltaVel;
-//			m_dExtHorzVel	-= m_dExtHorzDeltaVel;
-		m_dExtVertVel	-= m_dExtVertDeltaVel;
-		}
-	}
+        // Didn't actually move and, therefore, did not actually accelerate.
+        // Restore velocities.
+        //			m_dVel			-= m_dDeltaVel;
+        //			m_dExtHorzVel	-= m_dExtHorzDeltaVel;
+        m_dExtVertVel -= m_dExtVertDeltaVel;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
 void CDude::Render(void)
-	{
-	// Use user's chosen texture.
-	m_panimCur->m_ptextures	= m_aptextures[m_sTextureIndex];
+{
+    // Use user's chosen texture.
+    m_panimCur->m_ptextures = m_aptextures[m_sTextureIndex];
 
-	// Call base class.
-	CCharacter::Render();
+    // Call base class.
+    CCharacter::Render();
 
-	// Update children, if any . . .
-	CFlag*	pflag	= GetNextFlag(NULL);
-	while (pflag)
-		{
-		PositionChild(
-			pflag->GetSprite(),
-			((CDudeAnim3D*) m_panimCur)->m_ptransLeft->GetAtTime(m_lAnimTime),	// In:  Transform specifying position.
-			NULL,
-			NULL,
-			NULL);
+    // Update children, if any . . .
+    CFlag *pflag = GetNextFlag(NULL);
+    while (pflag)
+    {
+        PositionChild(
+          pflag->GetSprite(),
+          ((CDudeAnim3D *)m_panimCur)->m_ptransLeft->GetAtTime(m_lAnimTime), // In:  Transform specifying position.
+          NULL,
+          NULL,
+          NULL);
 
-		// Update flag's position so it can correctly collision detect.
-		pflag->m_dX	= m_dX;
-		pflag->m_dY	= m_dY;
-		pflag->m_dZ	= m_dZ;
+        // Update flag's position so it can correctly collision detect.
+        pflag->m_dX = m_dX;
+        pflag->m_dY = m_dY;
+        pflag->m_dZ = m_dZ;
 
-		// For asthetics, rotate it a bit.
-		pflag->m_dRot	= rspMod360(pflag->m_dRot + RAND_SWAY(10) );
+        // For asthetics, rotate it a bit.
+        pflag->m_dRot = rspMod360(pflag->m_dRot + RAND_SWAY(10));
 
-		// Get next.
-		pflag	= GetNextFlag(pflag);
-		}
+        // Get next.
+        pflag = GetNextFlag(pflag);
+    }
 
-	// Get anim . . .
-	CAnim3D*	panimWeapon	= NULL;	// Safety.
-	switch (m_state)
-		{
-		case State_Suicide:
-		case State_Execute:
-			panimWeapon	= &(m_aanimWeapons[SemiAutomatic]);
-			break;
-		default:
-			panimWeapon	= &(m_aanimWeapons[m_weapontypeCur]);
-			break;
-		}
+    // Get anim . . .
+    CAnim3D *panimWeapon = NULL; // Safety.
+    switch (m_state)
+    {
+        case State_Suicide:
+        case State_Execute:
+            panimWeapon = &(m_aanimWeapons[SemiAutomatic]);
+            break;
+        default:
+            panimWeapon = &(m_aanimWeapons[m_weapontypeCur]);
+            break;
+    }
 
-	// If we have a visible weapon . . .
-	if (panimWeapon->m_pmeshes)
-		{
-		// Show weapon sprite.
-		m_spriteWeapon.m_sInFlags	&= ~CSprite::InHidden;
+    // If we have a visible weapon . . .
+    if (panimWeapon->m_pmeshes)
+    {
+        // Show weapon sprite.
+        m_spriteWeapon.m_sInFlags &= ~CSprite::InHidden;
 
-		m_spriteWeapon.m_pmesh		= panimWeapon->m_pmeshes->GetAtTime(m_lAnimTime);
-		m_spriteWeapon.m_psop		= panimWeapon->m_psops->GetAtTime(m_lAnimTime);
-		m_spriteWeapon.m_ptex		= panimWeapon->m_ptextures->GetAtTime(m_lAnimTime);
-		m_spriteWeapon.m_psphere	= panimWeapon->m_pbounds->GetAtTime(m_lAnimTime);
-		m_spriteWeapon.m_ptrans		= ((CDudeAnim3D*)m_panimCur)->m_ptransRight->GetAtTime(m_lAnimTime);
-		}
-	else
-		{
-		// Hide weapon sprite.
-		m_spriteWeapon.m_sInFlags	|= CSprite::InHidden;
-		}
+        m_spriteWeapon.m_pmesh = panimWeapon->m_pmeshes->GetAtTime(m_lAnimTime);
+        m_spriteWeapon.m_psop = panimWeapon->m_psops->GetAtTime(m_lAnimTime);
+        m_spriteWeapon.m_ptex = panimWeapon->m_ptextures->GetAtTime(m_lAnimTime);
+        m_spriteWeapon.m_psphere = panimWeapon->m_pbounds->GetAtTime(m_lAnimTime);
+        m_spriteWeapon.m_ptrans = ((CDudeAnim3D *)m_panimCur)->m_ptransRight->GetAtTime(m_lAnimTime);
+    }
+    else
+    {
+        // Hide weapon sprite.
+        m_spriteWeapon.m_sInFlags |= CSprite::InHidden;
+    }
 
-	// If we have a backpack . . .
-	if (m_stockpile.m_sBackpack)
-		{
-		// Show backpack sprite.
-		m_spriteBackpack.m_sInFlags	&= ~CSprite::InHidden;
+    // If we have a backpack . . .
+    if (m_stockpile.m_sBackpack)
+    {
+        // Show backpack sprite.
+        m_spriteBackpack.m_sInFlags &= ~CSprite::InHidden;
 
-		ASSERT(m_animBackpack.m_pmeshes);
-		m_spriteBackpack.m_pmesh	= m_animBackpack.m_pmeshes->GetAtTime(m_lAnimTime);                   
-		m_spriteBackpack.m_psop		= m_animBackpack.m_psops->GetAtTime(m_lAnimTime);                     
-		m_spriteBackpack.m_ptex		= m_animBackpack.m_ptextures->GetAtTime(m_lAnimTime);                 
-		m_spriteBackpack.m_psphere	= m_animBackpack.m_pbounds->GetAtTime(m_lAnimTime);                   
-		m_spriteBackpack.m_ptrans	= ((CDudeAnim3D*)m_panimCur)->m_ptransBack->GetAtTime(m_lAnimTime);
-		}
-	else
-		{
-		// Hide bakcpack sprite.
-		m_spriteBackpack.m_sInFlags	|= CSprite::InHidden;
-		}
-	}
+        ASSERT(m_animBackpack.m_pmeshes);
+        m_spriteBackpack.m_pmesh = m_animBackpack.m_pmeshes->GetAtTime(m_lAnimTime);
+        m_spriteBackpack.m_psop = m_animBackpack.m_psops->GetAtTime(m_lAnimTime);
+        m_spriteBackpack.m_ptex = m_animBackpack.m_ptextures->GetAtTime(m_lAnimTime);
+        m_spriteBackpack.m_psphere = m_animBackpack.m_pbounds->GetAtTime(m_lAnimTime);
+        m_spriteBackpack.m_ptrans = ((CDudeAnim3D *)m_panimCur)->m_ptransBack->GetAtTime(m_lAnimTime);
+    }
+    else
+    {
+        // Hide bakcpack sprite.
+        m_spriteBackpack.m_sInFlags |= CSprite::InHidden;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to init new object at specified position
 ////////////////////////////////////////////////////////////////////////////////
-short CDude::EditNew(									// Returns 0 if successfull, non-zero otherwise
-	short sX,												// In:  New x coord
-	short sY,												// In:  New y coord
-	short sZ)												// In:  New z coord
-	{
-	short sResult = CCharacter::EditNew(sX, sY, sZ);
+short CDude::EditNew( // Returns 0 if successfull, non-zero otherwise
+  short sX,           // In:  New x coord
+  short sY,           // In:  New y coord
+  short sZ)           // In:  New z coord
+{
+    short sResult = CCharacter::EditNew(sX, sY, sZ);
 
-	// Init dude
-	sResult = Init();
+    // Init dude
+    sResult = Init();
 
-	return sResult;
-	}
+    return sResult;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Helper inline to get a GUI, set its text to the value, and recompose it.
 ////////////////////////////////////////////////////////////////////////////////
-inline
-void SetText(					// Returns nothing.
-	RGuiItem*	pguiRoot,	// In:  Root GUI.
-	long			lId,			// In:  ID of GUI to set text.
-	long			lVal)			// In:  Value to set text to.
-	{
-	RGuiItem*	pgui	= pguiRoot->GetItemFromId(lId);
-	if (pgui != NULL)
-		{
-		pgui->SetText("%ld", lVal);
-		pgui->Compose(); 
-		}
-	}
+inline void SetText(  // Returns nothing.
+  RGuiItem *pguiRoot, // In:  Root GUI.
+  long lId,           // In:  ID of GUI to set text.
+  long lVal)          // In:  Value to set text to.
+{
+    RGuiItem *pgui = pguiRoot->GetItemFromId(lId);
+    if (pgui != NULL)
+    {
+        pgui->SetText("%ld", lVal);
+        pgui->Compose();
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CDude::EditModify(void)				// Returns 0 if successfull, non-zero otherwise.
-	{
-	short	sResult	= CCharacter::EditModify();
+short CDude::EditModify(void) // Returns 0 if successfull, non-zero otherwise.
+{
+    short sResult = CCharacter::EditModify();
 
-	if (sResult == 0)
-		{
-		RGuiItem* pgui = RGuiItem::LoadInstantiate(FullPathVD(MODIFY_GUI_FILE) );
-		if (pgui)
-			{
-			sResult = m_stockpile.UserEdit(pgui);
-			if (sResult == 0)
-				{
-				// Get values from dialog:
-				
-				// Currently none.
+    if (sResult == 0)
+    {
+        RGuiItem *pgui = RGuiItem::LoadInstantiate(FullPathVD(MODIFY_GUI_FILE));
+        if (pgui)
+        {
+            sResult = m_stockpile.UserEdit(pgui);
+            if (sResult == 0)
+            {
+                // Get values from dialog:
 
-				// Success.
-				}
-			else
-				{
-				TRACE("EditModify():  m_stockpile.UserEdit() failed.\n");
-				}
+                // Currently none.
 
-			delete pgui;
-			}
-		else
-			{
-			TRACE("EditModify(): Failed to open GUI \"%s\".\n", MODIFY_GUI_FILE);
-			sResult	= -2;
-			}
-		}
-	else
-		{
-		TRACE("EditModify(): Base class EditModify() failed.\n");
-		sResult	= -1;
-		}
+                // Success.
+            }
+            else
+            {
+                TRACE("EditModify():  m_stockpile.UserEdit() failed.\n");
+            }
 
-	return sResult;
-	}
+            delete pgui;
+        }
+        else
+        {
+            TRACE("EditModify(): Failed to open GUI \"%s\".\n", MODIFY_GUI_FILE);
+            sResult = -2;
+        }
+    }
+    else
+    {
+        TRACE("EditModify(): Base class EditModify() failed.\n");
+        sResult = -1;
+    }
 
+    return sResult;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Init dude
 ////////////////////////////////////////////////////////////////////////////////
-short CDude::Init(void)									// Returns 0 if successfull, non-zero otherwise
-	{
-	short sResult = 0;
+short CDude::Init(void) // Returns 0 if successfull, non-zero otherwise
+{
+    short sResult = 0;
 
-	m_lPrevTime			= m_pRealm->m_time.GetGameTime();
-	m_lNextBulletTime	= m_lPrevTime;
-	
-	// Get resources
-	sResult = GetResources();
+    m_lPrevTime = m_pRealm->m_time.GetGameTime();
+    m_lNextBulletTime = m_lPrevTime;
 
-	// Prepare shadow (get resources and setup sprite).
-	sResult	|= PrepareShadow();
+    // Get resources
+    sResult = GetResources();
 
-	// Setup stand state.
-	SetState(State_Stand);
+    // Prepare shadow (get resources and setup sprite).
+    sResult |= PrepareShadow();
 
-	m_smash.m_bits		= CSmash::Good | CSmash::Character;
-	m_smash.m_pThing	= this;
+    // Setup stand state.
+    SetState(State_Stand);
 
-	// No special flags.
-	m_sprite.m_sInFlags = 0;
+    m_smash.m_bits = CSmash::Good | CSmash::Character;
+    m_smash.m_pThing = this;
 
-	// Targeting flag initially starts out as Hidden
-	m_TargetSprite.m_sInFlags		= CSprite::InHidden;
-	// Set alpha blendage.
-	m_TargetSprite.m_sAlphaLevel	= TARGET_ALPHA_LEVEL;
-	// This can be changed with the toggle, and should probably be 
-	// set initially by the preferences file.
-	m_bTargetingHelpEnabled = false;
+    // No special flags.
+    m_sprite.m_sInFlags = 0;
 
-	// Setup weapon sprite.
-	m_spriteWeapon.m_sInFlags	= 0;
-	m_spriteWeapon.m_pthing		= this;
-	m_sprite.AddChild(&m_spriteWeapon);
+    // Targeting flag initially starts out as Hidden
+    m_TargetSprite.m_sInFlags = CSprite::InHidden;
+    // Set alpha blendage.
+    m_TargetSprite.m_sAlphaLevel = TARGET_ALPHA_LEVEL;
+    // This can be changed with the toggle, and should probably be
+    // set initially by the preferences file.
+    m_bTargetingHelpEnabled = false;
 
-	// Setup backpack sprite.
-	m_spriteBackpack.m_sInFlags	= 0;
-	m_spriteBackpack.m_pthing		= this;
-	m_sprite.AddChild(&m_spriteBackpack);
+    // Setup weapon sprite.
+    m_spriteWeapon.m_sInFlags = 0;
+    m_spriteWeapon.m_pthing = this;
+    m_sprite.AddChild(&m_spriteWeapon);
 
-	// Setup our crawler.
-	m_crawler.m_prealm			= m_pRealm;
-	m_crawler.m_sVertTolerance	= MaxStepUpThreshold;
-	m_crawler.Setup(
-		sizeof(ms_anubs)/sizeof(ms_anubs[0]), 
-		ms_anubs, 
-		MAX_CRAWLER_PUSH_X, 
-		MAX_CRAWLER_PUSH_Z);
+    // Setup backpack sprite.
+    m_spriteBackpack.m_sInFlags = 0;
+    m_spriteBackpack.m_pthing = this;
+    m_sprite.AddChild(&m_spriteBackpack);
 
-	// Store initial hit points.
-	m_sOrigHitPoints	= m_stockpile.m_sHitPoints;
+    // Setup our crawler.
+    m_crawler.m_prealm = m_pRealm;
+    m_crawler.m_sVertTolerance = MaxStepUpThreshold;
+    m_crawler.Setup(sizeof(ms_anubs) / sizeof(ms_anubs[0]), ms_anubs, MAX_CRAWLER_PUSH_X, MAX_CRAWLER_PUSH_Z);
 
-	// Start with a weapon.
-	m_weapontypeCur	= NoWeapon;
-	NextWeapon();
+    // Store initial hit points.
+    m_sOrigHitPoints = m_stockpile.m_sHitPoints;
 
-	// Cache gun sound effects since the gun has no preload
-	CacheSample(g_smidRicochet1);
-	CacheSample(g_smidRicochet2);
-	CacheSample(g_smidBulletFire);
-	CacheSample(g_smidShotgun);
-	// Cache your own sound effects
-	CacheSample(g_smidDyingYell);
-	CacheSample(g_smidBodyImpact2);
-	CacheSample(g_smidOutOfBullets);
-	CacheSample(g_smidBulletIntoVest);
-	CacheSample(g_smidBlownupYell);
-	CacheSample(g_smidBurningMainGuy);
-	CacheSample(g_smidEmptyWeapon);
-	CacheSample(g_smidLoadedWeapon);
-	CacheSample(g_smidStep);
-	CacheSample(g_smidPickedUpWeapon);
+    // Start with a weapon.
+    m_weapontypeCur = NoWeapon;
+    NextWeapon();
 
-	return sResult;
-	}
+    // Cache gun sound effects since the gun has no preload
+    CacheSample(g_smidRicochet1);
+    CacheSample(g_smidRicochet2);
+    CacheSample(g_smidBulletFire);
+    CacheSample(g_smidShotgun);
+    // Cache your own sound effects
+    CacheSample(g_smidDyingYell);
+    CacheSample(g_smidBodyImpact2);
+    CacheSample(g_smidOutOfBullets);
+    CacheSample(g_smidBulletIntoVest);
+    CacheSample(g_smidBlownupYell);
+    CacheSample(g_smidBurningMainGuy);
+    CacheSample(g_smidEmptyWeapon);
+    CacheSample(g_smidLoadedWeapon);
+    CacheSample(g_smidStep);
+    CacheSample(g_smidPickedUpWeapon);
 
+    return sResult;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Kill dude
 ////////////////////////////////////////////////////////////////////////////////
 void CDude::Kill(void)
-	{
-	// Remove the target sprite, if there.
-	m_pRealm->m_scene.RemoveSprite(&m_TargetSprite);
+{
+    // Remove the target sprite, if there.
+    m_pRealm->m_scene.RemoveSprite(&m_TargetSprite);
 
-	// Free resources
-	FreeResources();
-	}
+    // Free resources
+    FreeResources();
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CDude::GetResources(void)						// Returns 0 if successfull, non-zero otherwise
-	{
-	short sResult = 0;
+short CDude::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+{
+    short sResult = 0;
 
-	//											Anim base name					Rigid name		Event name		Loop flags
-	//											===================			=============	===========		===========
-	sResult	= m_animRun.Get			("3d/main_runnogun",			NULL,				"mainevent",	RChannel_LoopAtStart | RChannel_LoopAtEnd);
-	sResult	|= m_animThrow.Get		("3d/main_grenade",			"maingrenade",	"mainevent",	0);
-	sResult	|= m_animStand.Get		("3d/main_bobbing",			NULL,				NULL,				RChannel_LoopAtStart | RChannel_LoopAtEnd);
-	sResult	|= m_animDie.Get			("3d/main_die",				NULL,				"mainevent",	0);
-	sResult	|= m_animShoot.Get		("3d/main_shoot",				"guntip",		NULL,				RChannel_LoopAtStart | RChannel_LoopAtEnd);
-	sResult	|= m_animRunShoot.Get	("3d/main_runshoot",			"guntip",		"mainevent",	RChannel_LoopAtStart | RChannel_LoopAtEnd);
-	sResult	|= m_animDamage.Get		("3d/main_multi",				NULL,				NULL,				RChannel_LoopAtStart | RChannel_LoopAtEnd);
-	sResult	|= m_animBurning.Get		("3d/main_onfire",			NULL,				"mainevent",	RChannel_LoopAtStart | RChannel_LoopAtEnd);
-	sResult	|=	m_animStrafe.Get		("3d/main_strafe",			NULL,				"mainevent",	RChannel_LoopAtStart | RChannel_LoopAtEnd);
-	sResult	|= m_animStrafeShoot.Get("3d/main_strafe",			"guntip",		"mainevent",	RChannel_LoopAtStart | RChannel_LoopAtEnd);
-	sResult	|= m_animSuicide.Get		("3d/main_suicide",			"bhead",			"mainevent",	0);
-	sResult	|= m_animLaunch.Get		("3d/main_missile",			"mainmissile",	"mainevent",	0);
-	sResult	|= m_animBlownUp.Get		("3d/main_blownup",			NULL,				NULL,				0);
-	sResult	|= m_animGetUp.Get		("3d/main_getup",				NULL,				NULL,				0);
-	sResult	|= m_animDuck.Get			("3d/main_duck",				NULL,				NULL,				0);
-	sResult	|= m_animRise.Get			("3d/main_rise",				NULL,				NULL,				0);
-	sResult	|= m_animExecute.Get		("3d/main_execute",			"guntip",		NULL,				0);
-	sResult	|= m_animPickPut.Get		("3d/main_pickput",			"lfhand",		"mainevent",	0);
-	sResult	|= m_animIdle.Get			("3d/main_idle",				NULL,				NULL,				0);
+    //											Anim base name					Rigid name		Event name		Loop
+    //flags
+    //											===================			=============	===========		===========
+    sResult = m_animRun.Get("3d/main_runnogun", NULL, "mainevent", RChannel_LoopAtStart | RChannel_LoopAtEnd);
+    sResult |= m_animThrow.Get("3d/main_grenade", "maingrenade", "mainevent", 0);
+    sResult |= m_animStand.Get("3d/main_bobbing", NULL, NULL, RChannel_LoopAtStart | RChannel_LoopAtEnd);
+    sResult |= m_animDie.Get("3d/main_die", NULL, "mainevent", 0);
+    sResult |= m_animShoot.Get("3d/main_shoot", "guntip", NULL, RChannel_LoopAtStart | RChannel_LoopAtEnd);
+    sResult |= m_animRunShoot.Get("3d/main_runshoot", "guntip", "mainevent", RChannel_LoopAtStart | RChannel_LoopAtEnd);
+    sResult |= m_animDamage.Get("3d/main_multi", NULL, NULL, RChannel_LoopAtStart | RChannel_LoopAtEnd);
+    sResult |= m_animBurning.Get("3d/main_onfire", NULL, "mainevent", RChannel_LoopAtStart | RChannel_LoopAtEnd);
+    sResult |= m_animStrafe.Get("3d/main_strafe", NULL, "mainevent", RChannel_LoopAtStart | RChannel_LoopAtEnd);
+    sResult |=
+      m_animStrafeShoot.Get("3d/main_strafe", "guntip", "mainevent", RChannel_LoopAtStart | RChannel_LoopAtEnd);
+    sResult |= m_animSuicide.Get("3d/main_suicide", "bhead", "mainevent", 0);
+    sResult |= m_animLaunch.Get("3d/main_missile", "mainmissile", "mainevent", 0);
+    sResult |= m_animBlownUp.Get("3d/main_blownup", NULL, NULL, 0);
+    sResult |= m_animGetUp.Get("3d/main_getup", NULL, NULL, 0);
+    sResult |= m_animDuck.Get("3d/main_duck", NULL, NULL, 0);
+    sResult |= m_animRise.Get("3d/main_rise", NULL, NULL, 0);
+    sResult |= m_animExecute.Get("3d/main_execute", "guntip", NULL, 0);
+    sResult |= m_animPickPut.Get("3d/main_pickput", "lfhand", "mainevent", 0);
+    sResult |= m_animIdle.Get("3d/main_idle", NULL, NULL, 0);
 
-	// Get the different textures this dude could have.
-	short i;
-	char	szResName[RSP_MAX_PATH];
-	for (i = 0; i < MaxTextures && sResult == 0; i++)
-		{
-		sprintf(szResName, "3d/main_color%d.tex", i);
-		sResult	|= rspGetResource(&g_resmgrGame, szResName, &(m_aptextures[i]) );
-		}
+    // Get the different textures this dude could have.
+    short i;
+    char szResName[RSP_MAX_PATH];
+    for (i = 0; i < MaxTextures && sResult == 0; i++)
+    {
+        sprintf(szResName, "3d/main_color%d.tex", i);
+        sResult |= rspGetResource(&g_resmgrGame, szResName, &(m_aptextures[i]));
+    }
 
-	// Get the different weapons this dude could use.
-	for (i = NoWeapon; i < NumWeaponTypes; i++)
-		{
-		if (ms_awdWeapons[i].pszWeaponResName)
-			{
-			sResult	|= m_aanimWeapons[i].Get(ms_awdWeapons[i].pszWeaponResName, NULL, NULL, NULL, RChannel_LoopAtStart | RChannel_LoopAtEnd);
-			}
-		}
+    // Get the different weapons this dude could use.
+    for (i = NoWeapon; i < NumWeaponTypes; i++)
+    {
+        if (ms_awdWeapons[i].pszWeaponResName)
+        {
+            sResult |= m_aanimWeapons[i].Get(ms_awdWeapons[i].pszWeaponResName,
+                                             NULL,
+                                             NULL,
+                                             NULL,
+                                             RChannel_LoopAtStart | RChannel_LoopAtEnd);
+        }
+    }
 
-	// Get the backpack.
-	sResult	|= m_animBackpack.Get(BACKPACK_RES_NAME, NULL, NULL, NULL, RChannel_LoopAtStart | RChannel_LoopAtEnd);
+    // Get the backpack.
+    sResult |= m_animBackpack.Get(BACKPACK_RES_NAME, NULL, NULL, NULL, RChannel_LoopAtStart | RChannel_LoopAtEnd);
 
-	// Get the targeting sprite
-	sResult |= rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(TARGETING_FILE), &(m_TargetSprite.m_pImage), RFile::LittleEndian);
-	
-	return sResult;
-	}
+    // Get the targeting sprite
+    sResult |= rspGetResource(&g_resmgrGame,
+                              m_pRealm->Make2dResPath(TARGETING_FILE),
+                              &(m_TargetSprite.m_pImage),
+                              RFile::LittleEndian);
 
+    return sResult;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
 void CDude::FreeResources(void)
-	{
-	// Release resources for animations.
-	m_animRun.Release();
-	m_animThrow.Release();
-	m_animStand.Release();
-	m_animDie.Release();
-	m_animShoot.Release();
-	m_animRunShoot.Release();
-	m_animDamage.Release();
-	m_animBurning.Release();
-	m_animStrafe.Release();
-	m_animStrafeShoot.Release();
-	m_animSuicide.Release();
-	m_animLaunch.Release();
-	m_animBlownUp.Release();
-	m_animGetUp.Release();
-	m_animDuck.Release();
-	m_animRise.Release();
-	m_animExecute.Release();
-	m_animPickPut.Release();
-	m_animIdle.Release();
+{
+    // Release resources for animations.
+    m_animRun.Release();
+    m_animThrow.Release();
+    m_animStand.Release();
+    m_animDie.Release();
+    m_animShoot.Release();
+    m_animRunShoot.Release();
+    m_animDamage.Release();
+    m_animBurning.Release();
+    m_animStrafe.Release();
+    m_animStrafeShoot.Release();
+    m_animSuicide.Release();
+    m_animLaunch.Release();
+    m_animBlownUp.Release();
+    m_animGetUp.Release();
+    m_animDuck.Release();
+    m_animRise.Release();
+    m_animExecute.Release();
+    m_animPickPut.Release();
+    m_animIdle.Release();
 
-	// Release the different textures.
-	short i;
-	for (i = 0; i < MaxTextures; i++)
-		{
-		rspReleaseResource(&g_resmgrGame, &(m_aptextures[i]) );
-		}
+    // Release the different textures.
+    short i;
+    for (i = 0; i < MaxTextures; i++)
+    {
+        rspReleaseResource(&g_resmgrGame, &(m_aptextures[i]));
+    }
 
-	// Release the different weapons this dude could use.
-	for (i = NoWeapon; i < NumWeaponTypes; i++)
-		{
-		if (m_aanimWeapons[i].m_pmeshes)
-			{
-			m_aanimWeapons[i].Release();
-			}
-		}
+    // Release the different weapons this dude could use.
+    for (i = NoWeapon; i < NumWeaponTypes; i++)
+    {
+        if (m_aanimWeapons[i].m_pmeshes)
+        {
+            m_aanimWeapons[i].Release();
+        }
+    }
 
-	// Release the backpack.
-	m_animBackpack.Release();
+    // Release the backpack.
+    m_animBackpack.Release();
 
-	// Release the targeting image
-	rspReleaseResource(&g_resmgrGame, &(m_TargetSprite.m_pImage));
-
-	}
+    // Release the targeting image
+    rspReleaseResource(&g_resmgrGame, &(m_TargetSprite.m_pImage));
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Sets a new state based on supplied state enum.  Will set animation ptr
 // to proper animation for state and reset animation timer.
 ////////////////////////////////////////////////////////////////////////////////
-bool CDude::SetState(	// Returns true if new state realized, false otherwise.
-	State	state)			// New state.
-	{
-	bool	bRealizeNewState	= true;		// Assume we can enter state.
-	State	stateOld				= m_state;	// Remember current state.
+bool CDude::SetState( // Returns true if new state realized, false otherwise.
+  State state)        // New state.
+{
+    bool bRealizeNewState = true; // Assume we can enter state.
+    State stateOld = m_state;     // Remember current state.
 
-	// If persistent state specified . . .
-	if (state == State_Persistent)
-		{
-		// Use last persistent state.
-		state	= m_statePersistent;
-		}
+    // If persistent state specified . . .
+    if (state == State_Persistent)
+    {
+        // Use last persistent state.
+        state = m_statePersistent;
+    }
 
-	// See if the state can be realized.
-	switch (m_state)
-		{
-		case State_Idle:
-			// Any new state is okay.
-			break;
-		case State_Stand:
-			// Any new state is okay.
-			break;
-		case State_Run:
-			// Any new state is okay.
-			break;
-		case State_ThrowDone:
-			break;
-		case State_Throw:
-		case State_ThrowRelease:
-		case State_ThrowFinish:
-			switch (state)
-				{
-				case State_ThrowRelease:
-				case State_ThrowFinish:
-				case State_ThrowDone:
-				case State_Die:
-				case State_Shot:
-				case State_BlownUp:
-				case State_Burning:
-					break;
-				default:
-					bRealizeNewState	= false;
-					break;
-				}
-			break;
-		case State_Launch:
-		case State_LaunchRelease:
-		case State_LaunchFinish:
-			switch (state)
-				{
-				case State_Die:
-				case State_Shot:
-				case State_BlownUp:
-				case State_Burning:
-				case State_LaunchRelease:
-				case State_LaunchFinish:
-				case State_LaunchDone:
-					break;
-				default:
-					bRealizeNewState	= false;
-					break;
-				}
-			break;
-		case State_LaunchDone:
-			break;
-		case State_Die:
-			switch (state)
-				{
-				case State_Dead:
-				case State_BlownUp:
-					break;
-				default:
-					bRealizeNewState	= false;
-					break;
-				}
-			break;
-		case State_Dead:
-			switch (state)
-				{
-				case State_Die:
-				case State_Shot:
-				case State_Burning:
-					bRealizeNewState	= false;
-					break;
-				case State_BlownUp:
-					break;
-				default:
-					break;
-				}
-			break;
-		case State_Shooting:
-			switch (state)
-				{
-				case State_Duck:
-					bRealizeNewState	= false;
-					break;
-				}
-			break;
-		case State_RunAndShoot:
-			// Can go anywhere from here.
-			break;
-		case State_Shot:
-			switch (state)
-				{
-				case State_Shot:
-					bRealizeNewState	= false;
-					break;
-				case State_BlownUp:
-				case State_Die:
-					break;
-				default:
-					// Check for minimum duration since last shot time . . .
-					if (m_pRealm->m_time.GetGameTime() < m_lLastShotTime + MIN_SHOT_DURATION)
-						{
-						bRealizeNewState = false;
-						}
-					break;
-				}
-			break;
-		case State_BlownUp:
-			switch (state)
-				{
-				case State_BlownUp:
-					break;
-				default:
-					// Check for end of blown up state . . .
-					if (m_lAnimTime < m_panimCur->m_psops->TotalTime())
-						{
-						bRealizeNewState	= false;
-						}
-					break;
-				}
-			break;
-		case State_Burning:
-			switch (state)
-				{
-				case State_Shot:
-				case State_BlownUp:
-					// Ok, but come back to this state.
-					m_statePersistent	= m_state;
-					break;
-				case State_Die:
-				case State_Stand:
-					// Don't come back.
-					m_statePersistent	= State_Stand;
-					break;
-				default:
-					bRealizeNewState	= false;
-					break;
-				}
-			break;
-		case State_Suicide:
-			switch (state)
-				{
-				case State_Dead:
-					break;
-				default:
-					// Cannot leave this state except to die.
-					bRealizeNewState	= false;
-					break;
-				}
-			break;
-		case State_GetUp:
-			// Can only switch states due to violence or anim done.
-			switch (state)
-				{
-				case State_Die:
-				case State_Shot:
-				case State_BlownUp:
-				case State_Burning:
-					break;
-				default:
-					// Check for end of get up state . . .
-					if (m_lAnimTime < m_panimCur->m_psops->TotalTime())
-						{
-						bRealizeNewState	= false;
-						}
-					break;
-				}
-			break;
-		case State_Duck:
-			// Can go to any other state.
-			break;
-		case State_Rise:
-			// Can go to any other state.
-			break;
-		case State_Jump:
-		case State_JumpForward:
-			// Only landing and falling?...damage? blown up? Not sure yet.
-			break;
-		case State_Fall:
-			break;
-		case State_Land:
-			break;
-		case State_LandForward:
-			break;
-		case State_Execute:
-			break;
-		case State_PutDown:
-			break;
-		case State_ObjectReleased:
-			break;
-		case State_PickUp:
-			break;
-		}
+    // See if the state can be realized.
+    switch (m_state)
+    {
+        case State_Idle:
+            // Any new state is okay.
+            break;
+        case State_Stand:
+            // Any new state is okay.
+            break;
+        case State_Run:
+            // Any new state is okay.
+            break;
+        case State_ThrowDone:
+            break;
+        case State_Throw:
+        case State_ThrowRelease:
+        case State_ThrowFinish:
+            switch (state)
+            {
+                case State_ThrowRelease:
+                case State_ThrowFinish:
+                case State_ThrowDone:
+                case State_Die:
+                case State_Shot:
+                case State_BlownUp:
+                case State_Burning:
+                    break;
+                default:
+                    bRealizeNewState = false;
+                    break;
+            }
+            break;
+        case State_Launch:
+        case State_LaunchRelease:
+        case State_LaunchFinish:
+            switch (state)
+            {
+                case State_Die:
+                case State_Shot:
+                case State_BlownUp:
+                case State_Burning:
+                case State_LaunchRelease:
+                case State_LaunchFinish:
+                case State_LaunchDone:
+                    break;
+                default:
+                    bRealizeNewState = false;
+                    break;
+            }
+            break;
+        case State_LaunchDone:
+            break;
+        case State_Die:
+            switch (state)
+            {
+                case State_Dead:
+                case State_BlownUp:
+                    break;
+                default:
+                    bRealizeNewState = false;
+                    break;
+            }
+            break;
+        case State_Dead:
+            switch (state)
+            {
+                case State_Die:
+                case State_Shot:
+                case State_Burning:
+                    bRealizeNewState = false;
+                    break;
+                case State_BlownUp:
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case State_Shooting:
+            switch (state)
+            {
+                case State_Duck:
+                    bRealizeNewState = false;
+                    break;
+            }
+            break;
+        case State_RunAndShoot:
+            // Can go anywhere from here.
+            break;
+        case State_Shot:
+            switch (state)
+            {
+                case State_Shot:
+                    bRealizeNewState = false;
+                    break;
+                case State_BlownUp:
+                case State_Die:
+                    break;
+                default:
+                    // Check for minimum duration since last shot time . . .
+                    if (m_pRealm->m_time.GetGameTime() < m_lLastShotTime + MIN_SHOT_DURATION)
+                    {
+                        bRealizeNewState = false;
+                    }
+                    break;
+            }
+            break;
+        case State_BlownUp:
+            switch (state)
+            {
+                case State_BlownUp:
+                    break;
+                default:
+                    // Check for end of blown up state . . .
+                    if (m_lAnimTime < m_panimCur->m_psops->TotalTime())
+                    {
+                        bRealizeNewState = false;
+                    }
+                    break;
+            }
+            break;
+        case State_Burning:
+            switch (state)
+            {
+                case State_Shot:
+                case State_BlownUp:
+                    // Ok, but come back to this state.
+                    m_statePersistent = m_state;
+                    break;
+                case State_Die:
+                case State_Stand:
+                    // Don't come back.
+                    m_statePersistent = State_Stand;
+                    break;
+                default:
+                    bRealizeNewState = false;
+                    break;
+            }
+            break;
+        case State_Suicide:
+            switch (state)
+            {
+                case State_Dead:
+                    break;
+                default:
+                    // Cannot leave this state except to die.
+                    bRealizeNewState = false;
+                    break;
+            }
+            break;
+        case State_GetUp:
+            // Can only switch states due to violence or anim done.
+            switch (state)
+            {
+                case State_Die:
+                case State_Shot:
+                case State_BlownUp:
+                case State_Burning:
+                    break;
+                default:
+                    // Check for end of get up state . . .
+                    if (m_lAnimTime < m_panimCur->m_psops->TotalTime())
+                    {
+                        bRealizeNewState = false;
+                    }
+                    break;
+            }
+            break;
+        case State_Duck:
+            // Can go to any other state.
+            break;
+        case State_Rise:
+            // Can go to any other state.
+            break;
+        case State_Jump:
+        case State_JumpForward:
+            // Only landing and falling?...damage? blown up? Not sure yet.
+            break;
+        case State_Fall:
+            break;
+        case State_Land:
+            break;
+        case State_LandForward:
+            break;
+        case State_Execute:
+            break;
+        case State_PutDown:
+            break;
+        case State_ObjectReleased:
+            break;
+        case State_PickUp:
+            break;
+    }
 
-	// If new state realized  . . .
-	if (bRealizeNewState == true)
-		{
-		// Clean up old state.
-		switch (stateOld)
-			{
-			case State_Idle:	// No cleaning necessary.
-			case State_Stand:
-			case State_Die:
-			case State_Run:
-			case State_Shot:
-			case State_Suicide:
-			case State_GetUp:
-				break;
-			case State_Duck:
-				// Clear the ducking bit
-				m_smash.m_bits &= ~CSmash::Ducking;
-				break;
-			case State_Dead:
-				break;
-			case State_Burning:
-				// If not coming back to this state . . .
-				if (stateOld != m_statePersistent)
-					{
-					// If the new state is die . . .
-					if (state == State_Die)
-						{
-						// Keep the fire.
-						}
-					else
-						{
-						// If there's a fire burning . . .
-						CThing*	pthingFire;
-						if (m_pRealm->m_idbank.GetThingByID(&pthingFire, m_u16IdFire) == 0)
-							{
-							// Send it a delete message.
-							GameMessage	msg;
-							msg.msg_ObjectDelete.eType		= typeObjectDelete;
-							msg.msg_ObjectDelete.sPriority	= 0;
-							SendThingMessage(&msg, pthingFire);
-							}
-						}
-					}
-				break;
-			case State_PickUp:
-				{
-				// If there's a powerup that we haven't let go of . . .
-				CPowerUp*	ppowerup;
-				if (m_pRealm->m_idbank.GetThingByID((CThing**)&ppowerup, m_u16IdChild) == 0)
-					{
-					ppowerup->Drop(m_dX, m_dY, m_dZ);
-					}
-				break;
-				}
-			case State_Throw:
-			case State_ThrowDone:
-			case State_ThrowRelease:
-			case State_ThrowFinish:
-			case State_PutDown:
-				{
-				// If there's a weapon that we haven't let go of . . .
-				CWeapon*	pweapon;
-				if (m_pRealm->m_idbank.GetThingByID((CThing**)&pweapon, m_u16IdWeapon) == 0 && state != State_ThrowRelease)
-					{
-					// It should drop like a rock.
-					pweapon->m_dHorizVel	= (GetRand() % (short)CGrenade::ms_dThrowHorizVel);	// NOTE:   ****USING RAND()****
-					pweapon->m_dRot	= GetRand() % 360;
-					ShootWeapon();
-					// Delete it!
-					GameMessage msg;
-					msg.msg_ObjectDelete.eType = typeObjectDelete;
-					msg.msg_ObjectDelete.sPriority = 0;
-					SendThingMessage(&msg, pweapon);
-					}
-				break;
-				}
-			case State_Launch:
-			case State_LaunchDone:
-			case State_LaunchRelease:
-			case State_LaunchFinish:
-			case State_Shooting:
-			case State_RunAndShoot:
-			case State_StrafeAndShoot:
-				{
-				// Abort weapon launch.
-				// If there's a weapon that we haven't launched . . .
-				CWeapon*	pweapon;
-				if (m_pRealm->m_idbank.GetThingByID((CThing**)&pweapon, m_u16IdWeapon) == 0 && state != State_LaunchRelease)
-					{
-					// Done with it.
-					ShootWeapon();
-					// Delete it!
-					GameMessage msg;
-					msg.msg_ObjectDelete.eType = typeObjectDelete;
-					msg.msg_ObjectDelete.sPriority = 0;
-					SendThingMessage(&msg, pweapon);
-					}
+    // If new state realized  . . .
+    if (bRealizeNewState == true)
+    {
+        // Clean up old state.
+        switch (stateOld)
+        {
+            case State_Idle: // No cleaning necessary.
+            case State_Stand:
+            case State_Die:
+            case State_Run:
+            case State_Shot:
+            case State_Suicide:
+            case State_GetUp:
+                break;
+            case State_Duck:
+                // Clear the ducking bit
+                m_smash.m_bits &= ~CSmash::Ducking;
+                break;
+            case State_Dead:
+                break;
+            case State_Burning:
+                // If not coming back to this state . . .
+                if (stateOld != m_statePersistent)
+                {
+                    // If the new state is die . . .
+                    if (state == State_Die)
+                    {
+                        // Keep the fire.
+                    }
+                    else
+                    {
+                        // If there's a fire burning . . .
+                        CThing *pthingFire;
+                        if (m_pRealm->m_idbank.GetThingByID(&pthingFire, m_u16IdFire) == 0)
+                        {
+                            // Send it a delete message.
+                            GameMessage msg;
+                            msg.msg_ObjectDelete.eType = typeObjectDelete;
+                            msg.msg_ObjectDelete.sPriority = 0;
+                            SendThingMessage(&msg, pthingFire);
+                        }
+                    }
+                }
+                break;
+            case State_PickUp:
+            {
+                // If there's a powerup that we haven't let go of . . .
+                CPowerUp *ppowerup;
+                if (m_pRealm->m_idbank.GetThingByID((CThing **)&ppowerup, m_u16IdChild) == 0)
+                {
+                    ppowerup->Drop(m_dX, m_dY, m_dZ);
+                }
+                break;
+            }
+            case State_Throw:
+            case State_ThrowDone:
+            case State_ThrowRelease:
+            case State_ThrowFinish:
+            case State_PutDown:
+            {
+                // If there's a weapon that we haven't let go of . . .
+                CWeapon *pweapon;
+                if (m_pRealm->m_idbank.GetThingByID((CThing **)&pweapon, m_u16IdWeapon) == 0 &&
+                    state != State_ThrowRelease)
+                {
+                    // It should drop like a rock.
+                    pweapon->m_dHorizVel = (GetRand() %
+                                            (short)CGrenade::ms_dThrowHorizVel); // NOTE:   ****USING RAND()****
+                    pweapon->m_dRot = GetRand() % 360;
+                    ShootWeapon();
+                    // Delete it!
+                    GameMessage msg;
+                    msg.msg_ObjectDelete.eType = typeObjectDelete;
+                    msg.msg_ObjectDelete.sPriority = 0;
+                    SendThingMessage(&msg, pweapon);
+                }
+                break;
+            }
+            case State_Launch:
+            case State_LaunchDone:
+            case State_LaunchRelease:
+            case State_LaunchFinish:
+            case State_Shooting:
+            case State_RunAndShoot:
+            case State_StrafeAndShoot:
+            {
+                // Abort weapon launch.
+                // If there's a weapon that we haven't launched . . .
+                CWeapon *pweapon;
+                if (m_pRealm->m_idbank.GetThingByID((CThing **)&pweapon, m_u16IdWeapon) == 0 &&
+                    state != State_LaunchRelease)
+                {
+                    // Done with it.
+                    ShootWeapon();
+                    // Delete it!
+                    GameMessage msg;
+                    msg.msg_ObjectDelete.eType = typeObjectDelete;
+                    msg.msg_ObjectDelete.sPriority = 0;
+                    SendThingMessage(&msg, pweapon);
+                }
 
-				break;
-				}
-			case State_BlownUp:
-				// If dead . . .
-				if (m_bDead == true)
-					{
-					// Simon says, "die."
-					state	= State_Dead;
-					}
-				break;
-			case State_Execute:
-				m_idVictim	= CIdBank::IdNil;
-				break;
-			}
+                break;
+            }
+            case State_BlownUp:
+                // If dead . . .
+                if (m_bDead == true)
+                {
+                    // Simon says, "die."
+                    state = State_Dead;
+                }
+                break;
+            case State_Execute:
+                m_idVictim = CIdBank::IdNil;
+                break;
+        }
 
-		// Setup new state.
-		m_state	= state;
-		switch (state)
-			{
-			case State_Idle:
-				m_panimCur	= NULL;
-				// Make sure we're not in the render list.
-				m_pRealm->m_scene.RemoveSprite(&m_sprite);
-				break;
-			case State_Stand:
-				m_statePersistent			= State_Stand;
-				m_panimCur					= &m_animStand;
-				m_lAnimTime					= 0;
-				m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-				m_lNextIdleTime			= IDLE_ANIM_TIMEOUT;
-				break;
-			case State_Run:
-				if (stateOld != State_Run)
-					{
-					m_panimCur			= &m_animRun;
-					m_lAnimTime			= 0;
-					m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-					
-					m_u8LastEvent		= 0;
-					}
-				break;
-			case State_Throw:
-				m_panimCur			= &m_animThrow;
-				m_lAnimTime			= 0;
-				m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-				break;
-			case State_ThrowDone:
-				// This state is transitional only.
-				break;
-			case State_ThrowRelease:
-				// This state marks the release of the thrown object.
-				break;
-			case State_ThrowFinish:
-				// During this state the throw animation is played to finish.
-				// The thrown item has been released already.
-				break;
-			case State_Die:
-				m_panimCur			= &m_animDie;
-				m_lAnimTime			= 0;
-				m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-				// Ahhhhhhhhhh....
-				PlaySample(g_smidDyingYell, SampleMaster::Voices);
+        // Setup new state.
+        m_state = state;
+        switch (state)
+        {
+            case State_Idle:
+                m_panimCur = NULL;
+                // Make sure we're not in the render list.
+                m_pRealm->m_scene.RemoveSprite(&m_sprite);
+                break;
+            case State_Stand:
+                m_statePersistent = State_Stand;
+                m_panimCur = &m_animStand;
+                m_lAnimTime = 0;
+                m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
+                m_lNextIdleTime = IDLE_ANIM_TIMEOUT;
+                break;
+            case State_Run:
+                if (stateOld != State_Run)
+                {
+                    m_panimCur = &m_animRun;
+                    m_lAnimTime = 0;
+                    m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
 
-				m_bGenericEvent1	= false;
+                    m_u8LastEvent = 0;
+                }
+                break;
+            case State_Throw:
+                m_panimCur = &m_animThrow;
+                m_lAnimTime = 0;
+                m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
+                break;
+            case State_ThrowDone:
+                // This state is transitional only.
+                break;
+            case State_ThrowRelease:
+                // This state marks the release of the thrown object.
+                break;
+            case State_ThrowFinish:
+                // During this state the throw animation is played to finish.
+                // The thrown item has been released already.
+                break;
+            case State_Die:
+                m_panimCur = &m_animDie;
+                m_lAnimTime = 0;
+                m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
+                // Ahhhhhhhhhh....
+                PlaySample(g_smidDyingYell, SampleMaster::Voices);
 
-				// Make sure he ends up dead.
-				m_bDead	= true;
+                m_bGenericEvent1 = false;
 
-				break;
-			case State_Dead:
-				{
-				// If not already dead . . .
-				if (m_bDead == false)
-					{
-					// Note deadness.
-					m_bDead	= true;
-					}
+                // Make sure he ends up dead.
+                m_bDead = true;
 
-				// Add in our Dead smash bit.
-				m_smash.m_bits	|= CSmash::Dead;
+                break;
+            case State_Dead:
+            {
+                // If not already dead . . .
+                if (m_bDead == false)
+                {
+                    // Note deadness.
+                    m_bDead = true;
+                }
 
-				// If in multiplayer . . .
-				if (m_pRealm->m_flags.bMultiplayer == true)
-					{
-					// Drop powerup.
-					// Create powerup . . .
-					CPowerUp*	ppowerup	= DropPowerUp(&m_stockpile, true);
-					if (ppowerup)
-						{
-						// Clear my stockpile.
-						m_stockpile.Zero();
-						// Toss it, baby.
-						TossPowerUp(ppowerup, 30);
-						}
-					}
+                // Add in our Dead smash bit.
+                m_smash.m_bits |= CSmash::Dead;
 
-				break;
-				}
-			case State_Shooting:
-				// If not already in this state . . .
-				if (stateOld != State_Shooting)
-					{
-					m_panimCur			= &m_animShoot;
-					m_lAnimTime			= 0;
-					m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-					}
-				break;
-			case State_RunAndShoot:
-				// If not already in this state . . .
-				if (stateOld != State_RunAndShoot)
-					{
-					m_panimCur			= &m_animRunShoot;
-					m_lAnimTime			= 0;
-					m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-					m_u8LastEvent		= 0;
-					}
-				break;
-			case State_Shot:
-				m_panimCur			= &m_animDamage;
-				m_lAnimTime			= 0;
-				m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-				break;
-			case State_BlownUp:
-				m_panimCur					= &m_animBlownUp;
-				m_lAnimTime					= 0;
-				m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-				
-				m_bGenericEvent1			= false;
-				break;
-			case State_Burning:
-				// If not already in this state . . .
-				if (stateOld != State_Burning)
-					{
-					m_panimCur			= &m_animBurning;
-					m_lAnimTime			= 0;
-					m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-				
-					m_u8LastEvent		= 0;
-					}
-				break;
-			case State_Strafe:
-				// If not already in this state . . .
-				if (stateOld != State_Strafe)
-					{
-					m_panimCur			= &m_animStrafe;
-					m_lAnimTime			= 0;
-					m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-				
-					m_u8LastEvent		= 0;
-					}
-				break;
-			case State_StrafeAndShoot:
-				// If not already in this state . . .
-				if (stateOld != State_StrafeAndShoot)
-					{
-					m_panimCur			= &m_animStrafeShoot;
-					m_lAnimTime			= 0;
-					m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-				
-					m_u8LastEvent		= 0;
-					}
-				break;
-			case State_Suicide:
-				{
-				if (StatsAreAllowed) Stat_Suicides++;
-				UnlockAchievement(ACHIEVEMENT_COMMIT_SUICIDE);
+                // If in multiplayer . . .
+                if (m_pRealm->m_flags.bMultiplayer == true)
+                {
+                    // Drop powerup.
+                    // Create powerup . . .
+                    CPowerUp *ppowerup = DropPowerUp(&m_stockpile, true);
+                    if (ppowerup)
+                    {
+                        // Clear my stockpile.
+                        m_stockpile.Zero();
+                        // Toss it, baby.
+                        TossPowerUp(ppowerup, 30);
+                    }
+                }
 
-				m_panimCur					= &m_animSuicide;
-				m_lAnimTime					= 0;
-				m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-				m_bBrainSplatted			= false;
-				m_bGenericEvent1			= false;
-				m_dVel						= 0.0;
+                break;
+            }
+            case State_Shooting:
+                // If not already in this state . . .
+                if (stateOld != State_Shooting)
+                {
+                    m_panimCur = &m_animShoot;
+                    m_lAnimTime = 0;
+                    m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
+                }
+                break;
+            case State_RunAndShoot:
+                // If not already in this state . . .
+                if (stateOld != State_RunAndShoot)
+                {
+                    m_panimCur = &m_animRunShoot;
+                    m_lAnimTime = 0;
+                    m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
+                    m_u8LastEvent = 0;
+                }
+                break;
+            case State_Shot:
+                m_panimCur = &m_animDamage;
+                m_lAnimTime = 0;
+                m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
+                break;
+            case State_BlownUp:
+                m_panimCur = &m_animBlownUp;
+                m_lAnimTime = 0;
+                m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
 
-				// Let the demon know.
-				GameMessage msg;
-				msg.msg_Suicide.eType = typeSuicide;
-				msg.msg_Suicide.sPriority = 0;
-				CThing* pDemon = m_pRealm->m_aclassHeads[CThing::CDemonID].GetNext();
-				if (pDemon)
-					SendThingMessage(&msg, pDemon);				
+                m_bGenericEvent1 = false;
+                break;
+            case State_Burning:
+                // If not already in this state . . .
+                if (stateOld != State_Burning)
+                {
+                    m_panimCur = &m_animBurning;
+                    m_lAnimTime = 0;
+                    m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
 
-				break;
-				}
-			case State_Launch:
-				m_panimCur					= &m_animLaunch;
-				m_lAnimTime					= 0;
-				m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-				break;
-			case State_LaunchRelease:
-				// This state marks the release of the launched object.
-				break;
-			case State_LaunchFinish:
-				// During this state the launch animation is played to finish.
-				// The launched item has been released already.
-				break;
-			case State_LaunchDone:
-				// This state is transitional only.
-				break;
-			case State_GetUp:
-				m_panimCur					= &m_animGetUp;
-				m_lAnimTime					= 0;
-				m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-				break;
-			case State_Duck:
-				// Set the ducking bits so missiles won't hit him.
-				m_smash.m_bits |= CSmash::Ducking;
-				if (stateOld != State_Duck)
-					{
-					m_panimCur					= &m_animDuck;
-					m_lAnimTime					= 0;
-					m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-					}
-				break;
-			case State_Rise:
-				// If not already in this state . . .
-				if (stateOld != State_Rise)
-					{
-					// If we were just in the duck state . . .
-					if (stateOld == State_Duck)
-						{
-						// We want to only rise based on how ducked we are.
-						// If we duck at the same rate we rise, there's a relation
-						// between the times of the animations.
-						// If not past the end of the duck . . .
-						if (m_lAnimTime < m_animDuck.m_psops->TotalTime())
-							{
-							ASSERT(m_animDuck.m_psops->TotalTime() != 0);
+                    m_u8LastEvent = 0;
+                }
+                break;
+            case State_Strafe:
+                // If not already in this state . . .
+                if (stateOld != State_Strafe)
+                {
+                    m_panimCur = &m_animStrafe;
+                    m_lAnimTime = 0;
+                    m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
 
-							// Get the ratio between the two animations total times.
-							float	fRatio	= (float)m_animRise.m_psops->TotalTime() 
-												/ (float)m_animDuck.m_psops->TotalTime();
-							// Invert the time in the new animations time base.
-							m_lAnimTime				= m_animRise.m_psops->TotalTime() - m_lAnimTime * fRatio;
-							}
-						else
-							{
-							m_lAnimTime	= 0;
-							}
-						}
-					else
-						{
-						m_lAnimTime	= 0;
-						}
+                    m_u8LastEvent = 0;
+                }
+                break;
+            case State_StrafeAndShoot:
+                // If not already in this state . . .
+                if (stateOld != State_StrafeAndShoot)
+                {
+                    m_panimCur = &m_animStrafeShoot;
+                    m_lAnimTime = 0;
+                    m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
 
-					m_panimCur					= &m_animRise;
-					m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-					}
-				break;
-			case State_Jump:
-				if (stateOld != State_Jump)
-					{
-//					m_panimCur	= &m_animJump;
-					ASSERT(0);	// No longer a valid state.
-					m_lAnimTime	= 0;
-					m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-					// Clear trigger.
-					m_bJumpVerticalTrigger	= false;
-					}
-				break;
-			case State_JumpForward:
-				if (stateOld != State_JumpForward)
-					{
-//					m_panimCur	= &m_animJumpForward;
-					ASSERT(0);	// No longer a valid state.
-					m_lAnimTime	= 0;
-					m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-					// Clear trigger.
-					m_bJumpVerticalTrigger	= false;
-					}
-				break;
-			case State_Execute:
-				if (stateOld != State_Execute)
-					{
-					m_panimCur	= &m_animExecute;
-					m_lAnimTime	= 0;
-					m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-					m_bGenericEvent1	= false;
-					PlaySample(g_smidExecution, SampleMaster::UserFeedBack);
-					}
-				break;
-			case State_PutDown:
-				if (stateOld != State_PutDown)
-					{
-					m_panimCur	= &m_animPickPut;
-					m_lAnimTime	= 0;
-					m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-					}
-				break;
-			case State_ObjectReleased:
-				// Use current anim settings.
-				break;
-			case State_PickUp:
-				if (stateOld != State_PickUp)
-					{
-					m_panimCur	= &m_animPickPut;
-					m_lAnimTime	= 0;
-					m_lAnimPrevUpdateTime	= m_pRealm->m_time.GetGameTime();
-					m_bGenericEvent1			= false;
-					}
-				break;
-			}
-		}
+                    m_u8LastEvent = 0;
+                }
+                break;
+            case State_Suicide:
+            {
+                if (StatsAreAllowed)
+                    Stat_Suicides++;
+                UnlockAchievement(ACHIEVEMENT_COMMIT_SUICIDE);
 
-	return bRealizeNewState;
-	}
+                m_panimCur = &m_animSuicide;
+                m_lAnimTime = 0;
+                m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
+                m_bBrainSplatted = false;
+                m_bGenericEvent1 = false;
+                m_dVel = 0.0;
+
+                // Let the demon know.
+                GameMessage msg;
+                msg.msg_Suicide.eType = typeSuicide;
+                msg.msg_Suicide.sPriority = 0;
+                CThing *pDemon = m_pRealm->m_aclassHeads[CThing::CDemonID].GetNext();
+                if (pDemon)
+                    SendThingMessage(&msg, pDemon);
+
+                break;
+            }
+            case State_Launch:
+                m_panimCur = &m_animLaunch;
+                m_lAnimTime = 0;
+                m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
+                break;
+            case State_LaunchRelease:
+                // This state marks the release of the launched object.
+                break;
+            case State_LaunchFinish:
+                // During this state the launch animation is played to finish.
+                // The launched item has been released already.
+                break;
+            case State_LaunchDone:
+                // This state is transitional only.
+                break;
+            case State_GetUp:
+                m_panimCur = &m_animGetUp;
+                m_lAnimTime = 0;
+                m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
+                break;
+            case State_Duck:
+                // Set the ducking bits so missiles won't hit him.
+                m_smash.m_bits |= CSmash::Ducking;
+                if (stateOld != State_Duck)
+                {
+                    m_panimCur = &m_animDuck;
+                    m_lAnimTime = 0;
+                    m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
+                }
+                break;
+            case State_Rise:
+                // If not already in this state . . .
+                if (stateOld != State_Rise)
+                {
+                    // If we were just in the duck state . . .
+                    if (stateOld == State_Duck)
+                    {
+                        // We want to only rise based on how ducked we are.
+                        // If we duck at the same rate we rise, there's a relation
+                        // between the times of the animations.
+                        // If not past the end of the duck . . .
+                        if (m_lAnimTime < m_animDuck.m_psops->TotalTime())
+                        {
+                            ASSERT(m_animDuck.m_psops->TotalTime() != 0);
+
+                            // Get the ratio between the two animations total times.
+                            float fRatio = (float)m_animRise.m_psops->TotalTime() /
+                                           (float)m_animDuck.m_psops->TotalTime();
+                            // Invert the time in the new animations time base.
+                            m_lAnimTime = m_animRise.m_psops->TotalTime() - m_lAnimTime * fRatio;
+                        }
+                        else
+                        {
+                            m_lAnimTime = 0;
+                        }
+                    }
+                    else
+                    {
+                        m_lAnimTime = 0;
+                    }
+
+                    m_panimCur = &m_animRise;
+                    m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
+                }
+                break;
+            case State_Jump:
+                if (stateOld != State_Jump)
+                {
+                    //					m_panimCur	= &m_animJump;
+                    ASSERT(0); // No longer a valid state.
+                    m_lAnimTime = 0;
+                    m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
+                    // Clear trigger.
+                    m_bJumpVerticalTrigger = false;
+                }
+                break;
+            case State_JumpForward:
+                if (stateOld != State_JumpForward)
+                {
+                    //					m_panimCur	= &m_animJumpForward;
+                    ASSERT(0); // No longer a valid state.
+                    m_lAnimTime = 0;
+                    m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
+                    // Clear trigger.
+                    m_bJumpVerticalTrigger = false;
+                }
+                break;
+            case State_Execute:
+                if (stateOld != State_Execute)
+                {
+                    m_panimCur = &m_animExecute;
+                    m_lAnimTime = 0;
+                    m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
+                    m_bGenericEvent1 = false;
+                    PlaySample(g_smidExecution, SampleMaster::UserFeedBack);
+                }
+                break;
+            case State_PutDown:
+                if (stateOld != State_PutDown)
+                {
+                    m_panimCur = &m_animPickPut;
+                    m_lAnimTime = 0;
+                    m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
+                }
+                break;
+            case State_ObjectReleased:
+                // Use current anim settings.
+                break;
+            case State_PickUp:
+                if (stateOld != State_PickUp)
+                {
+                    m_panimCur = &m_animPickPut;
+                    m_lAnimTime = 0;
+                    m_lAnimPrevUpdateTime = m_pRealm->m_time.GetGameTime();
+                    m_bGenericEvent1 = false;
+                }
+                break;
+        }
+    }
+
+    return bRealizeNewState;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Gets info on specified weapon.
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::GetWeaponInfo(		// Returns nothing.
-	WeaponType		weapon,		// In:  Weapon type to query.
-	ClassIDType*	pidWeapon,	// Out: CThing class ID of weapon.
-	short**			ppsNum)		// Out: Ptr to the weapon's counter.
-	{
-	static short sSafetyNum	= 0;
-	short	*psNumLeft	= &sSafetyNum;
-	// Switch on weapon type . . .
-	switch (weapon)
-		{
-		case NoWeapon:
-			*pidWeapon	= 0;
-			*ppsNum		= &sSafetyNum;
-			break;
-		case Grenade:
-			*pidWeapon	= CGrenadeID;
-			*ppsNum		= &m_stockpile.m_sNumGrenades;
-			break;
-		case FireBomb:
-			*pidWeapon	= CFirebombID;
-			*ppsNum		= &m_stockpile.m_sNumFireBombs;
-			break;
-		case Rocket:
-			*pidWeapon	= CRocketID;
-			*ppsNum		= &m_stockpile.m_sNumMissiles;
-			break;
-		case Napalm:
-			*pidWeapon	= CNapalmID;
-			*ppsNum		= &m_stockpile.m_sNumNapalms;
-			break;
-		case SemiAutomatic:
-			*pidWeapon	= CMachineGunID;
-			*ppsNum		= &m_stockpile.m_sNumBullets;
-			break;
-		case ShotGun:
-			*pidWeapon	= CShotGunID;
-			*ppsNum		= &m_stockpile.m_sNumShells;
-			break;
-		case FlameThrower:
-			*pidWeapon	= CFirestreamID; //CFireballID;
-			*ppsNum		= &m_stockpile.m_sNumFuel;
-			break;
-		case ProximityMine:
-			*pidWeapon	= CProximityMineID;
-			*ppsNum		= &m_stockpile.m_sNumMines;
-			break;
-		case TimedMine:
-			*pidWeapon	= CTimedMineID;
-			*ppsNum		= &m_stockpile.m_sNumMines;
-			break;
-		case RemoteMine:
-			*pidWeapon	= CRemoteControlMineID;
-			*ppsNum		= &m_stockpile.m_sNumMines;
-			break;
-		case BouncingBettyMine:
-			*pidWeapon	= CBouncingBettyMineID;
-			*ppsNum		= &m_stockpile.m_sNumMines;
-			break;
-		case Heatseeker:
-			*pidWeapon	= CHeatseekerID;
-			*ppsNum		= &m_stockpile.m_sNumHeatseekers;
-			break;
-		case SprayCannon:
-			*pidWeapon	= CAssaultWeaponID;
-			*ppsNum		= &m_stockpile.m_sNumShells;
-			break;
-		case DeathWad:
-			*pidWeapon	= CDeathWadID;
-			*ppsNum		= &m_stockpile.m_sNumMissiles;
-			break;
-		case DoubleBarrel:
-			*pidWeapon	= CDoubleBarrelID;
-			*ppsNum		= &m_stockpile.m_sNumShells;
-			break;
-		default:
-			TRACE("GetWeaponInfo():  Query on invalid weapon (%d).\n", (short)weapon);
-			break;
-		}
-	}
+void CDude::GetWeaponInfo( // Returns nothing.
+  WeaponType weapon,       // In:  Weapon type to query.
+  ClassIDType *pidWeapon,  // Out: CThing class ID of weapon.
+  short **ppsNum)          // Out: Ptr to the weapon's counter.
+{
+    static short sSafetyNum = 0;
+    short *psNumLeft = &sSafetyNum;
+    // Switch on weapon type . . .
+    switch (weapon)
+    {
+        case NoWeapon:
+            *pidWeapon = 0;
+            *ppsNum = &sSafetyNum;
+            break;
+        case Grenade:
+            *pidWeapon = CGrenadeID;
+            *ppsNum = &m_stockpile.m_sNumGrenades;
+            break;
+        case FireBomb:
+            *pidWeapon = CFirebombID;
+            *ppsNum = &m_stockpile.m_sNumFireBombs;
+            break;
+        case Rocket:
+            *pidWeapon = CRocketID;
+            *ppsNum = &m_stockpile.m_sNumMissiles;
+            break;
+        case Napalm:
+            *pidWeapon = CNapalmID;
+            *ppsNum = &m_stockpile.m_sNumNapalms;
+            break;
+        case SemiAutomatic:
+            *pidWeapon = CMachineGunID;
+            *ppsNum = &m_stockpile.m_sNumBullets;
+            break;
+        case ShotGun:
+            *pidWeapon = CShotGunID;
+            *ppsNum = &m_stockpile.m_sNumShells;
+            break;
+        case FlameThrower:
+            *pidWeapon = CFirestreamID; // CFireballID;
+            *ppsNum = &m_stockpile.m_sNumFuel;
+            break;
+        case ProximityMine:
+            *pidWeapon = CProximityMineID;
+            *ppsNum = &m_stockpile.m_sNumMines;
+            break;
+        case TimedMine:
+            *pidWeapon = CTimedMineID;
+            *ppsNum = &m_stockpile.m_sNumMines;
+            break;
+        case RemoteMine:
+            *pidWeapon = CRemoteControlMineID;
+            *ppsNum = &m_stockpile.m_sNumMines;
+            break;
+        case BouncingBettyMine:
+            *pidWeapon = CBouncingBettyMineID;
+            *ppsNum = &m_stockpile.m_sNumMines;
+            break;
+        case Heatseeker:
+            *pidWeapon = CHeatseekerID;
+            *ppsNum = &m_stockpile.m_sNumHeatseekers;
+            break;
+        case SprayCannon:
+            *pidWeapon = CAssaultWeaponID;
+            *ppsNum = &m_stockpile.m_sNumShells;
+            break;
+        case DeathWad:
+            *pidWeapon = CDeathWadID;
+            *ppsNum = &m_stockpile.m_sNumMissiles;
+            break;
+        case DoubleBarrel:
+            *pidWeapon = CDoubleBarrelID;
+            *ppsNum = &m_stockpile.m_sNumShells;
+            break;
+        default:
+            TRACE("GetWeaponInfo():  Query on invalid weapon (%d).\n", (short)weapon);
+            break;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Fire specified weapon type.
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::ArmWeapon(							// Returns nothing.
-	WeaponType weapon /*= CurrentWeapon*/)	// In:  Weapon to fire.
-	{
-	// If firing not in progress . . .
-	if (m_u16IdWeapon == CIdBank::IdNil)
-		{
-		// If no specific weapon . . .
-		if (weapon == CurrentWeapon)
-			{
-			weapon	= m_weapontypeCur;
-			}
+void CDude::ArmWeapon(                   // Returns nothing.
+  WeaponType weapon /*= CurrentWeapon*/) // In:  Weapon to fire.
+{
+    // If firing not in progress . . .
+    if (m_u16IdWeapon == CIdBank::IdNil)
+    {
+        // If no specific weapon . . .
+        if (weapon == CurrentWeapon)
+        {
+            weapon = m_weapontypeCur;
+        }
 
-		// Get current weapon and stockpile.
-		short*	psNumLeft;
-		GetWeaponInfo(weapon, &m_eWeaponType, &psNumLeft);
+        // Get current weapon and stockpile.
+        short *psNumLeft;
+        GetWeaponInfo(weapon, &m_eWeaponType, &psNumLeft);
 
-		ULONG weaponFlag = 0;
-		switch (weapon)
-			{
-			case Grenade: weaponFlag = FLAG_USED_GRENADE; break;
-			case FireBomb: weaponFlag = FLAG_USED_MOLOTOV; break;
-			case Rocket: weaponFlag = FLAG_USED_ROCKET; break;
-			case Napalm: weaponFlag = FLAG_USED_NAPALM; break;
-			case SemiAutomatic: weaponFlag = FLAG_USED_M16; break;
-			case ShotGun: weaponFlag = FLAG_USED_SHOTGUN; break;
-			case FlameThrower: weaponFlag = FLAG_USED_FLAMETHROWER; break;
-			case ProximityMine: weaponFlag = FLAG_USED_PROXIMITY_MINE; break;
-			case TimedMine: weaponFlag = FLAG_USED_TIMED_MINE; break;
-			case RemoteMine: weaponFlag = FLAG_USED_REMOTE_MINE; break;
-			case BouncingBettyMine: weaponFlag = FLAG_USED_BETTY_MINE; break;
-			case Heatseeker: weaponFlag = FLAG_USED_HEATSEEKER; break;
-			case SprayCannon: weaponFlag = FLAG_USED_SPRAY_CANNON; break;
-			case DeathWad: weaponFlag = FLAG_USED_DEATHWAD; break;
-			case DoubleBarrel: weaponFlag = FLAG_USED_DBL_SHOTGUN; break;
-			}
+        ULONG weaponFlag = 0;
+        switch (weapon)
+        {
+            case Grenade:
+                weaponFlag = FLAG_USED_GRENADE;
+                break;
+            case FireBomb:
+                weaponFlag = FLAG_USED_MOLOTOV;
+                break;
+            case Rocket:
+                weaponFlag = FLAG_USED_ROCKET;
+                break;
+            case Napalm:
+                weaponFlag = FLAG_USED_NAPALM;
+                break;
+            case SemiAutomatic:
+                weaponFlag = FLAG_USED_M16;
+                break;
+            case ShotGun:
+                weaponFlag = FLAG_USED_SHOTGUN;
+                break;
+            case FlameThrower:
+                weaponFlag = FLAG_USED_FLAMETHROWER;
+                break;
+            case ProximityMine:
+                weaponFlag = FLAG_USED_PROXIMITY_MINE;
+                break;
+            case TimedMine:
+                weaponFlag = FLAG_USED_TIMED_MINE;
+                break;
+            case RemoteMine:
+                weaponFlag = FLAG_USED_REMOTE_MINE;
+                break;
+            case BouncingBettyMine:
+                weaponFlag = FLAG_USED_BETTY_MINE;
+                break;
+            case Heatseeker:
+                weaponFlag = FLAG_USED_HEATSEEKER;
+                break;
+            case SprayCannon:
+                weaponFlag = FLAG_USED_SPRAY_CANNON;
+                break;
+            case DeathWad:
+                weaponFlag = FLAG_USED_DEATHWAD;
+                break;
+            case DoubleBarrel:
+                weaponFlag = FLAG_USED_DBL_SHOTGUN;
+                break;
+        }
 
-		State	stateShoot	= State_Throw;
-		switch (weapon)
-			{
-			case FlameThrower:
-			case SemiAutomatic:
-			case SprayCannon:
-				if ((m_dVel >= MIN_RUN_VEL || m_dVel <= -MIN_RUN_VEL || m_dAcc != 0.0))
-					{
-					stateShoot	= State_RunAndShoot;
-					}
-				else
-					{
-					switch (m_state)
-						{
-						case State_Strafe:
-						case State_StrafeAndShoot:
-							stateShoot	= State_StrafeAndShoot;
-							break;
-						case State_Execute:
-							stateShoot	= State_Execute;
-							break;
-						default:
-							stateShoot	= State_Shooting;
-							break;
-						}
-					}
-				break;
-			case ShotGun:
-			case DoubleBarrel:
-				stateShoot	= State_Launch;
-				break;
-			case Grenade:
-			case FireBomb:
-				stateShoot	= State_Throw;
-				break;
-			case Napalm:
-			case Rocket:
-			case Heatseeker:
-			case DeathWad:
-				stateShoot	= State_Launch;
-				break;
-			case ProximityMine:
-			case TimedMine:
-			case RemoteMine:
-			case BouncingBettyMine:
-				stateShoot	= State_PutDown;
-				break;
-			}
+        State stateShoot = State_Throw;
+        switch (weapon)
+        {
+            case FlameThrower:
+            case SemiAutomatic:
+            case SprayCannon:
+                if ((m_dVel >= MIN_RUN_VEL || m_dVel <= -MIN_RUN_VEL || m_dAcc != 0.0))
+                {
+                    stateShoot = State_RunAndShoot;
+                }
+                else
+                {
+                    switch (m_state)
+                    {
+                        case State_Strafe:
+                        case State_StrafeAndShoot:
+                            stateShoot = State_StrafeAndShoot;
+                            break;
+                        case State_Execute:
+                            stateShoot = State_Execute;
+                            break;
+                        default:
+                            stateShoot = State_Shooting;
+                            break;
+                    }
+                }
+                break;
+            case ShotGun:
+            case DoubleBarrel:
+                stateShoot = State_Launch;
+                break;
+            case Grenade:
+            case FireBomb:
+                stateShoot = State_Throw;
+                break;
+            case Napalm:
+            case Rocket:
+            case Heatseeker:
+            case DeathWad:
+                stateShoot = State_Launch;
+                break;
+            case ProximityMine:
+            case TimedMine:
+            case RemoteMine:
+            case BouncingBettyMine:
+                stateShoot = State_PutDown;
+                break;
+        }
 
-		// If we have any of this weapon . . .
-		if (*psNumLeft >= ms_awdWeapons[weapon].sMinAmmoRequired)
-			{
-			// Enter our weapon launch state.
-			if (SetState(stateShoot) == true)
-				{
-				if (GetInputMode() != INPUT_MODE_PLAYBACK)  // don't let demo mode set these flags, or the endgame will ruin achievements.
-					{
-					Flag_Achievements |= weaponFlag;
-					if ((Flag_Achievements & FLAG_MASK_WEAPONS) == FLAG_MASK_WEAPONS)
-						UnlockAchievement(ACHIEVEMENT_USE_EVERY_WEAPON);
-					}
+        // If we have any of this weapon . . .
+        if (*psNumLeft >= ms_awdWeapons[weapon].sMinAmmoRequired)
+        {
+            // Enter our weapon launch state.
+            if (SetState(stateShoot) == true)
+            {
+                if (GetInputMode() !=
+                    INPUT_MODE_PLAYBACK) // don't let demo mode set these flags, or the endgame will ruin achievements.
+                {
+                    Flag_Achievements |= weaponFlag;
+                    if ((Flag_Achievements & FLAG_MASK_WEAPONS) == FLAG_MASK_WEAPONS)
+                        UnlockAchievement(ACHIEVEMENT_USE_EVERY_WEAPON);
+                }
 
-				// Remember the type of ammo we're shooting.
-				m_weaponShooting	= weapon;
+                // Remember the type of ammo we're shooting.
+                m_weaponShooting = weapon;
 
-				CWeapon*	pweapon	= PrepareWeapon();
-				if (pweapon != NULL)
-					{
-					GameMessage msg;
-					msg.msg_WeaponFire.eType = typeWeaponFire;
-					msg.msg_WeaponFire.sPriority = 0;
-					msg.msg_WeaponFire.sWeapon = (short) weapon;
-					CThing* pDemon = m_pRealm->m_aclassHeads[CThing::CDemonID].GetNext();
-					if (pDemon)
-						SendThingMessage(&msg, pDemon);				
-					}
-				}
-			else
-				{
-				// Note that we were unable to arm a weapon.
-//				m_weaponShooting	= NoWeapon;
-				}
-			}
-		else
-			{
-			// Switch to the old faithful.
-			SetWeapon(SemiAutomatic);
-			// Note that we were unable to arm a weapon.
-			m_weaponShooting	= NoWeapon;
-			}
-		}
-	}
+                CWeapon *pweapon = PrepareWeapon();
+                if (pweapon != NULL)
+                {
+                    GameMessage msg;
+                    msg.msg_WeaponFire.eType = typeWeaponFire;
+                    msg.msg_WeaponFire.sPriority = 0;
+                    msg.msg_WeaponFire.sWeapon = (short)weapon;
+                    CThing *pDemon = m_pRealm->m_aclassHeads[CThing::CDemonID].GetNext();
+                    if (pDemon)
+                        SendThingMessage(&msg, pDemon);
+                }
+            }
+            else
+            {
+                // Note that we were unable to arm a weapon.
+                //				m_weaponShooting	= NoWeapon;
+            }
+        }
+        else
+        {
+            // Switch to the old faithful.
+            SetWeapon(SemiAutomatic);
+            // Note that we were unable to arm a weapon.
+            m_weaponShooting = NoWeapon;
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Shoot current weapon.
 // This should be done when the character releases the weapon it's
 // shooting.
 ////////////////////////////////////////////////////////////////////////////////
-CWeapon* CDude::ShootWeapon(void)		// Returns the weapoin ptr or NULL.
-	{
-	return ShootWeapon(
-		COLLISION_BITS_INCLUDE,
-		COLLISION_BITS_DONTCARE,
-		COLLISION_BITS_EXCLUDE);
-	}
+CWeapon *CDude::ShootWeapon(void) // Returns the weapoin ptr or NULL.
+{
+    return ShootWeapon(COLLISION_BITS_INCLUDE, COLLISION_BITS_DONTCARE, COLLISION_BITS_EXCLUDE);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Shoot current weapon.
@@ -4683,280 +4724,276 @@ CWeapon* CDude::ShootWeapon(void)		// Returns the weapoin ptr or NULL.
 // shooting.
 // (virtual).
 ////////////////////////////////////////////////////////////////////////////////
-CWeapon* CDude::ShootWeapon(					// Returns the weapon ptr or NULL.
-	CSmash::Bits bitsInclude /*= ms_u32CollideBitsInclude*/,
-	CSmash::Bits bitsDontcare /*= ms_u32CollideBitsDontcare*/,
-	CSmash::Bits bitsExclude /*= ms_u32CollideBitsExclude*/)
-	{
-	bool	bShootWeapon	= true;	// Assume we should shoot the weapon.
-	CWeapon*	pweapon		= NULL;	// Assume nothing.
+CWeapon *CDude::ShootWeapon( // Returns the weapon ptr or NULL.
+  CSmash::Bits bitsInclude /*= ms_u32CollideBitsInclude*/,
+  CSmash::Bits bitsDontcare /*= ms_u32CollideBitsDontcare*/,
+  CSmash::Bits bitsExclude /*= ms_u32CollideBitsExclude*/)
+{
+    bool bShootWeapon = true; // Assume we should shoot the weapon.
+    CWeapon *pweapon = NULL;  // Assume nothing.
 
-	// If the weapon is in an invalid position . . .
-	if (ValidateWeaponPosition() == false)
-		{
-		bShootWeapon	= false;
-		}
+    // If the weapon is in an invalid position . . .
+    if (ValidateWeaponPosition() == false)
+    {
+        bShootWeapon = false;
+    }
 
-	if (m_weaponShooting != NoWeapon && bShootWeapon == true)
-		{
-		// Get the weapon info.
-		ClassIDType	idWeapon;
-		short*	psNumLeft;
-		GetWeaponInfo(m_weaponShooting, &idWeapon, &psNumLeft);
+    if (m_weaponShooting != NoWeapon && bShootWeapon == true)
+    {
+        // Get the weapon info.
+        ClassIDType idWeapon;
+        short *psNumLeft;
+        GetWeaponInfo(m_weaponShooting, &idWeapon, &psNumLeft);
 
-//		ASSERT(idWeapon == m_eWeaponType);
+        //		ASSERT(idWeapon == m_eWeaponType);
 
+        switch (m_eWeaponType)
+        {
+            case CFirestreamID: // CFireballID:
+                if (m_u16IdWeapon != CIdBank::IdNil)
+                {
+                }
+                else
+                {
+                    bShootWeapon = false;
+                }
+                break;
+            case CShotGunID:
+                if (m_stockpile.m_sNumShells > 0)
+                {
+                }
+                else
+                {
+                    // Don't fire.
+                    bShootWeapon = false;
+                }
+                break;
+            case CDoubleBarrelID:
+                if (m_stockpile.m_sNumShells > 1)
+                {
+                    // Subtract one now (another will be taken soon -- cheezy... I know).
+                    m_stockpile.m_sNumShells--;
+                }
+                else
+                {
+                    // Don't fire.
+                    bShootWeapon = false;
+                }
+                break;
+            case CAssaultWeaponID:
+                if (m_stockpile.m_sNumShells > 0)
+                {
+                    // Note time of next fire.
+                    m_lNextBulletTime = m_pRealm->m_time.GetGameTime() + MS_BETWEEN_SPRAYS;
+                }
+                else
+                {
+                    // Note time of next fire.
+                    m_lNextBulletTime = m_pRealm->m_time.GetGameTime() + MS_BETWEEN_SPRAYS * 3;
+                    // Feedback.
+                    PlaySample(g_smidOutOfBullets, SampleMaster::Weapon);
+                    // Don't fire.
+                    bShootWeapon = false;
+                }
+                break;
+            case CMachineGunID:
+                // Cannot run out of bullets.
+                // Note time of next fire.
+                m_lNextBulletTime = m_pRealm->m_time.GetGameTime() + MS_BETWEEN_BULLETS;
+                // If we have any of this weapon . . .
+                if (m_stockpile.m_sNumBullets < CStockPile::ms_stockpileMax.m_sNumBullets)
+                {
+                    // Success.
+                    m_stockpile.m_sNumBullets = CStockPile::ms_stockpileMax.m_sNumBullets;
+                }
+                break;
+        }
 
-		switch (m_eWeaponType)
-			{
-			case CFirestreamID: //CFireballID:
-				if (m_u16IdWeapon != CIdBank::IdNil)
-					{
-					}
-				else
-					{
-					bShootWeapon	= false;
-					}
-				break;
-			case CShotGunID:
-				if (m_stockpile.m_sNumShells > 0)
-					{
-					}
-				else
-					{
-					// Don't fire.
-					bShootWeapon	= false;
-					}
-				break;
-			case CDoubleBarrelID:
-				if (m_stockpile.m_sNumShells > 1)
-					{
-					// Subtract one now (another will be taken soon -- cheezy... I know).
-					m_stockpile.m_sNumShells--;
-					}
-				else
-					{
-					// Don't fire.
-					bShootWeapon	= false;
-					}
-				break;
-			case CAssaultWeaponID:
-				if (m_stockpile.m_sNumShells > 0)
-					{
-					// Note time of next fire.
-					m_lNextBulletTime	= m_pRealm->m_time.GetGameTime() + MS_BETWEEN_SPRAYS;
-					}
-				else
-					{
-					// Note time of next fire.
-					m_lNextBulletTime	= m_pRealm->m_time.GetGameTime() + MS_BETWEEN_SPRAYS * 3;
-					// Feedback.
-					PlaySample(g_smidOutOfBullets, SampleMaster::Weapon);
-					// Don't fire.
-					bShootWeapon	= false;
-					}
-				break;
-			case CMachineGunID:
-				// Cannot run out of bullets.
-				// Note time of next fire.
-				m_lNextBulletTime	= m_pRealm->m_time.GetGameTime() + MS_BETWEEN_BULLETS;
-				// If we have any of this weapon . . .
-				if (m_stockpile.m_sNumBullets < CStockPile::ms_stockpileMax.m_sNumBullets)
-					{
-					// Success.
-					m_stockpile.m_sNumBullets	= CStockPile::ms_stockpileMax.m_sNumBullets;
-					}
-				break;
-			}
+        // If we actually want to shoot the weapon . . .
+        if (bShootWeapon)
+        {
+            // Deduct ammo.
+            *psNumLeft = *psNumLeft - 1;
 
-		// If we actually want to shoot the weapon . . .
-		if (bShootWeapon)
-			{
-			// Deduct ammo.
-			*psNumLeft	= *psNumLeft - 1;
+            pweapon = CCharacter::ShootWeapon(bitsInclude, bitsDontcare, bitsExclude);
 
-			pweapon	= CCharacter::ShootWeapon(bitsInclude, bitsDontcare, bitsExclude);
+            // If a weapon was returned . . .
+            if (pweapon)
+            {
+                // Set the detection bits (not all weapons use these).  The only one
+                // I know of currently is the heatseeker.
+                pweapon->SetDetectionBits(CSmash::Character, 0, m_pRealm->m_flags.bCoopMode ? CSmash::Good : 0);
+            }
+        }
+    }
 
-			// If a weapon was returned . . .
-			if (pweapon)
-				{
-				// Set the detection bits (not all weapons use these).  The only one
-				// I know of currently is the heatseeker.
-				pweapon->SetDetectionBits(
-					CSmash::Character,
-					0,
-					m_pRealm->m_flags.bCoopMode ? CSmash::Good : 0);
-				}
-			}
-		}
-
-	return pweapon;
-	}
+    return pweapon;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Receive damage.
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::Damage(			// Returns nothing.
-	short	sHitPoints,			// Hit points of damage to do.
-	U16	u16ShooterId)		// In:  Thing responsible for damage.
-	{
-	// Remember if already dead . . .
-	bool	bDead	= m_bDead;
+void CDude::Damage( // Returns nothing.
+  short sHitPoints, // Hit points of damage to do.
+  U16 u16ShooterId) // In:  Thing responsible for damage.
+{
+    // Remember if already dead . . .
+    bool bDead = m_bDead;
 
-	if (m_bInvincible == false)
-		{
-		if (StatsAreAllowed) Stat_DamageTaken += sHitPoints;
+    if (m_bInvincible == false)
+    {
+        if (StatsAreAllowed)
+            Stat_DamageTaken += sHitPoints;
 
-		m_stockpile.m_sHitPoints	-= sHitPoints;
-		// If out of life . . .
-		if (m_stockpile.m_sHitPoints <= 0)
-			{
-			m_stockpile.m_sHitPoints	= 0;
+        m_stockpile.m_sHitPoints -= sHitPoints;
+        // If out of life . . .
+        if (m_stockpile.m_sHitPoints <= 0)
+        {
+            m_stockpile.m_sHitPoints = 0;
 
-			if (m_state != State_Die && m_state != State_Dead)
-				{
-				// Go to die.
-				SetState(State_Die);
+            if (m_state != State_Die && m_state != State_Dead)
+            {
+                // Go to die.
+                SetState(State_Die);
 
-				// Even if we fail to enter the die state (like, if we're being
-				// blown up).  Be dead.
-				m_bDead	= true;
-				
-				// If he wasn't already dead when he entered here, then register the kill.
-				if (bDead == false)
-					ScoreRegisterKill(m_pRealm, GetInstanceID(), u16ShooterId);
-				}
-			}
-		}
-	}
+                // Even if we fail to enter the die state (like, if we're being
+                // blown up).  Be dead.
+                m_bDead = true;
+
+                // If he wasn't already dead when he entered here, then register the kill.
+                if (bDead == false)
+                    ScoreRegisterKill(m_pRealm, GetInstanceID(), u16ShooterId);
+            }
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Start the brain splat anim on its way.
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::StartBrainSplat(void)	// Returns nothing.
-	{
-	double	dBrainX, dBrainY, dBrainZ;
-	GetLinkPoint(														// Returns nothing.
-		m_panimCur->m_ptransRigid->GetAtTime(m_lAnimTime),	// In:  Transform specifying point.
-		&dBrainX,														// Out: Point specified.
-		&dBrainY,														// Out: Point specified.
-		&dBrainZ);														// Out: Point specified.
+void CDude::StartBrainSplat(void) // Returns nothing.
+{
+    double dBrainX, dBrainY, dBrainZ;
+    GetLinkPoint(                                        // Returns nothing.
+      m_panimCur->m_ptransRigid->GetAtTime(m_lAnimTime), // In:  Transform specifying point.
+      &dBrainX,                                          // Out: Point specified.
+      &dBrainY,                                          // Out: Point specified.
+      &dBrainZ);                                         // Out: Point specified.
 
-	// Make absolute by adding dude's position to relative position.
-	dBrainX	+= m_dX;
-	dBrainY	+= m_dY;
-	dBrainZ	+= m_dZ;
+    // Make absolute by adding dude's position to relative position.
+    dBrainX += m_dX;
+    dBrainY += m_dY;
+    dBrainZ += m_dZ;
 
-	// Create blood chunks.
-	short	i;
-	for (i = 0; i < BRAIN_SPLAT_NUM_CHUNKS; i++)
-		{
-		// Create blood particles . . .
-		CChunk*	pchunk	= NULL;	// Initialized for safety.
-		// Note that this will fail if particles are disabled.
-		if (CThing::Construct(CChunkID, m_pRealm, (CThing**)&pchunk) == 0)
-			{
-			pchunk->Setup(
-				dBrainX,				// Source position.
-				dBrainY,				// Source position.
-				dBrainZ,				// Source position.
-				m_dRot - 180,		// Angle of velocity.
-				BRAIN_SPLAT_SWAY,	// Angle sway.
-				40,					// Velocity (X/Z plane).
-				80,					// Velocity (X/Z plane) sway.
-				50,					// Velocity (Vertical).
-				100,					// Velocity (Vertical) sway.
-				CChunk::Blood);	// Type of chunk.
-			}														
-		}															
-	}
+    // Create blood chunks.
+    short i;
+    for (i = 0; i < BRAIN_SPLAT_NUM_CHUNKS; i++)
+    {
+        // Create blood particles . . .
+        CChunk *pchunk = NULL; // Initialized for safety.
+        // Note that this will fail if particles are disabled.
+        if (CThing::Construct(CChunkID, m_pRealm, (CThing **)&pchunk) == 0)
+        {
+            pchunk->Setup(dBrainX,          // Source position.
+                          dBrainY,          // Source position.
+                          dBrainZ,          // Source position.
+                          m_dRot - 180,     // Angle of velocity.
+                          BRAIN_SPLAT_SWAY, // Angle sway.
+                          40,               // Velocity (X/Z plane).
+                          80,               // Velocity (X/Z plane) sway.
+                          50,               // Velocity (Vertical).
+                          100,              // Velocity (Vertical) sway.
+                          CChunk::Blood);   // Type of chunk.
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Determines if supplied position is valid tweaking it if necessary.
 // (virtual).
 ////////////////////////////////////////////////////////////////////////////////
-bool CDude::MakeValidPosition(		// Returns true, if new position was valid.
-												// Returns false, if could not reach new position.
-	double*	pdNewX,						// In:  x position to validate.
-												// Out: New x position.
-	double*	pdNewY,						// In:  y position to validate.
-												// Out: New y position.
-	double*	pdNewZ,						// In:  z position to validate.
-												// Out: New z position.
-	short	sVertTolerance /*= 0*/)		// Vertical tolerance.
-	{
-	bool bValidatedPosition	= false;	// Assume failure.
+bool CDude::MakeValidPosition(  // Returns true, if new position was valid.
+                                // Returns false, if could not reach new position.
+  double *pdNewX,               // In:  x position to validate.
+                                // Out: New x position.
+  double *pdNewY,               // In:  y position to validate.
+                                // Out: New y position.
+  double *pdNewZ,               // In:  z position to validate.
+                                // Out: New z position.
+  short sVertTolerance /*= 0*/) // Vertical tolerance.
+{
+    bool bValidatedPosition = false; // Assume failure.
 
-	double	dCrawlerNewX;
-	double	dCrawlerNewY;
-	double	dCrawlerNewZ;
-	short		sTerrainH;
+    double dCrawlerNewX;
+    double dCrawlerNewY;
+    double dCrawlerNewZ;
+    short sTerrainH;
 
-	// Make sure the position has not changed since our crawlage.
-	ASSERT(m_dX == m_dLastCrawledToPosX);
-	ASSERT(m_dZ == m_dLastCrawledToPosZ);
+    // Make sure the position has not changed since our crawlage.
+    ASSERT(m_dX == m_dLastCrawledToPosX);
+    ASSERT(m_dZ == m_dLastCrawledToPosZ);
 
-	// Restore invalid movements to last good crawl position.
-	// The crawler cannot keep us out of things unless it is the only
-	// thing responsible for the movement.
-	if (m_dX != m_dLastCrawledToPosX)
-		m_dX	= m_dLastCrawledToPosX;
+    // Restore invalid movements to last good crawl position.
+    // The crawler cannot keep us out of things unless it is the only
+    // thing responsible for the movement.
+    if (m_dX != m_dLastCrawledToPosX)
+        m_dX = m_dLastCrawledToPosX;
 
-	if (m_dZ != m_dLastCrawledToPosZ)
-		m_dZ	= m_dLastCrawledToPosZ;
+    if (m_dZ != m_dLastCrawledToPosZ)
+        m_dZ = m_dLastCrawledToPosZ;
 
-	// Ask crawler for valid position as close as possible to new position
-	if (m_crawler.Move(		// Returns 0 if successfull, non-zero otherwise
-		m_dX, 					// In:  Position #1 xcoord                     
-		m_dY, 					// In:  Position #1 ycoord                     
-		m_dZ, 					// In:  Position #1 zcoord                     
-		*pdNewX, 				// In:  Position #2 xcoord                     
-		*pdNewY, 				// In:  Position #2 ycoord                     
-		*pdNewZ, 				// In:  Position #2 zcoord                     
-		&dCrawlerNewX, 		// Out: Final position xcoord                  
-		&dCrawlerNewY, 		// Out: Final position ycoord                  
-		&dCrawlerNewZ,			// Out: Final position zcoord                  
-		&sTerrainH)				// Out: Terrain height at new location
-		== 0)
-		{
-		// Success.
-		bValidatedPosition	= true;
+    // Ask crawler for valid position as close as possible to new position
+    if (m_crawler.Move(  // Returns 0 if successfull, non-zero otherwise
+          m_dX,          // In:  Position #1 xcoord
+          m_dY,          // In:  Position #1 ycoord
+          m_dZ,          // In:  Position #1 zcoord
+          *pdNewX,       // In:  Position #2 xcoord
+          *pdNewY,       // In:  Position #2 ycoord
+          *pdNewZ,       // In:  Position #2 zcoord
+          &dCrawlerNewX, // Out: Final position xcoord
+          &dCrawlerNewY, // Out: Final position ycoord
+          &dCrawlerNewZ, // Out: Final position zcoord
+          &sTerrainH)    // Out: Terrain height at new location
+        == 0)
+    {
+        // Success.
+        bValidatedPosition = true;
 
-		*pdNewX	= dCrawlerNewX;
-		*pdNewY	= dCrawlerNewY;
-		*pdNewZ	= dCrawlerNewZ;
+        *pdNewX = dCrawlerNewX;
+        *pdNewY = dCrawlerNewY;
+        *pdNewZ = dCrawlerNewZ;
 
-		// Stored crawled to position on X/Z plane.
-		m_dLastCrawledToPosX	= dCrawlerNewX;
-		m_dLastCrawledToPosZ	= dCrawlerNewZ;
+        // Stored crawled to position on X/Z plane.
+        m_dLastCrawledToPosX = dCrawlerNewX;
+        m_dLastCrawledToPosZ = dCrawlerNewZ;
 
-		// If we're gonna be at or below ground level . . .
-		if (sTerrainH >= *pdNewY)
-			{
-			// Get outta there!
-			*pdNewY	= sTerrainH;
-			// Update vertical delta.
-			m_dExtVertDeltaVel	+= -m_dExtVertVel;
-			// Reset vertical velocity.
-			m_dExtVertVel	= 0.0;
-			
-			m_bAboveTerrain	= false;
-			}
-		else
-			{
-			m_bAboveTerrain	= true;
-			}
-		}
-	else
-		{
-		// Failure.  Homer, I can't seem to move under my own power.
-		m_dVel	= 0.0;
-		m_dAcc	= 0.0;
-		m_dDrag	= 0.0;
-		}
+        // If we're gonna be at or below ground level . . .
+        if (sTerrainH >= *pdNewY)
+        {
+            // Get outta there!
+            *pdNewY = sTerrainH;
+            // Update vertical delta.
+            m_dExtVertDeltaVel += -m_dExtVertVel;
+            // Reset vertical velocity.
+            m_dExtVertVel = 0.0;
 
-	return bValidatedPosition;
-	}
+            m_bAboveTerrain = false;
+        }
+        else
+        {
+            m_bAboveTerrain = true;
+        }
+    }
+    else
+    {
+        // Failure.  Homer, I can't seem to move under my own power.
+        m_dVel = 0.0;
+        m_dAcc = 0.0;
+        m_dDrag = 0.0;
+    }
+
+    return bValidatedPosition;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Message handlers.
@@ -4966,343 +5003,335 @@ bool CDude::MakeValidPosition(		// Returns true, if new position was valid.
 // Handles a msg_Shot.
 // (virtual).
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::OnShotMsg(			// Returns nothing.
-	Shot_Message* pshotmsg)		// In:  Message to handle.
-	{
-	// Remember if already dead . . .
-	bool	bDead	= m_bDead;
+void CDude::OnShotMsg(    // Returns nothing.
+  Shot_Message *pshotmsg) // In:  Message to handle.
+{
+    // Remember if already dead . . .
+    bool bDead = m_bDead;
 
-	if (StatsAreAllowed)
-		{
-		Stat_HitsTaken++;
-		if (Stat_HitsTaken >= 10000)
-			UnlockAchievement(ACHIEVEMENT_TAKE_10000_HITS);
-		}
+    if (StatsAreAllowed)
+    {
+        Stat_HitsTaken++;
+        if (Stat_HitsTaken >= 10000)
+            UnlockAchievement(ACHIEVEMENT_TAKE_10000_HITS);
+    }
 
-	// Give the msg to CThing3d before we alter it.
-	CThing3d::OnShotMsg(pshotmsg);
+    // Give the msg to CThing3d before we alter it.
+    CThing3d::OnShotMsg(pshotmsg);
 
-	short	sInitKevlarLayers	= m_stockpile.m_sKevlarLayers;
+    short sInitKevlarLayers = m_stockpile.m_sKevlarLayers;
 
-	if (m_stockpile.m_sKevlarLayers > 0)
-		{
-		pshotmsg->sDamage	/= m_stockpile.m_sKevlarLayers * KEVLAR_PROTECTION_MULTIPLIER;
+    if (m_stockpile.m_sKevlarLayers > 0)
+    {
+        pshotmsg->sDamage /= m_stockpile.m_sKevlarLayers * KEVLAR_PROTECTION_MULTIPLIER;
 
-		// Choclate melts vest.
-		m_stockpile.m_sKevlarLayers = MAX((short)(m_stockpile.m_sKevlarLayers - (GetRand() & 0x3)), (short)0);
-		}
+        // Choclate melts vest.
+        m_stockpile.m_sKevlarLayers = MAX((short)(m_stockpile.m_sKevlarLayers - (GetRand() & 0x3)), (short)0);
+    }
 
-	CCharacter::OnShotMsg(pshotmsg);
+    CCharacter::OnShotMsg(pshotmsg);
 
-	// If we're taking damage . . .
-	if (pshotmsg->sDamage > 0)
-		{
-		Damage(pshotmsg->sDamage, pshotmsg->u16ShooterID);
+    // If we're taking damage . . .
+    if (pshotmsg->sDamage > 0)
+    {
+        Damage(pshotmsg->sDamage, pshotmsg->u16ShooterID);
 
-		// Check for mininum duration since last shot time . . .
-		if (	m_pRealm->m_time.GetGameTime() > m_lLastShotTime + MIN_CANNOT_BE_SHOT_DURATION
-			||	m_state == State_Stand)
-			{
-			if (SetState(State_Shot) == true)
-				{
-				m_lLastShotTime	= m_pRealm->m_time.GetGameTime();
-				}
-			}
-		}
+        // Check for mininum duration since last shot time . . .
+        if (m_pRealm->m_time.GetGameTime() > m_lLastShotTime + MIN_CANNOT_BE_SHOT_DURATION || m_state == State_Stand)
+        {
+            if (SetState(State_Shot) == true)
+            {
+                m_lLastShotTime = m_pRealm->m_time.GetGameTime();
+            }
+        }
+    }
 
-	// If we have protection . . .
-	if (sInitKevlarLayers > 0)
-		{
-		// Audible and visual feedback.
-		PlaySample(g_smidBulletIntoVest, SampleMaster::Weapon);
-		double	dHitY	= m_dY + m_sprite.m_sRadius + RAND_SWAY(VEST_HIT_SWAY);
-		// X/Z position depends on angle of shot (it is opposite).
-		short	sDeflectionAngle	= rspMod360(pshotmsg->sAngle + 180);
-		double	dHitX	= m_dX + COSQ[sDeflectionAngle] * TORSO_RADIUS;
-		double	dHitZ	= m_dZ - SINQ[sDeflectionAngle] * TORSO_RADIUS;
+    // If we have protection . . .
+    if (sInitKevlarLayers > 0)
+    {
+        // Audible and visual feedback.
+        PlaySample(g_smidBulletIntoVest, SampleMaster::Weapon);
+        double dHitY = m_dY + m_sprite.m_sRadius + RAND_SWAY(VEST_HIT_SWAY);
+        // X/Z position depends on angle of shot (it is opposite).
+        short sDeflectionAngle = rspMod360(pshotmsg->sAngle + 180);
+        double dHitX = m_dX + COSQ[sDeflectionAngle] * TORSO_RADIUS;
+        double dHitZ = m_dZ - SINQ[sDeflectionAngle] * TORSO_RADIUS;
 
-		StartAnim(VEST_HIT_RES_NAME, dHitX, dHitY, dHitZ, false);
+        StartAnim(VEST_HIT_RES_NAME, dHitX, dHitY, dHitZ, false);
 
-		// Create a kevlar peice.
-		CChunk*	pchunk	= NULL;	// Initialized for safety.
-		// Note that this will fail if particles are disabled.
-		if (CThing::Construct(CChunkID, m_pRealm, (CThing**)&pchunk) == 0)
-			{
-			pchunk->Setup(
-				dHitX,						// Source position.
-				dHitY,						// Source position.
-				dHitZ,						// Source position.
-				sDeflectionAngle,			// Angle of velocity.
-				0,								// Angle sway.
-				40,							// Velocity (X/Z plane).
-				80,							// Velocity (X/Z plane) sway.
-				50,							// Velocity (Vertical).
-				100,							// Velocity (Vertical) sway.
-				CChunk::Kevlar);			// Type of chunk.
-			}
-		}
-	
-	// If still alive . . .
-	if (m_bDead == false)
-		{
-		if (m_pRealm->m_time.GetGameTime() > m_lLastYellTime + MIN_BETWEEN_YELLS)
-			{
-			// If we took damage . . .
-			if (pshotmsg->sDamage > 0)
-				{
-				PlaySample(g_smidBlownupYell, SampleMaster::Voices);
+        // Create a kevlar peice.
+        CChunk *pchunk = NULL; // Initialized for safety.
+        // Note that this will fail if particles are disabled.
+        if (CThing::Construct(CChunkID, m_pRealm, (CThing **)&pchunk) == 0)
+        {
+            pchunk->Setup(dHitX,            // Source position.
+                          dHitY,            // Source position.
+                          dHitZ,            // Source position.
+                          sDeflectionAngle, // Angle of velocity.
+                          0,                // Angle sway.
+                          40,               // Velocity (X/Z plane).
+                          80,               // Velocity (X/Z plane) sway.
+                          50,               // Velocity (Vertical).
+                          100,              // Velocity (Vertical) sway.
+                          CChunk::Kevlar);  // Type of chunk.
+        }
+    }
 
-				m_lLastYellTime	= m_pRealm->m_time.GetGameTime();
-				}
-			}
-		}
-	else
-		{
-		// If not previously dead or dying . . .
-		if (bDead == false && m_state != State_Die)
-			{
-			// Ahhhhhhhhhh....
-			PlaySample(g_smidDyingYell, SampleMaster::Voices);
+    // If still alive . . .
+    if (m_bDead == false)
+    {
+        if (m_pRealm->m_time.GetGameTime() > m_lLastYellTime + MIN_BETWEEN_YELLS)
+        {
+            // If we took damage . . .
+            if (pshotmsg->sDamage > 0)
+            {
+                PlaySample(g_smidBlownupYell, SampleMaster::Voices);
 
-			m_lLastYellTime	= m_pRealm->m_time.GetGameTime();
-			}
-		}
-	}
+                m_lLastYellTime = m_pRealm->m_time.GetGameTime();
+            }
+        }
+    }
+    else
+    {
+        // If not previously dead or dying . . .
+        if (bDead == false && m_state != State_Die)
+        {
+            // Ahhhhhhhhhh....
+            PlaySample(g_smidDyingYell, SampleMaster::Voices);
+
+            m_lLastYellTime = m_pRealm->m_time.GetGameTime();
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Handles an Explosion_Message.
 // (virtual).
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::OnExplosionMsg(				// Returns nothing.
-	Explosion_Message* pexplosionmsg)	// In:  Message to handle.
-	{
-	// Remember if already dead . . .
-	bool	bDead	= m_bDead;
+void CDude::OnExplosionMsg(         // Returns nothing.
+  Explosion_Message *pexplosionmsg) // In:  Message to handle.
+{
+    // Remember if already dead . . .
+    bool bDead = m_bDead;
 
-	CCharacter::OnExplosionMsg(pexplosionmsg);
+    CCharacter::OnExplosionMsg(pexplosionmsg);
 
-	if (SetState(State_BlownUp) == true)
-		{
-		// Let's increase his vertical just a bit.
-		m_dExtVertVel	*= EXPLOSION_VERTICAL_VEL_MULTIPLIER;
+    if (SetState(State_BlownUp) == true)
+    {
+        // Let's increase his vertical just a bit.
+        m_dExtVertVel *= EXPLOSION_VERTICAL_VEL_MULTIPLIER;
 
-		Damage(pexplosionmsg->sDamage, pexplosionmsg->u16ShooterID);
+        Damage(pexplosionmsg->sDamage, pexplosionmsg->u16ShooterID);
 
-		// If he is carying a flag item, then he should drop it and
-		// pass the explosion message on to the flags so they can react.
-		DropAllFlags( (GameMessage*)pexplosionmsg);
+        // If he is carying a flag item, then he should drop it and
+        // pass the explosion message on to the flags so they can react.
+        DropAllFlags((GameMessage *)pexplosionmsg);
 
-		// If still alive . . .
-		if (m_bDead == false)
-			{
-			if (m_pRealm->m_time.GetGameTime() > m_lLastYellTime + MIN_BETWEEN_YELLS)
-				{
-				PlaySample(g_smidBlownupYell, SampleMaster::Voices);
+        // If still alive . . .
+        if (m_bDead == false)
+        {
+            if (m_pRealm->m_time.GetGameTime() > m_lLastYellTime + MIN_BETWEEN_YELLS)
+            {
+                PlaySample(g_smidBlownupYell, SampleMaster::Voices);
 
-				m_lLastYellTime	= m_pRealm->m_time.GetGameTime();
-				}
-			}
-		else
-			{
-			// If not previously dead . . .
-			if (bDead == false)
-				{
-				// Ahhhhhhhhhh....
-				PlaySample(g_smidDyingYell, SampleMaster::Voices);
+                m_lLastYellTime = m_pRealm->m_time.GetGameTime();
+            }
+        }
+        else
+        {
+            // If not previously dead . . .
+            if (bDead == false)
+            {
+                // Ahhhhhhhhhh....
+                PlaySample(g_smidDyingYell, SampleMaster::Voices);
 
-				m_lLastYellTime	= m_pRealm->m_time.GetGameTime();
-				}
-			}
+                m_lLastYellTime = m_pRealm->m_time.GetGameTime();
+            }
+        }
+    }
 
-		}
-
-	m_lLastShotTime	= m_pRealm->m_time.GetGameTime();
-	}
+    m_lLastShotTime = m_pRealm->m_time.GetGameTime();
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Handles a Burn_Message.
 // (virtual).
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::OnBurnMsg(			// Returns nothing.
-	Burn_Message* pburnmsg)		// In:  Message to handle.
-	{
-	if (SetState(State_Burning) == true)
-		{
-		CCharacter::OnBurnMsg(pburnmsg);
-		
-		PlaySample(g_smidBurningMainGuy, SampleMaster::Voices);
-		
-		// If he is carying a flag item, then he should drop them.
-		DropAllFlags( (GameMessage*)pburnmsg);
-		}
+void CDude::OnBurnMsg(    // Returns nothing.
+  Burn_Message *pburnmsg) // In:  Message to handle.
+{
+    if (SetState(State_Burning) == true)
+    {
+        CCharacter::OnBurnMsg(pburnmsg);
 
-	short sDamage = MAX((short) 1, (short) ((double) pburnmsg->sDamage * (((double) m_pRealm->m_flags.sDifficulty) / 10.0)));
-	Damage(sDamage, pburnmsg->u16ShooterID);
-	}
+        PlaySample(g_smidBurningMainGuy, SampleMaster::Voices);
+
+        // If he is carying a flag item, then he should drop them.
+        DropAllFlags((GameMessage *)pburnmsg);
+    }
+
+    short sDamage = MAX((short)1,
+                        (short)((double)pburnmsg->sDamage * (((double)m_pRealm->m_flags.sDifficulty) / 10.0)));
+    Damage(sDamage, pburnmsg->u16ShooterID);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Handles a PutMeDown_Message
 // (virtual)
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDude::OnPutMeDownMsg(		// Returns nothing
-	PutMeDown_Message* pputmedownmsg)
-	{
-	// If he is carrying the flag item, then he should put it down
-	if (pputmedownmsg->u16FlagInstanceID != CIdBank::IdNil)
-		{
-		// Detatch child and update its position
-		CThing3d* pthing3d = DetachChild(
-			&(pputmedownmsg->u16FlagInstanceID),
-			((CDudeAnim3D*) m_panimCur)->m_ptransLeft->GetAtTime(m_lAnimTime) );
-		if (pthing3d)
-			{
-			pthing3d->m_dX		= m_dX;
-			pthing3d->m_dY		= m_dY;
-			pthing3d->m_dZ		= m_dZ;
-			pthing3d->m_state = State_Die;
-			}
-		}
-	}
+void CDude::OnPutMeDownMsg( // Returns nothing
+  PutMeDown_Message *pputmedownmsg)
+{
+    // If he is carrying the flag item, then he should put it down
+    if (pputmedownmsg->u16FlagInstanceID != CIdBank::IdNil)
+    {
+        // Detatch child and update its position
+        CThing3d *pthing3d = DetachChild(&(pputmedownmsg->u16FlagInstanceID),
+                                         ((CDudeAnim3D *)m_panimCur)->m_ptransLeft->GetAtTime(m_lAnimTime));
+        if (pthing3d)
+        {
+            pthing3d->m_dX = m_dX;
+            pthing3d->m_dY = m_dY;
+            pthing3d->m_dZ = m_dZ;
+            pthing3d->m_state = State_Die;
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Handles an ObjectDelete_Message.
 // (virtual).
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::OnDeleteMsg(					// Returns nothing.
-	ObjectDelete_Message* pdeletemsg)	// In:  Message to handle.
-	{
-	CCharacter::OnDeleteMsg(pdeletemsg);
+void CDude::OnDeleteMsg(            // Returns nothing.
+  ObjectDelete_Message *pdeletemsg) // In:  Message to handle.
+{
+    CCharacter::OnDeleteMsg(pdeletemsg);
 
-	SetState(State_Delete);
-	}
+    SetState(State_Delete);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Handles a Suicide_Message.
 // (virtual).
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::OnSuicideMsg(				// Returns nothing.
-	Suicide_Message* psuicidemsg)		// In:  Message to handle.
-	{
-	CCharacter::OnSuicideMsg(psuicidemsg);
+void CDude::OnSuicideMsg(       // Returns nothing.
+  Suicide_Message *psuicidemsg) // In:  Message to handle.
+{
+    CCharacter::OnSuicideMsg(psuicidemsg);
 
-	SetState(State_Suicide);
-	}
+    SetState(State_Suicide);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implements basic functionality while being blown up and returns true
 // until the state is completed.
 // (virtual).
 ////////////////////////////////////////////////////////////////////////////////
-bool CDude::WhileBlownUp(void)	// Returns true until state is complete.
-	{
-	bool	bStatePersists	= true;	// Assume not done.
-	double	dNewX, dNewY, dNewZ;
+bool CDude::WhileBlownUp(void) // Returns true until state is complete.
+{
+    bool bStatePersists = true; // Assume not done.
+    double dNewX, dNewY, dNewZ;
 
-	// Get time from last call in seconds.
-	long		lCurTime	= m_pRealm->m_time.GetGameTime();
-	double	dSeconds	= double(lCurTime - m_lPrevTime) / 1000.0;
+    // Get time from last call in seconds.
+    long lCurTime = m_pRealm->m_time.GetGameTime();
+    double dSeconds = double(lCurTime - m_lPrevTime) / 1000.0;
 
-	// Update Velocities ////////////////////////////////////////////////////////
-	UpdateVelocities(dSeconds, ms_dMaxVelForeFast, ms_dMaxVelBackFast);
-	
-	// Get New Position /////////////////////////////////////////////////////////
-	GetNewPosition(&dNewX, &dNewY, &dNewZ, dSeconds);
+    // Update Velocities ////////////////////////////////////////////////////////
+    UpdateVelocities(dSeconds, ms_dMaxVelForeFast, ms_dMaxVelBackFast);
 
-	// Validate New Position ////////////////////////////////////////////////////
-	if (MakeValidPosition(&dNewX, &dNewY, &dNewZ, MaxStepUpThreshold) == true)
-		{
-		// Update Values /////////////////////////////////////////////////////////
+    // Get New Position /////////////////////////////////////////////////////////
+    GetNewPosition(&dNewX, &dNewY, &dNewZ, dSeconds);
 
-		m_dX	= dNewX;
-		m_dY	= dNewY;
-		m_dZ	= dNewZ;
+    // Validate New Position ////////////////////////////////////////////////////
+    if (MakeValidPosition(&dNewX, &dNewY, &dNewZ, MaxStepUpThreshold) == true)
+    {
+        // Update Values /////////////////////////////////////////////////////////
 
-		UpdateFirePosition();
-		}
-	else
-		{
-		// Restore Values ////////////////////////////////////////////////////////
-		
-		// Didn't actually move and, therefore, did not actually accelerate.  
-		// Restore velocities.
-//			m_dVel			-= m_dDeltaVel;
-//			m_dExtHorzVel	-= m_dExtHorzDeltaVel;
-		m_dExtVertVel	-= m_dExtVertDeltaVel;
-		}
+        m_dX = dNewX;
+        m_dY = dNewY;
+        m_dZ = dNewZ;
 
-	// If it was above the ground last time and is now below the ground, it must have
-	// hit the ground and the blown up state is complete
-	if (m_bAboveTerrain == false)
-	{
+        UpdateFirePosition();
+    }
+    else
+    {
+        // Restore Values ////////////////////////////////////////////////////////
 
-		// If not yet triggered . . .
-		if (m_bGenericEvent1 == false)
-			{
-			PlaySample(g_smidBodyImpact2, SampleMaster::Unspecified);
+        // Didn't actually move and, therefore, did not actually accelerate.
+        // Restore velocities.
+        //			m_dVel			-= m_dDeltaVel;
+        //			m_dExtHorzVel	-= m_dExtHorzDeltaVel;
+        m_dExtVertVel -= m_dExtVertDeltaVel;
+    }
 
-			m_bGenericEvent1	= true;
-			}
+    // If it was above the ground last time and is now below the ground, it must have
+    // hit the ground and the blown up state is complete
+    if (m_bAboveTerrain == false)
+    {
 
-		// Make sure its done with current animation also
-		if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
-			{
-			bStatePersists = false;
-			}
-	}
+        // If not yet triggered . . .
+        if (m_bGenericEvent1 == false)
+        {
+            PlaySample(g_smidBodyImpact2, SampleMaster::Unspecified);
 
-	return bStatePersists;
-	}
+            m_bGenericEvent1 = true;
+        }
+
+        // Make sure its done with current animation also
+        if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
+        {
+            bStatePersists = false;
+        }
+    }
+
+    return bStatePersists;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Execute the nearest writhing guy, if any.
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::OnExecute(void)		// Returns nothing.
-	{
-	// Update execution point via link point.
-	double	dMuzzleX, dMuzzleY, dMuzzleZ;
-	GetLinkPoint(														// Returns nothing.
-		m_panimCur->m_ptransRigid->GetAtTime(m_lAnimTime),	// In:  Transform specifying point.
-		&dMuzzleX,														// Out: Point speicfied.
-		&dMuzzleY,														// Out: Point speicfied.
-		&dMuzzleZ);														// Out: Point speicfied.
+void CDude::OnExecute(void) // Returns nothing.
+{
+    // Update execution point via link point.
+    double dMuzzleX, dMuzzleY, dMuzzleZ;
+    GetLinkPoint(                                        // Returns nothing.
+      m_panimCur->m_ptransRigid->GetAtTime(m_lAnimTime), // In:  Transform specifying point.
+      &dMuzzleX,                                         // Out: Point speicfied.
+      &dMuzzleY,                                         // Out: Point speicfied.
+      &dMuzzleZ);                                        // Out: Point speicfied.
 
-	// Get current weapon and stockpile.
-	short*		psNumLeft;
-	ClassIDType	idWeapon;
-	GetWeaponInfo(SemiAutomatic, &idWeapon, &psNumLeft);
-	if (*psNumLeft > 0)
-		{
-		// Muzzle flare and sound feedback.
-		m_bullets.Flare(
-			m_dRot, 
-			m_dX + dMuzzleX,
-			m_dY + dMuzzleY,
-			m_dZ + dMuzzleZ,
-			m_pRealm);
+    // Get current weapon and stockpile.
+    short *psNumLeft;
+    ClassIDType idWeapon;
+    GetWeaponInfo(SemiAutomatic, &idWeapon, &psNumLeft);
+    if (*psNumLeft > 0)
+    {
+        // Muzzle flare and sound feedback.
+        m_bullets.Flare(m_dRot, m_dX + dMuzzleX, m_dY + dMuzzleY, m_dZ + dMuzzleZ, m_pRealm);
 
-		// Shoot this thing.
-		GameMessage	msg;
-		msg.msg_Shot.eType			= typeShot;
-		msg.msg_Shot.sPriority		= 0;
-		msg.msg_Shot.sAngle			= m_dRot;
-		msg.msg_Shot.u16ShooterID	= m_u16InstanceId;
-		msg.msg_Shot.sDamage			= 10;
+        // Shoot this thing.
+        GameMessage msg;
+        msg.msg_Shot.eType = typeShot;
+        msg.msg_Shot.sPriority = 0;
+        msg.msg_Shot.sAngle = m_dRot;
+        msg.msg_Shot.u16ShooterID = m_u16InstanceId;
+        msg.msg_Shot.sDamage = 10;
 
-		// Send it the message.
-		SendThingMessage(&msg, m_idVictim);
+        // Send it the message.
+        SendThingMessage(&msg, m_idVictim);
 
-		// Note time of next fire.
-		m_lNextBulletTime	= m_pRealm->m_time.GetGameTime() + MS_BETWEEN_BULLETS;
-		// Deduct a shot.
-		*psNumLeft	= *psNumLeft - 1;
-		}
-	else
-		{
-		// Feedback.
-		PlaySample(g_smidOutOfBullets, SampleMaster::Weapon);
-		}
-	}
+        // Note time of next fire.
+        m_lNextBulletTime = m_pRealm->m_time.GetGameTime() + MS_BETWEEN_BULLETS;
+        // Deduct a shot.
+        *psNumLeft = *psNumLeft - 1;
+    }
+    else
+    {
+        // Feedback.
+        PlaySample(g_smidOutOfBullets, SampleMaster::Weapon);
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implements one-time functionality for when a weapon is destroyed while
@@ -5312,184 +5341,178 @@ void CDude::OnExecute(void)		// Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 // virtual (overridden here).
 void CDude::OnWeaponDestroyed(void)
-	{
-	// Feedback that we aborted.  Perhaps different by state?
-	PlaySample(g_smidGeneralBeep, SampleMaster::UserFeedBack);
-	// Finish.
-	switch (m_state)
-		{
-		case State_Throw:
-		case State_ThrowRelease:
-		case State_ThrowFinish:
-			SetState(State_ThrowDone);
-			break;
+{
+    // Feedback that we aborted.  Perhaps different by state?
+    PlaySample(g_smidGeneralBeep, SampleMaster::UserFeedBack);
+    // Finish.
+    switch (m_state)
+    {
+        case State_Throw:
+        case State_ThrowRelease:
+        case State_ThrowFinish:
+            SetState(State_ThrowDone);
+            break;
 
-		case State_Launch:
-		case State_LaunchRelease:
-		case State_LaunchFinish:
-			SetState(State_LaunchDone);
-			break;
+        case State_Launch:
+        case State_LaunchRelease:
+        case State_LaunchFinish:
+            SetState(State_LaunchDone);
+            break;
 
-		default:
-			// Be done with our state.
-			SetState(State_Persistent);
-			break;
-		}
-	
-	m_weaponShooting	= NoWeapon;
-	}
+        default:
+            // Be done with our state.
+            SetState(State_Persistent);
+            break;
+    }
+
+    m_weaponShooting = NoWeapon;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Revive a dead dude.  This is a more graceful way than just setting
 // his state.  This will restore stockpile and make him animate out of
 // a warp point.
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::Revive(				// Returns nothing.
-	bool	bWarpIn	/*= true*/)	// In:  true, to warp in, false to just get up.
-	{
-	// Must be dead, lying there still in multiplayer mode (or we could be cheating) . . .
-	if (	m_bDead == true 
-		&&	(m_pRealm->m_flags.bMultiplayer == true || bWarpIn == false) )
-		{
-		// Drop that fire.
-		m_u16IdFire	= CIdBank::IdNil;
+void CDude::Revive(        // Returns nothing.
+  bool bWarpIn /*= true*/) // In:  true, to warp in, false to just get up.
+{
+    // Must be dead, lying there still in multiplayer mode (or we could be cheating) . . .
+    if (m_bDead == true && (m_pRealm->m_flags.bMultiplayer == true || bWarpIn == false))
+    {
+        // Drop that fire.
+        m_u16IdFire = CIdBank::IdNil;
 
-		// Let's not be responding to old news.
-		m_MessageQueue.Empty();
+        // Let's not be responding to old news.
+        m_MessageQueue.Empty();
 
-		// Create powerup . . .
-		// NOTE that if the dude is going to be warped in (that is, he is going to get
-		// reloaded with stuff from the warp), he only drops his current weapon and all
-		// his ammo.  If he is not going to be warped in (that is, he will NOT get
-		// any stuff from a warp), he drops all his stuff so he can pick it back up.
-		DropPowerUp(&m_stockpile, bWarpIn);
-		// Clear my stockpile.
-		m_stockpile.Zero();
+        // Create powerup . . .
+        // NOTE that if the dude is going to be warped in (that is, he is going to get
+        // reloaded with stuff from the warp), he only drops his current weapon and all
+        // his ammo.  If he is not going to be warped in (that is, he will NOT get
+        // any stuff from a warp), he drops all his stuff so he can pick it back up.
+        DropPowerUp(&m_stockpile, bWarpIn);
+        // Clear my stockpile.
+        m_stockpile.Zero();
 
-		// Have a life.
-		m_stockpile.m_sHitPoints	= m_sOrigHitPoints;
-		m_smash.m_bits					&= ~CSmash::Dead;
-		m_bDead							= false;
-		m_sBrightness					= 0;
+        // Have a life.
+        m_stockpile.m_sHitPoints = m_sOrigHitPoints;
+        m_smash.m_bits &= ~CSmash::Dead;
+        m_bDead = false;
+        m_sBrightness = 0;
 
-		CDude*	pdude	= this;
-		if (bWarpIn == true)
-			{
-			// It would be best if this only occurred when we're in the dead state
-			// and, hence, on the proper animation.
-			// This should flag us to other situations.
-			ASSERT(m_state == State_Dead);
+        CDude *pdude = this;
+        if (bWarpIn == true)
+        {
+            // It would be best if this only occurred when we're in the dead state
+            // and, hence, on the proper animation.
+            // This should flag us to other situations.
+            ASSERT(m_state == State_Dead);
 
-			// Render current dead frame into background to stay.
-			m_pRealm->m_scene.DeadRender3D(
-				m_pRealm->m_phood->m_pimBackground,	// Destination image.
-				&m_sprite,									// Tree of 3D sprites to render.
-				m_pRealm->m_phood);						// Dst clip rect.
+            // Render current dead frame into background to stay.
+            m_pRealm->m_scene.DeadRender3D(m_pRealm->m_phood->m_pimBackground, // Destination image.
+                                           &m_sprite,                          // Tree of 3D sprites to render.
+                                           m_pRealm->m_phood);                 // Dst clip rect.
 
-			// First try to find a warp in point . . .
-			if (CWarp::WarpInAnywhere(
-				m_pRealm,
-				&pdude, 
-				CWarp::CopyStockPile) == 0)
-				{
-				// Force to base weapon
-				SetWeapon(SemiAutomatic, true);
-				NextWeapon();
+            // First try to find a warp in point . . .
+            if (CWarp::WarpInAnywhere(m_pRealm, &pdude, CWarp::CopyStockPile) == 0)
+            {
+                // Force to base weapon
+                SetWeapon(SemiAutomatic, true);
+                NextWeapon();
 
-				// Run on screen or out of building or whatever.
-				SetState(State_Run);
-				m_dVel	= ms_dMaxVelForeFast;
-				}
-			else
-				{
-				// Just get up, you rogue.
-				SetState(State_GetUp);
-				}
-			}
-		else
-			{
-			// Just get up, you rogue.
-			SetState(State_GetUp);
-			}
-		}
-	}
+                // Run on screen or out of building or whatever.
+                SetState(State_Run);
+                m_dVel = ms_dMaxVelForeFast;
+            }
+            else
+            {
+                // Just get up, you rogue.
+                SetState(State_GetUp);
+            }
+        }
+        else
+        {
+            // Just get up, you rogue.
+            SetState(State_GetUp);
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
-// ShowTarget - If the targeting aid is turned on, then this will put the 
+// ShowTarget - If the targeting aid is turned on, then this will put the
 //		          targeting sprite on the target.
 ////////////////////////////////////////////////////////////////////////////////
 void CDude::ShowTarget()
 {
-	if (m_bTargetingHelpEnabled && m_bDead == false)
-	{
-		// sAngle must be between 0 and 359.
-		short sRotY = rspMod360((short) m_dRot);
-		short sRangeXZ = 100;
-		short sRadius = 20;
+    if (m_bTargetingHelpEnabled && m_bDead == false)
+    {
+        // sAngle must be between 0 and 359.
+        short sRotY = rspMod360((short)m_dRot);
+        short sRangeXZ = 100;
+        short sRadius = 20;
 
-		float	fRateX = COSQ[sRotY] * sRangeXZ;
-		float	fRateZ = -SINQ[sRotY] * sRangeXZ;
-		float	fRateY = 0.0;	// If we ever want vertical movement . . .
+        float fRateX = COSQ[sRotY] * sRangeXZ;
+        float fRateZ = -SINQ[sRotY] * sRangeXZ;
+        float fRateY = 0.0; // If we ever want vertical movement . . .
 
-		// Set initial position to first point to check (NEVER checks original position).
-		float	fPosX = m_dX + fRateX;
-		float	fPosY = m_dY + fRateY;
-		float	fPosZ = m_dZ + fRateZ;
+        // Set initial position to first point to check (NEVER checks original position).
+        float fPosX = m_dX + fRateX;
+        float fPosY = m_dY + fRateY;
+        float fPosZ = m_dZ + fRateZ;
 
-		if (m_TargetSprite.m_psprParent)
-			m_TargetSprite.m_psprParent->RemoveChild(&m_TargetSprite);
-		((CThing3d*)this)->m_sprite.AddChild(&m_TargetSprite);
-		// Map from 3d to 2d coords
-		Map3Dto2D(
-			fRateX - m_sprite.m_sRadius / 2,
-			m_sprite.m_sRadius * 2,
-			fRateZ,
-			&m_TargetSprite.m_sX2,
-			&m_TargetSprite.m_sY2);
-		m_TargetSprite.m_sInFlags &= ~CSprite::InHidden;
-		m_TargetSprite.m_sLayer = CRealm::LayerSprite16;
-	}
-	else
-		m_TargetSprite.m_sInFlags |= CSprite::InHidden;
+        if (m_TargetSprite.m_psprParent)
+            m_TargetSprite.m_psprParent->RemoveChild(&m_TargetSprite);
+        ((CThing3d *)this)->m_sprite.AddChild(&m_TargetSprite);
+        // Map from 3d to 2d coords
+        Map3Dto2D(fRateX - m_sprite.m_sRadius / 2,
+                  m_sprite.m_sRadius * 2,
+                  fRateZ,
+                  &m_TargetSprite.m_sX2,
+                  &m_TargetSprite.m_sY2);
+        m_TargetSprite.m_sInFlags &= ~CSprite::InHidden;
+        m_TargetSprite.m_sLayer = CRealm::LayerSprite16;
+    }
+    else
+        m_TargetSprite.m_sInFlags |= CSprite::InHidden;
 }
 /*
 void CDude::ShowTarget(void)
 {
-	if (m_bTargetingHelpEnabled && m_bDead == false)
-	{
-		CThing* pTargetThing = NULL;
+    if (m_bTargetingHelpEnabled && m_bDead == false)
+    {
+        CThing* pTargetThing = NULL;
 
-		if (IlluminateTarget((short) m_dX,
-									(short) m_dY,
-									(short) m_dZ,
-									(short) m_dRot,
-									300,
-									20,
-									CSmash::Character,
-									CSmash::Good | CSmash::Bad,
-									0,
-									&pTargetThing,
-									&m_smash))
-		{
-			if (m_TargetSprite.m_psprParent)
-				m_TargetSprite.m_psprParent->RemoveChild(&m_TargetSprite);
-			((CThing3d*) pTargetThing)->m_sprite.AddChild(&m_TargetSprite);
-			// Map from 3d to 2d coords
-			Map3Dto2D(
-				(short) 0, 
-				(short) 30, 
-				(short) 0, 
-				&m_TargetSprite.m_sX2, 
-				&m_TargetSprite.m_sY2);
-			m_TargetSprite.m_sInFlags &= ~CSprite::InHidden;
-		}
-		else
-		{
-			m_TargetSprite.m_sInFlags |= CSprite::InHidden;
-		}
-	}
-	else
-		m_TargetSprite.m_sInFlags |= CSprite::InHidden;
+        if (IlluminateTarget((short) m_dX,
+                                    (short) m_dY,
+                                    (short) m_dZ,
+                                    (short) m_dRot,
+                                    300,
+                                    20,
+                                    CSmash::Character,
+                                    CSmash::Good | CSmash::Bad,
+                                    0,
+                                    &pTargetThing,
+                                    &m_smash))
+        {
+            if (m_TargetSprite.m_psprParent)
+                m_TargetSprite.m_psprParent->RemoveChild(&m_TargetSprite);
+            ((CThing3d*) pTargetThing)->m_sprite.AddChild(&m_TargetSprite);
+            // Map from 3d to 2d coords
+            Map3Dto2D(
+                (short) 0,
+                (short) 30,
+                (short) 0,
+                &m_TargetSprite.m_sX2,
+                &m_TargetSprite.m_sY2);
+            m_TargetSprite.m_sInFlags &= ~CSprite::InHidden;
+        }
+        else
+        {
+            m_TargetSprite.m_sInFlags |= CSprite::InHidden;
+        }
+    }
+    else
+        m_TargetSprite.m_sInFlags |= CSprite::InHidden;
 }
 */
 
@@ -5497,668 +5520,658 @@ void CDude::ShowTarget(void)
 // Next weapon please.
 ////////////////////////////////////////////////////////////////////////////////
 void CDude::NextWeapon(void)
-	{
-	short	sNumTried	= 0;
-	short	sCurWeapon	= m_weapontypeCur;
+{
+    short sNumTried = 0;
+    short sCurWeapon = m_weapontypeCur;
 
-	while (sNumTried < NumWeaponTypes)
-		{
-		sNumTried++;
-		sCurWeapon++;
-		if (sCurWeapon == NumWeaponTypes)
-			{
-			sCurWeapon	= NoWeapon + 1;
-			}
+    while (sNumTried < NumWeaponTypes)
+    {
+        sNumTried++;
+        sCurWeapon++;
+        if (sCurWeapon == NumWeaponTypes)
+        {
+            sCurWeapon = NoWeapon + 1;
+        }
 
-		if (SetWeapon((WeaponType)sCurWeapon, false) == true)
-			{
-			break;
-			}
-		}
+        if (SetWeapon((WeaponType)sCurWeapon, false) == true)
+        {
+            break;
+        }
+    }
 
-	if (sNumTried == NumWeaponTypes)
-		{
-		SetWeapon(NoWeapon, false);
-		}
-	PlaySample(g_smidLoadedWeapon, SampleMaster::UserFeedBack);
-	}
+    if (sNumTried == NumWeaponTypes)
+    {
+        SetWeapon(NoWeapon, false);
+    }
+    PlaySample(g_smidLoadedWeapon, SampleMaster::UserFeedBack);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Previous weapon please.
 ////////////////////////////////////////////////////////////////////////////////
 void CDude::PrevWeapon(void)
-	{
-	short	sNumTried	= 0;
-	short	sCurWeapon	= m_weapontypeCur;
+{
+    short sNumTried = 0;
+    short sCurWeapon = m_weapontypeCur;
 
-	while (sNumTried < NumWeaponTypes)
-		{
-		sNumTried++;
-		sCurWeapon--;
-		if (sCurWeapon == NoWeapon)
-			{
-			sCurWeapon	= NumWeaponTypes - 1;
-			}
+    while (sNumTried < NumWeaponTypes)
+    {
+        sNumTried++;
+        sCurWeapon--;
+        if (sCurWeapon == NoWeapon)
+        {
+            sCurWeapon = NumWeaponTypes - 1;
+        }
 
-		if (SetWeapon((WeaponType)sCurWeapon, false) == true)
-			{
-			break;
-			}
-		}
+        if (SetWeapon((WeaponType)sCurWeapon, false) == true)
+        {
+            break;
+        }
+    }
 
-	if (sNumTried == NumWeaponTypes)
-		{
-		SetWeapon(NoWeapon, false);
-		}
-	PlaySample(g_smidLoadedWeapon, SampleMaster::UserFeedBack);
-	}
+    if (sNumTried == NumWeaponTypes)
+    {
+        SetWeapon(NoWeapon, false);
+    }
+    PlaySample(g_smidLoadedWeapon, SampleMaster::UserFeedBack);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Set the current weapon.
 ////////////////////////////////////////////////////////////////////////////////
-bool CDude::SetWeapon(					// Returns true if weapon could be set as current.
-	WeaponType weapon,					// In:  New weapon to attempt to make the current.
-	bool	bSetIfNoAmmo /*= true*/)	// In:  true to set weapon (even if no ammo).
-	{
-	bool	bSetWeapon	= true;	// Assume we could set the weapon.
+bool CDude::SetWeapon(          // Returns true if weapon could be set as current.
+  WeaponType weapon,            // In:  New weapon to attempt to make the current.
+  bool bSetIfNoAmmo /*= true*/) // In:  true to set weapon (even if no ammo).
+{
+    bool bSetWeapon = true; // Assume we could set the weapon.
 
-	switch (weapon)
-		{
-		case NoWeapon:
-			break;
-		case SemiAutomatic:
-			if (m_stockpile.m_sMachineGun == 0)
-				{
-				bSetWeapon	= false;
-				}
-			break;
-		case Grenade:
-			break;
-		case FireBomb:
-			break;
-		case Rocket:
-			if (m_stockpile.m_sMissileLauncher == 0)
-				{
-				bSetWeapon	= false;
-				}
-			break;
-		case Napalm:
-			if (m_stockpile.m_sNapalmLauncher == 0)
-				{
-				bSetWeapon	= false;
-				}
-			break;
-		case ShotGun:
-			if (m_stockpile.m_sShotGun == 0)
-				{
-				bSetWeapon	= false;
-				}
-			break;
-		case SprayCannon:
-			if (m_stockpile.m_sSprayCannon == 0)
-				{
-				bSetWeapon	= false;
-				}
-			break;
-		case FlameThrower:
-			if (m_stockpile.m_sFlameThrower == 0)
-				{
-				bSetWeapon	= false;
-				}
-			break;
-		case BouncingBettyMine:
-		case ProximityMine:
-		case TimedMine:
-//		case RemoteMine: //Fixed crash when changing weapons and firing at the same time
-			break;
-		case Heatseeker:
-			if (m_stockpile.m_sMissileLauncher == 0)
-				{
-				bSetWeapon	= false;
-				}
-			break;
-		case DeathWad:
-			if (m_stockpile.m_sDeathWadLauncher == 0)
-				{
-				bSetWeapon	= false;
-				}
-			break;
-		case DoubleBarrel:
-			if (m_stockpile.m_sDoubleBarrel == 0)
-				{
-				bSetWeapon	= false;
-				}
-			break;
+    switch (weapon)
+    {
+        case NoWeapon:
+            break;
+        case SemiAutomatic:
+            if (m_stockpile.m_sMachineGun == 0)
+            {
+                bSetWeapon = false;
+            }
+            break;
+        case Grenade:
+            break;
+        case FireBomb:
+            break;
+        case Rocket:
+            if (m_stockpile.m_sMissileLauncher == 0)
+            {
+                bSetWeapon = false;
+            }
+            break;
+        case Napalm:
+            if (m_stockpile.m_sNapalmLauncher == 0)
+            {
+                bSetWeapon = false;
+            }
+            break;
+        case ShotGun:
+            if (m_stockpile.m_sShotGun == 0)
+            {
+                bSetWeapon = false;
+            }
+            break;
+        case SprayCannon:
+            if (m_stockpile.m_sSprayCannon == 0)
+            {
+                bSetWeapon = false;
+            }
+            break;
+        case FlameThrower:
+            if (m_stockpile.m_sFlameThrower == 0)
+            {
+                bSetWeapon = false;
+            }
+            break;
+        case BouncingBettyMine:
+        case ProximityMine:
+        case TimedMine:
+            //		case RemoteMine: //Fixed crash when changing weapons and firing at the same time
+            break;
+        case Heatseeker:
+            if (m_stockpile.m_sMissileLauncher == 0)
+            {
+                bSetWeapon = false;
+            }
+            break;
+        case DeathWad:
+            if (m_stockpile.m_sDeathWadLauncher == 0)
+            {
+                bSetWeapon = false;
+            }
+            break;
+        case DoubleBarrel:
+            if (m_stockpile.m_sDoubleBarrel == 0)
+            {
+                bSetWeapon = false;
+            }
+            break;
 
-		default:
-			bSetWeapon = false;
-			break;
-		}
+        default:
+            bSetWeapon = false;
+            break;
+    }
 
-	// Get info on this weapon.
-	ClassIDType	idDummy;
-	short*		psNum;
-	GetWeaponInfo(weapon, &idDummy, &psNum);
+    // Get info on this weapon.
+    ClassIDType idDummy;
+    short *psNum;
+    GetWeaponInfo(weapon, &idDummy, &psNum);
 
-	// If weapon was available . . .
-	if (bSetWeapon == true)
-		{
-		// If we have no ammo for this one . . .
-		if (*psNum <= 0)
-			{
-			// If set we cannot set when no ammo . . .
-			if (bSetIfNoAmmo == false)
-				{
-				bSetWeapon	= false;
-				}
-			else
-				{
-				PlaySample(g_smidEmptyWeapon, SampleMaster::UserFeedBack);
-				}
-			}
-		else
-			{
-			if (bSetIfNoAmmo == true)
-				{
-				PlaySample(g_smidLoadedWeapon, SampleMaster::UserFeedBack);
-				}
-			}
+    // If weapon was available . . .
+    if (bSetWeapon == true)
+    {
+        // If we have no ammo for this one . . .
+        if (*psNum <= 0)
+        {
+            // If set we cannot set when no ammo . . .
+            if (bSetIfNoAmmo == false)
+            {
+                bSetWeapon = false;
+            }
+            else
+            {
+                PlaySample(g_smidEmptyWeapon, SampleMaster::UserFeedBack);
+            }
+        }
+        else
+        {
+            if (bSetIfNoAmmo == true)
+            {
+                PlaySample(g_smidLoadedWeapon, SampleMaster::UserFeedBack);
+            }
+        }
 
+        // If able to change weapons . . .
+        if (bSetWeapon == true)
+        {
+            // Set new weapon.
+            m_weapontypeCur = weapon;
 
-		// If able to change weapons . . .
-		if (bSetWeapon == true)
-			{
-			// Set new weapon.
-			m_weapontypeCur	= weapon;
+            // If we have ammo . . .
+            if (*psNum > 0)
+            {
+                GameMessage msg;
+                msg.msg_WeaponSelect.eType = typeWeaponSelect;
+                msg.msg_WeaponSelect.sPriority = 0;
+                msg.msg_WeaponSelect.sWeapon = (short)m_weapontypeCur;
+                CThing *pDemon = m_pRealm->m_aclassHeads[CThing::CDemonID].GetNext();
+                if (pDemon)
+                    SendThingMessage(&msg, pDemon);
+            }
+        }
+    }
+    else
+    {
+        if (bSetIfNoAmmo == true)
+        {
+            PlaySample(g_smidEmptyWeapon, SampleMaster::UserFeedBack);
+        }
+    }
 
-			// If we have ammo . . .
-			if (*psNum > 0)
-				{
-				GameMessage msg;
-				msg.msg_WeaponSelect.eType = typeWeaponSelect;
-				msg.msg_WeaponSelect.sPriority = 0;
-				msg.msg_WeaponSelect.sWeapon = (short) m_weapontypeCur;
-				CThing* pDemon = m_pRealm->m_aclassHeads[CThing::CDemonID].GetNext();
-				if (pDemon)
-					SendThingMessage(&msg, pDemon);				
-				}
-			}
-		}
-	else
-		{
-		if (bSetIfNoAmmo == true)
-			{
-			PlaySample(g_smidEmptyWeapon, SampleMaster::UserFeedBack);
-			}
-		}
-		
-	return bSetWeapon;
-	}
-
+    return bSetWeapon;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Drop a powerup with the settings described by the specified stockpile.
 ////////////////////////////////////////////////////////////////////////////////
-CPowerUp* CDude::DropPowerUp(		// Returns new powerup on success; NULL on failure.
-	CStockPile*	pstockpile,			// In:  Settings for powerup.
-	bool			bCurWeaponOnly)	// In:  true, if only the current weapon should be
-											// in the powerup; false, if all.
-	{
-	CPowerUp*	ppowerup	= NULL;
+CPowerUp *CDude::DropPowerUp( // Returns new powerup on success; NULL on failure.
+  CStockPile *pstockpile,     // In:  Settings for powerup.
+  bool bCurWeaponOnly)        // In:  true, if only the current weapon should be
+                              // in the powerup; false, if all.
+{
+    CPowerUp *ppowerup = NULL;
 
-	// If not empty . . .
-	if (pstockpile->IsEmpty() == false)
-		{
-		// Create powerup . . .
-		if (ConstructWithID(CPowerUpID, m_pRealm, (CThing**)&ppowerup) == 0)
-			{
-			// Put stockpile into powerup.
-			ppowerup->m_stockpile.Copy(pstockpile);
+    // If not empty . . .
+    if (pstockpile->IsEmpty() == false)
+    {
+        // Create powerup . . .
+        if (ConstructWithID(CPowerUpID, m_pRealm, (CThing **)&ppowerup) == 0)
+        {
+            // Put stockpile into powerup.
+            ppowerup->m_stockpile.Copy(pstockpile);
 
-			if (bCurWeaponOnly)
-				{
-				// Note whether we had the weapon.  Not sure how it would be possible
-				// but just in case we can somehow have a weapon selected that we do
-				// hot have.
-				short	sHasWeapon	= ppowerup->m_stockpile.GetWeapon(m_weapontypeCur);
-				// Remove all but our current weapon.
-				short	sIndex;
-				for (sIndex = SemiAutomatic; sIndex <= DoubleBarrel; sIndex++)
-					{
-					// Zero.
-					ppowerup->m_stockpile.GetWeapon(sIndex) = 0;
-					}
+            if (bCurWeaponOnly)
+            {
+                // Note whether we had the weapon.  Not sure how it would be possible
+                // but just in case we can somehow have a weapon selected that we do
+                // hot have.
+                short sHasWeapon = ppowerup->m_stockpile.GetWeapon(m_weapontypeCur);
+                // Remove all but our current weapon.
+                short sIndex;
+                for (sIndex = SemiAutomatic; sIndex <= DoubleBarrel; sIndex++)
+                {
+                    // Zero.
+                    ppowerup->m_stockpile.GetWeapon(sIndex) = 0;
+                }
 
-				// Add back our currently selected weapon.
-				ppowerup->m_stockpile.GetWeapon(m_weapontypeCur) = sHasWeapon;
-				}
+                // Add back our currently selected weapon.
+                ppowerup->m_stockpile.GetWeapon(m_weapontypeCur) = sHasWeapon;
+            }
 
-			// Place powerup at our feet.
-			ppowerup->Setup(m_dX, m_dY, m_dZ);
-			}
-		}
+            // Place powerup at our feet.
+            ppowerup->Setup(m_dX, m_dY, m_dZ);
+        }
+    }
 
-	return ppowerup;
-	}
+    return ppowerup;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Play a step noise if the event is different from the last.
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::PlayStep(void)				// Returns nothing.
-	{
+void CDude::PlayStep(void) // Returns nothing.
+{
 #if 1
-	// If there is an event channel . . .
-	if (m_panimCur->m_pevent != NULL)
-		{
-		// If the current event is different from the last . . .
-		U8	u8Event	= *((U8*)(m_panimCur->m_pevent->GetAtTime(m_lAnimTime)) );
-		if (u8Event > 0 && u8Event != m_u8LastEvent)
-			{
-			PlaySample(g_smidStep, SampleMaster::Unspecified);
+    // If there is an event channel . . .
+    if (m_panimCur->m_pevent != NULL)
+    {
+        // If the current event is different from the last . . .
+        U8 u8Event = *((U8 *)(m_panimCur->m_pevent->GetAtTime(m_lAnimTime)));
+        if (u8Event > 0 && u8Event != m_u8LastEvent)
+        {
+            PlaySample(g_smidStep, SampleMaster::Unspecified);
 
-			m_u8LastEvent	= u8Event;
-			}
-		}
+            m_u8LastEvent = u8Event;
+        }
+    }
 #endif
-	}
-
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Find someone to execute.
 ////////////////////////////////////////////////////////////////////////////////
-bool CDude::FindExecutee(void)		// Returns true, if we found one; false, otherwise.
-	{
-	bool	bFoundOne	= false;	// Assume not found.
+bool CDude::FindExecutee(void) // Returns true, if we found one; false, otherwise.
+{
+    bool bFoundOne = false; // Assume not found.
 
-	CSmash*	psmashee	= NULL;	// Safety.
+    CSmash *psmashee = NULL; // Safety.
 
-	// Find the closest person including writhers.
-	if (m_pRealm->m_smashatorium.QuickCheckClosest(
-		&m_smash,					// In:  CSmash to check
-/*		CSmash::Character		
-		| CSmash::Misc 
-		| CSmash::Barrel 
-		| CSmash::Mine 
-		| */CSmash::AlmostDead,	// In:  Bits we can hit.
-		0,								// In:  Bits that you don't care about
-		0,								// In:  Bits that must be 0 to collide with a given CSmash
-		&psmashee) == true)
-		{
-		// We can handle anyone that wants to reveal their location . . .
-		// This can be done via the GetX/Y/Z() functions or their smash . . .
-		if ( (psmashee->m_pThing->GetX() != CThing::InvalidPosition
-			&&	psmashee->m_pThing->GetY() != CThing::InvalidPosition
-			&&	psmashee->m_pThing->GetZ() != CThing::InvalidPosition)
-			|| psmashee->m_pThing->GetSprite() )
-			{
-			// Found one.
-			bFoundOne	= true;
-			// Remember who.
-			m_idVictim	= psmashee->m_pThing->GetInstanceID();
-			}
-		}
+    // Find the closest person including writhers.
+    if (m_pRealm->m_smashatorium.QuickCheckClosest(&m_smash,           // In:  CSmash to check
+                                                                       /*		CSmash::Character
+                                                                               | CSmash::Misc
+                                                                               | CSmash::Barrel
+                                                                               | CSmash::Mine
+                                                                               | */
+                                                   CSmash::AlmostDead, // In:  Bits we can hit.
+                                                   0,                  // In:  Bits that you don't care about
+                                                   0, // In:  Bits that must be 0 to collide with a given CSmash
+                                                   &psmashee) == true)
+    {
+        // We can handle anyone that wants to reveal their location . . .
+        // This can be done via the GetX/Y/Z() functions or their smash . . .
+        if ((psmashee->m_pThing->GetX() != CThing::InvalidPosition &&
+             psmashee->m_pThing->GetY() != CThing::InvalidPosition &&
+             psmashee->m_pThing->GetZ() != CThing::InvalidPosition) ||
+            psmashee->m_pThing->GetSprite())
+        {
+            // Found one.
+            bFoundOne = true;
+            // Remember who.
+            m_idVictim = psmashee->m_pThing->GetInstanceID();
+        }
+    }
 
-	return bFoundOne;
-	}
-
+    return bFoundOne;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Track executee.
 ////////////////////////////////////////////////////////////////////////////////
-bool CDude::TrackExecutee(		// Returns true to persist, false, if we lost the target.
-			double dSeconds)		// In:  Seconds since last iteration.
-	{
-	bool	bPersist	= true;	// Assume we'll persist.
-	
-	// Get pointer to target.
-	CThing*	pthing;
-	if (m_pRealm->m_idbank.GetThingByID(&pthing, m_idVictim) == 0)
-		{
-		double	dVictimX;
-		double	dVictimZ;		
-		// Try to use smash position first, then resort to thing position.
-		CSmash*	psmash	= pthing->GetSmash();
-		if (psmash != NULL)
-			{
-			// This is generally more accurate for an execution point.
-			dVictimX	= psmash->m_sphere.sphere.X;
-			dVictimZ	= psmash->m_sphere.sphere.Z;
-			}
-		else
-			{
-			// This'll do though.
-			dVictimX	= pthing->GetX();
-			dVictimZ	= pthing->GetZ();
-			}
+bool CDude::TrackExecutee( // Returns true to persist, false, if we lost the target.
+  double dSeconds)         // In:  Seconds since last iteration.
+{
+    bool bPersist = true; // Assume we'll persist.
 
-		short	sDistX			= dVictimX - m_dX;
-		short	sDistZ			= m_dZ - dVictimZ;
-		double	dSqrDistanceXZ	= ABS2(sDistX, sDistZ);
+    // Get pointer to target.
+    CThing *pthing;
+    if (m_pRealm->m_idbank.GetThingByID(&pthing, m_idVictim) == 0)
+    {
+        double dVictimX;
+        double dVictimZ;
+        // Try to use smash position first, then resort to thing position.
+        CSmash *psmash = pthing->GetSmash();
+        if (psmash != NULL)
+        {
+            // This is generally more accurate for an execution point.
+            dVictimX = psmash->m_sphere.sphere.X;
+            dVictimZ = psmash->m_sphere.sphere.Z;
+        }
+        else
+        {
+            // This'll do though.
+            dVictimX = pthing->GetX();
+            dVictimZ = pthing->GetZ();
+        }
 
-		// Determine angle to target.
-		double	dRot		= rspATan(sDistZ, sDistX);
-		// Determine which rotation direction to target is smaller.
-		double	dDelta	= rspDegDelta(m_dRot, dRot);
+        short sDistX = dVictimX - m_dX;
+        short sDistZ = m_dZ - dVictimZ;
+        double dSqrDistanceXZ = ABS2(sDistX, sDistZ);
 
-		// If turning counter clockwise . . .
-		if (dDelta > 0.0)
-			{
-			m_dRot	+= MIN(dDelta, g_InputSettings.m_dStillFastDegreesPerSec * dSeconds);
-			}
-		else
-			{
-			m_dRot	+= MAX(dDelta, -g_InputSettings.m_dStillFastDegreesPerSec * dSeconds);
-			}
+        // Determine angle to target.
+        double dRot = rspATan(sDistZ, sDistX);
+        // Determine which rotation direction to target is smaller.
+        double dDelta = rspDegDelta(m_dRot, dRot);
+
+        // If turning counter clockwise . . .
+        if (dDelta > 0.0)
+        {
+            m_dRot += MIN(dDelta, g_InputSettings.m_dStillFastDegreesPerSec * dSeconds);
+        }
+        else
+        {
+            m_dRot += MAX(dDelta, -g_InputSettings.m_dStillFastDegreesPerSec * dSeconds);
+        }
 
 #if 1
-		// If too close . . .
-		if (dSqrDistanceXZ < MIN_SQR_DISTANCE_TO_EXECUTEE)
-			{
-			// Back up.
-			m_dVel	= dSqrDistanceXZ - MIN_SQR_DISTANCE_TO_EXECUTEE;
-			}
+        // If too close . . .
+        if (dSqrDistanceXZ < MIN_SQR_DISTANCE_TO_EXECUTEE)
+        {
+            // Back up.
+            m_dVel = dSqrDistanceXZ - MIN_SQR_DISTANCE_TO_EXECUTEE;
+        }
 #else
-		// Another solution, if we don't like the above, is to take
-		// the gun and use a transform we create (rather than the
-		// rigid body one) and aim the gun directly at the target
-		// point.
+        // Another solution, if we don't like the above, is to take
+        // the gun and use a transform we create (rather than the
+        // rigid body one) and aim the gun directly at the target
+        // point.
 #endif
-		}
-	else
-		{
-		// Lost our target.  Continuing is futile.
-		m_idVictim	= CIdBank::IdNil;
-		bPersist	= false;
-		}
+    }
+    else
+    {
+        // Lost our target.  Continuing is futile.
+        m_idVictim = CIdBank::IdNil;
+        bPersist = false;
+    }
 
-	return bPersist;
-	}
+    return bPersist;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Take a powerup.
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::TakePowerUp(		// Returns nothing.
-	CPowerUp**	pppowerup)		// In:  Power up to take from.
-										// Out: Ptr to powerup, if it persisted; NULL otherwise.
-	{
-	CStockPile*	pspMax;
-	// Note if we do or will have the backpack.
-	if (m_stockpile.m_sBackpack || (*pppowerup)->m_stockpile.m_sBackpack)
-		{
-		pspMax	= &CStockPile::ms_stockpileBackPackMax;
-		}
-	else
-		{
-		pspMax	= &CStockPile::ms_stockpileMax;
-		}
+void CDude::TakePowerUp( // Returns nothing.
+  CPowerUp **pppowerup)  // In:  Power up to take from.
+                         // Out: Ptr to powerup, if it persisted; NULL otherwise.
+{
+    CStockPile *pspMax;
+    // Note if we do or will have the backpack.
+    if (m_stockpile.m_sBackpack || (*pppowerup)->m_stockpile.m_sBackpack)
+    {
+        pspMax = &CStockPile::ms_stockpileBackPackMax;
+    }
+    else
+    {
+        pspMax = &CStockPile::ms_stockpileMax;
+    }
 
-	// Create a stockpile of the amount we can take from the powerup.
-	CStockPile	spTake;
-	spTake.Copy(pspMax);
-	spTake.Sub(&m_stockpile);
-	// Intersect the amount we can take with the amount available.
-	spTake.Intersect( &( (*pppowerup)->m_stockpile) );
+    // Create a stockpile of the amount we can take from the powerup.
+    CStockPile spTake;
+    spTake.Copy(pspMax);
+    spTake.Sub(&m_stockpile);
+    // Intersect the amount we can take with the amount available.
+    spTake.Intersect(&((*pppowerup)->m_stockpile));
 
-	// If we got anything . . .
-	if (spTake.IsEmpty() == false)
-		{
-		// Cash it in.
-		m_stockpile.Add( &spTake );
+    // If we got anything . . .
+    if (spTake.IsEmpty() == false)
+    {
+        // Cash it in.
+        m_stockpile.Add(&spTake);
 
-		// If in MP mode, empty the powerup so it goes away.  Otherwise, just remove what we took
-		if (m_pRealm->m_flags.bMultiplayer)
-			(*pppowerup)->m_stockpile.Zero();
-		else
-			(*pppowerup)->m_stockpile.Sub( &spTake );
+        // If in MP mode, empty the powerup so it goes away.  Otherwise, just remove what we took
+        if (m_pRealm->m_flags.bMultiplayer)
+            (*pppowerup)->m_stockpile.Zero();
+        else
+            (*pppowerup)->m_stockpile.Sub(&spTake);
 
-		// Play feedback.
-		(*pppowerup)->PickUpFeedback();
+        // Play feedback.
+        (*pppowerup)->PickUpFeedback();
 
-		// Store its ID so we can attempt to get it if it does persist.
-		U16	idInstance	= (*pppowerup)->GetInstanceID();
+        // Store its ID so we can attempt to get it if it does persist.
+        U16 idInstance = (*pppowerup)->GetInstanceID();
 
-		// Let powerup decide if it should persist.
-		(*pppowerup)->RepaginateNow();
+        // Let powerup decide if it should persist.
+        (*pppowerup)->RepaginateNow();
 
-		// If it persisted . . .
-		if (m_pRealm->m_idbank.GetThingByID((CThing**)pppowerup, idInstance) == 0)
-			{
-			ASSERT( (*pppowerup)->GetClassID() == CPowerUpID);
-			}
-		else
-			{
-			*pppowerup	= NULL;
-			}
-		}
-	else
-		{
-		// Temp feedback for needed nothing from the weapon.
-		PlaySample(g_smidOutOfBullets, SampleMaster::UserFeedBack);
+        // If it persisted . . .
+        if (m_pRealm->m_idbank.GetThingByID((CThing **)pppowerup, idInstance) == 0)
+        {
+            ASSERT((*pppowerup)->GetClassID() == CPowerUpID);
+        }
+        else
+        {
+            *pppowerup = NULL;
+        }
+    }
+    else
+    {
+        // Temp feedback for needed nothing from the weapon.
+        PlaySample(g_smidOutOfBullets, SampleMaster::UserFeedBack);
 
-		// If in MP mode, eat the powerup
-		if (m_pRealm->m_flags.bMultiplayer)
-			{
-			(*pppowerup)->m_stockpile.Zero();
-			(*pppowerup)->RepaginateNow();
-			*pppowerup	= NULL;
-			}
-		}
+        // If in MP mode, eat the powerup
+        if (m_pRealm->m_flags.bMultiplayer)
+        {
+            (*pppowerup)->m_stockpile.Zero();
+            (*pppowerup)->RepaginateNow();
+            *pppowerup = NULL;
+        }
+    }
 
-	// If it still exists . . .
-	if (*pppowerup)
-		{
-		// Store its ID so we can attempt to get it if it does persist.
-		U16	idInstance	= (*pppowerup)->GetInstanceID();
+    // If it still exists . . .
+    if (*pppowerup)
+    {
+        // Store its ID so we can attempt to get it if it does persist.
+        U16 idInstance = (*pppowerup)->GetInstanceID();
 
-		// Toss it.
-		TossPowerUp(*pppowerup, 130);
+        // Toss it.
+        TossPowerUp(*pppowerup, 130);
 
-		// If it persisted . . .
-		if (m_pRealm->m_idbank.GetThingByID((CThing**)pppowerup, idInstance) == 0)
-			{
-			ASSERT( (*pppowerup)->GetClassID() == CPowerUpID);
-			}
-		else
-			{
-			*pppowerup	= NULL;
-			}
-		}
-	}
-
+        // If it persisted . . .
+        if (m_pRealm->m_idbank.GetThingByID((CThing **)pppowerup, idInstance) == 0)
+        {
+            ASSERT((*pppowerup)->GetClassID() == CPowerUpID);
+        }
+        else
+        {
+            *pppowerup = NULL;
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Create a cheat powerup.
 ////////////////////////////////////////////////////////////////////////////////
-CPowerUp* CDude::CreateCheat(	// Returns new powerup on success; NULL on failure.
-	CStockPile*	pstockpile)		// In:  Settings for powerup.
-	{
-	// First deduct from the cheat powerup what we cannot use.
-	CStockPile	spUsable;
-	spUsable.Copy( m_stockpile.m_sBackpack ? &CStockPile::ms_stockpileBackPackMax : &CStockPile::ms_stockpileMax );
-	spUsable.Sub( &m_stockpile );
+CPowerUp *CDude::CreateCheat( // Returns new powerup on success; NULL on failure.
+  CStockPile *pstockpile)     // In:  Settings for powerup.
+{
+    // First deduct from the cheat powerup what we cannot use.
+    CStockPile spUsable;
+    spUsable.Copy(m_stockpile.m_sBackpack ? &CStockPile::ms_stockpileBackPackMax : &CStockPile::ms_stockpileMax);
+    spUsable.Sub(&m_stockpile);
 
-	// Intersect with the supplied.
-	spUsable.Intersect(pstockpile);
+    // Intersect with the supplied.
+    spUsable.Intersect(pstockpile);
 
-	// Finally, drop it.
+    // Finally, drop it.
 
-	// If it contains anything . . .
-	CPowerUp*	ppowerup;
-	if (spUsable.IsEmpty() == false)
-		{
-		ppowerup	= DropPowerUp( &spUsable, false );
+    // If it contains anything . . .
+    CPowerUp *ppowerup;
+    if (spUsable.IsEmpty() == false)
+    {
+        ppowerup = DropPowerUp(&spUsable, false);
 
-		if (ppowerup)
-			{
-			// Take it right away.
-			TakePowerUp(&ppowerup);
-			}
-		}
-	else
-		{
-		ppowerup	= NULL;
-		}
+        if (ppowerup)
+        {
+            // Take it right away.
+            TakePowerUp(&ppowerup);
+        }
+    }
+    else
+    {
+        ppowerup = NULL;
+    }
 
-	UnlockAchievement(ACHIEVEMENT_ENABLE_CHEATS);
-	Flag_Achievements |= FLAG_USED_CHEATS;
+    UnlockAchievement(ACHIEVEMENT_ENABLE_CHEATS);
+    Flag_Achievements |= FLAG_USED_CHEATS;
 
-	// Let the demon know.that they are cheating
-	GameMessage msg;
-	msg.msg_Cheater.eType = typeCheater;
-	msg.msg_Cheater.sPriority = 0;
-	CThing* pDemon = m_pRealm->m_aclassHeads[CThing::CDemonID].GetNext();
-	if (pDemon)
-		SendThingMessage(&msg, pDemon);				
+    // Let the demon know.that they are cheating
+    GameMessage msg;
+    msg.msg_Cheater.eType = typeCheater;
+    msg.msg_Cheater.sPriority = 0;
+    CThing *pDemon = m_pRealm->m_aclassHeads[CThing::CDemonID].GetNext();
+    if (pDemon)
+        SendThingMessage(&msg, pDemon);
 
-	return ppowerup;
-	}
+    return ppowerup;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Break a powerup open and toss it.
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::TossPowerUp(		// Returns nothing.
-	CPowerUp*	ppowerup,		// In:  Powerup to toss.
-	short			sVelocity)		// In:  Velocity of toss.
-	{
-	// Blow it up.
-	GameMessage	msg;
-	msg.msg_Explosion.eType				= typeExplosion;
-	msg.msg_Explosion.sPriority		= 0;
-	msg.msg_Explosion.sDamage			= 0;
-	msg.msg_Explosion.sX					= m_dX;
-	msg.msg_Explosion.sY					= m_dY;
-	msg.msg_Explosion.sZ					= m_dZ;
-	msg.msg_Explosion.sVelocity		= sVelocity;
-	msg.msg_Explosion.u16ShooterID	= GetInstanceID();
+void CDude::TossPowerUp( // Returns nothing.
+  CPowerUp *ppowerup,    // In:  Powerup to toss.
+  short sVelocity)       // In:  Velocity of toss.
+{
+    // Blow it up.
+    GameMessage msg;
+    msg.msg_Explosion.eType = typeExplosion;
+    msg.msg_Explosion.sPriority = 0;
+    msg.msg_Explosion.sDamage = 0;
+    msg.msg_Explosion.sX = m_dX;
+    msg.msg_Explosion.sY = m_dY;
+    msg.msg_Explosion.sZ = m_dZ;
+    msg.msg_Explosion.sVelocity = sVelocity;
+    msg.msg_Explosion.u16ShooterID = GetInstanceID();
 
-	SendThingMessage(&msg, msg.msg_Explosion.sPriority, ppowerup);
-	}
+    SendThingMessage(&msg, msg.msg_Explosion.sPriority, ppowerup);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Get the current weapon the dude has ready to use.
 ////////////////////////////////////////////////////////////////////////////////
 CDude::WeaponType CDude::GetCurrentWeapon(void)
-	{
-	return m_weapontypeCur;
-	}
+{
+    return m_weapontypeCur;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Sets the dude's position.  It is very important that the dude is not
 // moved by outside things, other than the warp.
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::SetPosition(		// Returns nothing.
-	double	dX,					// In:  New position for dude.
-	double	dY,					// In:  New position for dude.
-	double	dZ)					// In:  New position for dude.
-	{
-	// Set position and update crawler position.
-	m_dLastCrawledToPosX	= m_dX	= dX;
-	m_dY	= dY;
-	m_dLastCrawledToPosZ	= m_dZ	= dZ;
-	}
-
+void CDude::SetPosition( // Returns nothing.
+  double dX,             // In:  New position for dude.
+  double dY,             // In:  New position for dude.
+  double dZ)             // In:  New position for dude.
+{
+    // Set position and update crawler position.
+    m_dLastCrawledToPosX = m_dX = dX;
+    m_dY = dY;
+    m_dLastCrawledToPosZ = m_dZ = dZ;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Get the next child flag item after the specified flag item.
 ////////////////////////////////////////////////////////////////////////////////
-CFlag* CDude::GetNextFlag(			// Returns the next flag item after pflag.
-	CFlag*	pflag)					// In:  The flag to get the follower of.
-											// NULL for first child flag.
-	{
-	CFlag*	pflagNext	= NULL;
+CFlag *CDude::GetNextFlag( // Returns the next flag item after pflag.
+  CFlag *pflag)            // In:  The flag to get the follower of.
+                           // NULL for first child flag.
+{
+    CFlag *pflagNext = NULL;
 
-	CSprite*	psprite	= pflag ? pflag->m_sprite.m_psprNext : m_sprite.m_psprHeadChild;
-	while (psprite && pflagNext == NULL)
-		{
-		// If this sprite names its owner . . .
-		CThing*	pthing	= psprite->m_pthing;
-		if (pthing)
-			{
-			// If it is a flag . . .
-			if (pthing->GetClassID() == CFlagID)
-				{
-				pflagNext	= (CFlag*)pthing;
-				}
-			}
+    CSprite *psprite = pflag ? pflag->m_sprite.m_psprNext : m_sprite.m_psprHeadChild;
+    while (psprite && pflagNext == NULL)
+    {
+        // If this sprite names its owner . . .
+        CThing *pthing = psprite->m_pthing;
+        if (pthing)
+        {
+            // If it is a flag . . .
+            if (pthing->GetClassID() == CFlagID)
+            {
+                pflagNext = (CFlag *)pthing;
+            }
+        }
 
-		// Next Please.
-		psprite	= psprite->m_psprNext;
-		}
+        // Next Please.
+        psprite = psprite->m_psprNext;
+    }
 
-	return pflagNext;
-	}
+    return pflagNext;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Drop all child flag items.
 ////////////////////////////////////////////////////////////////////////////////
-void CDude::DropAllFlags(	// Returns nothing.
-	GameMessage*	pmsg)		// In:  Message to pass to flags.
-	{
-	GameMessage	msg;
-	
-	// If no message specified . . .
-	if (pmsg == NULL)
-		{
-		msg.msg_Explosion.eType = typeExplosion;
-		msg.msg_Explosion.sPriority = 0;
-		msg.msg_Explosion.sDamage = 10;
-		msg.msg_Explosion.sX = (short) m_dX;
-		msg.msg_Explosion.sY = (short) m_dY;
-		msg.msg_Explosion.sZ = (short) m_dZ;
-		msg.msg_Explosion.sVelocity = 30;
-		msg.msg_Explosion.u16ShooterID = GetInstanceID();
+void CDude::DropAllFlags( // Returns nothing.
+  GameMessage *pmsg)      // In:  Message to pass to flags.
+{
+    GameMessage msg;
 
-		pmsg	=	&msg;
-		}
-	else
-		{
-		// If it is an explosion message . . .
-		if (pmsg->msg_Generic.eType == typeExplosion)
-			{
-			// Copy it so we can tweak it.
-			msg	= *pmsg;
-			}
-		}
+    // If no message specified . . .
+    if (pmsg == NULL)
+    {
+        msg.msg_Explosion.eType = typeExplosion;
+        msg.msg_Explosion.sPriority = 0;
+        msg.msg_Explosion.sDamage = 10;
+        msg.msg_Explosion.sX = (short)m_dX;
+        msg.msg_Explosion.sY = (short)m_dY;
+        msg.msg_Explosion.sZ = (short)m_dZ;
+        msg.msg_Explosion.sVelocity = 30;
+        msg.msg_Explosion.u16ShooterID = GetInstanceID();
 
-	// Loop through all child flags and send them a message and remove them.
-	CFlag*	pflag	= GetNextFlag(NULL);
-	CFlag*	pflagNext;
-	while (pflag)
-		{
-		// Get the next now b/c this won't be a sibling after we detach it.
-		pflagNext	= GetNextFlag(pflag);
+        pmsg = &msg;
+    }
+    else
+    {
+        // If it is an explosion message . . .
+        if (pmsg->msg_Generic.eType == typeExplosion)
+        {
+            // Copy it so we can tweak it.
+            msg = *pmsg;
+        }
+    }
 
-		U16	u16IdFlag	= pflag->GetInstanceID();
-		
-		// Detach the flag.
-		DetachChild(
-			&u16IdFlag,
-			((CDudeAnim3D*) m_panimCur)->m_ptransLeft->GetAtTime(m_lAnimTime) );
+    // Loop through all child flags and send them a message and remove them.
+    CFlag *pflag = GetNextFlag(NULL);
+    CFlag *pflagNext;
+    while (pflag)
+    {
+        // Get the next now b/c this won't be a sibling after we detach it.
+        pflagNext = GetNextFlag(pflag);
 
-		// Move it to our position rather than the transformed position b/c we
-		// don't know if that's a valid position but we do know that our position
-		// is.
-		pflag->m_dX	= m_dX;
-		pflag->m_dY	= m_dY;
-		pflag->m_dZ	= m_dZ;
+        U16 u16IdFlag = pflag->GetInstanceID();
 
-		// If it's an explosion . . .
-		if (pmsg->msg_Generic.eType == typeExplosion)
-			{
-			// Tweak the message a little.
-			pmsg->msg_Explosion.sX = (short) m_dX + RAND_SWAY(30);
-			pmsg->msg_Explosion.sZ = (short) m_dZ + RAND_SWAY(30);
-			}
+        // Detach the flag.
+        DetachChild(&u16IdFlag, ((CDudeAnim3D *)m_panimCur)->m_ptransLeft->GetAtTime(m_lAnimTime));
 
-		// Forward the specified message.
-		SendThingMessage(
-			pmsg,
-			pflag);
+        // Move it to our position rather than the transformed position b/c we
+        // don't know if that's a valid position but we do know that our position
+        // is.
+        pflag->m_dX = m_dX;
+        pflag->m_dY = m_dY;
+        pflag->m_dZ = m_dZ;
 
-		// Next please.
-		pflag	= pflagNext;
-		}
-	}
+        // If it's an explosion . . .
+        if (pmsg->msg_Generic.eType == typeExplosion)
+        {
+            // Tweak the message a little.
+            pmsg->msg_Explosion.sX = (short)m_dX + RAND_SWAY(30);
+            pmsg->msg_Explosion.sZ = (short)m_dZ + RAND_SWAY(30);
+        }
+
+        // Forward the specified message.
+        SendThingMessage(pmsg, pflag);
+
+        // Next please.
+        pflag = pflagNext;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // EOF

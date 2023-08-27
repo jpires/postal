@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // RES.CPP
-// 
+//
 // History:
 //		09/22/95 JMI	Started.
 //
@@ -26,7 +26,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 //
-// This class stores data identified by a string in a CResItem stored in 
+// This class stores data identified by a string in a CResItem stored in
 // HASH_SIZE Clist <CResItem>'s.	 Use GetResource to get a resource and
 // FreeResource to release it.
 //
@@ -69,7 +69,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // Module specific (static) variables.
 //////////////////////////////////////////////////////////////////////////////
-CList<CRes>	CRes::ms_listRes;					// List of all CRes objects.
+CList<CRes> CRes::ms_listRes; // List of all CRes objects.
 
 //////////////////////////////////////////////////////////////////////////////
 // Construction/Destruction Functions.
@@ -81,25 +81,25 @@ CList<CRes>	CRes::ms_listRes;					// List of all CRes objects.
 //
 //////////////////////////////////////////////////////////////////////////////
 CRes::CRes()
-	{
-	Set();
+{
+    Set();
 
-	// If this is the first . . .
-	if (ms_listRes.IsEmpty() == TRUE)
-		{
-		CNFile::SetOpenHook(FileOpenHook, 0L);
-		CNFile::SetCloseHook(FileCloseHook, 0L);
-		}
-	
-	// Add this to list of all CRes.
-	if (ms_listRes.Add(this) == 0)
-		{
-		}
-	else
-		{
-		TRACE("CRes(): Unable to add this to ms_listRes.\n");
-		}
-	}
+    // If this is the first . . .
+    if (ms_listRes.IsEmpty() == TRUE)
+    {
+        CNFile::SetOpenHook(FileOpenHook, 0L);
+        CNFile::SetCloseHook(FileCloseHook, 0L);
+    }
+
+    // Add this to list of all CRes.
+    if (ms_listRes.Add(this) == 0)
+    {
+    }
+    else
+    {
+        TRACE("CRes(): Unable to add this to ms_listRes.\n");
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -107,18 +107,18 @@ CRes::CRes()
 //
 //////////////////////////////////////////////////////////////////////////////
 CRes::~CRes()
-	{
-	Reset();
+{
+    Reset();
 
-	// Remove this from list of all CRes.
-	if (ms_listRes.Remove(this) == 0)
-		{
-		}
-	else
-		{
-		TRACE("CRes(): Unable to remove this from ms_listRes.\n");
-		}
-	}
+    // Remove this from list of all CRes.
+    if (ms_listRes.Remove(this) == 0)
+    {
+    }
+    else
+    {
+        TRACE("CRes(): Unable to remove this from ms_listRes.\n");
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // Internal Functions.
@@ -129,20 +129,20 @@ CRes::~CRes()
 // Returns hash value for psz.
 //
 //////////////////////////////////////////////////////////////////////////////
-long HashFunc(char* psz)
-	{
-	long lHash	= 0L;
-	
-	while (*psz != '\0')
-		{
-		// Add all characters.
-		lHash += (long)*psz;
+long HashFunc(char *psz)
+{
+    long lHash = 0L;
 
-		psz++;
-		}
+    while (*psz != '\0')
+    {
+        // Add all characters.
+        lHash += (long)*psz;
 
-	return (lHash & (HASH_SIZE-1));
-	}
+        psz++;
+    }
+
+    return (lHash & (HASH_SIZE - 1));
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -150,10 +150,10 @@ long HashFunc(char* psz)
 //
 //////////////////////////////////////////////////////////////////////////////
 void CRes::Set(void)
-	{
-	m_pDispatch		= NULL;
-	m_sFreeOnClose	= TRUE;
-	}
+{
+    m_pDispatch = NULL;
+    m_sFreeOnClose = TRUE;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -161,77 +161,76 @@ void CRes::Set(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 void CRes::Reset(void)
-	{
-	#ifdef _DEBUG
-		// All lists should be empty.
-		for (short i = 0; i < HASH_SIZE; i++)
-			ASSERT(m_alistRes[i].IsEmpty() == TRUE);
-	#endif // _DEBUG
+{
+#ifdef _DEBUG
+    // All lists should be empty.
+    for (short i = 0; i < HASH_SIZE; i++)
+        ASSERT(m_alistRes[i].IsEmpty() == TRUE);
+#endif // _DEBUG
 
-	// Free any remaining resources and their nodes.
-	FreeAll();
-	}
+    // Free any remaining resources and their nodes.
+    FreeAll();
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Handles data callbacks from dispatch.
 //
 //////////////////////////////////////////////////////////////////////////////
-short CRes::UseCall(	UCHAR* puc, long lSize, USHORT usType, UCHAR ucFlags, 
-							long lTime)
-	{
-	short	sRes		= RET_DONTFREE;	// Assume success.
-	short	sError	= 0;
+short CRes::UseCall(UCHAR *puc, long lSize, USHORT usType, UCHAR ucFlags, long lTime)
+{
+    short sRes = RET_DONTFREE; // Assume success.
+    short sError = 0;
 
-	ASSERT(usType	== RT_TYPE_FILEIMAGE);
-	ASSERT(puc		!= NULL);
-	
-	char*		pszName	= (char*)puc;
-	long		lLen		= strlen(pszName) + 1;
+    ASSERT(usType == RT_TYPE_FILEIMAGE);
+    ASSERT(puc != NULL);
 
-	// Allocate a CResItem.
-	PRESITEM	pri	= new CResItem(pszName, puc + lLen, lSize - lLen, this);
-	if (pri != NULL)
-		{
-		// Check for duplicate resource names.
-		ASSERT(GetResItem(pszName) == NULL);
+    char *pszName = (char *)puc;
+    long lLen = strlen(pszName) + 1;
 
-		// Get hash value.
-		long	lHash	= HashFunc(pszName);
+    // Allocate a CResItem.
+    PRESITEM pri = new CResItem(pszName, puc + lLen, lSize - lLen, this);
+    if (pri != NULL)
+    {
+        // Check for duplicate resource names.
+        ASSERT(GetResItem(pszName) == NULL);
 
-		ASSERT(lHash < HASH_SIZE);
-		// Add item.
-		if (m_alistRes[lHash].Add(pri) == 0)
-			{
-			// Success.
-			}
-		else
-			{
-			TRACE("UseCall(): Unable to add CResItem to res list.\n");
-			sError = -2;
-			}
+        // Get hash value.
+        long lHash = HashFunc(pszName);
 
-		// If any errors occurred after CResItem allocation . . .	
-		if (sError != 0)
-			{
-			delete pri;
-			}
-		}
-	else
-		{
-		TRACE("UseCall(): Unable to allocate CResItem for %s.\n", pszName);
-		sError = -1;
-		}
-	
-	// If any errors occur . . .	
-	if (sError != 0)
-		{
-		// We won't be needing this.
-		sRes	= RET_FREE;
-		}
+        ASSERT(lHash < HASH_SIZE);
+        // Add item.
+        if (m_alistRes[lHash].Add(pri) == 0)
+        {
+            // Success.
+        }
+        else
+        {
+            TRACE("UseCall(): Unable to add CResItem to res list.\n");
+            sError = -2;
+        }
 
-	return sRes;
-	}
+        // If any errors occurred after CResItem allocation . . .
+        if (sError != 0)
+        {
+            delete pri;
+        }
+    }
+    else
+    {
+        TRACE("UseCall(): Unable to allocate CResItem for %s.\n", pszName);
+        sError = -1;
+    }
+
+    // If any errors occur . . .
+    if (sError != 0)
+    {
+        // We won't be needing this.
+        sRes = RET_FREE;
+    }
+
+    return sRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -239,35 +238,33 @@ short CRes::UseCall(	UCHAR* puc, long lSize, USHORT usType, UCHAR ucFlags,
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-short CRes::UseCallStatic(	UCHAR* puc, long lSize, USHORT usType, 
-									UCHAR ucFlags, long lTime, long l_pRes)
-	{
-	return ((CRes*)l_pRes)->UseCall(puc, lSize, usType, ucFlags, lTime);
-	}
+short CRes::UseCallStatic(UCHAR *puc, long lSize, USHORT usType, UCHAR ucFlags, long lTime, long l_pRes)
+{
+    return ((CRes *)l_pRes)->UseCall(puc, lSize, usType, ucFlags, lTime);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Handles alloc callbacks from dispatch.
 //
 //////////////////////////////////////////////////////////////////////////////
-UCHAR* CRes::AllocCall(long lSize, USHORT usType, UCHAR ucFlags)
-	{
-	ASSERT(usType == RT_TYPE_FILEIMAGE);
+UCHAR *CRes::AllocCall(long lSize, USHORT usType, UCHAR ucFlags)
+{
+    ASSERT(usType == RT_TYPE_FILEIMAGE);
 
-	UCHAR*	puc	= (UCHAR*)malloc(lSize);
+    UCHAR *puc = (UCHAR *)malloc(lSize);
 
-	if (puc != NULL)
-		{
-		// Success.
-		}
-	else
-		{
-		TRACE("AllocCall(): Failed to allocate %ld bytes for resource.\n",
-				lSize);
-		}	
+    if (puc != NULL)
+    {
+        // Success.
+    }
+    else
+    {
+        TRACE("AllocCall(): Failed to allocate %ld bytes for resource.\n", lSize);
+    }
 
-	return puc;
-	}
+    return puc;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -275,24 +272,23 @@ UCHAR* CRes::AllocCall(long lSize, USHORT usType, UCHAR ucFlags)
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-UCHAR* CRes::AllocCallStatic(	long lSize, USHORT usType, UCHAR ucFlags,
-										long l_pRes)
-	{
-	return ((CRes*)l_pRes)->AllocCall(lSize, usType, ucFlags);
-	}
+UCHAR *CRes::AllocCallStatic(long lSize, USHORT usType, UCHAR ucFlags, long l_pRes)
+{
+    return ((CRes *)l_pRes)->AllocCall(lSize, usType, ucFlags);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Handles free callbacks from filter.
 //
 //////////////////////////////////////////////////////////////////////////////
-void CRes::FreeCall(UCHAR* puc, USHORT usType, UCHAR ucFlags)
-	{
-	ASSERT(usType	== RT_TYPE_FILEIMAGE);
-	ASSERT(puc		!= NULL);
+void CRes::FreeCall(UCHAR *puc, USHORT usType, UCHAR ucFlags)
+{
+    ASSERT(usType == RT_TYPE_FILEIMAGE);
+    ASSERT(puc != NULL);
 
-	free(puc);
-	}
+    free(puc);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -300,35 +296,34 @@ void CRes::FreeCall(UCHAR* puc, USHORT usType, UCHAR ucFlags)
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-void CRes::FreeCallStatic(	UCHAR* puc, USHORT usType, UCHAR ucFlags, 
-									long l_pRes)
-	{
-	((CRes*)l_pRes)->FreeCall(puc, usType, ucFlags);
-	}
+void CRes::FreeCallStatic(UCHAR *puc, USHORT usType, UCHAR ucFlags, long l_pRes)
+{
+    ((CRes *)l_pRes)->FreeCall(puc, usType, ucFlags);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Returns a resource item based on it's hash value and .
 //
 //////////////////////////////////////////////////////////////////////////////
-PRESITEM	CRes::GetResItem(char* pszName)
-	{
-	long lHash		= HashFunc(pszName);
+PRESITEM CRes::GetResItem(char *pszName)
+{
+    long lHash = HashFunc(pszName);
 
-	PRESITEM	pri	= m_alistRes[lHash].GetHead();
+    PRESITEM pri = m_alistRes[lHash].GetHead();
 
-	while (pri != NULL)
-		{
-		if (strcmp(pri->m_pszName, pszName) == 0)
-			{
-			break;
-			}
+    while (pri != NULL)
+    {
+        if (strcmp(pri->m_pszName, pszName) == 0)
+        {
+            break;
+        }
 
-		pri	= m_alistRes[lHash].GetNext();
-		}
+        pri = m_alistRes[lHash].GetNext();
+    }
 
-	return pri;
-	}
+    return pri;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // Methods.
@@ -339,25 +334,25 @@ PRESITEM	CRes::GetResItem(char* pszName)
 // Set filter.
 //
 //////////////////////////////////////////////////////////////////////////////
-void CRes::SetDispatcher(CDispatch* pDispatch)
-	{
-	if (m_pDispatch != NULL)
-		{
-		m_pDispatch->SetDataHandler(RT_TYPE_FILEIMAGE, NULL);
-		m_pDispatch->SetAllocHandler(RT_TYPE_FILEIMAGE, NULL);
-		m_pDispatch->SetFreeHandler(RT_TYPE_FILEIMAGE, NULL);
-		}
+void CRes::SetDispatcher(CDispatch *pDispatch)
+{
+    if (m_pDispatch != NULL)
+    {
+        m_pDispatch->SetDataHandler(RT_TYPE_FILEIMAGE, NULL);
+        m_pDispatch->SetAllocHandler(RT_TYPE_FILEIMAGE, NULL);
+        m_pDispatch->SetFreeHandler(RT_TYPE_FILEIMAGE, NULL);
+    }
 
-	m_pDispatch	= pDispatch;
+    m_pDispatch = pDispatch;
 
-	if (m_pDispatch != NULL)
-		{
-		m_pDispatch->SetDataHandler(	RT_TYPE_FILEIMAGE, UseCallStatic);
-		m_pDispatch->SetAllocHandler(	RT_TYPE_FILEIMAGE, AllocCallStatic);
-		m_pDispatch->SetFreeHandler(	RT_TYPE_FILEIMAGE, FreeCallStatic);
-		m_pDispatch->SetUserVal(RT_TYPE_FILEIMAGE, (long)this);
-		}
-	}
+    if (m_pDispatch != NULL)
+    {
+        m_pDispatch->SetDataHandler(RT_TYPE_FILEIMAGE, UseCallStatic);
+        m_pDispatch->SetAllocHandler(RT_TYPE_FILEIMAGE, AllocCallStatic);
+        m_pDispatch->SetFreeHandler(RT_TYPE_FILEIMAGE, FreeCallStatic);
+        m_pDispatch->SetUserVal(RT_TYPE_FILEIMAGE, (long)this);
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -365,18 +360,18 @@ void CRes::SetDispatcher(CDispatch* pDispatch)
 // Returns ptr to CResItem on succes, NULL otherwise.
 //
 //////////////////////////////////////////////////////////////////////////////
-PRESITEM CRes::GetResource(char* pszName)
-	{
-	PRESITEM	pri	= GetResItem(pszName);
+PRESITEM CRes::GetResource(char *pszName)
+{
+    PRESITEM pri = GetResItem(pszName);
 
-	if (pri != NULL)
-		{
-		// Lock resource.
-		pri->Lock();
-		}
+    if (pri != NULL)
+    {
+        // Lock resource.
+        pri->Lock();
+    }
 
-	return pri;
-	}
+    return pri;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -384,20 +379,20 @@ PRESITEM CRes::GetResource(char* pszName)
 //
 //////////////////////////////////////////////////////////////////////////////
 void CRes::FreeResource(PRESITEM pri)
-	{
-	ASSERT(GetResItem(pri->m_pszName) != NULL);
+{
+    ASSERT(GetResItem(pri->m_pszName) != NULL);
 
-	// Unlock.  If no more references to this object . . .
-	if (pri->Unlock() == 0)
-		{
-		// Remove from list.
-		long	lHash	= HashFunc(pri->m_pszName);
-		m_alistRes[lHash].Remove(pri);
+    // Unlock.  If no more references to this object . . .
+    if (pri->Unlock() == 0)
+    {
+        // Remove from list.
+        long lHash = HashFunc(pri->m_pszName);
+        m_alistRes[lHash].Remove(pri);
 
-		// Hasta.
-		delete pri;
-		}
-	}
+        // Hasta.
+        delete pri;
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -405,23 +400,23 @@ void CRes::FreeResource(PRESITEM pri)
 //
 //////////////////////////////////////////////////////////////////////////////
 void CRes::FreeAll(void)
-	{
-	PRESITEM	pri;
-	
-	for (short i = 0; i < HASH_SIZE; i++)
-		{
-		pri = m_alistRes[i].GetHead();
-		while (pri != NULL)
-			{
-			// Remove from list.
-			m_alistRes[i].Remove();
-			// Deallocate.
-			delete pri;
-			// Get next item.
-			pri = m_alistRes[i].GetNext();
-			}
-		}
-	}
+{
+    PRESITEM pri;
+
+    for (short i = 0; i < HASH_SIZE; i++)
+    {
+        pri = m_alistRes[i].GetHead();
+        while (pri != NULL)
+        {
+            // Remove from list.
+            m_alistRes[i].Remove();
+            // Deallocate.
+            delete pri;
+            // Get next item.
+            pri = m_alistRes[i].GetNext();
+        }
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -430,50 +425,49 @@ void CRes::FreeAll(void)
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-short CRes::FileOpenHook(	CNFile* pfile, char* pszFileName, 
-									char* pszFlags, short sEndian, long lUser)
-	{
-	short	sRes	= 1;	// Assume we fail to find file.
+short CRes::FileOpenHook(CNFile *pfile, char *pszFileName, char *pszFlags, short sEndian, long lUser)
+{
+    short sRes = 1; // Assume we fail to find file.
 
-	CRes*	pres	= ms_listRes.GetHead();
-	while (pres != NULL && sRes > 0)
-		{
-		// Attempt to get file from resource manager.
-		PRESITEM	pri	= pres->GetResource(pszFileName);
-		if (pri != NULL)
-			{
-			// Open the file.
-			if (pfile->Open(pri->m_puc, pri->m_lSize, sEndian) == 0)
-				{
-				// Set the user value to the ptr to the res item so we know which
-				// one to free on close.
-				pfile->SetUserVal((long)pri);
-				// Success.
-				sRes = 0;
-				}
-			else
-				{
-				TRACE("FileOpenHook(): Failed to open memory file.\n");
-				sRes = -1;
-				}
+    CRes *pres = ms_listRes.GetHead();
+    while (pres != NULL && sRes > 0)
+    {
+        // Attempt to get file from resource manager.
+        PRESITEM pri = pres->GetResource(pszFileName);
+        if (pri != NULL)
+        {
+            // Open the file.
+            if (pfile->Open(pri->m_puc, pri->m_lSize, sEndian) == 0)
+            {
+                // Set the user value to the ptr to the res item so we know which
+                // one to free on close.
+                pfile->SetUserVal((long)pri);
+                // Success.
+                sRes = 0;
+            }
+            else
+            {
+                TRACE("FileOpenHook(): Failed to open memory file.\n");
+                sRes = -1;
+            }
 
-			// If any errors occurred after we got the resource . . .
-			if (sRes != 0)
-				{
-				pres->FreeResource(pri);
-				}
-			}
-		else
-			{
-			sRes = 1;
-			}
+            // If any errors occurred after we got the resource . . .
+            if (sRes != 0)
+            {
+                pres->FreeResource(pri);
+            }
+        }
+        else
+        {
+            sRes = 1;
+        }
 
-		// Get next resource manager.
-		pres = ms_listRes.GetNext();
-		}
+        // Get next resource manager.
+        pres = ms_listRes.GetNext();
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -482,60 +476,60 @@ short CRes::FileOpenHook(	CNFile* pfile, char* pszFileName,
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-short CRes::FileCloseHook(CNFile* pfile, long lUser)
-	{
-	short	sRes	= 0;	// Assume we find the file.
+short CRes::FileCloseHook(CNFile *pfile, long lUser)
+{
+    short sRes = 0; // Assume we find the file.
 
-	// Get user value (which is the pointer to the CResItem).
-	PRESITEM	pri	= (PRESITEM)pfile->GetUserVal();
-	if (pri != NULL)
-		{
-		CRes*		pres	= pri->m_pRes;
-		#ifdef _DEBUG
-			// Verify it's a valid one.
-			pres	= ms_listRes.GetHead();
-			while (pres != NULL)
-				{
-				if (pres == pri->m_pRes)
-					{
-					break;
-					}
-				pres = ms_listRes.GetNext();
-				}
-			// We should have found the CRes that matched pri's.
-			ASSERT(pres != NULL);
-		#endif // _DEBUG
+    // Get user value (which is the pointer to the CResItem).
+    PRESITEM pri = (PRESITEM)pfile->GetUserVal();
+    if (pri != NULL)
+    {
+        CRes *pres = pri->m_pRes;
+#ifdef _DEBUG
+        // Verify it's a valid one.
+        pres = ms_listRes.GetHead();
+        while (pres != NULL)
+        {
+            if (pres == pri->m_pRes)
+            {
+                break;
+            }
+            pres = ms_listRes.GetNext();
+        }
+        // We should have found the CRes that matched pri's.
+        ASSERT(pres != NULL);
+#endif // _DEBUG
 
-		// Close the file.
-		if (pfile->Close() == 0)
-			{
-			// Clear the user value.
-			pfile->SetUserVal(0);
-			}
-		else
-			{
-			TRACE("FileCloseHook(): Failed to close memory file.\n");
-			sRes = -1;
-			}
-		
-		if (pres->m_sFreeOnClose == TRUE)
-			{
-			// Release the resource.
-			pres->FreeResource(pri);
-			}
-		else
-			{
-			// Unlock the resource.
-			pri->Unlock();
-			}
-		}
-	else
-		{
-		sRes = 1;
-		}
+        // Close the file.
+        if (pfile->Close() == 0)
+        {
+            // Clear the user value.
+            pfile->SetUserVal(0);
+        }
+        else
+        {
+            TRACE("FileCloseHook(): Failed to close memory file.\n");
+            sRes = -1;
+        }
 
-	return sRes;
-	}
+        if (pres->m_sFreeOnClose == TRUE)
+        {
+            // Release the resource.
+            pres->FreeResource(pri);
+        }
+        else
+        {
+            // Unlock the resource.
+            pri->Unlock();
+        }
+    }
+    else
+    {
+        sRes = 1;
+    }
+
+    return sRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // EOF

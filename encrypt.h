@@ -20,10 +20,10 @@
 #ifndef _ENCRYPT_H
 #define _ENCRYPT_H
 
-short Encrypt(char* szInputString,char* szOutputString,short sSourceLength);
-short Decrypt(char* szInputString,char* szOutputString,short sSourceLength);
-short Encrypt(char* szFileName,char* szIntputString);
-short Decrypt(char* szFileName,char* szOutputString);
+short Encrypt(char *szInputString, char *szOutputString, short sSourceLength);
+short Decrypt(char *szInputString, char *szOutputString, short sSourceLength);
+short Encrypt(char *szFileName, char *szIntputString);
+short Decrypt(char *szFileName, char *szOutputString);
 
 #endif
 //////////////////////////////////////////////////////////////////////////////////////

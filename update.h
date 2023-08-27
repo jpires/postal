@@ -21,7 +21,7 @@
 // History:
 //		01/13/96 MJR	Started.
 //
-//		08/21/97	JMI	Changed Update() to UpdateSystem() and added 
+//		08/21/97	JMI	Changed Update() to UpdateSystem() and added
 //							UpdateDisplay()s (see proto for details).
 //
 //		08/22/97	JMI	Removed UpdateDisplay()s.
@@ -41,7 +41,7 @@
 // Update
 extern void UpdateSystem(void);
 
-#endif //UPDATE_H
+#endif // UPDATE_H
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

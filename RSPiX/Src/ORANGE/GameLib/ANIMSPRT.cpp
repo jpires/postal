@@ -46,24 +46,24 @@
 #include "ANIMSPRT.H"
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Default Constructor
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-RAnimSprite::RAnimSprite()	
-	: RSprite()
+RAnimSprite::RAnimSprite()
+  : RSprite()
 {
-	m_sVersion = ANIMSPRITE_CURRENT_VERSION;
-	m_sNumFrames = 0;
-	m_sNumPictures = 0;
-	m_sLoopToFrame = -1;
-	m_lTimer = 0;
-	m_sCurrFrame = -1;
-	m_ulAnimFlags = 0;
-	m_aFrames = NULL;
-	m_apPictures = NULL;
-	m_sAllocatedPics = 0;
+    m_sVersion = ANIMSPRITE_CURRENT_VERSION;
+    m_sNumFrames = 0;
+    m_sNumPictures = 0;
+    m_sLoopToFrame = -1;
+    m_lTimer = 0;
+    m_sCurrFrame = -1;
+    m_ulAnimFlags = 0;
+    m_aFrames = NULL;
+    m_apPictures = NULL;
+    m_sAllocatedPics = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,10 +74,9 @@ RAnimSprite::RAnimSprite()
 
 RAnimSprite::~RAnimSprite()
 {
-	FreeFrames();
-	FreePictures();
+    FreeFrames();
+    FreePictures();
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -95,22 +94,22 @@ RAnimSprite::~RAnimSprite()
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-short RAnimSprite::Load(char* pszFilename)
+short RAnimSprite::Load(char *pszFilename)
 {
-	RFile cf;
-	short sReturn = SUCCESS;
+    RFile cf;
+    short sReturn = SUCCESS;
 
-	if (cf.Open(pszFilename, "rb", RFile::LittleEndian) != SUCCESS)
-	{
-		TRACE("RAnimSprite::Load - could not open file %s for input\n", pszFilename);
-		return FAILURE;
-	}
+    if (cf.Open(pszFilename, "rb", RFile::LittleEndian) != SUCCESS)
+    {
+        TRACE("RAnimSprite::Load - could not open file %s for input\n", pszFilename);
+        return FAILURE;
+    }
 
-	sReturn = Load(&cf);
+    sReturn = Load(&cf);
 
-	cf.Close();
+    cf.Close();
 
-	return sReturn;
+    return sReturn;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -129,97 +128,97 @@ short RAnimSprite::Load(char* pszFilename)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-short RAnimSprite::Load(RFile* pcf)
+short RAnimSprite::Load(RFile *pcf)
 {
-	short sReturn = SUCCESS;
-	ULONG ulFileType;
+    short sReturn = SUCCESS;
+    ULONG ulFileType;
 
-	if (pcf && pcf->IsOpen())
-	{
-		if (pcf->Read(&ulFileType) == 1)
-		{
-			if (ulFileType == ANIMSPRITE_COOKIE)
-			{
-				if (pcf->Read(&m_sVersion) == 1)
-				{
-					if (m_sVersion == ANIMSPRITE_CURRENT_VERSION)
-					{
-						if (pcf->Read(&m_sNumFrames) == 1)
-						{
-							if (pcf->Read(&m_sNumPictures) == 1)
-							{
-								if (pcf->Read(&m_sLoopToFrame) == 1)
-								{
-									if (pcf->Read(&m_ulAnimFlags) == 1)
-									{
-										if (ReadPictures(pcf) == SUCCESS)
-										{
-											if (ReadFrames(pcf) != SUCCESS)
-											{
-												TRACE("RAnimSprite::Load - Error reading frames\n");
-												sReturn = FAILURE;
-											}
-										}
-										else
-										{
-											TRACE("RAnimSprite::Load - Error reading pictures\n");
-											sReturn = FAILURE;
-										}
-									}
-									else
-									{
-										TRACE("RAnimSprite::Load - Error reading AnimFlags\n");
-										sReturn = FAILURE;
-									}
-								}
-								else
-								{
-									TRACE("RAnimSprite::Load - Error reading LoopToFrame\n");
-									sReturn = FAILURE;
-								}
-							}
-							else
-							{
-								TRACE("RAnimSprite::Load - Error reading number of pictures\n");
-								sReturn = FAILURE;
-							}
-						}
-						else
-						{
-							TRACE("RAnimSprite::Load - Error reading number of frames\n");
-							sReturn = FAILURE;
-						}
-					}	
-					else
-					{
-						TRACE("RAnimSprite::Load - The file's version does not match the current version\n");
-						sReturn = FAILURE;
-					}
-				}
-				else
-				{
-					TRACE("RAnimSprite::Load - Error reading file version number\n");
-					sReturn = FAILURE;
-				}
-			}
-			else
-			{
-				TRACE("RAnimSprite::Load - Wrong filetype, animations should start with 'ANIM'\n");
-				sReturn = FAILURE;
-			}
-		}
-		else
-		{
-			TRACE("RAnimSprite::Load - Error reading file type marker\n");
-			sReturn = FAILURE;
-		}
-	}
-	else
-	{
-		TRACE("RAnimSprite::Load - The RFile* pcf does not refer to an open file\n");
-		sReturn = FAILURE;
-	}
-	return sReturn;
+    if (pcf && pcf->IsOpen())
+    {
+        if (pcf->Read(&ulFileType) == 1)
+        {
+            if (ulFileType == ANIMSPRITE_COOKIE)
+            {
+                if (pcf->Read(&m_sVersion) == 1)
+                {
+                    if (m_sVersion == ANIMSPRITE_CURRENT_VERSION)
+                    {
+                        if (pcf->Read(&m_sNumFrames) == 1)
+                        {
+                            if (pcf->Read(&m_sNumPictures) == 1)
+                            {
+                                if (pcf->Read(&m_sLoopToFrame) == 1)
+                                {
+                                    if (pcf->Read(&m_ulAnimFlags) == 1)
+                                    {
+                                        if (ReadPictures(pcf) == SUCCESS)
+                                        {
+                                            if (ReadFrames(pcf) != SUCCESS)
+                                            {
+                                                TRACE("RAnimSprite::Load - Error reading frames\n");
+                                                sReturn = FAILURE;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            TRACE("RAnimSprite::Load - Error reading pictures\n");
+                                            sReturn = FAILURE;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        TRACE("RAnimSprite::Load - Error reading AnimFlags\n");
+                                        sReturn = FAILURE;
+                                    }
+                                }
+                                else
+                                {
+                                    TRACE("RAnimSprite::Load - Error reading LoopToFrame\n");
+                                    sReturn = FAILURE;
+                                }
+                            }
+                            else
+                            {
+                                TRACE("RAnimSprite::Load - Error reading number of pictures\n");
+                                sReturn = FAILURE;
+                            }
+                        }
+                        else
+                        {
+                            TRACE("RAnimSprite::Load - Error reading number of frames\n");
+                            sReturn = FAILURE;
+                        }
+                    }
+                    else
+                    {
+                        TRACE("RAnimSprite::Load - The file's version does not match the current version\n");
+                        sReturn = FAILURE;
+                    }
+                }
+                else
+                {
+                    TRACE("RAnimSprite::Load - Error reading file version number\n");
+                    sReturn = FAILURE;
+                }
+            }
+            else
+            {
+                TRACE("RAnimSprite::Load - Wrong filetype, animations should start with 'ANIM'\n");
+                sReturn = FAILURE;
+            }
+        }
+        else
+        {
+            TRACE("RAnimSprite::Load - Error reading file type marker\n");
+            sReturn = FAILURE;
+        }
+    }
+    else
+    {
+        TRACE("RAnimSprite::Load - The RFile* pcf does not refer to an open file\n");
+        sReturn = FAILURE;
+    }
+    return sReturn;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -239,17 +238,17 @@ short RAnimSprite::Load(RFile* pcf)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-short RAnimSprite::ReadPictures(RFile* pcf)
+short RAnimSprite::ReadPictures(RFile *pcf)
 {
-	short sReturn = SUCCESS;
-	short i = 0;
+    short sReturn = SUCCESS;
+    short i = 0;
 
-	AllocatePictures(m_sNumPictures);
+    AllocatePictures(m_sNumPictures);
 
-	while(sReturn == SUCCESS && i < m_sNumPictures)
-		sReturn = m_apPictures[i++]->Load(pcf);
+    while (sReturn == SUCCESS && i < m_sNumPictures)
+        sReturn = m_apPictures[i++]->Load(pcf);
 
-	return sReturn;
+    return sReturn;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -269,84 +268,84 @@ short RAnimSprite::ReadPictures(RFile* pcf)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-short RAnimSprite::ReadFrames(RFile* pcf)
+short RAnimSprite::ReadFrames(RFile *pcf)
 {
-	short sReturn = SUCCESS;
-	short i = 0;
+    short sReturn = SUCCESS;
+    short i = 0;
 
-	AllocateFrames(m_sNumFrames);
+    AllocateFrames(m_sNumFrames);
 
-	while (sReturn == SUCCESS && i < m_sNumFrames)
-	{
-		if (pcf->Read(&(m_aFrames[i].sOffsetX)) == 1)
-		{
-			if (pcf->Read(&(m_aFrames[i].sOffsetY)) == 1)
-			{
-				if (pcf->Read(&(m_aFrames[i].sOffsetZ)) == 1)
-				{
-					if (pcf->Read(&(m_aFrames[i].sRotDeg)) == 1)
-					{
-						if (pcf->Read(&(m_aFrames[i].lScaleWidth)) == 1)
-						{
-							if (pcf->Read(&(m_aFrames[i].lScaleHeight)) == 1)
-							{
-								if (pcf->Read(&(m_aFrames[i].sHold)) == 1)
-								{
-									if (pcf->Read(&(m_aFrames[i].sPicIndex)) == 1)
-									{
-										m_aFrames[i].pImage = m_apPictures[m_aFrames[i].sPicIndex];
-										i++;
-									}
-									else
-									{
-										TRACE("RAnimSprite::ReadFrames - Error reading frame %d picture index\n", i);
-										sReturn = FAILURE;
-									}
-								}
-								else
-								{
-									TRACE("RAnimSprite::ReadFrames - Error reading frame %d sHold\n", i);
-									sReturn = FAILURE;
-								}
-							}
-							else
-							{
-								TRACE("RAnimSprite::ReadFrames - Error reading frame %d scale height\n", i);
-								sReturn = FAILURE;
-							}
-						}
-						else
-						{
-							TRACE("RAnimSprite::ReadFrames - Error reading frame %d scale width\n", i);
-							sReturn = FAILURE;
-						}
-					}
-					else
-					{
-						TRACE("RAnimSprite::ReadFrames - Error reading frame %d rotational degrees\n", i);
-						sReturn = FAILURE;
-					}
-				}
-				else
-				{
-					TRACE("RAnimSprite::ReadFrames - Error reading frame %d Z offset\n", i);
-					sReturn = FAILURE;
-				}
-			}
-			else
-			{
-				TRACE("RAnimSprite::ReadFrames - Error reading frame %d Y offset\n", i);
-				sReturn = FAILURE;
-			}
-		}
-		else
-		{
-			TRACE("RAnimSprite::ReadFrames - Error reading frame %d X offset\n", i);
-			sReturn = FAILURE;
-		}
-	}
+    while (sReturn == SUCCESS && i < m_sNumFrames)
+    {
+        if (pcf->Read(&(m_aFrames[i].sOffsetX)) == 1)
+        {
+            if (pcf->Read(&(m_aFrames[i].sOffsetY)) == 1)
+            {
+                if (pcf->Read(&(m_aFrames[i].sOffsetZ)) == 1)
+                {
+                    if (pcf->Read(&(m_aFrames[i].sRotDeg)) == 1)
+                    {
+                        if (pcf->Read(&(m_aFrames[i].lScaleWidth)) == 1)
+                        {
+                            if (pcf->Read(&(m_aFrames[i].lScaleHeight)) == 1)
+                            {
+                                if (pcf->Read(&(m_aFrames[i].sHold)) == 1)
+                                {
+                                    if (pcf->Read(&(m_aFrames[i].sPicIndex)) == 1)
+                                    {
+                                        m_aFrames[i].pImage = m_apPictures[m_aFrames[i].sPicIndex];
+                                        i++;
+                                    }
+                                    else
+                                    {
+                                        TRACE("RAnimSprite::ReadFrames - Error reading frame %d picture index\n", i);
+                                        sReturn = FAILURE;
+                                    }
+                                }
+                                else
+                                {
+                                    TRACE("RAnimSprite::ReadFrames - Error reading frame %d sHold\n", i);
+                                    sReturn = FAILURE;
+                                }
+                            }
+                            else
+                            {
+                                TRACE("RAnimSprite::ReadFrames - Error reading frame %d scale height\n", i);
+                                sReturn = FAILURE;
+                            }
+                        }
+                        else
+                        {
+                            TRACE("RAnimSprite::ReadFrames - Error reading frame %d scale width\n", i);
+                            sReturn = FAILURE;
+                        }
+                    }
+                    else
+                    {
+                        TRACE("RAnimSprite::ReadFrames - Error reading frame %d rotational degrees\n", i);
+                        sReturn = FAILURE;
+                    }
+                }
+                else
+                {
+                    TRACE("RAnimSprite::ReadFrames - Error reading frame %d Z offset\n", i);
+                    sReturn = FAILURE;
+                }
+            }
+            else
+            {
+                TRACE("RAnimSprite::ReadFrames - Error reading frame %d Y offset\n", i);
+                sReturn = FAILURE;
+            }
+        }
+        else
+        {
+            TRACE("RAnimSprite::ReadFrames - Error reading frame %d X offset\n", i);
+            sReturn = FAILURE;
+        }
+    }
 
-	return sReturn;
+    return sReturn;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -365,22 +364,22 @@ short RAnimSprite::ReadFrames(RFile* pcf)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-short RAnimSprite::Save(char* pszFilename)
-{	
-	RFile cf;
-	short sReturn = SUCCESS;
+short RAnimSprite::Save(char *pszFilename)
+{
+    RFile cf;
+    short sReturn = SUCCESS;
 
-	if (cf.Open(pszFilename, "wb", RFile::LittleEndian) != SUCCESS)
-	{
-		TRACE("RAnimSprite::Save - could not open file for output %s\n", pszFilename);
-		return FAILURE;
-	}
+    if (cf.Open(pszFilename, "wb", RFile::LittleEndian) != SUCCESS)
+    {
+        TRACE("RAnimSprite::Save - could not open file for output %s\n", pszFilename);
+        return FAILURE;
+    }
 
-	sReturn = Save(&cf);
-	
-	cf.Close();
+    sReturn = Save(&cf);
 
-	return sReturn;
+    cf.Close();
+
+    return sReturn;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -401,76 +400,76 @@ short RAnimSprite::Save(char* pszFilename)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-short RAnimSprite::Save(RFile* pcf)
+short RAnimSprite::Save(RFile *pcf)
 {
-	short sReturn = SUCCESS;
-	ULONG ulFileType = ANIMSPRITE_COOKIE;
+    short sReturn = SUCCESS;
+    ULONG ulFileType = ANIMSPRITE_COOKIE;
 
-	if (pcf && pcf->IsOpen())
-	{
-		if (pcf->Write(&ulFileType) == 1)
-		{
-			if (pcf->Write(&m_sVersion) == 1)
-			{
-				if (pcf->Write(&m_sNumFrames) == 1)
-				{
-					if (pcf->Write(&m_sNumPictures) == 1)
-					{
-						if (pcf->Write(&m_sLoopToFrame) == 1)
-						{
-							if (pcf->Write(&m_ulAnimFlags) == 1)
-							{
-								if (WritePictures(pcf) == SUCCESS)
-									sReturn = WriteFrames(pcf);
-								else
-								{
-									TRACE("RAnimSprite::Save - Error saving pictures\n");
-									sReturn = FAILURE;
-								}
-							}
-							else
-							{
-								TRACE("RAnimSprite::Save - Error writing animation flags\n");
-								sReturn = FAILURE;
-							}
-						}
-						else
-						{
-							TRACE("RAnimSprite::Save - Error writing loop flag\n");
-							sReturn = FAILURE;
-						}
-					}
-					else
-					{
-						TRACE("RAnimSprite::Save - Error writing number of pictures\n");
-						sReturn = FAILURE;
-					}
-				}
-				else
-				{
-					TRACE("RAnimSprite::Save - Error writing number of frames\n");
-					sReturn = FAILURE;
-				}
-			}
-			else
-			{
-				TRACE("RAnimSprite::Save - Error writing animation version number\n");
-				sReturn = FAILURE;
-			}	
-		}
-		else
-		{
-			TRACE("RAnimSprite::Save - Error writing animation filetype marker\n");
-			sReturn = FAILURE;		
-		}		
-	}
-	else
-	{
-		TRACE("RAnimSprite::Save - RFile* pcf does not refer to an open file\n");
-		sReturn = FAILURE;
-	}
+    if (pcf && pcf->IsOpen())
+    {
+        if (pcf->Write(&ulFileType) == 1)
+        {
+            if (pcf->Write(&m_sVersion) == 1)
+            {
+                if (pcf->Write(&m_sNumFrames) == 1)
+                {
+                    if (pcf->Write(&m_sNumPictures) == 1)
+                    {
+                        if (pcf->Write(&m_sLoopToFrame) == 1)
+                        {
+                            if (pcf->Write(&m_ulAnimFlags) == 1)
+                            {
+                                if (WritePictures(pcf) == SUCCESS)
+                                    sReturn = WriteFrames(pcf);
+                                else
+                                {
+                                    TRACE("RAnimSprite::Save - Error saving pictures\n");
+                                    sReturn = FAILURE;
+                                }
+                            }
+                            else
+                            {
+                                TRACE("RAnimSprite::Save - Error writing animation flags\n");
+                                sReturn = FAILURE;
+                            }
+                        }
+                        else
+                        {
+                            TRACE("RAnimSprite::Save - Error writing loop flag\n");
+                            sReturn = FAILURE;
+                        }
+                    }
+                    else
+                    {
+                        TRACE("RAnimSprite::Save - Error writing number of pictures\n");
+                        sReturn = FAILURE;
+                    }
+                }
+                else
+                {
+                    TRACE("RAnimSprite::Save - Error writing number of frames\n");
+                    sReturn = FAILURE;
+                }
+            }
+            else
+            {
+                TRACE("RAnimSprite::Save - Error writing animation version number\n");
+                sReturn = FAILURE;
+            }
+        }
+        else
+        {
+            TRACE("RAnimSprite::Save - Error writing animation filetype marker\n");
+            sReturn = FAILURE;
+        }
+    }
+    else
+    {
+        TRACE("RAnimSprite::Save - RFile* pcf does not refer to an open file\n");
+        sReturn = FAILURE;
+    }
 
-	return sReturn;
+    return sReturn;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -490,15 +489,15 @@ short RAnimSprite::Save(RFile* pcf)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-short RAnimSprite::WritePictures(RFile* pcf)
+short RAnimSprite::WritePictures(RFile *pcf)
 {
-	short sReturn = SUCCESS;
-	short i = 0;
+    short sReturn = SUCCESS;
+    short i = 0;
 
-	while (sReturn == SUCCESS && i < m_sNumPictures)
-		sReturn = m_apPictures[i++]->Save(pcf);
+    while (sReturn == SUCCESS && i < m_sNumPictures)
+        sReturn = m_apPictures[i++]->Save(pcf);
 
-	return sReturn;
+    return sReturn;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -518,79 +517,79 @@ short RAnimSprite::WritePictures(RFile* pcf)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-short RAnimSprite::WriteFrames(RFile* pcf)
+short RAnimSprite::WriteFrames(RFile *pcf)
 {
-	short sReturn = SUCCESS;
-	short i = 0;
+    short sReturn = SUCCESS;
+    short i = 0;
 
-	while (sReturn == SUCCESS && i < m_sNumFrames)
-	{
-		if (pcf->Write(&(m_aFrames[i].sOffsetX)) == 1)
-		{
-			if (pcf->Write(&(m_aFrames[i].sOffsetY)) == 1)
-			{
-				if (pcf->Write(&(m_aFrames[i].sOffsetZ)) == 1)
-				{
-					if (pcf->Write(&(m_aFrames[i].sRotDeg)) == 1)
-					{
-						if (pcf->Write(&(m_aFrames[i].lScaleWidth)) == 1)
-						{
-							if (pcf->Write(&(m_aFrames[i].lScaleHeight)) == 1)
-							{
-								if (pcf->Write(&(m_aFrames[i].sHold)) == 1)
-								{
-									if (pcf->Write(&(m_aFrames[i].sPicIndex)) == 1)
-										i++;
-									else
-									{
-										TRACE("RAnimSprite::WriteFrame - Error writing frame %d sPicIndex\n", i);
-										sReturn = FAILURE;
-									}
-								}
-								else
-								{
-									TRACE("RAnimSprite::WriteFrame - Error writing frame %d sHold\n", i);
-									sReturn = FAILURE;
-								}
-							}
-							else
-							{
-								TRACE("RAnimSprite::WriteFrames - Error writing frame %d scaled height\n", i);
-								sReturn = FAILURE;
-							}
-						}
-						else
-						{
-							TRACE("RAnimSprite::WriteFrames - Error writing frame %d scaled width\n", i);
-							sReturn = FAILURE;
-						}
-					}
-					else
-					{
-						TRACE("RAnimSprite::WriteFrames - Error writing frame %d rotational degrees\n", i);
-						sReturn = FAILURE;
-					}
-				}	
-				else
-				{
-					TRACE("RAnimSprite::WriteFrame - Error writing frame %d Z offset\n", i);
-					sReturn = FAILURE;
-				}
-			}
-			else
-			{
-				TRACE("RAnimSprite::WriteFrames - Error writing frame %d Y offset\n", i);
-				sReturn = FAILURE;
-			}
-		}
-		else
-		{
-			TRACE("RAnimSprite::WriteFrames - Error writing frame %d X offset\n", i);
-			sReturn = FAILURE;
-		}
-	}
+    while (sReturn == SUCCESS && i < m_sNumFrames)
+    {
+        if (pcf->Write(&(m_aFrames[i].sOffsetX)) == 1)
+        {
+            if (pcf->Write(&(m_aFrames[i].sOffsetY)) == 1)
+            {
+                if (pcf->Write(&(m_aFrames[i].sOffsetZ)) == 1)
+                {
+                    if (pcf->Write(&(m_aFrames[i].sRotDeg)) == 1)
+                    {
+                        if (pcf->Write(&(m_aFrames[i].lScaleWidth)) == 1)
+                        {
+                            if (pcf->Write(&(m_aFrames[i].lScaleHeight)) == 1)
+                            {
+                                if (pcf->Write(&(m_aFrames[i].sHold)) == 1)
+                                {
+                                    if (pcf->Write(&(m_aFrames[i].sPicIndex)) == 1)
+                                        i++;
+                                    else
+                                    {
+                                        TRACE("RAnimSprite::WriteFrame - Error writing frame %d sPicIndex\n", i);
+                                        sReturn = FAILURE;
+                                    }
+                                }
+                                else
+                                {
+                                    TRACE("RAnimSprite::WriteFrame - Error writing frame %d sHold\n", i);
+                                    sReturn = FAILURE;
+                                }
+                            }
+                            else
+                            {
+                                TRACE("RAnimSprite::WriteFrames - Error writing frame %d scaled height\n", i);
+                                sReturn = FAILURE;
+                            }
+                        }
+                        else
+                        {
+                            TRACE("RAnimSprite::WriteFrames - Error writing frame %d scaled width\n", i);
+                            sReturn = FAILURE;
+                        }
+                    }
+                    else
+                    {
+                        TRACE("RAnimSprite::WriteFrames - Error writing frame %d rotational degrees\n", i);
+                        sReturn = FAILURE;
+                    }
+                }
+                else
+                {
+                    TRACE("RAnimSprite::WriteFrame - Error writing frame %d Z offset\n", i);
+                    sReturn = FAILURE;
+                }
+            }
+            else
+            {
+                TRACE("RAnimSprite::WriteFrames - Error writing frame %d Y offset\n", i);
+                sReturn = FAILURE;
+            }
+        }
+        else
+        {
+            TRACE("RAnimSprite::WriteFrames - Error writing frame %d X offset\n", i);
+            sReturn = FAILURE;
+        }
+    }
 
-	return sReturn;
+    return sReturn;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -616,49 +615,48 @@ short RAnimSprite::WriteFrames(RFile* pcf)
 
 short RAnimSprite::SetFrame(short sFrameNum)
 {
- 	if (sFrameNum < 0 || sFrameNum >= m_sNumFrames)
-	{
-		TRACE("RAnimSprite::SetFrame - frame number supplied is not in range 0-%d so using last frame\n", m_sNumFrames);
-		sFrameNum = m_sNumFrames-1;
-	}
+    if (sFrameNum < 0 || sFrameNum >= m_sNumFrames)
+    {
+        TRACE("RAnimSprite::SetFrame - frame number supplied is not in range 0-%d so using last frame\n", m_sNumFrames);
+        sFrameNum = m_sNumFrames - 1;
+    }
 
-	// Change current frame
-	m_sCurrFrame = sFrameNum;
+    // Change current frame
+    m_sCurrFrame = sFrameNum;
 
-	// Set the expiration time for this frame
-	m_lTimer = rspGetMilliseconds() + m_aFrames[m_sCurrFrame].sHold;
+    // Set the expiration time for this frame
+    m_lTimer = rspGetMilliseconds() + m_aFrames[m_sCurrFrame].sHold;
 
-	// Set the sprite's image pointer to the picture for this frame
-	m_pImage = m_aFrames[m_sCurrFrame].pImage;
+    // Set the sprite's image pointer to the picture for this frame
+    m_pImage = m_aFrames[m_sCurrFrame].pImage;
 
-	// Check the animation flags to see if the sprite should be modified
-	// with various frame data.
-	if (m_ulAnimFlags & ANIMSPRITE_FLAG_OFFSET)
-	{
-		m_sX += m_aFrames[m_sCurrFrame].sOffsetX;
-		m_sY += m_aFrames[m_sCurrFrame].sOffsetY;
-		m_sZ += m_aFrames[m_sCurrFrame].sOffsetZ;
-	}
+    // Check the animation flags to see if the sprite should be modified
+    // with various frame data.
+    if (m_ulAnimFlags & ANIMSPRITE_FLAG_OFFSET)
+    {
+        m_sX += m_aFrames[m_sCurrFrame].sOffsetX;
+        m_sY += m_aFrames[m_sCurrFrame].sOffsetY;
+        m_sZ += m_aFrames[m_sCurrFrame].sOffsetZ;
+    }
 
-	if (m_ulAnimFlags & ANIMSPRITE_FLAG_ROTATION)
-		m_sAngle = m_aFrames[m_sCurrFrame].sRotDeg;
+    if (m_ulAnimFlags & ANIMSPRITE_FLAG_ROTATION)
+        m_sAngle = m_aFrames[m_sCurrFrame].sRotDeg;
 
-	if (m_ulAnimFlags & ANIMSPRITE_FLAG_SCALE)
-	{
-		m_lWidth = m_aFrames[m_sCurrFrame].lScaleWidth;
-		m_lHeight = m_aFrames[m_sCurrFrame].lScaleHeight;
-	}	
+    if (m_ulAnimFlags & ANIMSPRITE_FLAG_SCALE)
+    {
+        m_lWidth = m_aFrames[m_sCurrFrame].lScaleWidth;
+        m_lHeight = m_aFrames[m_sCurrFrame].lScaleHeight;
+    }
 
-	return SUCCESS;
+    return SUCCESS;
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // NextFrame
 //
 // Description:
-//		Go to the next frame of the animation immediately (not using the 
+//		Go to the next frame of the animation immediately (not using the
 //		timer).  If it is on the last frame and the ANIMSPRITE_FLAG_LOOP
 //		is set, then it will loop back to the m_sLoopToFrame number.  If
 //		the flag is not set then it will stay on the last frame.
@@ -669,55 +667,56 @@ short RAnimSprite::SetFrame(short sFrameNum)
 //	Return:
 //		frame number it is on
 //		ANIMSPRITE_LAST_FRAME if it is stuck on the last frame (not looping)
-//	
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 short RAnimSprite::NextFrame()
 {
-	// See if it is on the last frame
-	if (m_sCurrFrame == m_sNumFrames-1)
-	{
-//		if (m_ulAnimFlags & ANIMSPRITE_FLAG_LOOP)
-		if (m_sLoopToFrame > -1 && m_sLoopToFrame < m_sNumFrames)
-			if (m_sLoopToFrame >= 0 && m_sLoopToFrame < m_sNumFrames)
-				m_sCurrFrame = m_sLoopToFrame;
-			else
-			{
-				TRACE("RAnimSprite::NextFrame - Anim is supposed to loop but m_sLoopToFrame is out of range 0-%d\n", m_sLoopToFrame);
-				return ANIMSPRITE_LAST_FRAME;
-			}
-		else
-			return ANIMSPRITE_LAST_FRAME;
-	}
-	// If not on the last frame then increment to the next frame
-	else
-		m_sCurrFrame++;
+    // See if it is on the last frame
+    if (m_sCurrFrame == m_sNumFrames - 1)
+    {
+        //		if (m_ulAnimFlags & ANIMSPRITE_FLAG_LOOP)
+        if (m_sLoopToFrame > -1 && m_sLoopToFrame < m_sNumFrames)
+            if (m_sLoopToFrame >= 0 && m_sLoopToFrame < m_sNumFrames)
+                m_sCurrFrame = m_sLoopToFrame;
+            else
+            {
+                TRACE("RAnimSprite::NextFrame - Anim is supposed to loop but m_sLoopToFrame is out of range 0-%d\n",
+                      m_sLoopToFrame);
+                return ANIMSPRITE_LAST_FRAME;
+            }
+        else
+            return ANIMSPRITE_LAST_FRAME;
+    }
+    // If not on the last frame then increment to the next frame
+    else
+        m_sCurrFrame++;
 
-	// Set the expiration time for this frame
-	m_lTimer = rspGetMilliseconds() + m_aFrames[m_sCurrFrame].sHold;
+    // Set the expiration time for this frame
+    m_lTimer = rspGetMilliseconds() + m_aFrames[m_sCurrFrame].sHold;
 
-	// Set the sprite's image pointer to the picture for this frame
-	m_pImage = m_aFrames[m_sCurrFrame].pImage;
+    // Set the sprite's image pointer to the picture for this frame
+    m_pImage = m_aFrames[m_sCurrFrame].pImage;
 
-	// Check the animation flags to see if the sprite should be modified
-	// with various frame data.
-	if (m_ulAnimFlags & ANIMSPRITE_FLAG_OFFSET)
-	{
-		m_sX += m_aFrames[m_sCurrFrame].sOffsetX;
-		m_sY += m_aFrames[m_sCurrFrame].sOffsetY;
-		m_sZ += m_aFrames[m_sCurrFrame].sOffsetZ;
-	}
+    // Check the animation flags to see if the sprite should be modified
+    // with various frame data.
+    if (m_ulAnimFlags & ANIMSPRITE_FLAG_OFFSET)
+    {
+        m_sX += m_aFrames[m_sCurrFrame].sOffsetX;
+        m_sY += m_aFrames[m_sCurrFrame].sOffsetY;
+        m_sZ += m_aFrames[m_sCurrFrame].sOffsetZ;
+    }
 
-	if (m_ulAnimFlags & ANIMSPRITE_FLAG_ROTATION)
-		m_sAngle = m_aFrames[m_sCurrFrame].sRotDeg;
+    if (m_ulAnimFlags & ANIMSPRITE_FLAG_ROTATION)
+        m_sAngle = m_aFrames[m_sCurrFrame].sRotDeg;
 
-	if (m_ulAnimFlags & ANIMSPRITE_FLAG_SCALE)
-	{
-		m_lWidth = m_aFrames[m_sCurrFrame].lScaleWidth;
-		m_lHeight = m_aFrames[m_sCurrFrame].lScaleHeight;
-	}	
+    if (m_ulAnimFlags & ANIMSPRITE_FLAG_SCALE)
+    {
+        m_lWidth = m_aFrames[m_sCurrFrame].lScaleWidth;
+        m_lHeight = m_aFrames[m_sCurrFrame].lScaleHeight;
+    }
 
-	return m_sCurrFrame;
+    return m_sCurrFrame;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -739,50 +738,51 @@ short RAnimSprite::NextFrame()
 
 short RAnimSprite::PrevFrame()
 {
-	// See if it is on the first frame
-	if (m_sCurrFrame == 0)
-	{
-//		if (m_ulAnimFlags & ANIMSPRITE_FLAG_LOOP)
-		if (m_sLoopToFrame > -1 && m_sLoopToFrame < m_sNumFrames)
-			if (m_sLoopToFrame >= 0 && m_sLoopToFrame < m_sNumFrames)
-				m_sCurrFrame = m_sLoopToFrame;
-			else
-			{
-				TRACE("RAnimSprite::PrevFrame - Anim is supposed to loop but m_sLoopToFrame is out of range 0-%d\n", m_sLoopToFrame);
-				return ANIMSPRITE_FIRST_FRAME;
-			}
-		else
-			return ANIMSPRITE_FIRST_FRAME;
-	}
-	// If not on the last frame then increment to the next frame
-	else
-		m_sCurrFrame--;
+    // See if it is on the first frame
+    if (m_sCurrFrame == 0)
+    {
+        //		if (m_ulAnimFlags & ANIMSPRITE_FLAG_LOOP)
+        if (m_sLoopToFrame > -1 && m_sLoopToFrame < m_sNumFrames)
+            if (m_sLoopToFrame >= 0 && m_sLoopToFrame < m_sNumFrames)
+                m_sCurrFrame = m_sLoopToFrame;
+            else
+            {
+                TRACE("RAnimSprite::PrevFrame - Anim is supposed to loop but m_sLoopToFrame is out of range 0-%d\n",
+                      m_sLoopToFrame);
+                return ANIMSPRITE_FIRST_FRAME;
+            }
+        else
+            return ANIMSPRITE_FIRST_FRAME;
+    }
+    // If not on the last frame then increment to the next frame
+    else
+        m_sCurrFrame--;
 
-	// Set the expiration time for this frame
-	m_lTimer = rspGetMilliseconds() + m_aFrames[m_sCurrFrame].sHold;
+    // Set the expiration time for this frame
+    m_lTimer = rspGetMilliseconds() + m_aFrames[m_sCurrFrame].sHold;
 
-	// Set the sprite's image pointer to the picture for this frame
-	m_pImage = m_aFrames[m_sCurrFrame].pImage;
+    // Set the sprite's image pointer to the picture for this frame
+    m_pImage = m_aFrames[m_sCurrFrame].pImage;
 
-	// Check the animation flags to see if the sprite should be modified
-	// with various frame data.
-	if (m_ulAnimFlags & ANIMSPRITE_FLAG_OFFSET)
-	{
-		m_sX += m_aFrames[m_sCurrFrame].sOffsetX;
-		m_sY += m_aFrames[m_sCurrFrame].sOffsetY;
-		m_sZ += m_aFrames[m_sCurrFrame].sOffsetZ;
-	}
+    // Check the animation flags to see if the sprite should be modified
+    // with various frame data.
+    if (m_ulAnimFlags & ANIMSPRITE_FLAG_OFFSET)
+    {
+        m_sX += m_aFrames[m_sCurrFrame].sOffsetX;
+        m_sY += m_aFrames[m_sCurrFrame].sOffsetY;
+        m_sZ += m_aFrames[m_sCurrFrame].sOffsetZ;
+    }
 
-	if (m_ulAnimFlags & ANIMSPRITE_FLAG_ROTATION)
-		m_sAngle = m_aFrames[m_sCurrFrame].sRotDeg;
+    if (m_ulAnimFlags & ANIMSPRITE_FLAG_ROTATION)
+        m_sAngle = m_aFrames[m_sCurrFrame].sRotDeg;
 
-	if (m_ulAnimFlags & ANIMSPRITE_FLAG_SCALE)
-	{
-		m_lWidth = m_aFrames[m_sCurrFrame].lScaleWidth;
-		m_lHeight = m_aFrames[m_sCurrFrame].lScaleHeight;
-	}	
+    if (m_ulAnimFlags & ANIMSPRITE_FLAG_SCALE)
+    {
+        m_lWidth = m_aFrames[m_sCurrFrame].lScaleWidth;
+        m_lHeight = m_aFrames[m_sCurrFrame].lScaleHeight;
+    }
 
-	return m_sCurrFrame;
+    return m_sCurrFrame;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -800,10 +800,9 @@ short RAnimSprite::PrevFrame()
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-
-short RAnimSprite::NextKeyFrame()		// goes to next key frame of animation
+short RAnimSprite::NextKeyFrame() // goes to next key frame of animation
 {
-	return SUCCESS;
+    return SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -812,7 +811,7 @@ short RAnimSprite::NextKeyFrame()		// goes to next key frame of animation
 //
 // Description:
 //		Go to the next frame of the animation if the time for the current
-//		frame has expired.  It will loop to the m_sLoopToFrame if the 
+//		frame has expired.  It will loop to the m_sLoopToFrame if the
 //		ANIMSPRITE_FLAG_LOOP is set.
 //
 // Parameters:
@@ -823,13 +822,13 @@ short RAnimSprite::NextKeyFrame()		// goes to next key frame of animation
 //		current frame number or ANIMSPRITE_LAST_FRAME (see next frame)
 //
 ///////////////////////////////////////////////////////////////////////////////
-	
+
 short RAnimSprite::Animate()
 {
-	if (rspGetMilliseconds() > m_lTimer)
-		return NextFrame();
-	else
-		return ANIMSPRITE_WAITING;
+    if (rspGetMilliseconds() > m_lTimer)
+        return NextFrame();
+    else
+        return ANIMSPRITE_WAITING;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -850,17 +849,17 @@ short RAnimSprite::Animate()
 
 short RAnimSprite::AllocateFrames(short sNumFrames)
 {
-	if (m_aFrames)
-	{
-		TRACE("RAnimSprite::AllocateFrames - Frames are already allocated, free these before allocating more\n");
-		return FAILURE;
-	}
+    if (m_aFrames)
+    {
+        TRACE("RAnimSprite::AllocateFrames - Frames are already allocated, free these before allocating more\n");
+        return FAILURE;
+    }
 
-	m_aFrames = new FRAME[sNumFrames];
-	if (m_aFrames)
-		return SUCCESS;
-	else
-		return FAILURE;
+    m_aFrames = new FRAME[sNumFrames];
+    if (m_aFrames)
+        return SUCCESS;
+    else
+        return FAILURE;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -881,25 +880,25 @@ short RAnimSprite::AllocateFrames(short sNumFrames)
 
 short RAnimSprite::AllocatePictures(short sNumPictures)
 {
-	if (m_apPictures)
-	{
-		TRACE("RAnimSprite::AllocatePictures - Pictures are already allocated, free these before allocating more\n");
-		return FAILURE;
-	}
+    if (m_apPictures)
+    {
+        TRACE("RAnimSprite::AllocatePictures - Pictures are already allocated, free these before allocating more\n");
+        return FAILURE;
+    }
 
-	m_apPictures = new RImage*[sNumPictures];
-	if (m_apPictures == NULL)
-		return FAILURE;
-	
-	short i;
+    m_apPictures = new RImage *[sNumPictures];
+    if (m_apPictures == NULL)
+        return FAILURE;
 
-	for (i = 0; i < sNumPictures; i++)
-		m_apPictures[i] = new RImage;
+    short i;
 
-	// Save this so that this many will be freed later
-	m_sAllocatedPics = sNumPictures;
+    for (i = 0; i < sNumPictures; i++)
+        m_apPictures[i] = new RImage;
 
-	return SUCCESS;
+    // Save this so that this many will be freed later
+    m_sAllocatedPics = sNumPictures;
+
+    return SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -920,14 +919,14 @@ short RAnimSprite::AllocatePictures(short sNumPictures)
 
 short RAnimSprite::FreeFrames()
 {
-	if (m_aFrames)
-	{
-		delete []m_aFrames;
-		m_aFrames = NULL;
-		return SUCCESS;
-	}
-	else	
-		return FAILURE;
+    if (m_aFrames)
+    {
+        delete[] m_aFrames;
+        m_aFrames = NULL;
+        return SUCCESS;
+    }
+    else
+        return FAILURE;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -949,22 +948,21 @@ short RAnimSprite::FreeFrames()
 
 short RAnimSprite::FreePictures()
 {
-	if (m_apPictures)
-	{
-		short i;
-		// free each picture
-		for (i = 0; i < m_sAllocatedPics; i++)
-			delete m_apPictures[i];
-		// free array of image pointers
-		delete []m_apPictures;
-		m_sAllocatedPics = 0;
-		m_apPictures = NULL;
-		return SUCCESS;
-	}
-	else
-		return FAILURE;
+    if (m_apPictures)
+    {
+        short i;
+        // free each picture
+        for (i = 0; i < m_sAllocatedPics; i++)
+            delete m_apPictures[i];
+        // free array of image pointers
+        delete[] m_apPictures;
+        m_sAllocatedPics = 0;
+        m_apPictures = NULL;
+        return SUCCESS;
+    }
+    else
+        return FAILURE;
 }
-
 
 //*****************************************************************************
 // EOF

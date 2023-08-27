@@ -17,7 +17,7 @@
 //
 // Chunk.H
 // Project: Nostril (aka Postal)
-// 
+//
 // History:
 //		05/13/97 JMI	Started.
 //
@@ -47,167 +47,164 @@
 #include "realm.h"
 
 class CChunk : public CThing
-	{
-	//---------------------------------------------------------------------------
-	// Types, enums, etc.
-	//---------------------------------------------------------------------------
-	public:
+{
+    //---------------------------------------------------------------------------
+    // Types, enums, etc.
+    //---------------------------------------------------------------------------
+  public:
+    typedef enum
+    {
+        Blood,
+        BulletCasing,
+        Shell,
+        Kevlar,
 
-		typedef enum
-			{
-			Blood,
-			BulletCasing,
-			Shell,
-			Kevlar,
+        NumTypes
+    } Type;
 
-			NumTypes
-			} Type;
+    typedef struct
+    {
+        U8 u8ColorIndex;
+        short sLen;
+    } TypeInfo;
 
-		typedef struct
-			{
-			U8		u8ColorIndex;
-			short	sLen;
-			} TypeInfo;
+    //---------------------------------------------------------------------------
+    // Variables
+    //---------------------------------------------------------------------------
+  public:
+    double m_dX;
+    double m_dY;
+    double m_dZ;
 
-	//---------------------------------------------------------------------------
-	// Variables
-	//---------------------------------------------------------------------------
-	public:
-		double m_dX;
-		double m_dY;
-		double m_dZ;
+    double m_dRot;
+    double m_dVel;
+    double m_dVertVel;
 
-		double m_dRot;
-		double m_dVel;
-		double m_dVertVel;
+    long m_lPrevTime;
 
-		long	m_lPrevTime;
+    short m_sSuspend; // Suspend flag
 
-		short m_sSuspend;								// Suspend flag
+    Type m_type;
 
-		Type	m_type;
+    short m_sLen; // Length of item.
 
-		short	m_sLen;									// Length of item.
-														
-	protected:
-		CSpriteLine2d		m_sprite;				// Sprite.
+  protected:
+    CSpriteLine2d m_sprite; // Sprite.
 
-		// Note that this is never reseeded b/c this is just an 'effect'
-		// that does not and SHOULD not affect game play as it can be
-		// turned off.
-		static long			ms_lGetRandomSeed;	// Seed for GetRand[om]().
+    // Note that this is never reseeded b/c this is just an 'effect'
+    // that does not and SHOULD not affect game play as it can be
+    // turned off.
+    static long ms_lGetRandomSeed; // Seed for GetRand[om]().
 
-		// Chunk info for each type.
-		static TypeInfo	ms_atiChunks[NumTypes];
-														
-	//---------------------------------------------------------------------------
-	// Static Variables
-	//---------------------------------------------------------------------------
-	public:
+    // Chunk info for each type.
+    static TypeInfo ms_atiChunks[NumTypes];
 
-	//---------------------------------------------------------------------------
-	// Constructor(s) / destructor
-	//---------------------------------------------------------------------------
-	public:
-		// Constructor
-		CChunk(CRealm* pRealm)
-			: CThing(pRealm, CChunkID)
-			{
-			m_sSuspend			= 0;
-			m_dRot				= 0.0;
-			m_dVel				= 0.0;
-			m_dVertVel			= 0.0;
-			m_sLen				= 0;
+    //---------------------------------------------------------------------------
+    // Static Variables
+    //---------------------------------------------------------------------------
+  public:
+    //---------------------------------------------------------------------------
+    // Constructor(s) / destructor
+    //---------------------------------------------------------------------------
+  public:
+    // Constructor
+    CChunk(CRealm *pRealm)
+      : CThing(pRealm, CChunkID)
+    {
+        m_sSuspend = 0;
+        m_dRot = 0.0;
+        m_dVel = 0.0;
+        m_dVertVel = 0.0;
+        m_sLen = 0;
 
-			m_sprite.m_pthing		= this;
-			m_sprite.m_u8Color	= 1;
+        m_sprite.m_pthing = this;
+        m_sprite.m_u8Color = 1;
 
-			m_type				= Blood;
-			}
+        m_type = Blood;
+    }
 
-	public:
-		// Destructor
-		~CChunk()
-			{
-			// Remove sprite from scene (this is safe even if it was already removed!)
-			m_pRealm->m_scene.RemoveSprite(&m_sprite);
-			}
+  public:
+    // Destructor
+    ~CChunk()
+    {
+        // Remove sprite from scene (this is safe even if it was already removed!)
+        m_pRealm->m_scene.RemoveSprite(&m_sprite);
+    }
 
-	//---------------------------------------------------------------------------
-	// Required static functions
-	//---------------------------------------------------------------------------
-	public:
-		// Construct object
-		static short Construct(									// Returns 0 if successfull, non-zero otherwise
-			CRealm* pRealm,										// In:  Pointer to realm this object belongs to
-			CThing** ppNew)										// Out: Pointer to new object
-			{
-			short sResult = 0;
+    //---------------------------------------------------------------------------
+    // Required static functions
+    //---------------------------------------------------------------------------
+  public:
+    // Construct object
+    static short Construct( // Returns 0 if successfull, non-zero otherwise
+      CRealm *pRealm,       // In:  Pointer to realm this object belongs to
+      CThing **ppNew)       // Out: Pointer to new object
+    {
+        short sResult = 0;
 
-			// Don't allow chunks when disabled . . .
-			if (g_GameSettings.m_sParticleEffects)
-				{
-				*ppNew = new CChunk(pRealm);
-				if (*ppNew == 0)
-					{
-					sResult = -1;
-					TRACE("CChunk::Construct(): Couldn't construct CChunk (that's really "
-						"not that bad a thing)\n");
-					}
-				}
-			else
-				{
-				// Particles disabled.
-				sResult	= 1;
-				}
+        // Don't allow chunks when disabled . . .
+        if (g_GameSettings.m_sParticleEffects)
+        {
+            *ppNew = new CChunk(pRealm);
+            if (*ppNew == 0)
+            {
+                sResult = -1;
+                TRACE("CChunk::Construct(): Couldn't construct CChunk (that's really "
+                      "not that bad a thing)\n");
+            }
+        }
+        else
+        {
+            // Particles disabled.
+            sResult = 1;
+        }
 
-			return sResult;
-			}
+        return sResult;
+    }
 
-	//---------------------------------------------------------------------------
-	// Virtual functions (implementing them as inlines doesn't pay!)
-	//---------------------------------------------------------------------------
-	public:
-		// Suspend object
-		void Suspend(void);
+    //---------------------------------------------------------------------------
+    // Virtual functions (implementing them as inlines doesn't pay!)
+    //---------------------------------------------------------------------------
+  public:
+    // Suspend object
+    void Suspend(void);
 
-		// Resume object
-		void Resume(void);
+    // Resume object
+    void Resume(void);
 
-		// Update object
-		void Update(void);
+    // Update object
+    void Update(void);
 
-		// Render object
-		void Render(void);
+    // Render object
+    void Render(void);
 
-		// Note that this setup accepts the amount of random sway you want to
-		// apply to the particle so you don't have to.  You should not, otherwise
-		// you'll ruin it (the game synch that is). Seriously.
-		short Setup(					// Returns 0 on success.
-			short sX,					// In:  New x coord
-			short sY,					// In:  New y coord
-			short sZ,					// In:  New z coord
-			double dRot,				// In:  Initial direction.
-			short	sRandRotSway,		// In:  Random sway on rotation or zero.
-			double dVel,				// In:  Initial velocity.
-			short	sRandVelSway,		// In:  Random sway on velocity or zero.
-			double dVertVel,			// In:  Initial vertical velocity.
-			short	sRandVertVelSway,	// In:  Random sway on velocity or zero.
-			Type	type);				// In:  Type of chunk.
+    // Note that this setup accepts the amount of random sway you want to
+    // apply to the particle so you don't have to.  You should not, otherwise
+    // you'll ruin it (the game synch that is). Seriously.
+    short Setup(              // Returns 0 on success.
+      short sX,               // In:  New x coord
+      short sY,               // In:  New y coord
+      short sZ,               // In:  New z coord
+      double dRot,            // In:  Initial direction.
+      short sRandRotSway,     // In:  Random sway on rotation or zero.
+      double dVel,            // In:  Initial velocity.
+      short sRandVelSway,     // In:  Random sway on velocity or zero.
+      double dVertVel,        // In:  Initial vertical velocity.
+      short sRandVertVelSway, // In:  Random sway on velocity or zero.
+      Type type);             // In:  Type of chunk.
 
-		// Get a random number that is in no way related to the game's main
-		// GetRand().
-		static long GetChunkRand(void)
-			{
-			return (((ms_lGetRandomSeed = ms_lGetRandomSeed * 214013L + 2531011L) >> 16) & 0x7fff);
-			}
+    // Get a random number that is in no way related to the game's main
+    // GetRand().
+    static long GetChunkRand(void)
+    {
+        return (((ms_lGetRandomSeed = ms_lGetRandomSeed * 214013L + 2531011L) >> 16) & 0x7fff);
+    }
 
-	//---------------------------------------------------------------------------
-	// Internal functions
-	//---------------------------------------------------------------------------
-	protected:
-	};
-
+    //---------------------------------------------------------------------------
+    // Internal functions
+    //---------------------------------------------------------------------------
+  protected:
+};
 
 #endif // CHUNK_H
 ////////////////////////////////////////////////////////////////////////////////

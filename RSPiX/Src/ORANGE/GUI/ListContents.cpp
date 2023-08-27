@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // ListContents.CPP
-// 
+//
 // History:
 //		01/21/97 JMI	Started.
 //
@@ -39,16 +39,16 @@
 // paths to a header file.  In this case we generally go off of our
 // RSPiX root directory.  System.h MUST be included before this macro
 // is evaluated.  System.h is the header that, based on the current
-// platform (or more so in this case on the compiler), defines 
+// platform (or more so in this case on the compiler), defines
 // PATHS_IN_INCLUDES.  Blue.h includes system.h so you can include that
 // instead.
 ///////////////////////////////////////////////////////////////////////////////
 #include "System.h"
 
 #ifdef PATHS_IN_INCLUDES
-	#include "ORANGE/GUI/ListBox.h"
+#include "ORANGE/GUI/ListBox.h"
 #else
-	#include "ListBox.h"
+#include "ListBox.h"
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -85,42 +85,42 @@
 // (protected/virtual (overridden here)).
 //
 //////////////////////////////////////////////////////////////////////////////
-short RListContents::SaveChildren(	// Returns 0 on success.
-	RFile*	pfile)						// File to save to.
-	{
-	short	sRes	= 0;	// Assume success.
+short RListContents::SaveChildren( // Returns 0 on success.
+  RFile *pfile)                    // File to save to.
+{
+    short sRes = 0; // Assume success.
 
-	ASSERT(pfile->IsOpen() != FALSE);
+    ASSERT(pfile->IsOpen() != FALSE);
 
-	// Determine number of child items.
-	short	sNum	= 0;
-	RGuiItem*	pgui = m_listguiChildren.GetHead();
-	while (pgui != NULL)
-		{
-		sNum++;
+    // Determine number of child items.
+    short sNum = 0;
+    RGuiItem *pgui = m_listguiChildren.GetHead();
+    while (pgui != NULL)
+    {
+        sNum++;
 
-		pgui	= m_listguiChildren.GetNext();
-		}
+        pgui = m_listguiChildren.GetNext();
+    }
 
-	// Write number of children.
-	pfile->Write(sNum);
+    // Write number of children.
+    pfile->Write(sNum);
 
-	// Save children in reverse order.
-	pgui	= m_listguiChildren.GetTail();
-	while (pgui != NULL && sRes == 0 && pfile->Error() == FALSE)
-		{
-		// Before each item is a value indicating whether the item
-		// is an encapsulator.
-		pfile->Write((short)pgui->IsProp(ENCAPSULATOR_PROP_KEY) );
+    // Save children in reverse order.
+    pgui = m_listguiChildren.GetTail();
+    while (pgui != NULL && sRes == 0 && pfile->Error() == FALSE)
+    {
+        // Before each item is a value indicating whether the item
+        // is an encapsulator.
+        pfile->Write((short)pgui->IsProp(ENCAPSULATOR_PROP_KEY));
 
-		// Save child.
-		sRes	= pgui->Save(pfile);
+        // Save child.
+        sRes = pgui->Save(pfile);
 
-		pgui	= m_listguiChildren.GetPrev();
-		}
+        pgui = m_listguiChildren.GetPrev();
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -128,61 +128,59 @@ short RListContents::SaveChildren(	// Returns 0 on success.
 // (protected/virtual (overridden here)).
 //
 //////////////////////////////////////////////////////////////////////////////
-short RListContents::LoadChildren(	// Returns 0 on success.
-	RFile*	pfile)						// File to load from.
-	{
-	short	sRes	= 0;	// Assume success.
+short RListContents::LoadChildren( // Returns 0 on success.
+  RFile *pfile)                    // File to load from.
+{
+    short sRes = 0; // Assume success.
 
-	ASSERT(pfile->IsOpen() != FALSE);
-	// Need to know parent.
-	ASSERT(GetParent() != NULL);
+    ASSERT(pfile->IsOpen() != FALSE);
+    // Need to know parent.
+    ASSERT(GetParent() != NULL);
 
-	short	sNum;
-	// Read number of children.
-	pfile->Read(&sNum);
+    short sNum;
+    // Read number of children.
+    pfile->Read(&sNum);
 
-	// Instantiate children.
-	RGuiItem* pgui;
-	short	sCurChild;
-	short	sEncapsulator;
-	for (	sCurChild	= 0; 
-			sCurChild < sNum && sRes == 0 && pfile->Error() == FALSE; 
-			sCurChild++)
-		{
-		// Before each item is a value indicating whether the item
-		// is an encapsulator.
-		pfile->Read(&sEncapsulator);
+    // Instantiate children.
+    RGuiItem *pgui;
+    short sCurChild;
+    short sEncapsulator;
+    for (sCurChild = 0; sCurChild < sNum && sRes == 0 && pfile->Error() == FALSE; sCurChild++)
+    {
+        // Before each item is a value indicating whether the item
+        // is an encapsulator.
+        pfile->Read(&sEncapsulator);
 
-		pgui	= LoadInstantiate(pfile);
-		if (pgui != NULL)
-			{
-			pgui->SetParent(this);
-			// If the item is an encapsulator . . .
-			if (sEncapsulator != FALSE)
-				{
-				// Mark item as an encapsulator.
-				pgui->SetProp(ENCAPSULATOR_PROP_KEY, TRUE);
-				// Set callback.
-				pgui->m_bcUser				= RListBox::PressedCall;
-				// Set instance to parent listbox.
-				pgui->m_ulUserInstance	= (ULONG)GetParent();
-				// If pushed in . . .
-				if (pgui->m_sInvertedBorder != FALSE)
-					{
-					// Select item.
-					((RListBox*)GetParent())->SetSel(pgui);
-					}
-				}
-			}
-		else
-			{
-			TRACE("LoadChildren(): LoadInstantiate() failed.\n");
-			sRes	= -1;
-			}
-		}
+        pgui = LoadInstantiate(pfile);
+        if (pgui != NULL)
+        {
+            pgui->SetParent(this);
+            // If the item is an encapsulator . . .
+            if (sEncapsulator != FALSE)
+            {
+                // Mark item as an encapsulator.
+                pgui->SetProp(ENCAPSULATOR_PROP_KEY, TRUE);
+                // Set callback.
+                pgui->m_bcUser = RListBox::PressedCall;
+                // Set instance to parent listbox.
+                pgui->m_ulUserInstance = (ULONG)GetParent();
+                // If pushed in . . .
+                if (pgui->m_sInvertedBorder != FALSE)
+                {
+                    // Select item.
+                    ((RListBox *)GetParent())->SetSel(pgui);
+                }
+            }
+        }
+        else
+        {
+            TRACE("LoadChildren(): LoadInstantiate() failed.\n");
+            sRes = -1;
+        }
+    }
 
-	return sRes;
-	}
+    return sRes;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // EOF

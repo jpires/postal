@@ -26,31 +26,40 @@ extern SDL_Surface *sdlShadowSurface;
 extern int sdlWindowWidth;
 extern int sdlWindowHeight;
 
-extern short rspMsgBox(	// Returns RSP_MB_RET_*.  See switch statement below.
-	USHORT usFlags,		// MB_BUT/ICO_* flags specifying buttons and icons.
-	char *pszTitle,		// Title for box.
-	char *pszFrmt,			// Format for string.
-	...)						// Various shit.
+extern short rspMsgBox( // Returns RSP_MB_RET_*.  See switch statement below.
+  USHORT usFlags,       // MB_BUT/ICO_* flags specifying buttons and icons.
+  char *pszTitle,       // Title for box.
+  char *pszFrmt,        // Format for string.
+  ...)                  // Various shit.
 {
-	char szOutput[4096];
-	va_list varp;
-	// Get pointer to the arguments.
-	va_start(varp, pszFrmt);    
-	// Compose string.
-	SDL_vsnprintf(szOutput, sizeof (szOutput), pszFrmt, varp);
-	// Done with var arguments.
-	va_end(varp);
+    char szOutput[4096];
+    va_list varp;
+    // Get pointer to the arguments.
+    va_start(varp, pszFrmt);
+    // Compose string.
+    SDL_vsnprintf(szOutput, sizeof(szOutput), pszFrmt, varp);
+    // Done with var arguments.
+    va_end(varp);
 
     SDL_MessageBoxData data;
     SDL_zero(data);
 
     switch (usFlags & RSP_MB_ICN_MASK)
     {
-        case RSP_MB_ICN_STOP: data.flags |= SDL_MESSAGEBOX_ERROR; break;
-        case RSP_MB_ICN_QUERY: data.flags |= SDL_MESSAGEBOX_INFORMATION; break;
-        case RSP_MB_ICN_EXCLAIM: data.flags |= SDL_MESSAGEBOX_WARNING; break;
-        case RSP_MB_ICN_INFO: data.flags |= SDL_MESSAGEBOX_INFORMATION; break;
-        default: break;
+        case RSP_MB_ICN_STOP:
+            data.flags |= SDL_MESSAGEBOX_ERROR;
+            break;
+        case RSP_MB_ICN_QUERY:
+            data.flags |= SDL_MESSAGEBOX_INFORMATION;
+            break;
+        case RSP_MB_ICN_EXCLAIM:
+            data.flags |= SDL_MESSAGEBOX_WARNING;
+            break;
+        case RSP_MB_ICN_INFO:
+            data.flags |= SDL_MESSAGEBOX_INFORMATION;
+            break;
+        default:
+            break;
     }
 
     data.window = sdlWindow;
@@ -63,8 +72,7 @@ extern short rspMsgBox(	// Returns RSP_MB_RET_*.  See switch statement below.
     {
         case RSP_MB_BUT_OK:
             data.numbuttons = 1;
-            buttons[0].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT |
-                               SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+            buttons[0].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT | SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
             buttons[0].buttonid = RSP_MB_RET_OK;
             buttons[0].text = "OK";
             break;
@@ -125,7 +133,9 @@ extern short rspMsgBox(	// Returns RSP_MB_RET_*.  See switch statement below.
             buttons[1].text = "Cancel";
             break;
 
-        default: ASSERT(false); return -1;
+        default:
+            ASSERT(false);
+            return -1;
     }
 
     data.buttons = buttons;
@@ -135,36 +145,31 @@ extern short rspMsgBox(	// Returns RSP_MB_RET_*.  See switch statement below.
     return (rc == 0) ? button : -1;
 }
 
-
-extern short rspOpenBox(								// Returns 0 if successfull, non-zero otherwise
-	const char* pszBoxTitle,							// In:  Title of box
-	const char*	pszDefaultPath,						// In:  Default directory and file
-	char* pszSelectedFile,								// Out: File that user selected
-	short sSelectedFileBufSize,						// In:  Size of buffer pointed to by pszSelectedFile
-	const char*	pszFilter /*= NULL*/)				// In:  Filename filter or NULL for none
+extern short rspOpenBox(            // Returns 0 if successfull, non-zero otherwise
+  const char *pszBoxTitle,          // In:  Title of box
+  const char *pszDefaultPath,       // In:  Default directory and file
+  char *pszSelectedFile,            // Out: File that user selected
+  short sSelectedFileBufSize,       // In:  Size of buffer pointed to by pszSelectedFile
+  const char *pszFilter /*= NULL*/) // In:  Filename filter or NULL for none
 {
     fprintf(stderr, "STUBBED: %s:%d\n", __FILE__, __LINE__);
     return -1;
 }
 
-
-extern short rspSaveBox(			// Returns 0 on success.
-	const char* pszBoxTitle,				// In:  Title of box.
-	const char*	pszDefFileName,			// In:  Default filename.
-	char* pszChosenFileName,		// Out: User's choice.
-	short sStrSize,					// In:  Amount of memory pointed to by pszChosenFileName.
-	const char*	pszFilter /*= NULL*/)	// In:  If not NULL, '.' delimited extension based filename
-											//	filter specification.  Ex: ".cpp.h.exe.lib" or "cpp.h.exe.lib"
-											// Note: Cannot use '.' in filter.  Preceding '.' ignored.
+extern short rspSaveBox(            // Returns 0 on success.
+  const char *pszBoxTitle,          // In:  Title of box.
+  const char *pszDefFileName,       // In:  Default filename.
+  char *pszChosenFileName,          // Out: User's choice.
+  short sStrSize,                   // In:  Amount of memory pointed to by pszChosenFileName.
+  const char *pszFilter /*= NULL*/) // In:  If not NULL, '.' delimited extension based filename
+                                    //	filter specification.  Ex: ".cpp.h.exe.lib" or "cpp.h.exe.lib"
+                                    // Note: Cannot use '.' in filter.  Preceding '.' ignored.
 {
     fprintf(stderr, "STUBBED: %s:%d\n", __FILE__, __LINE__);
     return -1;
 }
 
-
-extern void rspSetCursor(
-	short sCursorID)						// In:  ID of built-in cursor (use RSP_CURSOR_* macros)
+extern void rspSetCursor(short sCursorID) // In:  ID of built-in cursor (use RSP_CURSOR_* macros)
 {
     fprintf(stderr, "STUBBED: %s:%d\n", __FILE__, __LINE__);
 }
-

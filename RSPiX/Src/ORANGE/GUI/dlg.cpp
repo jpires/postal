@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // DLG.CPP
-// 
+//
 // History:
 //		08/07/96 JMI	Started.
 //
@@ -42,7 +42,7 @@
 //		11/27/96	JMI	Added initialization of m_type to identify this type
 //							of GUI item and virtual base function void Do(void).
 //
-//		12/19/96	JMI	Uses new m_justification (as m_sJustification) and 
+//		12/19/96	JMI	Uses new m_justification (as m_sJustification) and
 //							upgraded to new RFont/RPrint.
 //
 //		12/31/96	JMI	Do() now calls base implementation in RGuiItem.
@@ -69,7 +69,7 @@
 //							entire window is the 'hot' area and the title bar is the
 //							'event' area.
 //
-//		01/18/97	JMI	Converted Do() to take an RInputEvent* instead of a 
+//		01/18/97	JMI	Converted Do() to take an RInputEvent* instead of a
 //							long*.
 //
 //		01/23/97	JMI	Changed Do() such that you cannot drag an item outside
@@ -116,9 +116,9 @@
 #include "Blue.h"
 
 #ifdef PATHS_IN_INCLUDES
-	#include "ORANGE/GUI/dlg.h"
+#include "ORANGE/GUI/dlg.h"
 #else
-	#include "dlg.h"
+#include "dlg.h"
 #endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////////////
@@ -126,10 +126,10 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Sets val to def if val is -1.
-#define DEF(val, def)	((val == -1) ? def : val)
+#define DEF(val, def) ((val == -1) ? def : val)
 
 // Sets a value pointed to if ptr is not NULL.
-#define SET(pval, val)					((pval != NULL) ? *pval = val : val)
+#define SET(pval, val) ((pval != NULL) ? *pval = val : val)
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -149,21 +149,19 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 RDlg::RDlg()
-	{
-	// Override RGuiItem's default justification.
-	m_justification	= RGuiItem::Centered;
+{
+    // Override RGuiItem's default justification.
+    m_justification = RGuiItem::Centered;
 
-	m_type				= Dlg;	// Indicates type of GUI item.
-	}
+    m_type = Dlg; // Indicates type of GUI item.
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Destructor.
 //
 //////////////////////////////////////////////////////////////////////////////
-RDlg::~RDlg()
-	{
-	}
+RDlg::~RDlg() {}
 
 ////////////////////////////////////////////////////////////////////////
 // Methods.
@@ -174,59 +172,56 @@ RDlg::~RDlg()
 // Does as Dlg would Do.
 //
 ////////////////////////////////////////////////////////////////////////
-void RDlg::Do(			// Returns nothing.
-	RInputEvent* pie)	// In:  Most recent user input event.
-							// Out: pie->sUsed = TRUE, if used.
-	{
-	// Call base.
-	RGuiItem::Do(pie);
+void RDlg::Do(      // Returns nothing.
+  RInputEvent *pie) // In:  Most recent user input event.
+                    // Out: pie->sUsed = TRUE, if used.
+{
+    // Call base.
+    RGuiItem::Do(pie);
 
-	// If we're active . . .
-	if (m_hot.IsActive() != FALSE)
-		{
-		// If we're pressed . . .
-		if (m_sPressed != FALSE)
-			{
-			short	sTopPosX, sTopPosY;
-			short	sPosX, sPosY;
-			short	sParentW, sParentH;
+    // If we're active . . .
+    if (m_hot.IsActive() != FALSE)
+    {
+        // If we're pressed . . .
+        if (m_sPressed != FALSE)
+        {
+            short sTopPosX, sTopPosY;
+            short sPosX, sPosY;
+            short sParentW, sParentH;
 
-			// Get mouse position RSPiX relative.
-			rspGetMouse(&sTopPosX, &sTopPosY, NULL);
-			sPosX	= sTopPosX;
-			sPosY	= sTopPosY;
+            // Get mouse position RSPiX relative.
+            rspGetMouse(&sTopPosX, &sTopPosY, NULL);
+            sPosX = sTopPosX;
+            sPosY = sTopPosY;
 
-			RGuiItem*	pguiParent	= GetParent();
-			if (pguiParent != NULL)
-				{
-				pguiParent->TopPosToChild(&sPosX, &sPosY);
-				sParentW	= pguiParent->m_im.m_sWidth;
-				sParentH	= pguiParent->m_im.m_sHeight;
-				}
-			else
-				{
-				rspGetVideoMode(NULL, NULL, NULL, NULL, &sParentW, &sParentH);
-				}
+            RGuiItem *pguiParent = GetParent();
+            if (pguiParent != NULL)
+            {
+                pguiParent->TopPosToChild(&sPosX, &sPosY);
+                sParentW = pguiParent->m_im.m_sWidth;
+                sParentH = pguiParent->m_im.m_sHeight;
+            }
+            else
+            {
+                rspGetVideoMode(NULL, NULL, NULL, NULL, &sParentW, &sParentH);
+            }
 
-			// Stay within parent.
-			short sClippedPosX	= MAX((short)0, MIN(sPosX, sParentW) );
-			short sClippedPosY	= MAX((short)0, MIN(sPosY, sParentH) );
+            // Stay within parent.
+            short sClippedPosX = MAX((short)0, MIN(sPosX, sParentW));
+            short sClippedPosY = MAX((short)0, MIN(sPosY, sParentH));
 
-			// If clipped . . .
-			if (sClippedPosX != sPosX || sClippedPosY != sPosY)
-				{
-				// Reposition cursor based on clipped position.
-				rspSetMouse(
-					sClippedPosX + sTopPosX - sPosX,
-					sClippedPosY + sTopPosY - sPosY);
-				}
+            // If clipped . . .
+            if (sClippedPosX != sPosX || sClippedPosY != sPosY)
+            {
+                // Reposition cursor based on clipped position.
+                rspSetMouse(sClippedPosX + sTopPosX - sPosX, sClippedPosY + sTopPosY - sPosY);
+            }
 
-			// Finally move to new position.
-			Move(	sClippedPosX - m_sMoveOffsetX, 
-					sClippedPosY - m_sMoveOffsetY);
-			}
-		}
-	}
+            // Finally move to new position.
+            Move(sClippedPosX - m_sMoveOffsetX, sClippedPosY - m_sMoveOffsetY);
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -235,64 +230,61 @@ void RDlg::Do(			// Returns nothing.
 // (virtual).
 //
 ////////////////////////////////////////////////////////////////////////
-void RDlg::CursorEvent(	// Returns nothing.
-	RInputEvent* pie)		// In:  Most recent user input event.             
-								// Out: pie->sUsed = TRUE, if used.
-	{
-	RGuiItem::CursorEvent(pie);
+void RDlg::CursorEvent( // Returns nothing.
+  RInputEvent *pie)     // In:  Most recent user input event.
+                        // Out: pie->sUsed = TRUE, if used.
+{
+    RGuiItem::CursorEvent(pie);
 
-	switch (pie->sEvent)
-		{
-		case RSP_MB0_DOUBLECLICK:
-		case RSP_MB0_PRESSED:
-			// Store offsets for nice drag.
-			m_sMoveOffsetX = pie->sPosX;
-			m_sMoveOffsetY = pie->sPosY;
+    switch (pie->sEvent)
+    {
+        case RSP_MB0_DOUBLECLICK:
+        case RSP_MB0_PRESSED:
+            // Store offsets for nice drag.
+            m_sMoveOffsetX = pie->sPosX;
+            m_sMoveOffsetY = pie->sPosY;
 
-			// Note that we used it.
-			pie->sUsed	= TRUE;
+            // Note that we used it.
+            pie->sUsed = TRUE;
 
-			break;
-		}
-	}
+            break;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Compose item.
 //
 ////////////////////////////////////////////////////////////////////////
-void RDlg::Compose(			// Returns nothing.
-	RImage* pim /*= NULL*/)	// Dest image, uses m_im if NULL.
-	{
-	if (pim == NULL)
-		{
-		pim	= &m_im;
-		}
+void RDlg::Compose(       // Returns nothing.
+  RImage *pim /*= NULL*/) // Dest image, uses m_im if NULL.
+{
+    if (pim == NULL)
+    {
+        pim = &m_im;
+    }
 
-	// Call base (draws border and background).
-	RGuiItem::Compose(pim);
+    // Call base (draws border and background).
+    RGuiItem::Compose(pim);
 
-	// Draw dlg stuff.
-	short	sX, sY, sW, sH;
-	
-	// Get client relative to border (minus title) so we know where to
-	// put title.
-	RGuiItem::GetClient(&sX, &sY, &sW, &sH);
+    // Draw dlg stuff.
+    short sX, sY, sW, sH;
 
-	// Draw text.
-	if (m_szText[0] != '\0')
-		{
-		short	sTextHeight	= m_sFontCellHeight;
+    // Get client relative to border (minus title) so we know where to
+    // put title.
+    RGuiItem::GetClient(&sX, &sY, &sW, &sH);
 
-		// Draw title bar.
-		rspRect( m_u32BorderColor, pim,
-					sX, sY,
-					sW,
-					sTextHeight);
+    // Draw text.
+    if (m_szText[0] != '\0')
+    {
+        short sTextHeight = m_sFontCellHeight;
 
-		DrawText(sX, sY, sW, sTextHeight, pim);
-		}
-	}
+        // Draw title bar.
+        rspRect(m_u32BorderColor, pim, sX, sY, sW, sTextHeight);
+
+        DrawText(sX, sY, sW, sTextHeight, pim);
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -301,22 +293,18 @@ void RDlg::Compose(			// Returns nothing.
 // (virtual).
 //
 //////////////////////////////////////////////////////////////////////////////
-void RDlg::SetEventArea(void)	// Returns nothing.
-	{
-	// Call base to set to defaults.
-	RGuiItem::GetClient(
-		&m_sEventAreaX,
-		&m_sEventAreaY,
-		&m_sEventAreaW,
-		&m_sEventAreaH);
-	
-	// If there is title text . . .
-	if (m_szText[0] != '\0')
-		{
-		// Use height of text.
-		m_sEventAreaH	= m_sFontCellHeight;
-		}
-	}
+void RDlg::SetEventArea(void) // Returns nothing.
+{
+    // Call base to set to defaults.
+    RGuiItem::GetClient(&m_sEventAreaX, &m_sEventAreaY, &m_sEventAreaW, &m_sEventAreaH);
+
+    // If there is title text . . .
+    if (m_szText[0] != '\0')
+    {
+        // Use height of text.
+        m_sEventAreaH = m_sFontCellHeight;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Querries.
@@ -328,25 +316,25 @@ void RDlg::SetEventArea(void)	// Returns nothing.
 // item.  Calls base class version.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RDlg::GetClient(	// Returns nothing.
-	short* psX,				// Out: X position unless NULL.
-	short* psY,				// Out: Y position unless NULL.
-	short* psW,				// Out: Width unless NULL.
-	short* psH)				// Out: Height unless NULL.
-	{
-	// Call base.
-	RGuiItem::GetClient(psX, psY, psW, psH);
-	
-	// If there is title text . . .
-	if (m_szText[0] != '\0')
-		{
-		// Reduce for title bar.
-		if (psY)
-			*psY	= *psY + m_sFontCellHeight;
-		if (psH)
-			*psH	= *psH - m_sFontCellHeight;
-		}
-	}
+void RDlg::GetClient( // Returns nothing.
+  short *psX,         // Out: X position unless NULL.
+  short *psY,         // Out: Y position unless NULL.
+  short *psW,         // Out: Width unless NULL.
+  short *psH)         // Out: Height unless NULL.
+{
+    // Call base.
+    RGuiItem::GetClient(psX, psY, psW, psH);
+
+    // If there is title text . . .
+    if (m_szText[0] != '\0')
+    {
+        // Reduce for title bar.
+        if (psY)
+            *psY = *psY + m_sFontCellHeight;
+        if (psH)
+            *psH = *psH - m_sFontCellHeight;
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // EOF

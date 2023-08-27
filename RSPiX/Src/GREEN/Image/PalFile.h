@@ -34,16 +34,16 @@
 // paths to a header file.  In this case we generally go off of our
 // RSPiX root directory.  System.h MUST be included before this macro
 // is evaluated.  System.h is the header that, based on the current
-// platform (or more so in this case on the compiler), defines 
+// platform (or more so in this case on the compiler), defines
 // PATHS_IN_INCLUDES.  Blue.h includes system.h so you can include that
 // instead.
 ///////////////////////////////////////////////////////////////////////////////
 #include "System.h"
 
 #ifdef PATHS_IN_INCLUDES
-	#include "GREEN/Image/Image.h"
+#include "GREEN/Image/Image.h"
 #else
-	#include "Image.h"
+#include "Image.h"
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -58,66 +58,60 @@
 // Typedefs.
 //////////////////////////////////////////////////////////////////////////////
 class RPalFile
-	{
-	///////////////////////////////////////////////////////////////////////////
-	// Con/Destruction.
-	///////////////////////////////////////////////////////////////////////////
-	public:
+{
+    ///////////////////////////////////////////////////////////////////////////
+    // Con/Destruction.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    ///////////////////////////////////////////////////////////////////////////
+    // Methods.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    // Maps a particular file load onto the appropriate function, if available.
+    static short Load( // Returns SUCCESS on success or FAILURE on failure.
+      RPal *ppal,      // Pal to load into.
+      RFile *pfile);   // File to load from.
 
-	///////////////////////////////////////////////////////////////////////////
-	// Methods.
-	///////////////////////////////////////////////////////////////////////////
-	public:
+    // Loads an RPal with no file version into ppal from pfile.
+    static short LoadNoVersion( // Returns SUCCESS on success or FAILURE on
+                                // failure.
+      RPal *ppal,               // Pal to load into.
+      RFile *pfile);            // File to load from.
 
-		// Maps a particular file load onto the appropriate function, if available.
-		static short Load(	// Returns SUCCESS on success or FAILURE on failure.
-			RPal*		ppal,		// Pal to load into.
-			RFile*	pfile);	// File to load from.
+  protected:
+    // Loads an RPal with file version 1 into pim from pfile.
+    static short LoadVersion1( // Returns SUCCESS on success or FAILURE on
+                               // failure.
+      RPal *ppal,              // Pal to load into.
+      RFile *pfile);           // File to load from.
 
-		// Loads an RPal with no file version into ppal from pfile.
-		static short LoadNoVersion(	// Returns SUCCESS on success or FAILURE on
-												// failure.
-			RPal*		ppal,					// Pal to load into.
-			RFile*	pfile);				// File to load from.
+    // Loads an RPal with file version 2 into pim from pfile.
+    static short LoadVersion2( // Returns SUCCESS on success or FAILURE on
+                               // failure.
+      RPal *ppal,              // Pal to load into.
+      RFile *pfile);           // File to load from.
 
-	protected:
+    // Loads an RPal with file version 3 into pim from pfile.
+    static short LoadVersion3( // Returns SUCCESS on success or FAILURE on
+                               // failure.
+      RPal *ppal,              // Pal to load into.
+      RFile *pfile);           // File to load from.
 
-		// Loads an RPal with file version 1 into pim from pfile.
-		static short LoadVersion1(	// Returns SUCCESS on success or FAILURE on
-											// failure.
-			RPal*		ppal,				// Pal to load into.
-			RFile*	pfile);			// File to load from.
+    ///////////////////////////////////////////////////////////////////////////
+    // Querries.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    ///////////////////////////////////////////////////////////////////////////
+    // Instantiable data.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+    ///////////////////////////////////////////////////////////////////////////
+    // Static data.
+    ///////////////////////////////////////////////////////////////////////////
+  public:
+};
 
-		// Loads an RPal with file version 2 into pim from pfile.
-		static short LoadVersion2(	// Returns SUCCESS on success or FAILURE on
-											// failure.
-			RPal*		ppal,				// Pal to load into.
-			RFile*	pfile);			// File to load from.
-
-		// Loads an RPal with file version 3 into pim from pfile.
-		static short LoadVersion3(	// Returns SUCCESS on success or FAILURE on
-											// failure.
-			RPal*		ppal,				// Pal to load into.
-			RFile*	pfile);			// File to load from.
-
-	///////////////////////////////////////////////////////////////////////////
-	// Querries.
-	///////////////////////////////////////////////////////////////////////////
-	public:
-
-
-	///////////////////////////////////////////////////////////////////////////
-	// Instantiable data.
-	///////////////////////////////////////////////////////////////////////////
-	public:
-
-	///////////////////////////////////////////////////////////////////////////
-	// Static data.
-	///////////////////////////////////////////////////////////////////////////
-	public:
-	};
-
-#endif	// PALFILE_H
+#endif // PALFILE_H
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////

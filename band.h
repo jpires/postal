@@ -45,10 +45,10 @@
 //							Now uses new SampleMaster interface for volume and play
 //							instance reference.
 //
-//		07/31/97 BRH	Set the default value of the destination bouy to 1 in 
+//		07/31/97 BRH	Set the default value of the destination bouy to 1 in
 //							the constructor.
 //
-//		08/12/97	JMI	Now one band member maintains the volume for the band 
+//		08/12/97	JMI	Now one band member maintains the volume for the band
 //							sample.
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -60,192 +60,188 @@
 
 // CBand is a class of marching band members for the parade
 class CBand : public CDoofus
-	{
-	//---------------------------------------------------------------------------
-	// Types, enums, etc.
-	//---------------------------------------------------------------------------
-	protected:
+{
+    //---------------------------------------------------------------------------
+    // Types, enums, etc.
+    //---------------------------------------------------------------------------
+  protected:
+    //---------------------------------------------------------------------------
+    // Variables
+    //---------------------------------------------------------------------------
+  protected:
+    CCharacter::State m_ePreviousState; // State variable to remember what he was
+                                        // Doing before he was shot, etc.
+    CAnim3D *m_pPreviousAnim;           // Previous state's animation
 
-	//---------------------------------------------------------------------------
-	// Variables
-	//---------------------------------------------------------------------------
-	protected:
-		CCharacter::State m_ePreviousState;	// State variable to remember what he was
-														// Doing before he was shot, etc.
-		CAnim3D*	m_pPreviousAnim;				// Previous state's animation
+    CAnim3D m_animStand;   // Stand animation
+    CAnim3D m_animMarch;   // Marching animation
+    CAnim3D m_animRun;     // Running away animation
+    CAnim3D m_animShot;    // Shot dead animation
+    CAnim3D m_animBlownup; // Blown up by explosion
+    CAnim3D m_animOnFire;  // Running while on fire
 
-		CAnim3D m_animStand;						// Stand animation
-		CAnim3D m_animMarch;						// Marching animation
-		CAnim3D m_animRun;						// Running away animation
-		CAnim3D m_animShot;						// Shot dead animation
-		CAnim3D m_animBlownup;					// Blown up by explosion
-		CAnim3D m_animOnFire;					// Running while on fire
+    U16 m_idChildItem; // ID of child item or CIdBank::IdNil.
 
-		U16					m_idChildItem;		// ID of child item or CIdBank::IdNil.
+    // Tracks file counter so we know when to load/save "common" data
+    static short ms_sFileCount;
 
-		// Tracks file counter so we know when to load/save "common" data 
-		static short ms_sFileCount;
+    // "Constant" values that we want to be able to tune using the editor
+    static double ms_dCloseToBouy;                            // How close to be to a bouy to consider yourself 'there'
+    static double ms_dMingleBouyDist;                         // How close to be to a bouy when mingling around
+    static double ms_dExplosionVelocity;                      // How high he will get blown up.
+    static double ms_dMaxMarchVel;                            // How fast to march
+    static double ms_dMaxRunVel;                              // Hos fast to run
+    static long ms_lMingleTime;                               // How long to mingle before moving
+    static short ms_sStartingHitPoints;                       // How many hit points to start with
+    static SampleMaster::SoundInstance ms_siBandSongInstance; // sound played during band march.
+    static U16 ms_idBandLeader;                               // The person who adjusts the band sound
+                                                              // volume or IdNil.
 
-		// "Constant" values that we want to be able to tune using the editor
-		static double ms_dCloseToBouy;		// How close to be to a bouy to consider yourself 'there'
-		static double ms_dMingleBouyDist;	// How close to be to a bouy when mingling around
-		static double ms_dExplosionVelocity;// How high he will get blown up.
-		static double ms_dMaxMarchVel;		// How fast to march
-		static double ms_dMaxRunVel;			// Hos fast to run
-		static long ms_lMingleTime;			// How long to mingle before moving
-		static short ms_sStartingHitPoints;	// How many hit points to start with
-		static SampleMaster::SoundInstance ms_siBandSongInstance;		// sound played during band march.
-		static U16	ms_idBandLeader;			// The person who adjusts the band sound
-														// volume or IdNil.
+    // This value indicates whether the marchers have stopped playing in this level.
+    static bool ms_bDonePlaying;
 
+    //---------------------------------------------------------------------------
+    // Constructor(s) / destructor
+    //---------------------------------------------------------------------------
+  protected:
+    // Constructor
+    CBand(CRealm *pRealm)
+      : CDoofus(pRealm, CBandID)
+    {
+        m_ucNextBouyID = 1;
+        m_ucDestBouyID = 1;
+        m_idChildItem = CIdBank::IdNil;
+        m_bCivilian = true;
+    }
 
-		// This value indicates whether the marchers have stopped playing in this level.
-		static bool	ms_bDonePlaying;
-	
-	//---------------------------------------------------------------------------
-	// Constructor(s) / destructor
-	//---------------------------------------------------------------------------
-	protected:
-		// Constructor
-		CBand(CRealm* pRealm)
-			: CDoofus(pRealm, CBandID)
-			{
-			m_ucNextBouyID = 1;
-			m_ucDestBouyID = 1;
-			m_idChildItem	= CIdBank::IdNil;
-			m_bCivilian = true;
-			}
+  public:
+    // Destructor
+    ~CBand()
+    {
+        // Remove sprite from scene (this is safe even if it was already removed!)
+        m_pRealm->m_scene.RemoveSprite(&m_sprite);
+        m_pRealm->m_smashatorium.Remove(&m_smash);
 
-	public:
-		// Destructor
-		~CBand()
-			{
-			// Remove sprite from scene (this is safe even if it was already removed!)
-			m_pRealm->m_scene.RemoveSprite(&m_sprite);
-			m_pRealm->m_smashatorium.Remove(&m_smash);
+        // Free resources
+        FreeResources();
 
-			// Free resources
-			FreeResources();
+        // If sample playing . . .
+        if (ms_siBandSongInstance != 0)
+        {
+            AbortSample(ms_siBandSongInstance);
+            ms_siBandSongInstance = 0;
+        }
+    }
 
-			// If sample playing . . .
-			if (ms_siBandSongInstance != 0)
-				{
-				AbortSample(ms_siBandSongInstance);
-				ms_siBandSongInstance	= 0;
-				}
-			}
+    //---------------------------------------------------------------------------
+    // Required static functions
+    //---------------------------------------------------------------------------
+  public:
+    // Construct object
+    static short Construct( // Returns 0 if successfull, non-zero otherwise
+      CRealm *pRealm,       // In:  Pointer to realm this object belongs to
+      CThing **ppNew)       // Out: Pointer to new object
+    {
+        short sResult = 0;
+        *ppNew = new CBand(pRealm);
+        if (*ppNew == 0)
+        {
+            sResult = -1;
+            TRACE("CBand::Construct(): Couldn't construct CBand (that's a bad thing)\n");
+        }
+        return sResult;
+    }
 
-	//---------------------------------------------------------------------------
-	// Required static functions
-	//---------------------------------------------------------------------------
-	public:
-		// Construct object
-		static short Construct(									// Returns 0 if successfull, non-zero otherwise
-			CRealm* pRealm,										// In:  Pointer to realm this object belongs to
-			CThing** ppNew)										// Out: Pointer to new object
-			{
-			short sResult = 0;
-			*ppNew = new CBand(pRealm);
-			if (*ppNew == 0)
-				{
-				sResult = -1;
-				TRACE("CBand::Construct(): Couldn't construct CBand (that's a bad thing)\n");
-				}
-			return sResult;
-			}
+    //---------------------------------------------------------------------------
+    // Required virtual functions (implimenting them as inlines doesn't pay!)
+    //---------------------------------------------------------------------------
+  public:
+    // Load object (should call base class version!)
+    short Load(             // Returns 0 if successfull, non-zero otherwise
+      RFile *pFile,         // In:  File to load from
+      bool bEditMode,       // In:  True for edit mode, false otherwise
+      short sFileCount,     // In:  File count (unique per file, never 0)
+      ULONG ulFileVersion); // In:  Version of file format to load.
 
-	//---------------------------------------------------------------------------
-	// Required virtual functions (implimenting them as inlines doesn't pay!)
-	//---------------------------------------------------------------------------
-	public:
-		// Load object (should call base class version!)
-		short Load(													// Returns 0 if successfull, non-zero otherwise
-			RFile* pFile,											// In:  File to load from
-			bool bEditMode,										// In:  True for edit mode, false otherwise
-			short sFileCount,										// In:  File count (unique per file, never 0)
-			ULONG	ulFileVersion);								// In:  Version of file format to load.
+    // Save object (should call base class version!)
+    short Save(          // Returns 0 if successfull, non-zero otherwise
+      RFile *pFile,      // In:  File to save to
+      short sFileCount); // In:  File count (unique per file, never 0)
 
-		// Save object (should call base class version!)
-		short Save(													// Returns 0 if successfull, non-zero otherwise
-			RFile* pFile,											// In:  File to save to
-			short sFileCount);									// In:  File count (unique per file, never 0)
+    // Startup object
+    short Startup(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Startup object
-		short Startup(void);										// Returns 0 if successfull, non-zero otherwise
+    // Update object
+    void Update(void);
 
-		// Update object
-		void Update(void);
+    // Render object
+    void Render(void);
 
-		// Render object
-		void Render(void);
+    // Called by editor when a new object is created
+    short EditNew(short sX, short sY, short sZ);
 
-		// Called by editor when a new object is created
-		short EditNew(short sX, short sY, short sZ);
+    // Called by editor to modify object
+    short EditModify(void); // Returns 0 if successfull, non-zero otherwise
+                            // Called by editor to render object
+                            //		void EditRender(void);
 
-		// Called by editor to modify object
-		short EditModify(void);									// Returns 0 if successfull, non-zero otherwise
-		// Called by editor to render object
-//		void EditRender(void);
+    //---------------------------------------------------------------------------
+    // Message handlers that are called by CCharacter ProcessMessage().  These
+    // have code to set the correct animation, state, etc for these messages
+    //---------------------------------------------------------------------------
+  public:
+    void OnShotMsg(Shot_Message *pMessage);
 
-	//---------------------------------------------------------------------------
-	// Message handlers that are called by CCharacter ProcessMessage().  These
-	// have code to set the correct animation, state, etc for these messages
-	//---------------------------------------------------------------------------
-	public:
+    void OnBurnMsg(Burn_Message *pMessage);
 
-		void OnShotMsg(Shot_Message* pMessage);
+    void OnExplosionMsg(Explosion_Message *pMessage);
 
-		void OnBurnMsg(Burn_Message* pMessage);
+    void OnPanicMsg(Panic_Message *pMessage);
 
-		void OnExplosionMsg(Explosion_Message* pMessage);
+    //---------------------------------------------------------------------------
+    // Useful generic character state-specific functionality.
+    //---------------------------------------------------------------------------
+  public:
+    // Implements basic one-time functionality for each time State_Dead is
+    // entered.
+    void OnDead(void);
 
-		void OnPanicMsg(Panic_Message* pMessage);
+    // Implements basic functionality while dying and returns true
+    // until the state is completed.
+    virtual // Overriden here.
+      bool
+      WhileDying(void); // Returns true until state is complete.
 
-	//---------------------------------------------------------------------------
-	// Useful generic character state-specific functionality.
-	//---------------------------------------------------------------------------
-	public:
+    // Implements basic functionality while being shot and returns true
+    // until the state is completed.
+    virtual // Overriden here.
+      bool
+      WhileShot(void); // Returns true until state is complete.
 
-		// Implements basic one-time functionality for each time State_Dead is
-		// entered.
-		void OnDead(void);
+    //---------------------------------------------------------------------------
+    // Internal functions
+    //---------------------------------------------------------------------------
+  protected:
+    // Get all required resources
+    short GetResources(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Implements basic functionality while dying and returns true
-		// until the state is completed.
-		virtual						// Overriden here.
-		bool WhileDying(void);	// Returns true until state is complete.
+    // Free all resources
+    short FreeResources(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Implements basic functionality while being shot and returns true
-		// until the state is completed.
-		virtual						// Overriden here.
-		bool WhileShot(void);	// Returns true until state is complete.
+    // Initalize the object - this should be called after the resources are loaded
+    short Init(void);
 
-	//---------------------------------------------------------------------------
-	// Internal functions
-	//---------------------------------------------------------------------------
-	protected:
-		// Get all required resources
-		short GetResources(void);						// Returns 0 if successfull, non-zero otherwise
-		
-		// Free all resources
-		short FreeResources(void);						// Returns 0 if successfull, non-zero otherwise
+    // Go through the message queue and change the state if necessary
+    void ProcessMessages(void);
 
-		// Initalize the object - this should be called after the resources are loaded
-		short Init(void);
+    // Send panic message to other band members
+    void AlertBand(void);
 
-		// Go through the message queue and change the state if necessary
-		void ProcessMessages(void);
+    // Drop item and apply appropriate forces.
+    void DropItem(void); // Returns nothing.
+};
 
-		// Send panic message to other band members
-		void AlertBand(void);
-
-		// Drop item and apply appropriate forces.
-		void DropItem(void);	// Returns nothing.
-
-	};
-
-
-#endif //BAND_H
+#endif // BAND_H
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

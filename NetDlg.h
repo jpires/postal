@@ -17,7 +17,7 @@
 //
 // NetDlg.H
 // Project: Nostril (aka Postal)
-// 
+//
 // History:
 //		04/08/97 JMI	Started.
 //
@@ -37,7 +37,7 @@
 //		08/10/97 MJR	Added browse parameter to DoNetGameDialog().
 //
 //		08/27/97	JMI	Changed NetProbIcons functions to NetProbGui functions.
-//							Also, instead of a DrawNetProbGui() there's a 
+//							Also, instead of a DrawNetProbGui() there's a
 //							GetNetProbGui() so you can draw it, move it, change the
 //							text, etc.
 //
@@ -49,39 +49,35 @@
 #include "netclient.h"
 #include "netserver.h"
 
-
 // More than one module needs to know the "standard" abort key for the "NetProb"
 // gui that this module defines.  This gives both types of rspix codes for the
 // key along with the descriptive text for that key.
-#define NET_PROB_GUI_ABORT_GK_KEY		RSP_GK_F9
-#define NET_PROB_GUI_ABORT_SK_KEY		RSP_SK_F9
-#define NET_PROB_GUI_ABORT_KEY_TEXT		"F9"
+#define NET_PROB_GUI_ABORT_GK_KEY RSP_GK_F9
+#define NET_PROB_GUI_ABORT_SK_KEY RSP_SK_F9
+#define NET_PROB_GUI_ABORT_KEY_TEXT "F9"
 
 // This is a general message for the "NetProb" gui that works for general
 // cases of "network not responding".
-extern char* g_pszNetProb_General;
-
+extern char *g_pszNetProb_General;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Do network game dialog
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern short DoNetGameDialog(							// Returns 0 if successfull, non-zero otherwise.
-	CNetClient*	pclient,									// I/O: Client interface
-	bool bBrowse,											// In:  Whether to browse (true) or connect (false)
-	CNetServer*	pserver,									// I/O: Server interface or NULL if not server
-	NetMsg* pmsgOut);										// Out: NetMsg::NOTHING or NetMsg::START_GAME
-
+extern short DoNetGameDialog( // Returns 0 if successfull, non-zero otherwise.
+  CNetClient *pclient,        // I/O: Client interface
+  bool bBrowse,               // In:  Whether to browse (true) or connect (false)
+  CNetServer *pserver,        // I/O: Server interface or NULL if not server
+  NetMsg *pmsgOut);           // Out: NetMsg::NOTHING or NetMsg::START_GAME
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Get text associated with the specified error message
 //
 //////////////////////////////////////////////////////////////////////////////
-extern const char* NetErrorText(						// Returns pointer to text
-	NetMsg* pmsg);											// In:  Error message
-
+extern const char *NetErrorText( // Returns pointer to text
+  NetMsg *pmsg);                 // In:  Error message
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -90,7 +86,6 @@ extern const char* NetErrorText(						// Returns pointer to text
 //////////////////////////////////////////////////////////////////////////////
 extern bool NetBlockingWasAborted(void);
 
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Net blocking watchdog.  Call this periodically to let the watchdog know
@@ -98,7 +93,6 @@ extern bool NetBlockingWasAborted(void);
 //
 ////////////////////////////////////////////////////////////////////////////////
 extern void NetBlockingWatchdog(void);
-
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -121,14 +115,14 @@ extern void KillNetProbGUI(void);
 //////////////////////////////////////////////////////////////////////////////
 //
 // Get the net prob GUI which is used to notify the user of network problems.
-// You can move it, draw it, change its text, or whatever.  It's just up to 
+// You can move it, draw it, change its text, or whatever.  It's just up to
 // you to avoid having a problem with other things updating its settings while
 // you are.
-// Note that this is automagically drawn to the screen via the blocking 
+// Note that this is automagically drawn to the screen via the blocking
 // callback.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern RTxt* GetNetProbGUI(void);	// Returns the net prob GUI.
+extern RTxt *GetNetProbGUI(void); // Returns the net prob GUI.
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -136,18 +130,18 @@ extern RTxt* GetNetProbGUI(void);	// Returns the net prob GUI.
 // Cleared by you when you call ClearNetProb().
 //
 //////////////////////////////////////////////////////////////////////////////
-extern bool IsNetProb(void);	// Returns true, if net problem; false otherwise.
+extern bool IsNetProb(void); // Returns true, if net problem; false otherwise.
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// Clear a net problem.  After a call to this function, IsNetProb() will 
-// return false until the next net blocking callback or other asynch net 
+// Clear a net problem.  After a call to this function, IsNetProb() will
+// return false until the next net blocking callback or other asynch net
 // error.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern void ClearNetProb(void);	// Returns nothing.
+extern void ClearNetProb(void); // Returns nothing.
 
-#endif	// NETDLG_H
+#endif // NETDLG_H
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

@@ -26,7 +26,7 @@
 //						demo to provide a way to load the attribute
 //						map and to access the data.
 //
-// 10/31/96 BRH	Changed CAttributeMap to RAttributeMap for the 
+// 10/31/96 BRH	Changed CAttributeMap to RAttributeMap for the
 //						new naming convention.
 //
 // 11/20/96 BRH	Changed to new file version now that there are
@@ -46,20 +46,20 @@
 #define ATTRIBUTE_H
 
 #ifdef PATHS_IN_INCLUDES
-	#include "BLUE/Blue.h"
-	#include "ORANGE/File/file.h"
+#include "BLUE/Blue.h"
+#include "ORANGE/File/file.h"
 #else
-	#include "Blue.h"
-	#include "file.h"
+#include "Blue.h"
+#include "file.h"
 #endif // PATHS_IN_INCLUDES
 
- #define ATTRIBUTE_MAP_COOKIE 0x4d525441 //Looks like "ATRM" in the file
- #define ATTRIBUTE_CURRENT_VERSION 5
+#define ATTRIBUTE_MAP_COOKIE 0x4d525441 // Looks like "ATRM" in the file
+#define ATTRIBUTE_CURRENT_VERSION 5
 
- #define ATTRIBUTE_NOT_WALKABLE 0x2000 // was 0x0800
- #define ATTRIBUTE_LIGHT_EFFECT 0x4000
+#define ATTRIBUTE_NOT_WALKABLE 0x2000 // was 0x0800
+#define ATTRIBUTE_LIGHT_EFFECT 0x4000
 
- #define ATTRIBUTE_HEIGHT_MASK  0x00FF	// Mask of height bits.
+#define ATTRIBUTE_HEIGHT_MASK 0x00FF // Mask of height bits.
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -68,8 +68,8 @@
 // This class makes it easier to load and access attribute maps for
 //	games.  There is a separate utility that converts Photoshop files
 // (.PSD) to attribute maps.  It looks for a layer called
-// "attributes" and reads the R, G and B channels to get the 
-// attribute data.  The attribute bits are set in that utility.  
+// "attributes" and reads the R, G and B channels to get the
+// attribute data.  The attribute bits are set in that utility.
 // This class simply returns the values stored in the attribute map
 // at different locations.  It has functions for returning attributes
 // for a single point or an OR mask of all points within a rectangle.
@@ -78,87 +78,75 @@
 
 class RAttributeMap
 {
-	public:
-		long m_lWidth;
-		long m_lHeight;
-		long m_lWorldWidth;
-		long m_lWorldHeight;
-		short m_sScaleX;
-		short m_sScaleY;
-		short m_sNumDetailMaps;
-		short m_sBlockDataSize;
+  public:
+    long m_lWidth;
+    long m_lHeight;
+    long m_lWorldWidth;
+    long m_lWorldHeight;
+    short m_sScaleX;
+    short m_sScaleY;
+    short m_sNumDetailMaps;
+    short m_sBlockDataSize;
 
-		// General Constructor
-		RAttributeMap();
+    // General Constructor
+    RAttributeMap();
 
-		// Contstuctor that opens the given map file
-		RAttributeMap(char* pszFilename);
+    // Contstuctor that opens the given map file
+    RAttributeMap(char *pszFilename);
 
-		// General Destructor
-		~RAttributeMap();
+    // General Destructor
+    ~RAttributeMap();
 
-		// Load function - to load a map
-		short Load(char* pszFilename);
+    // Load function - to load a map
+    short Load(char *pszFilename);
 
-		// Load function that takes an open RFile pointer
-		short Load(RFile* prf);
+    // Load function that takes an open RFile pointer
+    short Load(RFile *prf);
 
-		// Single point attribute
-		USHORT GetAttribute(long lX, long lY);
+    // Single point attribute
+    USHORT GetAttribute(long lX, long lY);
 
-		// Rectangle attribute
-		USHORT GetAttribute(long lTop, long lBottom, long lLeft, long lRight);
+    // Rectangle attribute
+    USHORT GetAttribute(long lTop, long lBottom, long lLeft, long lRight);
 
-		// Get just the low 8 bits (flags) from the last GetAttribute Call
-		UCHAR GetFlags()
-			{return m_ucFlags;};
-		
-		// Get the maximum height from the last GetAttribute Call
-		UCHAR GetMaxHeight()
-			{return m_ucMaxHeight;};
+    // Get just the low 8 bits (flags) from the last GetAttribute Call
+    UCHAR GetFlags() { return m_ucFlags; };
 
-		// Get the minimum height from the last GetAttribute Call
-		UCHAR GetMinHeight()
-			{return m_ucMinHeight;};
+    // Get the maximum height from the last GetAttribute Call
+    UCHAR GetMaxHeight() { return m_ucMaxHeight; };
 
-	private:
-		// pointer to map buffer
-		USHORT* m_pusMap;
+    // Get the minimum height from the last GetAttribute Call
+    UCHAR GetMinHeight() { return m_ucMinHeight; };
 
-		// pointer to detail map buffer
-		USHORT* m_pusDetailMap;
+  private:
+    // pointer to map buffer
+    USHORT *m_pusMap;
 
-		// The attribute stored since the last GetAttribute Call
-		USHORT m_usLastAttribute;
+    // pointer to detail map buffer
+    USHORT *m_pusDetailMap;
 
-		// The Max height stored since the last GetAttribute Call
-		UCHAR m_ucMaxHeight;
+    // The attribute stored since the last GetAttribute Call
+    USHORT m_usLastAttribute;
 
-		// The Min height stored since the last GetAttribute Call
-		UCHAR m_ucMinHeight;
+    // The Max height stored since the last GetAttribute Call
+    UCHAR m_ucMaxHeight;
 
-		// The flags stored since the last GetAttribute Call
-		UCHAR m_ucFlags;
+    // The Min height stored since the last GetAttribute Call
+    UCHAR m_ucMinHeight;
 
-		// Allocate buffer for map
-		short AllocateMap(ULONG ulSize, ULONG ulDetailMapSize);
-			
-	public:
-		// Deallocate buffer for map
-		void FreeMap();
+    // The flags stored since the last GetAttribute Call
+    UCHAR m_ucFlags;
 
+    // Allocate buffer for map
+    short AllocateMap(ULONG ulSize, ULONG ulDetailMapSize);
+
+  public:
+    // Deallocate buffer for map
+    void FreeMap();
 };
 
-
-#endif //ATTRIBUTE_H
+#endif // ATTRIBUTE_H
 
 //////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-

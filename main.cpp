@@ -26,7 +26,7 @@
 //		02/04/97	JMI	Now defaults to using RSP_DOSYSTEM_SLEEP instead of
 //							RSP_DOSYSTEM_HOGCPU for rspSetDoSystemMode().
 //
-//		02/19/97	JMI	rspInitBlue was being called before 
+//		02/19/97	JMI	rspInitBlue was being called before
 //							rspSetWin32Video/AudioType().
 //
 //		02/21/97	JMI	Now gets specific display settings from game settings(INI).
@@ -89,18 +89,18 @@
 //		09/09/97	JMI	Added check of INI flag in setting of Blue Shield Cursor
 //							Mode on PC.
 //
-//		09/25/97	JMI	Now, on the PC, when setting the video type, sets the 
+//		09/25/97	JMI	Now, on the PC, when setting the video type, sets the
 //							rspLock/Unlock behavior to be strict even when in simpler
 //							modes that don't require that level of behavior (like GDI).
 //
 //		10/09/97	JMI	Added g_pszVideoChangeDepthErrorUnderGDI_s in the event
-//							the colordepth could not be changed and the user had 
+//							the colordepth could not be changed and the user had
 //							specified to use GDI (i.e., not DirectX).
 //
 //		10/21/97	JMI	Put back the play movie hack.  Also, added ability to turn
 //							it off via the INI.
 //
-//		10/21/97	JMI	Now disables RipCord static logo only if movie successfully 
+//		10/21/97	JMI	Now disables RipCord static logo only if movie successfully
 //							plays.
 //
 //		10/24/97	JMI	Now switches the video mode back if AVI changes (this seems
@@ -119,9 +119,9 @@
 #define MAIN_CPP
 
 #ifdef WIN32
-    #include <direct.h>
+#include <direct.h>
 #else
-    #include <sys/time.h>
+#include <sys/time.h>
 #endif
 
 #include "RSPiX.h"
@@ -135,7 +135,7 @@
 #include "title.h"
 #include "input.h"
 
-//#define RSP_PROFILE_ON
+// #define RSP_PROFILE_ON
 #include "ORANGE/Debug/profile.h"
 
 #if PLATFORM_MACOSX
@@ -159,8 +159,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // Amount of time to retry audio before telling the user it's not working
-#define AUDIO_RETRY_TIME	5000
-
+#define AUDIO_RETRY_TIME 5000
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -171,237 +170,222 @@ int wideScreenWidth;
 // Function prototypes
 ////////////////////////////////////////////////////////////////////////////////
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // Set up video for the game.
 ////////////////////////////////////////////////////////////////////////////////
-static short SetupVideo(					// Returns 0 on success.
-	short	sUseCurrentDeviceDimensions,	// In:  1 to use current video area.
-	short	sDeviceWidth,						// In:  Desired video hardware width.
-	short	sDeviceHeight)						// In:  Desired video hardware height.
-	{
-	short	sResult	= 0;
+static short SetupVideo(             // Returns 0 on success.
+  short sUseCurrentDeviceDimensions, // In:  1 to use current video area.
+  short sDeviceWidth,                // In:  Desired video hardware width.
+  short sDeviceHeight)               // In:  Desired video hardware height.
+{
+    short sResult = 0;
 
 #ifdef MOBILE
-	wideScreenWidth = 850;
+    wideScreenWidth = 850;
 #elif defined(PANDORA)
-	wideScreenWidth = 800;
+    wideScreenWidth = 800;
 #else
-	//wideScreenWidth = 640;
+    // wideScreenWidth = 640;
 
-	// Attempt to grab desired resolution from desktop
-	short sDepth, sWidth, sHeight;
-	rspQueryVideoModeReset();
-	while (!rspQueryVideoMode(&sDepth, &sWidth, &sHeight));
-	TRACE("rspQueryVideoMode result: %ix%ix%i\n", sWidth, sHeight, sDepth);
-	// Sanity-check result
-	if (sHeight > 480 && sWidth > 640)
-		wideScreenWidth = 480 * sWidth / sHeight;
-	else // fallback to specified resolution
-		wideScreenWidth = 480 * sDeviceWidth / sDeviceHeight;
+    // Attempt to grab desired resolution from desktop
+    short sDepth, sWidth, sHeight;
+    rspQueryVideoModeReset();
+    while (!rspQueryVideoMode(&sDepth, &sWidth, &sHeight))
+        ;
+    TRACE("rspQueryVideoMode result: %ix%ix%i\n", sWidth, sHeight, sDepth);
+    // Sanity-check result
+    if (sHeight > 480 && sWidth > 640)
+        wideScreenWidth = 480 * sWidth / sHeight;
+    else // fallback to specified resolution
+        wideScreenWidth = 480 * sDeviceWidth / sDeviceHeight;
 #endif
-	// If "use current settings" is specified, we get the current device settings
-	// instead of using those specified in the prefs file.
-	if (sUseCurrentDeviceDimensions != FALSE)
-		rspGetVideoMode(NULL, &sDeviceWidth, &sDeviceHeight);
+    // If "use current settings" is specified, we get the current device settings
+    // instead of using those specified in the prefs file.
+    if (sUseCurrentDeviceDimensions != FALSE)
+        rspGetVideoMode(NULL, &sDeviceWidth, &sDeviceHeight);
 
-	// Try setting video mode using device size specified in prefs file
-	sResult = rspSetVideoMode(
-		MAIN_SCREEN_DEPTH,
-		sDeviceWidth,
-		sDeviceHeight,
-		MAIN_WINDOW_WIDTH,
-		MAIN_WINDOW_HEIGHT,
-		MAIN_SCREEN_PAGES,
-		MAIN_SCREEN_SCALING);
-	if (sResult != 0)
-		{
+    // Try setting video mode using device size specified in prefs file
+    sResult = rspSetVideoMode(MAIN_SCREEN_DEPTH,
+                              sDeviceWidth,
+                              sDeviceHeight,
+                              MAIN_WINDOW_WIDTH,
+                              MAIN_WINDOW_HEIGHT,
+                              MAIN_SCREEN_PAGES,
+                              MAIN_SCREEN_SCALING);
+    if (sResult != 0)
+    {
 
-		// Create description of video mode for error messages
-		char acVideoMode[100];
-		sprintf(acVideoMode, "%hd by %hd Pixels", (short)MAIN_WINDOW_WIDTH, (short)MAIN_WINDOW_HEIGHT);
-		if (MAIN_SCREEN_DEPTH <= 16)
-			sprintf(&(acVideoMode[strlen(acVideoMode)]), ", %hd Colors", (short)pow(2.0, (double)MAIN_SCREEN_DEPTH));
-		else if (MAIN_SCREEN_DEPTH == 24)
-			sprintf(&(acVideoMode[strlen(acVideoMode)]), ", True Color (24 bit)");
-		else
-			sprintf(&(acVideoMode[strlen(acVideoMode)]), ", True Color (32 bit)");
-		if (MAIN_SCREEN_PAGES > 1)
-			sprintf(&(acVideoMode[strlen(acVideoMode)]), ", %hd Pages", (short)MAIN_SCREEN_PAGES);
+        // Create description of video mode for error messages
+        char acVideoMode[100];
+        sprintf(acVideoMode, "%hd by %hd Pixels", (short)MAIN_WINDOW_WIDTH, (short)MAIN_WINDOW_HEIGHT);
+        if (MAIN_SCREEN_DEPTH <= 16)
+            sprintf(&(acVideoMode[strlen(acVideoMode)]), ", %hd Colors", (short)pow(2.0, (double)MAIN_SCREEN_DEPTH));
+        else if (MAIN_SCREEN_DEPTH == 24)
+            sprintf(&(acVideoMode[strlen(acVideoMode)]), ", True Color (24 bit)");
+        else
+            sprintf(&(acVideoMode[strlen(acVideoMode)]), ", True Color (32 bit)");
+        if (MAIN_SCREEN_PAGES > 1)
+            sprintf(&(acVideoMode[strlen(acVideoMode)]), ", %hd Pages", (short)MAIN_SCREEN_PAGES);
 
-		// Get current device depth (before we try changing it)
-		short sCurrentDeviceDepth;
-		rspGetVideoMode(&sCurrentDeviceDepth);
+        // Get current device depth (before we try changing it)
+        short sCurrentDeviceDepth;
+        rspGetVideoMode(&sCurrentDeviceDepth);
 
-		// Find closest available device size for the settings we need.  This function knows about
-		// ALL available video modes (the same ones you get in Winows' Display Settings Dialog), so
-		// if it can't find a matching mode, then it isn't available.  However, just because it does
-		// find a match doesn't mean we can set it, because under Win95, changing the color depth
-		// requires a reboot (unless they have DirectX, a fancy video driver, or the QuickRes utility).
-		sResult = rspSuggestVideoMode(
-			MAIN_SCREEN_DEPTH,
-			MAIN_WINDOW_WIDTH,
-			MAIN_WINDOW_HEIGHT,
-			MAIN_SCREEN_PAGES,
-			MAIN_SCREEN_SCALING,
-			&sDeviceWidth,
-			&sDeviceHeight,
-			NULL);
-		if (sResult == 0)
-			{
+        // Find closest available device size for the settings we need.  This function knows about
+        // ALL available video modes (the same ones you get in Winows' Display Settings Dialog), so
+        // if it can't find a matching mode, then it isn't available.  However, just because it does
+        // find a match doesn't mean we can set it, because under Win95, changing the color depth
+        // requires a reboot (unless they have DirectX, a fancy video driver, or the QuickRes utility).
+        sResult = rspSuggestVideoMode(MAIN_SCREEN_DEPTH,
+                                      MAIN_WINDOW_WIDTH,
+                                      MAIN_WINDOW_HEIGHT,
+                                      MAIN_SCREEN_PAGES,
+                                      MAIN_SCREEN_SCALING,
+                                      &sDeviceWidth,
+                                      &sDeviceHeight,
+                                      NULL);
+        if (sResult == 0)
+        {
 
-			// Try to set suggested mode
-			sResult = rspSetVideoMode(
-				MAIN_SCREEN_DEPTH,
-				sDeviceWidth,
-				sDeviceHeight,
-				MAIN_WINDOW_WIDTH,
-				MAIN_WINDOW_HEIGHT,
-				MAIN_SCREEN_PAGES,
-				MAIN_SCREEN_SCALING);
-			if (sResult != 0)
-				{
+            // Try to set suggested mode
+            sResult = rspSetVideoMode(MAIN_SCREEN_DEPTH,
+                                      sDeviceWidth,
+                                      sDeviceHeight,
+                                      MAIN_WINDOW_WIDTH,
+                                      MAIN_WINDOW_HEIGHT,
+                                      MAIN_SCREEN_PAGES,
+                                      MAIN_SCREEN_SCALING);
+            if (sResult != 0)
+            {
 
-				// If current depth is different from required depth, then that is most likely the
-				// reason for the failure.
-				if (sCurrentDeviceDepth != MAIN_SCREEN_DEPTH)
-					{
-					rspMsgBox(RSP_MB_ICN_STOP | RSP_MB_BUT_OK,
-						g_pszCriticalErrorTitle,
-						g_pszVideoChangeDepthError,
-						acVideoMode);
-					TRACE("SetupVideo(): Error returned by rspSetVideoMode() -- most likely due to attempted change in depth!\n");
-					}
-				else
-					{
-					TRACE("SetupVideo(): Error returned by rspSetVideoMode()!\n");
-					rspMsgBox(RSP_MB_ICN_STOP | RSP_MB_BUT_OK,
-						g_pszCriticalErrorTitle,
-						g_pszVideoModeError,
-						acVideoMode);
-					}
-				}
-			}
-		else
-			{
+                // If current depth is different from required depth, then that is most likely the
+                // reason for the failure.
+                if (sCurrentDeviceDepth != MAIN_SCREEN_DEPTH)
+                {
+                    rspMsgBox(RSP_MB_ICN_STOP | RSP_MB_BUT_OK,
+                              g_pszCriticalErrorTitle,
+                              g_pszVideoChangeDepthError,
+                              acVideoMode);
+                    TRACE("SetupVideo(): Error returned by rspSetVideoMode() -- most likely due to attempted change in "
+                          "depth!\n");
+                }
+                else
+                {
+                    TRACE("SetupVideo(): Error returned by rspSetVideoMode()!\n");
+                    rspMsgBox(RSP_MB_ICN_STOP | RSP_MB_BUT_OK,
+                              g_pszCriticalErrorTitle,
+                              g_pszVideoModeError,
+                              acVideoMode);
+                }
+            }
+        }
+        else
+        {
 
-			// Since rspSuggestVideoMode() failed, we know that the requested mode is
-			// not available.  Now we just want to figure out the EXACT problem so
-			// we can report it to the user.  Since modes are returned in sorted order
-			// by increasing depth, height, width, and pages, it makes this a bit easier.
+            // Since rspSuggestVideoMode() failed, we know that the requested mode is
+            // not available.  Now we just want to figure out the EXACT problem so
+            // we can report it to the user.  Since modes are returned in sorted order
+            // by increasing depth, height, width, and pages, it makes this a bit easier.
 
-			// Look for mode with the requested depth.  If there isn't one, depth is the problem.
-			rspQueryVideoModeReset();
-			short sDeviceDepth;
-			short sDevicePages;
-			do	{
-				sResult = rspQueryVideoMode(
-					&sDeviceDepth,
-					&sDeviceWidth,
-					&sDeviceHeight,
-					&sDevicePages);
-				} while ((sResult == 0) && (sDeviceDepth < MAIN_SCREEN_DEPTH));
-			if ((sResult == 0) && (sDeviceDepth == MAIN_SCREEN_DEPTH))
-				{
-				// We got the depth, now find a mode with the requested resolution.  If
-				// there isn't one, then resolution at this depth is the problem.
-				while ( (sResult == 0) &&
-						  (sDeviceDepth == MAIN_SCREEN_DEPTH) &&
-						  ((sDeviceWidth < MAIN_WINDOW_WIDTH) || (sDeviceHeight < MAIN_WINDOW_HEIGHT)) )
-					{
-					sResult = rspQueryVideoMode(
-						&sDeviceDepth,
-						&sDeviceWidth,
-						&sDeviceHeight,
-						&sDevicePages);
-					}
-				if ( (sResult == 0) &&
-					  (sDeviceDepth == MAIN_SCREEN_DEPTH) &&
-					  (sDeviceWidth >= MAIN_WINDOW_WIDTH) &&
-					  (sDeviceHeight >= MAIN_WINDOW_HEIGHT) )
-					{
-					// We got the depth and resolution, which only leaves pages or scaling
-					// as possible problems.  RSPiX doesn't support scaling as of 04/16/97
-					// and probably never will, so if we eliminate that with an ASSERT(),
-					// then we can assume that the problem is the number of pages.
-					ASSERT(MAIN_SCREEN_SCALING == 0);
-					sResult = -1;
-					TRACE("SetupVideo(): No video modes available at %dx%d, %d-bit, with %d pages!\n",
-						MAIN_WINDOW_WIDTH , MAIN_WINDOW_HEIGHT, MAIN_SCREEN_DEPTH, MAIN_SCREEN_PAGES);
-					rspMsgBox(
-						RSP_MB_ICN_STOP | RSP_MB_BUT_OK,
-						g_pszCriticalErrorTitle,
-						g_pszVideoPagesError,
-						acVideoMode);
-					}
-				else
-					{
-					sResult = -1;
-					TRACE("SetupVideo(): No %hd-bit video modes go up to %hdx%hd resolution!\n",
-						(short)MAIN_SCREEN_DEPTH, (short)MAIN_WINDOW_WIDTH, (short)MAIN_WINDOW_HEIGHT);
-					rspMsgBox(
-						RSP_MB_ICN_STOP | RSP_MB_BUT_OK,
-						g_pszCriticalErrorTitle,
-						g_pszVideoResolutionError,
-						acVideoMode);
-					}
-				}
-			else
-				{
-				sResult = -1;
-				TRACE("SetupVideo(): No %hd-bit video modes are available!\n",
-					(short)MAIN_SCREEN_DEPTH);
-				rspMsgBox(
-					RSP_MB_ICN_STOP | RSP_MB_BUT_OK,
-					g_pszCriticalErrorTitle,
-					g_pszVideoDepthError,
-					acVideoMode);
-				}
-			}
-		}
+            // Look for mode with the requested depth.  If there isn't one, depth is the problem.
+            rspQueryVideoModeReset();
+            short sDeviceDepth;
+            short sDevicePages;
+            do
+            {
+                sResult = rspQueryVideoMode(&sDeviceDepth, &sDeviceWidth, &sDeviceHeight, &sDevicePages);
+            } while ((sResult == 0) && (sDeviceDepth < MAIN_SCREEN_DEPTH));
+            if ((sResult == 0) && (sDeviceDepth == MAIN_SCREEN_DEPTH))
+            {
+                // We got the depth, now find a mode with the requested resolution.  If
+                // there isn't one, then resolution at this depth is the problem.
+                while ((sResult == 0) && (sDeviceDepth == MAIN_SCREEN_DEPTH) &&
+                       ((sDeviceWidth < MAIN_WINDOW_WIDTH) || (sDeviceHeight < MAIN_WINDOW_HEIGHT)))
+                {
+                    sResult = rspQueryVideoMode(&sDeviceDepth, &sDeviceWidth, &sDeviceHeight, &sDevicePages);
+                }
+                if ((sResult == 0) && (sDeviceDepth == MAIN_SCREEN_DEPTH) && (sDeviceWidth >= MAIN_WINDOW_WIDTH) &&
+                    (sDeviceHeight >= MAIN_WINDOW_HEIGHT))
+                {
+                    // We got the depth and resolution, which only leaves pages or scaling
+                    // as possible problems.  RSPiX doesn't support scaling as of 04/16/97
+                    // and probably never will, so if we eliminate that with an ASSERT(),
+                    // then we can assume that the problem is the number of pages.
+                    ASSERT(MAIN_SCREEN_SCALING == 0);
+                    sResult = -1;
+                    TRACE("SetupVideo(): No video modes available at %dx%d, %d-bit, with %d pages!\n",
+                          MAIN_WINDOW_WIDTH,
+                          MAIN_WINDOW_HEIGHT,
+                          MAIN_SCREEN_DEPTH,
+                          MAIN_SCREEN_PAGES);
+                    rspMsgBox(RSP_MB_ICN_STOP | RSP_MB_BUT_OK,
+                              g_pszCriticalErrorTitle,
+                              g_pszVideoPagesError,
+                              acVideoMode);
+                }
+                else
+                {
+                    sResult = -1;
+                    TRACE("SetupVideo(): No %hd-bit video modes go up to %hdx%hd resolution!\n",
+                          (short)MAIN_SCREEN_DEPTH,
+                          (short)MAIN_WINDOW_WIDTH,
+                          (short)MAIN_WINDOW_HEIGHT);
+                    rspMsgBox(RSP_MB_ICN_STOP | RSP_MB_BUT_OK,
+                              g_pszCriticalErrorTitle,
+                              g_pszVideoResolutionError,
+                              acVideoMode);
+                }
+            }
+            else
+            {
+                sResult = -1;
+                TRACE("SetupVideo(): No %hd-bit video modes are available!\n", (short)MAIN_SCREEN_DEPTH);
+                rspMsgBox(RSP_MB_ICN_STOP | RSP_MB_BUT_OK, g_pszCriticalErrorTitle, g_pszVideoDepthError, acVideoMode);
+            }
+        }
+    }
 
-	return sResult;
-	}
+    return sResult;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Allocates a chunk and resizes so that we may be able to have some large
 // blocks of contiguous memory.
 ////////////////////////////////////////////////////////////////////////////////
-static char* CreateChunk(	// Returns the memory ptr that will hold the chunk
-									// in place.  Needs to be freed with free() when done
-									// with the chunk.
-	long lChunkSize)			// In:  Size of chunk to create.
-	{
-	char*	pcOrig		= (char*)malloc(lChunkSize);
-	char* pcReAlloc	= (char*)realloc(pcOrig, 1024);
-	ASSERT(pcOrig == pcReAlloc);
-	if (pcReAlloc)
-		{
-		return pcReAlloc;
-		}
-	else
-		{
-		return pcOrig;
-		}
-	}
-
+static char *CreateChunk( // Returns the memory ptr that will hold the chunk
+                          // in place.  Needs to be freed with free() when done
+                          // with the chunk.
+  long lChunkSize)        // In:  Size of chunk to create.
+{
+    char *pcOrig = (char *)malloc(lChunkSize);
+    char *pcReAlloc = (char *)realloc(pcOrig, 1024);
+    ASSERT(pcOrig == pcReAlloc);
+    if (pcReAlloc)
+    {
+        return pcReAlloc;
+    }
+    else
+    {
+        return pcOrig;
+    }
+}
 
 static void assert_types_are_sane(void)
 {
-    ASSERT(sizeof (S8) == 1);
-    ASSERT(sizeof (U8) == 1);
-    ASSERT(sizeof (S16) == 2);
-    ASSERT(sizeof (U16) == 2);
-    ASSERT(sizeof (S32) == 4);
-    ASSERT(sizeof (U32) == 4);
-    ASSERT(sizeof (S64) == 8);
-    ASSERT(sizeof (U64) == 8);
+    ASSERT(sizeof(S8) == 1);
+    ASSERT(sizeof(U8) == 1);
+    ASSERT(sizeof(S16) == 2);
+    ASSERT(sizeof(U16) == 2);
+    ASSERT(sizeof(S32) == 4);
+    ASSERT(sizeof(U32) == 4);
+    ASSERT(sizeof(S64) == 8);
+    ASSERT(sizeof(U64) == 8);
 
     U32 val = 0x02000001;
 #if SYS_ENDIAN_BIG
-    ASSERT(*((U8*) &val) == 0x02);
+    ASSERT(*((U8 *)&val) == 0x02);
 #else
-    ASSERT(*((U8*) &val) == 0x01);
+    ASSERT(*((U8 *)&val) == 0x01);
 #endif
 }
 
@@ -429,7 +413,9 @@ static const char *GetAchievementName(const Achievement ach)
 {
     switch (ach)
     {
-        #define ACH_CASE(name) case ACHIEVEMENT_##name: return #name
+#define ACH_CASE(name)                                                                                                 \
+    case ACHIEVEMENT_##name:                                                                                           \
+        return #name
         ACH_CASE(KILL_FIRST_VICTIM);
         ACH_CASE(START_SECOND_LEVEL);
         ACH_CASE(DUCK_UNDER_ROCKET);
@@ -459,8 +445,9 @@ static const char *GetAchievementName(const Achievement ach)
         ACH_CASE(TOUCH_SOMEONE_WHILE_BURNING);
         ACH_CASE(COMPLETE_GAME_IN_X_MINUTES);
         ACH_CASE(COMPLETE_GAME_ON_HARDEST);
-        #undef ACH_CASE
-        case ACHIEVEMENT_MAX: break;  // not a real achievement, keep compiler happy.
+#undef ACH_CASE
+        case ACHIEVEMENT_MAX:
+            break; // not a real achievement, keep compiler happy.
     }
 
     return NULL;
@@ -468,31 +455,37 @@ static const char *GetAchievementName(const Achievement ach)
 
 class SteamworksEvents
 {
-public:
+  public:
     SteamworksEvents()
-        : m_CallbackUserStatsReceived(this, &SteamworksEvents::OnUserStatsReceived)
-    {}
-
-    STEAM_CALLBACK(SteamworksEvents, OnUserStatsReceived, UserStatsReceived_t /* *pParam */, m_CallbackUserStatsReceived)
+      : m_CallbackUserStatsReceived(this, &SteamworksEvents::OnUserStatsReceived)
     {
-        //printf("STEAMWORKS: OnUserStatsReceived\n");
+    }
+
+    STEAM_CALLBACK(SteamworksEvents,
+                   OnUserStatsReceived,
+                   UserStatsReceived_t /* *pParam */,
+                   m_CallbackUserStatsReceived)
+    {
+        // printf("STEAMWORKS: OnUserStatsReceived\n");
 
         if (pParam->m_nGameID != SteamAppID)
             return;
         else if (pParam->m_eResult != k_EResultOK)
             return;
 
-        //printf("STEAMWORKS: Accepting these stats.\n");
+        // printf("STEAMWORKS: Accepting these stats.\n");
 
         // Update our stats and achievements.
         int32 val;
         ISteamUserStats *stats = SteamUserStats();
-        #define UPDATESTAT(st) { \
-            stats->GetStat(#st, &val); \
-            /*printf("STEAMWORKS: Got stat '%s' (+%d)\n", #st, (int) val);*/ \
-            Stat_##st += (int) val; \
-            if (Stat_##st < 0) Stat_##st = 0x7FFFFFFF; \
-        }
+#define UPDATESTAT(st)                                                                                                 \
+    {                                                                                                                  \
+        stats->GetStat(#st, &val);                                                                                     \
+        /*printf("STEAMWORKS: Got stat '%s' (+%d)\n", #st, (int) val);*/                                               \
+        Stat_##st += (int)val;                                                                                         \
+        if (Stat_##st < 0)                                                                                             \
+            Stat_##st = 0x7FFFFFFF;                                                                                    \
+    }
         UPDATESTAT(BulletsFired);
         UPDATESTAT(BulletsHit);
         UPDATESTAT(BulletsMissed);
@@ -507,16 +500,17 @@ public:
         UPDATESTAT(KilledCivilians);
         UPDATESTAT(TotalKilled);
         UPDATESTAT(LevelsPlayed);
-        #undef UPDATESTAT
+#undef UPDATESTAT
 
         for (int i = 0; i < ACHIEVEMENT_MAX; i++)
         {
-            const char *name = GetAchievementName((Achievement) i);
-            if (!name) break;  // just in case.
+            const char *name = GetAchievementName((Achievement)i);
+            if (!name)
+                break; // just in case.
             bool unlocked = false;
             if (!stats->GetAchievement(name, &unlocked))
                 unlocked = false;
-            //printf("STEAMWORKS: Achievement '%s': %slocked\n", name, unlocked ? "un" : "");
+            // printf("STEAMWORKS: Achievement '%s': %slocked\n", name, unlocked ? "un" : "");
             EarnedSteamAchievements[i] = unlocked;
         }
 
@@ -524,19 +518,18 @@ public:
     }
 };
 
-
 static bool touchFile(const char *fname, const int64 stamp)
 {
 #ifdef WIN32
-    HANDLE hFile = CreateFileA(fname, GENERIC_READ | FILE_WRITE_ATTRIBUTES,
-                               FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+    HANDLE hFile =
+      CreateFileA(fname, GENERIC_READ | FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
         return false;
 
     ULARGE_INTEGER val;
-    val.QuadPart = (ULONGLONG) stamp;
-    val.QuadPart += 11644473600LL;  // epoch difference. Ignoring leap seconds, oh well.
-    val.QuadPart *= 10000000LL;  // convert to nanoseconds.
+    val.QuadPart = (ULONGLONG)stamp;
+    val.QuadPart += 11644473600LL; // epoch difference. Ignoring leap seconds, oh well.
+    val.QuadPart *= 10000000LL;    // convert to nanoseconds.
     FILETIME ft;
     ft.dwLowDateTime = val.LowPart;
     ft.dwHighDateTime = val.HighPart;
@@ -545,12 +538,11 @@ static bool touchFile(const char *fname, const int64 stamp)
     return (rc != 0);
 #else
     timeval ft[2];
-    ft[0].tv_sec = ft[1].tv_sec = (time_t) stamp;
+    ft[0].tv_sec = ft[1].tv_sec = (time_t)stamp;
     ft[0].tv_usec = ft[1].tv_usec = 0;
     return (utimes(fname, ft) == 0);
 #endif
 }
-
 
 static bool prepareSteamworks()
 {
@@ -558,8 +550,7 @@ static bool prepareSteamworks()
 
     if ((!SteamAPI_Init()) || ((utils = SteamUtils()) == NULL))
     {
-        rspMsgBox(RSP_MB_BUT_OK | RSP_MB_ICN_STOP,
-                  "Error!", "%s", "Can't initialize Steamworks, aborting...");
+        rspMsgBox(RSP_MB_BUT_OK | RSP_MB_ICN_STOP, "Error!", "%s", "Can't initialize Steamworks, aborting...");
         return false;
     }
 
@@ -576,7 +567,10 @@ static bool prepareSteamworks()
         bool nukeAchievements = rspCommandLine("nukesteamachievements") != 0;
         if (nukeAchievements)
         {
-            if (rspMsgBox(RSP_MB_BUT_OKCANCEL | RSP_MB_ICN_QUERY, "Whoa!", "%s", "Really nuke your Steam Achievements? This can't be undone!") != RSP_MB_RET_OK)
+            if (rspMsgBox(RSP_MB_BUT_OKCANCEL | RSP_MB_ICN_QUERY,
+                          "Whoa!",
+                          "%s",
+                          "Really nuke your Steam Achievements? This can't be undone!") != RSP_MB_RET_OK)
                 nukeAchievements = false;
         }
 
@@ -598,7 +592,10 @@ static bool prepareSteamworks()
         bool nukeCloud = rspCommandLine("nukesteamcloud") != 0;
         if (nukeCloud)
         {
-            if (rspMsgBox(RSP_MB_BUT_OKCANCEL | RSP_MB_ICN_QUERY, "Whoa!", "%s", "Really nuke the Steam Cloud? This can't be undone!") != RSP_MB_RET_OK)
+            if (rspMsgBox(RSP_MB_BUT_OKCANCEL | RSP_MB_ICN_QUERY,
+                          "Whoa!",
+                          "%s",
+                          "Really nuke the Steam Cloud? This can't be undone!") != RSP_MB_RET_OK)
                 nukeCloud = false;
         }
 
@@ -621,17 +618,17 @@ static bool prepareSteamworks()
             for (int i = 0; i < Max; i++)
             {
                 char fname[64];
-                snprintf(fname, sizeof (fname), "savegame/%d.gme", i);
+                snprintf(fname, sizeof(fname), "savegame/%d.gme", i);
                 FILE *io = fopen(FindCorrectFile(fname, "rb"), "rb");
                 if (io != NULL)
                 {
                     char buf[1024];
-                    const size_t br = fread(buf, 1, sizeof (buf), io);
+                    const size_t br = fread(buf, 1, sizeof(buf), io);
                     fclose(io);
                     if (br > 0)
                     {
-                        snprintf(fname, sizeof (fname), "savegame_%d.gme", i);
-                        cloud->FileWrite(fname, buf, (int32) br);
+                        snprintf(fname, sizeof(fname), "savegame_%d.gme", i);
+                        cloud->FileWrite(fname, buf, (int32)br);
                     }
                 }
             }
@@ -642,9 +639,9 @@ static bool prepareSteamworks()
         for (int i = 0; i < Max; i++)
         {
             char src[64];
-            snprintf(src, sizeof (src), "savegame_%d.gme", i);
+            snprintf(src, sizeof(src), "savegame_%d.gme", i);
             char dst[64];
-            snprintf(dst, sizeof (dst), "steamcloud/%d.gme", i);
+            snprintf(dst, sizeof(dst), "steamcloud/%d.gme", i);
 
             remove(FindCorrectFile(dst, "wb"));
 
@@ -652,7 +649,7 @@ static bool prepareSteamworks()
                 continue;
 
             char buf[1024];
-            const int32 br = cloud->FileRead(src, buf, (int32) sizeof (buf));
+            const int32 br = cloud->FileRead(src, buf, (int32)sizeof(buf));
             if (br <= 0)
                 continue;
 
@@ -660,7 +657,7 @@ static bool prepareSteamworks()
             if (!io)
                 continue;
 
-            const size_t bw = fwrite(buf, (size_t) br, 1, io);
+            const size_t bw = fwrite(buf, (size_t)br, 1, io);
             fclose(io);
             if (bw != 1)
                 remove(FindCorrectFile(dst, "wb"));
@@ -673,7 +670,7 @@ static bool prepareSteamworks()
         }
     }
 
-    return true;  // good to go.
+    return true; // good to go.
 }
 
 void RequestSteamStatsStore()
@@ -684,16 +681,16 @@ void RequestSteamStatsStore()
 
 void UnlockAchievement(const Achievement ach)
 {
-    //if ((ach < 0) || (ach >= ACHIEVEMENT_MAX))
-    //    return;
+    // if ((ach < 0) || (ach >= ACHIEVEMENT_MAX))
+    //     return;
     if (Flag_Achievements & FLAG_USED_CHEATS)
-        return;  // denied.
+        return; // denied.
     else if (EarnedSteamAchievements[ach])
-        return;  // already have it.
+        return; // already have it.
     else if (!EnableSteamAchievements)
         return;
     else if (GetInputMode() == INPUT_MODE_PLAYBACK)
-        return;   // you have to actually be playing, not a demo run.  :)
+        return; // you have to actually be playing, not a demo run.  :)
 
     const char *achstr = GetAchievementName(ach);
     if (!achstr)
@@ -703,7 +700,7 @@ void UnlockAchievement(const Achievement ach)
     if (!stats)
         return;
 
-    //printf("STEAMWORKS: Unlocking achievement '%s'!\n", achstr);
+    // printf("STEAMWORKS: Unlocking achievement '%s'!\n", achstr);
 
     EarnedSteamAchievements[ach] = true;
     stats->SetAchievement(achstr);
@@ -719,13 +716,14 @@ void RunSteamworksUpkeep()
         ISteamUserStats *stats = SteamUserStats();
         if (stats)
         {
-            //printf("STEAMWORKS: Pushing stats/achievements...\n");
+// printf("STEAMWORKS: Pushing stats/achievements...\n");
 
-            // since we're pushing here anyhow, might as well update counters...
-            #define SETSTAT(st) { \
-                /*printf("STEAMWORKS: Storing stat '%s' (%d)\n", #st, Stat_##st);*/ \
-                stats->SetStat(#st, Stat_##st); \
-            }
+// since we're pushing here anyhow, might as well update counters...
+#define SETSTAT(st)                                                                                                    \
+    {                                                                                                                  \
+        /*printf("STEAMWORKS: Storing stat '%s' (%d)\n", #st, Stat_##st);*/                                            \
+        stats->SetStat(#st, Stat_##st);                                                                                \
+    }
             SETSTAT(BulletsFired);
             SETSTAT(BulletsHit);
             SETSTAT(BulletsMissed);
@@ -740,7 +738,7 @@ void RunSteamworksUpkeep()
             SETSTAT(KilledCivilians);
             SETSTAT(TotalKilled);
             SETSTAT(LevelsPlayed);
-            #undef SETSTAT
+#undef SETSTAT
 
             if (stats->StoreStats())
                 StoreSteamStatsPending = false;
@@ -749,10 +747,9 @@ void RunSteamworksUpkeep()
 }
 #endif
 
-
 int main(int argc, char **argv)
-	{
-	short sResult = 0;
+{
+    short sResult = 0;
 
     _argc = argc;
     _argv = argv;
@@ -760,293 +757,290 @@ int main(int argc, char **argv)
     assert_types_are_sane();
     rspPlatformInit();
 
-    #if WITH_STEAMWORKS
+#if WITH_STEAMWORKS
     if (!prepareSteamworks())
         return 1;
-    #endif
-
-	//------------------------------------------------------------------------
-	// Get hardware-related settings from prefs file
-	//------------------------------------------------------------------------
-
-	// Open the preference file.  If this file doesn't exist then we can't
-	// continue (we could use defaults for video, audio, etc., but we can't
-	// guess where the assets are!)  The preference file must be located in
-	// the same directory as this application, and it is assumed that that
-	// directory is the current directory.  This will be the case unless the
-	// user does something stupid.
-	RPrefs prefs;
-	if (prefs.Open(g_pszPrefFileName, "rt") == 0)
-		{
-		// Get video preferences
-		short sDeviceWidth;
-		short sDeviceHeight;
-		short	sUseCurrentDeviceDimensions;
-		prefs.GetVal("Video", "DeviceWidth", MAIN_SCREEN_MIN_WIDTH, &sDeviceWidth);
-		prefs.GetVal("Video", "DeviceHeight", MAIN_SCREEN_MIN_HEIGHT, &sDeviceHeight);
-		prefs.GetVal("Video", "UseCurrentDeviceDimensions", 1, &sUseCurrentDeviceDimensions);
-
-		// Get audio preferences
-		short	sAudioSamplesPerSec;
-		short	sDeviceBitsPerSample;
-		short	sBufTime;
-		short	sMixBitsPerSample;
-		prefs.GetVal("Audio", "DeviceRate", MAIN_AUDIO_RATE, &sAudioSamplesPerSec);
-		prefs.GetVal("Audio", "DeviceBits", MAIN_AUDIO_BITS, &sDeviceBitsPerSample);
-		prefs.GetVal("Audio", "DeviceBufTime", MAIN_AUDIO_BUFTIME, &sBufTime);
-		prefs.GetVal("Audio", "MixBits", 16, &sMixBitsPerSample);
-
-		// Close preferences file
-		prefs.Close();
-
-		// Make sure no errors occurred
-		if (prefs.IsError() == 0)
-			{
-
-			//---------------------------------------------------------------------------
-			// Init blue layer
-			//---------------------------------------------------------------------------
-			if (rspInitBlue() == 0)
-				{
-
-// Turn on profile (if enabled via macro)
-rspProfileOn();
-
-// Set profile report file name
-rspSetProfileOutput("profile.out");	
-
-				//------------------------------------------------------------------------
-				// Set system stuff
-				//------------------------------------------------------------------------
-
-				// Set app name
-				rspSetApplicationName(g_pszAppName);
-
-#if defined(_DEBUG)
-				// Set mode to minimum use of CPU
-				rspSetDoSystemMode(RSP_DOSYSTEM_SLEEP);
-#else
-				// Set mode to maximum use of CPU
-				rspSetDoSystemMode(RSP_DOSYSTEM_HOGCPU);
 #endif
 
-				//------------------------------------------------------------------------
-				// Setup video
-				//------------------------------------------------------------------------
+    //------------------------------------------------------------------------
+    // Get hardware-related settings from prefs file
+    //------------------------------------------------------------------------
 
-				sResult	= SetupVideo(				// Returns 0 on success.
-					sUseCurrentDeviceDimensions,	// In:  1 to use current video area.
-					sDeviceWidth,						// In:  Desired video hardware width.
-					sDeviceHeight);					// In:  Desired video hardware height.
+    // Open the preference file.  If this file doesn't exist then we can't
+    // continue (we could use defaults for video, audio, etc., but we can't
+    // guess where the assets are!)  The preference file must be located in
+    // the same directory as this application, and it is assumed that that
+    // directory is the current directory.  This will be the case unless the
+    // user does something stupid.
+    RPrefs prefs;
+    if (prefs.Open(g_pszPrefFileName, "rt") == 0)
+    {
+        // Get video preferences
+        short sDeviceWidth;
+        short sDeviceHeight;
+        short sUseCurrentDeviceDimensions;
+        prefs.GetVal("Video", "DeviceWidth", MAIN_SCREEN_MIN_WIDTH, &sDeviceWidth);
+        prefs.GetVal("Video", "DeviceHeight", MAIN_SCREEN_MIN_HEIGHT, &sDeviceHeight);
+        prefs.GetVal("Video", "UseCurrentDeviceDimensions", 1, &sUseCurrentDeviceDimensions);
 
-				if (sResult == 0)
-					{
-					// Set Win32 static colors and lock them.
-					rspSetWin32StaticColors(1);
-					
-					//---------------------------------------------------------------
-					// Setup audio
-					//---------------------------------------------------------------
+        // Get audio preferences
+        short sAudioSamplesPerSec;
+        short sDeviceBitsPerSample;
+        short sBufTime;
+        short sMixBitsPerSample;
+        prefs.GetVal("Audio", "DeviceRate", MAIN_AUDIO_RATE, &sAudioSamplesPerSec);
+        prefs.GetVal("Audio", "DeviceBits", MAIN_AUDIO_BITS, &sDeviceBitsPerSample);
+        prefs.GetVal("Audio", "DeviceBufTime", MAIN_AUDIO_BUFTIME, &sBufTime);
+        prefs.GetVal("Audio", "MixBits", 16, &sMixBitsPerSample);
 
-					// If the INI or default mode fails b/c it is incompatible with the
-					// hardware, we will try vanilla settings.
-					bool	bSwitchedToVanillaSettings	= false;
-					// A common reason why the audio mode can't be set is that another
-					// process started a sound that hasn't finished playing by the time
-					// this app starts.  Therefore, it often pays to keep trying for a
-					// few seconds to give that other sound time to finish.  If it still
-					// doesn't work after a few seconds, we ask the user what to do.
-					// He can abort (end game), retry (for another few seconds), or ignore
-					// (play the game without audio).
-					bool bRetry = true;
+        // Close preferences file
+        prefs.Close();
 
-					while (bRetry)
-						{
-						// Keep trying until it works or time runs out, whichever comes first
-						long	lTime = rspGetMilliseconds();
-						bool	bDone	= false;
-						do	{
-							// Try to set mode
-							sResult = RMix::SetMode(
-								sAudioSamplesPerSec,
-								sDeviceBitsPerSample,
-								MAIN_AUDIO_CHANNELS,
-								sBufTime,
-								MAIN_AUDIO_MAXBUFTIME,
-								sMixBitsPerSample,
-								sMixBitsPerSample);
+        // Make sure no errors occurred
+        if (prefs.IsError() == 0)
+        {
 
-							switch (sResult)
-								{
-								case 0:
-									// Alrighty.
-									bDone	= true;
-									break;
-								case BLU_ERR_DEVICE_IN_USE:
-									// Try again until timer expires.
-									if ((rspGetMilliseconds() - lTime) < AUDIO_RETRY_TIME)
-										{
-										// Continue.
-										}
-									else
-										{
-										// Done.
-										bDone	= true;
-										}
-									break;
-								case BLU_ERR_NO_DEVICE:
-									// Not much we can do about this.  Note that we'll still
-									// need to be able to open the sample files to query info
-									// about them (even if NO sound).  This is handled by game.cpp.
-									bDone	= true;
-									break;
-								case BLU_ERR_NOT_SUPPORTED:
-									// Trying more won't help.  Jump out of this loop so the
-									// user can choose what to do.
-									bDone	= true;
-									break;
-								}
+            //---------------------------------------------------------------------------
+            // Init blue layer
+            //---------------------------------------------------------------------------
+            if (rspInitBlue() == 0)
+            {
 
-							} while (bDone == false);
+                // Turn on profile (if enabled via macro)
+                rspProfileOn();
 
-						// If it worked, clear the retry flag
-						if (sResult == 0)
-							{
-							bRetry = false;
-							}
-						else
-							{
-							TRACE("main(): Audio didn't work, using msgbox to find out what to do...\n");
-							char buf[100];
-							sprintf(buf, "%.3f kHz, %hd Bit, %s",
-								(float)sAudioSamplesPerSec/(float)1000,
-								(short)sDeviceBitsPerSample,
-								(MAIN_AUDIO_CHANNELS == 1) ? "Mono" : "Stereo");
-							
-							// Default to generic error.
-							char*	pszMsg;
-							USHORT usFlags; 
-							// Try to find a better one, though, based on the return value.
-							switch (sResult)
-								{
-								case BLU_ERR_DEVICE_IN_USE:
-									pszMsg	= g_pszAudioModeInUseError_s;
-									usFlags	= RSP_MB_ICN_QUERY | RSP_MB_BUT_ABORTRETRYIGNORE;
-									break;
-								case BLU_ERR_NO_DEVICE:
-									pszMsg	= g_pszAudioModeNoDeviceError_s;
-									usFlags	= RSP_MB_ICN_QUERY | RSP_MB_BUT_YESNO;
-									break;
-								case BLU_ERR_NOT_SUPPORTED:
-									// If we haven't already tried vanilla settings . . .
-									if (bSwitchedToVanillaSettings == false)
-										{
-										pszMsg	= g_pszAudioModeNotSupportedError_s;
-										usFlags	= RSP_MB_ICN_QUERY | RSP_MB_BUT_ABORTRETRYIGNORE;
-										// Fall back on our most Vanilla mode.
-										sAudioSamplesPerSec		= MAIN_VANILLA_AUDIO_RATE;
-										sDeviceBitsPerSample		= MAIN_VANILLA_AUDIO_BITS;
-										
-										// Should we alter sMixBitsPerSample????
-										// Let's not -- that way they should be able to use the
-										// assets they originally installed.
-										
-										// Remember.
-										bSwitchedToVanillaSettings	= true;
-										}
-									else
-										{
-										pszMsg	= g_pszAudioVanillaModeNotSupportedError_s;
-										usFlags	= RSP_MB_ICN_QUERY | RSP_MB_BUT_YESNO;
-										}
-									break;
-								default:
-									pszMsg	= g_pszAudioModeGeneralError_s;
-									usFlags	= RSP_MB_ICN_QUERY | RSP_MB_BUT_ABORTRETRYIGNORE;
-									break;
-								}
+                // Set profile report file name
+                rspSetProfileOutput("profile.out");
 
-							short sButton = rspMsgBox(
-								usFlags,
-								g_pszCriticalErrorTitle,
-								pszMsg,
-								buf);
-							switch (sButton)
-								{
-								case RSP_MB_RET_NO:
-								case RSP_MB_RET_ABORT:
-									// To abort, just clear the retry flag.  
-									// Keep the error, though.
-									bRetry = false;
-									break;
-								case RSP_MB_RET_RETRY:
-									// To retry, just clear the error (not really necessary, but seems like a good thing)
-									sResult = 0;
-									break;
-								case RSP_MB_RET_YES:
-								case RSP_MB_RET_IGNORE:
-									// To ignore, just clear the error and the retry flag
-									sResult = 0;
-									bRetry = false;
-									break;
-								}
-							}
-						}
+                //------------------------------------------------------------------------
+                // Set system stuff
+                //------------------------------------------------------------------------
 
-					if (sResult == 0)
-						{
+                // Set app name
+                rspSetApplicationName(g_pszAppName);
 
-						//------------------------------------------------------------
-						// Run the game
-						//------------------------------------------------------------
+#if defined(_DEBUG)
+                // Set mode to minimum use of CPU
+                rspSetDoSystemMode(RSP_DOSYSTEM_SLEEP);
+#else
+                // Set mode to maximum use of CPU
+                rspSetDoSystemMode(RSP_DOSYSTEM_HOGCPU);
+#endif
 
-						// Hide system cursor
-						rspHideMouseCursor();
+                //------------------------------------------------------------------------
+                // Setup video
+                //------------------------------------------------------------------------
 
-						// Run the game
-						TheGame();
+                sResult = SetupVideo(          // Returns 0 on success.
+                  sUseCurrentDeviceDimensions, // In:  1 to use current video area.
+                  sDeviceWidth,                // In:  Desired video hardware width.
+                  sDeviceHeight);              // In:  Desired video hardware height.
 
-						// Restore system cursor
-						rspShowMouseCursor();
-						
-						// Kill audio
-						RMix::KillMode();
-						}
+                if (sResult == 0)
+                {
+                    // Set Win32 static colors and lock them.
+                    rspSetWin32StaticColors(1);
 
-					// Kill video
-					rspKillVideoMode();
-					}
+                    //---------------------------------------------------------------
+                    // Setup audio
+                    //---------------------------------------------------------------
 
-// Turn off profile (if enabled via macro)
-rspProfileOff();
+                    // If the INI or default mode fails b/c it is incompatible with the
+                    // hardware, we will try vanilla settings.
+                    bool bSwitchedToVanillaSettings = false;
+                    // A common reason why the audio mode can't be set is that another
+                    // process started a sound that hasn't finished playing by the time
+                    // this app starts.  Therefore, it often pays to keep trying for a
+                    // few seconds to give that other sound time to finish.  If it still
+                    // doesn't work after a few seconds, we ask the user what to do.
+                    // He can abort (end game), retry (for another few seconds), or ignore
+                    // (play the game without audio).
+                    bool bRetry = true;
 
-				// Kill blue layer
-				rspKillBlue();
-				}
-			else
-				{
-				// Can't init blue
-				TRACE("main(): Error returned by rspInitBlue()!\n");
-				rspMsgBox(RSP_MB_ICN_STOP | RSP_MB_BUT_OK, g_pszCriticalErrorTitle, g_pszBadBlueInit);
-				}
-			}
-		else
-			{
-			// Error reading preference file
-			TRACE("main(): Error reading prefs file!\n");
-			rspMsgBox(RSP_MB_ICN_STOP | RSP_MB_BUT_OK, g_pszCriticalErrorTitle, g_pszPrefReadError);
-			}
-		}
-	else
-		{
-		// Can't open preference file
-		TRACE("main(): Couldn't open prefs file: %s !\n", g_pszPrefFileName);
-		rspMsgBox(RSP_MB_ICN_STOP | RSP_MB_BUT_OK, g_pszCriticalErrorTitle, g_pszPrefOpenError);
-		}
+                    while (bRetry)
+                    {
+                        // Keep trying until it works or time runs out, whichever comes first
+                        long lTime = rspGetMilliseconds();
+                        bool bDone = false;
+                        do
+                        {
+                            // Try to set mode
+                            sResult = RMix::SetMode(sAudioSamplesPerSec,
+                                                    sDeviceBitsPerSample,
+                                                    MAIN_AUDIO_CHANNELS,
+                                                    sBufTime,
+                                                    MAIN_AUDIO_MAXBUFTIME,
+                                                    sMixBitsPerSample,
+                                                    sMixBitsPerSample);
+
+                            switch (sResult)
+                            {
+                                case 0:
+                                    // Alrighty.
+                                    bDone = true;
+                                    break;
+                                case BLU_ERR_DEVICE_IN_USE:
+                                    // Try again until timer expires.
+                                    if ((rspGetMilliseconds() - lTime) < AUDIO_RETRY_TIME)
+                                    {
+                                        // Continue.
+                                    }
+                                    else
+                                    {
+                                        // Done.
+                                        bDone = true;
+                                    }
+                                    break;
+                                case BLU_ERR_NO_DEVICE:
+                                    // Not much we can do about this.  Note that we'll still
+                                    // need to be able to open the sample files to query info
+                                    // about them (even if NO sound).  This is handled by game.cpp.
+                                    bDone = true;
+                                    break;
+                                case BLU_ERR_NOT_SUPPORTED:
+                                    // Trying more won't help.  Jump out of this loop so the
+                                    // user can choose what to do.
+                                    bDone = true;
+                                    break;
+                            }
+
+                        } while (bDone == false);
+
+                        // If it worked, clear the retry flag
+                        if (sResult == 0)
+                        {
+                            bRetry = false;
+                        }
+                        else
+                        {
+                            TRACE("main(): Audio didn't work, using msgbox to find out what to do...\n");
+                            char buf[100];
+                            sprintf(buf,
+                                    "%.3f kHz, %hd Bit, %s",
+                                    (float)sAudioSamplesPerSec / (float)1000,
+                                    (short)sDeviceBitsPerSample,
+                                    (MAIN_AUDIO_CHANNELS == 1) ? "Mono" : "Stereo");
+
+                            // Default to generic error.
+                            char *pszMsg;
+                            USHORT usFlags;
+                            // Try to find a better one, though, based on the return value.
+                            switch (sResult)
+                            {
+                                case BLU_ERR_DEVICE_IN_USE:
+                                    pszMsg = g_pszAudioModeInUseError_s;
+                                    usFlags = RSP_MB_ICN_QUERY | RSP_MB_BUT_ABORTRETRYIGNORE;
+                                    break;
+                                case BLU_ERR_NO_DEVICE:
+                                    pszMsg = g_pszAudioModeNoDeviceError_s;
+                                    usFlags = RSP_MB_ICN_QUERY | RSP_MB_BUT_YESNO;
+                                    break;
+                                case BLU_ERR_NOT_SUPPORTED:
+                                    // If we haven't already tried vanilla settings . . .
+                                    if (bSwitchedToVanillaSettings == false)
+                                    {
+                                        pszMsg = g_pszAudioModeNotSupportedError_s;
+                                        usFlags = RSP_MB_ICN_QUERY | RSP_MB_BUT_ABORTRETRYIGNORE;
+                                        // Fall back on our most Vanilla mode.
+                                        sAudioSamplesPerSec = MAIN_VANILLA_AUDIO_RATE;
+                                        sDeviceBitsPerSample = MAIN_VANILLA_AUDIO_BITS;
+
+                                        // Should we alter sMixBitsPerSample????
+                                        // Let's not -- that way they should be able to use the
+                                        // assets they originally installed.
+
+                                        // Remember.
+                                        bSwitchedToVanillaSettings = true;
+                                    }
+                                    else
+                                    {
+                                        pszMsg = g_pszAudioVanillaModeNotSupportedError_s;
+                                        usFlags = RSP_MB_ICN_QUERY | RSP_MB_BUT_YESNO;
+                                    }
+                                    break;
+                                default:
+                                    pszMsg = g_pszAudioModeGeneralError_s;
+                                    usFlags = RSP_MB_ICN_QUERY | RSP_MB_BUT_ABORTRETRYIGNORE;
+                                    break;
+                            }
+
+                            short sButton = rspMsgBox(usFlags, g_pszCriticalErrorTitle, pszMsg, buf);
+                            switch (sButton)
+                            {
+                                case RSP_MB_RET_NO:
+                                case RSP_MB_RET_ABORT:
+                                    // To abort, just clear the retry flag.
+                                    // Keep the error, though.
+                                    bRetry = false;
+                                    break;
+                                case RSP_MB_RET_RETRY:
+                                    // To retry, just clear the error (not really necessary, but seems like a good
+                                    // thing)
+                                    sResult = 0;
+                                    break;
+                                case RSP_MB_RET_YES:
+                                case RSP_MB_RET_IGNORE:
+                                    // To ignore, just clear the error and the retry flag
+                                    sResult = 0;
+                                    bRetry = false;
+                                    break;
+                            }
+                        }
+                    }
+
+                    if (sResult == 0)
+                    {
+
+                        //------------------------------------------------------------
+                        // Run the game
+                        //------------------------------------------------------------
+
+                        // Hide system cursor
+                        rspHideMouseCursor();
+
+                        // Run the game
+                        TheGame();
+
+                        // Restore system cursor
+                        rspShowMouseCursor();
+
+                        // Kill audio
+                        RMix::KillMode();
+                    }
+
+                    // Kill video
+                    rspKillVideoMode();
+                }
+
+                // Turn off profile (if enabled via macro)
+                rspProfileOff();
+
+                // Kill blue layer
+                rspKillBlue();
+            }
+            else
+            {
+                // Can't init blue
+                TRACE("main(): Error returned by rspInitBlue()!\n");
+                rspMsgBox(RSP_MB_ICN_STOP | RSP_MB_BUT_OK, g_pszCriticalErrorTitle, g_pszBadBlueInit);
+            }
+        }
+        else
+        {
+            // Error reading preference file
+            TRACE("main(): Error reading prefs file!\n");
+            rspMsgBox(RSP_MB_ICN_STOP | RSP_MB_BUT_OK, g_pszCriticalErrorTitle, g_pszPrefReadError);
+        }
+    }
+    else
+    {
+        // Can't open preference file
+        TRACE("main(): Couldn't open prefs file: %s !\n", g_pszPrefFileName);
+        rspMsgBox(RSP_MB_ICN_STOP | RSP_MB_BUT_OK, g_pszCriticalErrorTitle, g_pszPrefOpenError);
+    }
 
     return 0;
-	}
-
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // EOF

@@ -18,7 +18,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 //	btime.cpp
-// 
+//
 // History:
 //		06/03/04 RCG	Started.
 //
@@ -43,10 +43,9 @@ static Uint32 MicrosecondsBase = 0;
 //
 //////////////////////////////////////////////////////////////////////////////
 extern void Time_Init(void)
-	{
+{
     MicrosecondsBase = SDL_GetTicks();
-	}
-
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -55,34 +54,34 @@ extern void Time_Init(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 extern long rspGetMilliseconds(void)
-	{
-        return (long) (SDL_GetTicks());
-	}
+{
+    return (long)(SDL_GetTicks());
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// Get time since last rspGetMicroseconds(TRUE) call in microseconds.  May 
+// Get time since last rspGetMicroseconds(TRUE) call in microseconds.  May
 // not always be accurate to the nearest microsecond.  It is always on the
 // Mac but possibly not in Windows; however, every machine tested produced
 // good to excellent resolution.
 // Returns the time in a long.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern long rspGetMicroseconds(	// Returns microseconds between now and
-											// last
-	short sReset /*= FALSE*/)		// Set to TRUE to reset timer.  If you never
-											// reset the timer, it will wrap within
-											// just over 35 minutes.
-	{
+extern long rspGetMicroseconds( // Returns microseconds between now and
+                                // last
+  short sReset /*= FALSE*/)     // Set to TRUE to reset timer.  If you never
+                                // reset the timer, it will wrap within
+                                // just over 35 minutes.
+{
     Uint32 microsecs = SDL_GetTicks();
-    long lTime = (long) (microsecs - MicrosecondsBase);
+    long lTime = (long)(microsecs - MicrosecondsBase);
 
-		// If reset requested . . .
-	if (sReset != FALSE)
-		MicrosecondsBase = microsecs;
+    // If reset requested . . .
+    if (sReset != FALSE)
+        MicrosecondsBase = microsecs;
 
-	return lTime * 1000;
-	}
+    return lTime * 1000;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -97,9 +96,9 @@ extern long rspGetMicroseconds(	// Returns microseconds between now and
 //
 //////////////////////////////////////////////////////////////////////////////
 extern S64 rspGetAppMicroseconds()
-	{
-        return ((S64) SDL_GetTicks()) * 1000;
-	}
+{
+    return ((S64)SDL_GetTicks()) * 1000;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // EOF

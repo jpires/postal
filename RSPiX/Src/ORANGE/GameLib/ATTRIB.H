@@ -24,45 +24,41 @@
 #ifndef attrib_h
 #define attrib_h
 
-#define ATTRIBUTE_MASK	0xffc0
-#define CONTOUR_MASK		0x006f
+#define ATTRIBUTE_MASK 0xffc0
+#define CONTOUR_MASK 0x006f
 
 typedef struct tag_CONTOUR
 {
- 	WORD block[16];
+    WORD block[16];
 } CONTOUR;
 
 typedef struct tag_ATTRIB
 {
-	short s;
+    short s;
 } ATTRIB;
-
 
 class CAttribute
 {
-protected:
+  protected:
+    WORD *m_pAttribMap; // Pointer to attribute map
+    CONTOUR *m_pAttribCont;
+    short m_sMapWidth;
 
-	WORD*    m_pAttribMap;			//Pointer to attribute map
-	CONTOUR* m_pAttribCont;
-	short		m_sMapWidth;
+  public:
+    CAttribute();
+    ~CAttribute();
 
-public:
-	CAttribute();
-	~CAttribute();
-
-	void Reset();
-	void FromBlock();
-	void ToBlock();
-	void PutBlock();
-	void GetReward();
-	BOOL GetPointAttrib(short sX, short sY, WORD* wAttribute);
-	short GetPointSurface(short sX, short sY);
-
+    void Reset();
+    void FromBlock();
+    void ToBlock();
+    void PutBlock();
+    void GetReward();
+    BOOL GetPointAttrib(short sX, short sY, WORD *wAttribute);
+    short GetPointSurface(short sX, short sY);
 };
 
-#endif //attrib_h
+#endif // attrib_h
 
 //*****************************************************************************
 // EOF
 //*****************************************************************************
-

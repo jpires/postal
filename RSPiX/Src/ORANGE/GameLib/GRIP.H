@@ -24,10 +24,7 @@
 #ifndef grip_h
 #define grip_h
 
-#define 	GRIP_DISPLAY_H	320
-#define	GRIP_DISPLAY_W	640
+#define GRIP_DISPLAY_H 320
+#define GRIP_DISPLAY_W 640
 
-
-
-#endif //grip_h
-
+#endif // grip_h

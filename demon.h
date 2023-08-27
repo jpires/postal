@@ -17,7 +17,7 @@
 //
 // Demon.H
 // Project: Postal
-// 
+//
 // History:
 //		06/09/97 BRH	Started this file from SoundThing.h
 //
@@ -30,9 +30,9 @@
 //							Then, removed m_psndChannel b/c this class really didn't
 //							use it.
 //
-//		07/21/97	JMI	Added GetX(), GetY(), and GetZ().	
+//		07/21/97	JMI	Added GetX(), GetY(), and GetZ().
 //
-//		08/01/97	JMI	Demon would set his position (m_dX, Y, Z) when first 
+//		08/01/97	JMI	Demon would set his position (m_dX, Y, Z) when first
 //							created but, since he never Save()d or Load()ed it, he
 //							was in an unitialized position when loaded into a level.
 //
@@ -47,9 +47,9 @@
 //							ms_apsmidBurn, ms_apsmidSuicide, ms_apsmidWrithing,
 //							ms_apsmidKillSeries).
 //							Also, removed unused vars:
-//							m_lNextStartTime, m_lLastStartTime, m_sWhichTime, 
-//							m_bEnabled, m_bRepeats, m_bInitiallyEnabled, 
-//							m_bInitiallyRepeats, m_lMinTime[], m_lRndTime[], 
+//							m_lNextStartTime, m_lLastStartTime, m_sWhichTime,
+//							m_bEnabled, m_bRepeats, m_bInitiallyEnabled,
+//							m_bInitiallyRepeats, m_lMinTime[], m_lRndTime[],
 //							m_szResName, and m_id.
 //							Also, now saves position and defaults to position on the
 //							the screen (that way older levels that didn't save the
@@ -69,226 +69,232 @@
 #include "realm.h"
 #include "SampleMaster.h"
 
-
 class CDemon : public CThing
-	{
-	//---------------------------------------------------------------------------
-	// Types, enums, etc.
-	//---------------------------------------------------------------------------
-	public:
+{
+    //---------------------------------------------------------------------------
+    // Types, enums, etc.
+    //---------------------------------------------------------------------------
+  public:
+    typedef enum
+    {
+        State_Happy, // La, la, la.
+        State_Delete // Delete self next chance.
+    } State;
 
-		typedef enum
-			{
-			State_Happy,		// La, la, la.
-			State_Delete		// Delete self next chance.
-			} State;
+    typedef enum
+    {
+        NumSoundBanks = 5,        // Number of sound banks.
+        NumExplosionComments = 8, // Number of explosion comments per bank.
+        NumBurnComments = 4,      // Number of burn comments per bank.
+        NumSuicideComments = 1,   // Number of suicide comments per bank.
+        NumWrithingComments = 5,  // Number of writhing comments per bank.
+        NumKillSeriesComments = 7 // Number of kill series comments per bank.
+    } Macros;
 
-		typedef enum
-			{
-			NumSoundBanks = 5,			// Number of sound banks.
-			NumExplosionComments = 8,	// Number of explosion comments per bank.
-			NumBurnComments = 4,			// Number of burn comments per bank.
-			NumSuicideComments = 1,		// Number of suicide comments per bank.
-			NumWrithingComments = 5,	// Number of writhing comments per bank.
-			NumKillSeriesComments = 7	// Number of kill series comments per bank.
-			} Macros;
+    //---------------------------------------------------------------------------
+    // Variables
+    //---------------------------------------------------------------------------
+  public:
+    long m_lIdleTime;      // Time without saying something
+    long m_lKillTimer;     // Bonus kill timer
+    short m_sRecentKills;  // Number of recent kills
+    short m_sCommentCount; // Number of comments that could have
+                           // been made, but were withheld.
 
-	//---------------------------------------------------------------------------
-	// Variables
-	//---------------------------------------------------------------------------
-	public:
-		long m_lIdleTime;							// Time without saying something
-		long m_lKillTimer;						// Bonus kill timer
-		short m_sRecentKills;					// Number of recent kills
-		short m_sCommentCount;					// Number of comments that could have 
-														// been made, but were withheld.
+    RImage *m_pImage;  // Pointer to only image (for editor only)
+    CSprite2 m_sprite; // Sprite (for editor only)
+    double m_dX;       // x coord (for editor only)
+    double m_dY;       // y coord (for editor only)
+    double m_dZ;       // z coord (for editor only)
 
-		RImage* m_pImage;							// Pointer to only image (for editor only)
-		CSprite2 m_sprite;						// Sprite (for editor only)
-		double m_dX;								// x coord (for editor only)
-		double m_dY;								// y coord (for editor only)
-		double m_dZ;								// z coord (for editor only)
+    short m_sSuspend; // Suspend flag
 
-		short m_sSuspend;							// Suspend flag
+    State m_state; // Current state.
 
-		State	m_state;								// Current state.
+    short m_sSoundBank; // Sound bank index.
 
-		short	m_sSoundBank;						// Sound bank index.
-														
-	protected:
+  protected:
+    static long ms_lMinIdleTime;   // Min time before playing next sample
+    static long ms_lBonusKillTime; // Kill an amount within this time and get a bonus comment
+    // Sound banks of explosion comments indexed by m_sSoundBank.
+    static SampleMasterID *ms_apsmidExplosion[NumSoundBanks][NumExplosionComments];
+    // Sound banks of burn comments indexed by m_sSoundBank.
+    static SampleMasterID *ms_apsmidBurn[NumSoundBanks][NumBurnComments];
+    // Sound banks of suicide comments indexed by m_sSoundBank.
+    static SampleMasterID *ms_apsmidSuicide[NumSoundBanks][NumSuicideComments];
+    // Sound banks of writhing comments indexed by m_sSoundBank.
+    static SampleMasterID *ms_apsmidWrithing[NumSoundBanks][NumWrithingComments];
+    // Sound banks of kill series comments indexed by m_sSoundBank.
+    static SampleMasterID *ms_apsmidKillSeries[NumSoundBanks][NumKillSeriesComments];
 
-		static long ms_lMinIdleTime;			// Min time before playing next sample
-		static long ms_lBonusKillTime;		// Kill an amount within this time and get a bonus comment
-		// Sound banks of explosion comments indexed by m_sSoundBank.
-		static SampleMasterID* ms_apsmidExplosion[NumSoundBanks][NumExplosionComments];
-		// Sound banks of burn comments indexed by m_sSoundBank.
-		static SampleMasterID* ms_apsmidBurn[NumSoundBanks][NumBurnComments];			
-		// Sound banks of suicide comments indexed by m_sSoundBank.
-		static SampleMasterID* ms_apsmidSuicide[NumSoundBanks][NumSuicideComments];	
-		// Sound banks of writhing comments indexed by m_sSoundBank.
-		static SampleMasterID* ms_apsmidWrithing[NumSoundBanks][NumWrithingComments];
-		// Sound banks of kill series comments indexed by m_sSoundBank.
-		static SampleMasterID* ms_apsmidKillSeries[NumSoundBanks][NumKillSeriesComments];
-														
-	//---------------------------------------------------------------------------
-	// Constructor(s) / destructor
-	//---------------------------------------------------------------------------
-	public:
-		// Constructor
-		CDemon(CRealm* pRealm)
-			: CThing(pRealm, CDemonID)
-			{
-			m_lIdleTime = 0;
-			m_lKillTimer = 0;
-			m_sRecentKills = 0;
-			m_sCommentCount = 0;
+    //---------------------------------------------------------------------------
+    // Constructor(s) / destructor
+    //---------------------------------------------------------------------------
+  public:
+    // Constructor
+    CDemon(CRealm *pRealm)
+      : CThing(pRealm, CDemonID)
+    {
+        m_lIdleTime = 0;
+        m_lKillTimer = 0;
+        m_sRecentKills = 0;
+        m_sCommentCount = 0;
 
-			m_pImage = 0;
+        m_pImage = 0;
 
-			m_sSuspend = 0;
+        m_sSuspend = 0;
 
-			m_state	= State_Happy;
+        m_state = State_Happy;
 
-			// Default to position on the screen for old .rlms that did not
-			// save their demon's position.
-			m_dX		= 100.0;
-			m_dY		= 0.0;
-			m_dZ		= 50.0;
+        // Default to position on the screen for old .rlms that did not
+        // save their demon's position.
+        m_dX = 100.0;
+        m_dY = 0.0;
+        m_dZ = 50.0;
 
-			m_sSoundBank	= 0;
-			}
+        m_sSoundBank = 0;
+    }
 
-	public:
-		// Destructor
-		~CDemon()
-			{
-			Kill();
-			}
+  public:
+    // Destructor
+    ~CDemon() { Kill(); }
 
-	//---------------------------------------------------------------------------
-	// Required static functions
-	//---------------------------------------------------------------------------
-	public:
-		// Construct object
-		static short Construct(									// Returns 0 if successfull, non-zero otherwise
-			CRealm* pRealm,										// In:  Pointer to realm this object belongs to
-			CThing** ppNew)										// Out: Pointer to new object
-			{
-			short sResult = 0;
-			*ppNew = new CDemon(pRealm);
-			if (*ppNew == 0)
-				{
-				sResult = -1;
-				TRACE("CExplode::Construct(): Couldn't construct CDemon (that's a bad thing)\n");
-				}
-			return sResult;
-			}
+    //---------------------------------------------------------------------------
+    // Required static functions
+    //---------------------------------------------------------------------------
+  public:
+    // Construct object
+    static short Construct( // Returns 0 if successfull, non-zero otherwise
+      CRealm *pRealm,       // In:  Pointer to realm this object belongs to
+      CThing **ppNew)       // Out: Pointer to new object
+    {
+        short sResult = 0;
+        *ppNew = new CDemon(pRealm);
+        if (*ppNew == 0)
+        {
+            sResult = -1;
+            TRACE("CExplode::Construct(): Couldn't construct CDemon (that's a bad thing)\n");
+        }
+        return sResult;
+    }
 
-	//---------------------------------------------------------------------------
-	// Required virtual functions (implimenting them as inlines doesn't pay!)
-	//---------------------------------------------------------------------------
-	public:
-		// Load object (should call base class version!)
-		short Load(													// Returns 0 if successfull, non-zero otherwise
-			RFile* pFile,											// In:  File to load from
-			bool bEditMode,										// In:  True for edit mode, false otherwise
-			short sFileCount,										// In:  File count (unique per file, never 0)
-			ULONG	ulFileVersion);								// In:  Version of file format to load.
+    //---------------------------------------------------------------------------
+    // Required virtual functions (implimenting them as inlines doesn't pay!)
+    //---------------------------------------------------------------------------
+  public:
+    // Load object (should call base class version!)
+    short Load(             // Returns 0 if successfull, non-zero otherwise
+      RFile *pFile,         // In:  File to load from
+      bool bEditMode,       // In:  True for edit mode, false otherwise
+      short sFileCount,     // In:  File count (unique per file, never 0)
+      ULONG ulFileVersion); // In:  Version of file format to load.
 
-		// Save object (should call base class version!)
-		short Save(													// Returns 0 if successfull, non-zero otherwise
-			RFile* pFile,											// In:  File to save to
-			short sFileCount);									// In:  File count (unique per file, never 0)
+    // Save object (should call base class version!)
+    short Save(          // Returns 0 if successfull, non-zero otherwise
+      RFile *pFile,      // In:  File to save to
+      short sFileCount); // In:  File count (unique per file, never 0)
 
-		// Startup object
-		short Startup(void);										// Returns 0 if successfull, non-zero otherwise
+    // Startup object
+    short Startup(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Shutdown object
-		short Shutdown(void);									// Returns 0 if successfull, non-zero otherwise
+    // Shutdown object
+    short Shutdown(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Suspend object
-		void Suspend(void);
+    // Suspend object
+    void Suspend(void);
 
-		// Resume object
-		void Resume(void);
+    // Resume object
+    void Resume(void);
 
-		// Update object
-		void Update(void);
+    // Update object
+    void Update(void);
 
-		// Render object
-		void Render(void);
+    // Render object
+    void Render(void);
 
-		short Setup(												// Returns 0 on success.
-			short sX,												// In: New x coord
-			short sY,												// In: New y coord
-			short sZ);												// In: New z coord
+    short Setup( // Returns 0 on success.
+      short sX,  // In: New x coord
+      short sY,  // In: New y coord
+      short sZ); // In: New z coord
 
-		// Called by editor to init new object at specified position
-		short EditNew(												// Returns 0 if successfull, non-zero otherwise
-			short sX,												// In:  New x coord
-			short sY,												// In:  New y coord
-			short sZ);												// In:  New z coord
+    // Called by editor to init new object at specified position
+    short EditNew( // Returns 0 if successfull, non-zero otherwise
+      short sX,    // In:  New x coord
+      short sY,    // In:  New y coord
+      short sZ);   // In:  New z coord
 
-		// Called by editor to modify object
-		short EditModify(void);									// Returns 0 if successfull, non-zero otherwise
+    // Called by editor to modify object
+    short EditModify(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Called by editor to move object to specified position
-		short EditMove(											// Returns 0 if successfull, non-zero otherwise
-			short sX,												// In:  New x coord
-			short sY,												// In:  New y coord
-			short sZ);												// In:  New z coord
+    // Called by editor to move object to specified position
+    short EditMove( // Returns 0 if successfull, non-zero otherwise
+      short sX,     // In:  New x coord
+      short sY,     // In:  New y coord
+      short sZ);    // In:  New z coord
 
-		// Called by editor to get the clickable pos/area of an object in 2D.
-		virtual	// Overridden here.
-		void EditRect(				// Returns nothiing.
-			RRect*	prc);			// Out: Clickable pos/area of object.
+    // Called by editor to get the clickable pos/area of an object in 2D.
+    virtual // Overridden here.
+      void
+      EditRect(      // Returns nothiing.
+        RRect *prc); // Out: Clickable pos/area of object.
 
-		// Called by editor to get the hotspot of an object in 2D.
-		virtual	// Overridden here.
-		void EditHotSpot(			// Returns nothiing.
-			short*	psX,			// Out: X coord of 2D hotspot relative to
-										// EditRect() pos.
-			short*	psY);			// Out: Y coord of 2D hotspot relative to
-										// EditRect() pos.
+    // Called by editor to get the hotspot of an object in 2D.
+    virtual // Overridden here.
+      void
+      EditHotSpot(   // Returns nothiing.
+        short *psX,  // Out: X coord of 2D hotspot relative to
+                     // EditRect() pos.
+        short *psY); // Out: Y coord of 2D hotspot relative to
+                     // EditRect() pos.
 
-		// Called by editor to update object
-		void EditUpdate(void);
+    // Called by editor to update object
+    void EditUpdate(void);
 
-		// Called by editor to render object
-		void EditRender(void);
+    // Called by editor to render object
+    void EditRender(void);
 
-		// Get the coordinates of this thing.
-		virtual					// Overriden here.
-		double GetX(void)	{ return m_dX; }
+    // Get the coordinates of this thing.
+    virtual // Overriden here.
+      double
+      GetX(void)
+    {
+        return m_dX;
+    }
 
-		virtual					// Overriden here.
-		double GetY(void)	{ return m_dY; }
+    virtual // Overriden here.
+      double
+      GetY(void)
+    {
+        return m_dY;
+    }
 
-		virtual					// Overriden here.
-		double GetZ(void)	{ return m_dZ; }
+    virtual // Overriden here.
+      double
+      GetZ(void)
+    {
+        return m_dZ;
+    }
 
-	//---------------------------------------------------------------------------
-	// Optional Static  functions
-	//---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------
+    // Optional Static  functions
+    //---------------------------------------------------------------------------
 
-		// Preload the sound samples that might be used.
-		static short Preload(
-			CRealm* prealm);				// In:  Calling realm.
+    // Preload the sound samples that might be used.
+    static short Preload(CRealm *prealm); // In:  Calling realm.
 
-	//---------------------------------------------------------------------------
-	// Internal functions
-	//---------------------------------------------------------------------------
-	protected:
-		// Init object
-		short Init(void);											// Returns 0 if successfull, non-zero otherwise
-		
-		// Kill object
-		short Kill(void);											// Returns 0 if successfull, non-zero otherwise
+    //---------------------------------------------------------------------------
+    // Internal functions
+    //---------------------------------------------------------------------------
+  protected:
+    // Init object
+    short Init(void); // Returns 0 if successfull, non-zero otherwise
 
-		// Process our message queue.
-		void ProcessMessages(void);
-	};
+    // Kill object
+    short Kill(void); // Returns 0 if successfull, non-zero otherwise
 
+    // Process our message queue.
+    void ProcessMessages(void);
+};
 
 #endif // DEMON_H
 ////////////////////////////////////////////////////////////////////////////////

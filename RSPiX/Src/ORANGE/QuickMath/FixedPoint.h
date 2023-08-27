@@ -27,18 +27,18 @@ for use of Quickmath, and deals primarily with high speed fixed
 point operations.
 /*****************************************************************
 Hungarian:	fp = either generic fixed point or signed 32 (S16.U16)
-				pfp = pointer to fixed point number
-						(sorry FILE*)
-				fpS32 = S16.U16
-				type = RFixedS32, members = "frac" and "mod"
+                pfp = pointer to fixed point number
+                        (sorry FILE*)
+                fpS32 = S16.U16
+                type = RFixedS32, members = "frac" and "mod"
 
-				fpS16 = S8.U8
-				fpU16 = U8.U8, etc.
-				type = RFixedS16, same members, etc., etc.
+                fpS16 = S8.U8
+                fpU16 = U8.U8, etc.
+                type = RFixedS16, same members, etc., etc.
 
-				& = implicit pass by reference, do NOT use a pointer
-				& is used in almost all cases to prevent VC from creating
-				a local stack frame which would slow things down by 20 times.
+                & = implicit pass by reference, do NOT use a pointer
+                & is used in almost all cases to prevent VC from creating
+                a local stack frame which would slow things down by 20 times.
 
 NOTE: Some functions can take a long AS an fpS32.  Understand that this is
 a memory cast as a fpS32 and does NOT represent the actual long "value"!
@@ -65,42 +65,51 @@ inline double rspfpGetValue(&fpDst)
 /****************************************************************/
 // Fixed Point 32S
 //======================================= signed 15:16 fixed point
-typedef union	{
-	long	val; //********* Full 32 bit signed value
-	struct	
-		{
+typedef union
+{
+    long val; //********* Full 32 bit signed value
+    struct
+    {
 #ifdef SYS_ENDIAN_BIG // big endian
-//-----------------------------------------------
-		union
-			{
-			short	mod; //********* signed 16-bit integer part
-			struct {
-				signed char upper; 	// for 256v level z-coloring:
-				unsigned char lower;
-				};
-			};
-		unsigned short frac; // unsigned 16-bit fractional part
+                      //-----------------------------------------------
+        union
+        {
+            short mod; //********* signed 16-bit integer part
+            struct
+            {
+                signed char upper; // for 256v level z-coloring:
+                unsigned char lower;
+            };
+        };
+        unsigned short frac; // unsigned 16-bit fractional part
 //-----------------------------------------------
 #else // little endian
-		unsigned short frac;
-		union	// for 256v level z-coloring:
-			{
-			short	mod;
-			struct {
-				unsigned char lower;
-				signed char upper;
-				};
-			};
+        unsigned short frac;
+        union // for 256v level z-coloring:
+        {
+            short mod;
+            struct
+            {
+                unsigned char lower;
+                signed char upper;
+            };
+        };
 #endif
-		};
-	} RFixedS32;
+    };
+} RFixedS32;
 //====================
-inline void rspfpSet(RFixedS32& s32fx,long lVal) 
-	{ s32fx.val = lVal; }
-inline void rspfpAdd(RFixedS32& s32fx,RFixedS32& s32fxAdd)
-	{ s32fx.val += s32fxAdd.val; }
-inline void rspfpSub(RFixedS32& s32fx,RFixedS32& s32fxSub)
-	{ s32fx.val -= s32fxSub.val; }
+inline void rspfpSet(RFixedS32 &s32fx, long lVal)
+{
+    s32fx.val = lVal;
+}
+inline void rspfpAdd(RFixedS32 &s32fx, RFixedS32 &s32fxAdd)
+{
+    s32fx.val += s32fxAdd.val;
+}
+inline void rspfpSub(RFixedS32 &s32fx, RFixedS32 &s32fxSub)
+{
+    s32fx.val -= s32fxSub.val;
+}
 
 // NEED 64-bit multiplication to handle overflow!
 #if 0
@@ -153,75 +162,96 @@ inline void rspfpSub(RFixedS32& s32fx,RFixedS32& s32fxSub)
 #endif
 #endif
 
-inline void rspfpAddHalf(RFixedS32& s32fx) // useful for rounding
-	{ s32fx.val += (long)32768; }
+inline void rspfpAddHalf(RFixedS32 &s32fx) // useful for rounding
+{
+    s32fx.val += (long)32768;
+}
 //========================= debugging only! (slow)
-inline void rspfpSetValue(RFixedS32& s32fx,double dVal)
-	{ s32fx.val = (long) (dVal * 65536.0); }
-inline double rspfpGetValue(RFixedS32& s32fx)
-	{ return (double)s32fx.mod + (double)s32fx.frac / (double)65536.0; }
+inline void rspfpSetValue(RFixedS32 &s32fx, double dVal)
+{
+    s32fx.val = (long)(dVal * 65536.0);
+}
+inline double rspfpGetValue(RFixedS32 &s32fx)
+{
+    return (double)s32fx.mod + (double)s32fx.frac / (double)65536.0;
+}
 
 // For passing back an error:
-const RFixedS32	s32fxERROR = {-65536};
+const RFixedS32 s32fxERROR = { -65536 };
 
 // For fixed32 type stuff:
-//extern unsigned long OneOver[256];
-//extern void SetOneOver();
+// extern unsigned long OneOver[256];
+// extern void SetOneOver();
 #define NUM_ONEOVER_FP32 1280
 
 class RInitNum
-	{
-public:
-	RInitNum();
-	static long OneOver[NUM_ONEOVER_FP32];
-	};
+{
+  public:
+    RInitNum();
+    static long OneOver[NUM_ONEOVER_FP32];
+};
 
 //======================================= unsigned 8:8 fixed point
-typedef union	{
-	unsigned short	val;
-	struct	
-		{
+typedef union
+{
+    unsigned short val;
+    struct
+    {
 #ifdef SYS_ENDIAN_BIG // big endian
-		unsigned char	mod;
-		unsigned char frac;
+        unsigned char mod;
+        unsigned char frac;
 #else // little endian
-		unsigned char frac;
-		unsigned char	mod;
+        unsigned char frac;
+        unsigned char mod;
 #endif
-		};
-	} RFixedU16;
+    };
+} RFixedU16;
 //-------------------------------------
 
 //======================================= signed 8:8 fixed point
-typedef union	{
-	signed short	val;
-	struct	
-		{
+typedef union
+{
+    signed short val;
+    struct
+    {
 #ifdef SYS_ENDIAN_BIG // big endian
-		signed char	mod;
-		unsigned char frac;
+        signed char mod;
+        unsigned char frac;
 #else // little endian
-		unsigned char frac;
-		signed char	mod;
+        unsigned char frac;
+        signed char mod;
 #endif
-		};
-	} RFixedS16;
+    };
+} RFixedS16;
 //-------------------------------------
 
 //====================
-extern RFixedS32 fpSINQ[csNumRotSteps],fpCOSQ[csNumRotSteps];
-extern	void InitTrigFP();
-inline RFixedS32 rspfpSin(short sDeg) { return fpSINQ[sDeg]; }
-inline RFixedS32 rspfpCos(short sDeg) { return fpCOSQ[sDeg]; }
-inline long rspfpOneOver(short sDen) { return RInitNum::OneOver[sDen]; }
+extern RFixedS32 fpSINQ[csNumRotSteps], fpCOSQ[csNumRotSteps];
+extern void InitTrigFP();
+inline RFixedS32 rspfpSin(short sDeg)
+{
+    return fpSINQ[sDeg];
+}
+inline RFixedS32 rspfpCos(short sDeg)
+{
+    return fpCOSQ[sDeg];
+}
+inline long rspfpOneOver(short sDen)
+{
+    return RInitNum::OneOver[sDen];
+}
 
 // Auto Initialize hook!
 class RQuickTrigFP
-	{
-public:
-	RQuickTrigFP() { InitTrigFP(); TRACE("QTRIG fixed point initialized!\n"); }
-	~RQuickTrigFP() {  }
-	};
+{
+  public:
+    RQuickTrigFP()
+    {
+        InitTrigFP();
+        TRACE("QTRIG fixed point initialized!\n");
+    }
+    ~RQuickTrigFP() {}
+};
 
 //====================
 #endif

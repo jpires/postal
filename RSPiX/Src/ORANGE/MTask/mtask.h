@@ -31,9 +31,9 @@
 #include "System.h"
 
 #ifdef PATHS_IN_INCLUDES
-	#include "ORANGE/CDT/List.h"
+#include "ORANGE/CDT/List.h"
 #else
-	#include "LIST.H"
+#include "LIST.H"
 #endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////
@@ -42,10 +42,10 @@
 
 typedef struct tag_TaskInfo
 {
-	long* plStackAddress;		// Address of allocated memory for stack
-	long* plSP;					// Current saved position of Stack Pointer
-	char* pszFunctionName;	// Name of task using this stack 
-									// (used for reporting errors)
+    long *plStackAddress;  // Address of allocated memory for stack
+    long *plSP;            // Current saved position of Stack Pointer
+    char *pszFunctionName; // Name of task using this stack
+                           // (used for reporting errors)
 } TASKINFO, *PTASKINFO;
 
 //////////////////////////////////////////////////////////////////////
@@ -56,33 +56,33 @@ typedef struct tag_TaskInfo
 // should be called in the main loop of the game
 void MTaskManager(void);
 
-// This is used to add tasks to be processed by 
+// This is used to add tasks to be processed by
 // MTaskManager.  Note only tasks designed for
 // this module should be added.  Tasks should
 // never return and need to call MTaskWait
 // periodically.
-short MTaskAddFunc(void* pFunction, char* pszFuncName, short sStackSize = 1024);
+short MTaskAddFunc(void *pFunction, char *pszFuncName, short sStackSize = 1024);
 
-#define MTaskAddwSize(fnTask, sStackSz)	MTaskAddFunc(fnTask, #fnTask, sStackSz)
-#define MTaskAdd(fnTask)						MTaskAddFunc(fnTask, #fnTask);
+#define MTaskAddwSize(fnTask, sStackSz) MTaskAddFunc(fnTask, #fnTask, sStackSz)
+#define MTaskAdd(fnTask) MTaskAddFunc(fnTask, #fnTask);
 
-// This is used to remove tasks from the task list.  
+// This is used to remove tasks from the task list.
 // Only call this function from within the task's process
 // since it kills the currently running task and removes
-// it from the list.  
+// it from the list.
 // This is what should be called when you no longer wish
 // to run a task.  For example if the task is character
 // logic, it would normally loop until the guy got killed.
 // When he is killed, call MTaskKill to remove it from
-// the task processing list.  
+// the task processing list.
 void MTaskKill(void);
 
 // This funciton is to be called from within the task's
-// process.  It is used to allow other tasks to be run.  
+// process.  It is used to allow other tasks to be run.
 // This funciton must be called periodically to allow the
 // other tasks to run.  Your code will resume immediately
 // after this call.
-long* MTaskWait(void);
+long *MTaskWait(void);
 
 #endif // MTASK_H
 

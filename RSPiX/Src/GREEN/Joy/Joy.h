@@ -43,7 +43,7 @@
 // Returns 0 on success.
 extern short Joy_SetKey(short sJoy, UCHAR ucKey, USHORT usState);
 
-// Updates joystick sJoy's current state and makes the current state the 
+// Updates joystick sJoy's current state and makes the current state the
 // previous.
 // Returns 0 on success.
 extern short Joy_Update(short sJoy);

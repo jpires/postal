@@ -78,7 +78,6 @@
 #include "common/system.h"
 #include "ramflx/ramflx.h"
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Default constructor.  If this is used, then Setup() must be called before
@@ -86,39 +85,37 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 CRamFlx::CRamFlx(void)
-	{
-	// Set flags to default states
-	m_sOpenForRead = FALSE;
+{
+    // Set flags to default states
+    m_sOpenForRead = FALSE;
 
-	// Init CImage
-	InitBuf(&m_imagePrev);
-	
-	// Clear file header
-	ClearHeader();
-	}
-	
-	
+    // Init CImage
+    InitBuf(&m_imagePrev);
+
+    // Clear file header
+    ClearHeader();
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Destructor.
 //
 ///////////////////////////////////////////////////////////////////////////////
 CRamFlx::~CRamFlx()
-	{
-	// Close in case file was left open
-	Close();
-	
-	// Clear header in case it's illegally accessed after we're destroyed
-	ClearHeader();
+{
+    // Close in case file was left open
+    Close();
 
-	// Free any memory that needs freeing
-	FreeBuf(&m_imagePrev);
-	
-	// Clear flags to default values (same reason we cleared header)
-	m_sOpenForRead = FALSE;
-	}
-	
-	
+    // Clear header in case it's illegally accessed after we're destroyed
+    ClearHeader();
+
+    // Free any memory that needs freeing
+    FreeBuf(&m_imagePrev);
+
+    // Clear flags to default values (same reason we cleared header)
+    m_sOpenForRead = FALSE;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Open an existing FLC/FLI file for reading.  You can optionally get a copy of
@@ -129,90 +126,86 @@ CRamFlx::~CRamFlx()
 //						so that the next time this function is called, it doesn't fail
 //
 ///////////////////////////////////////////////////////////////////////////////
-short CRamFlx::Open(
-			char* pszFileName,		// Full path and filename of flic file
-			FLX_FILE_HDR* pfilehdr,	// Copy of header returned here if not NULL
-			CImage* pimage)			// Memory allocated within struct if not NULL
-	{
-	short sError = 0;
-	
-	// Close in case it was left open
-	Close();
+short CRamFlx::Open(char *pszFileName,      // Full path and filename of flic file
+                    FLX_FILE_HDR *pfilehdr, // Copy of header returned here if not NULL
+                    CImage *pimage)         // Memory allocated within struct if not NULL
+{
+    short sError = 0;
 
-	// Clear file header.  This is done primarily for the older FLI files
-	// so that all fields, even those that aren't used by FLI files, will
-	// be set to default values.
-	ClearHeader();
+    // Close in case it was left open
+    Close();
 
-	CNFile	file;
-	// Open file (only if it already exists -- do not create new file!)
-	if (file.Open(pszFileName, "rb", ENDIAN_LITTLE) == 0)
-		{
-		// Read the header.  Regardless of whether it's a FLC or FLI file,
-		// the header is returned as if it was a FLC file.
-		if (ReadHeader(&file) == 0)
-			{
-			// Restart animation
-			Restart();
-						
-			// Default is to read both pixels and color data from flic
-			m_sReadPixels = TRUE;
-			m_sReadColors = TRUE;
+    // Clear file header.  This is done primarily for the older FLI files
+    // so that all fields, even those that aren't used by FLI files, will
+    // be set to default values.
+    ClearHeader();
 
-			// Is this a flic with no delta compression?
-			if (m_filehdr.sReserveA == FLX_RSP_NODELTA)
-				{
-				// Create list of pointers to frames in the flic(no delta compression)
-				sError = CreateFramePointers();
-				// Make sure the memory file pointer resets to the first frame
-				Restart();
-				// Flic has no delta compression
-				m_sNoDelta = TRUE;
-				}
-			else
-				{
-				// Flic has delta compression
-				m_sNoDelta = FALSE;
-				}
+    CNFile file;
+    // Open file (only if it already exists -- do not create new file!)
+    if (file.Open(pszFileName, "rb", ENDIAN_LITTLE) == 0)
+    {
+        // Read the header.  Regardless of whether it's a FLC or FLI file,
+        // the header is returned as if it was a FLC file.
+        if (ReadHeader(&file) == 0)
+        {
+            // Restart animation
+            Restart();
 
+            // Default is to read both pixels and color data from flic
+            m_sReadPixels = TRUE;
+            m_sReadColors = TRUE;
 
-			// If user doesn' specify a buffer, then we need to allocate buffers for the
-			// previous frame and the previous color palette.
-			if (pimage == NULL)
-				{
-				sError = AllocBuf(&m_imagePrev, (long)m_filehdr.sWidth, (long)m_filehdr.sHeight, 256);
-				}
-			}
-		else
-			sError = 1;
-		
-		// Close the file, the flic is loaded into the buffer
-		file.Close();
-		}
-	else
-		sError = 1;
-	
-	// Final check for file errors
-	if ((sError == 0) && m_file.Error() == TRUE)
-		sError = 1;
+            // Is this a flic with no delta compression?
+            if (m_filehdr.sReserveA == FLX_RSP_NODELTA)
+            {
+                // Create list of pointers to frames in the flic(no delta compression)
+                sError = CreateFramePointers();
+                // Make sure the memory file pointer resets to the first frame
+                Restart();
+                // Flic has no delta compression
+                m_sNoDelta = TRUE;
+            }
+            else
+            {
+                // Flic has delta compression
+                m_sNoDelta = FALSE;
+            }
 
-	// If pointer to header not NULL, then return copy of header there
-	if ((sError == 0) && (pfilehdr != NULL))
-		*pfilehdr = m_filehdr;
-	
-	// If pointer to buf not NULL, then allocate memory
-	if ((sError == 0) && (pimage != NULL))
-		sError = CreateBuf(pimage, (long)m_filehdr.sWidth, (long)m_filehdr.sHeight, 256);
-	
-	// If no errors, then file is finally marked "open for reading"
-	if (sError == 0)
-		m_sOpenForRead = TRUE;
-		
-	
-	return sError;
-	}
-	
-	
+            // If user doesn' specify a buffer, then we need to allocate buffers for the
+            // previous frame and the previous color palette.
+            if (pimage == NULL)
+            {
+                sError = AllocBuf(&m_imagePrev, (long)m_filehdr.sWidth, (long)m_filehdr.sHeight, 256);
+            }
+        }
+        else
+            sError = 1;
+
+        // Close the file, the flic is loaded into the buffer
+        file.Close();
+    }
+    else
+        sError = 1;
+
+    // Final check for file errors
+    if ((sError == 0) && m_file.Error() == TRUE)
+        sError = 1;
+
+    // If pointer to header not NULL, then return copy of header there
+    if ((sError == 0) && (pfilehdr != NULL))
+        *pfilehdr = m_filehdr;
+
+    // If pointer to buf not NULL, then allocate memory
+    if ((sError == 0) && (pimage != NULL))
+        sError = CreateBuf(pimage, (long)m_filehdr.sWidth, (long)m_filehdr.sHeight, 256);
+
+    // If no errors, then file is finally marked "open for reading"
+    if (sError == 0)
+        m_sOpenForRead = TRUE;
+
+    return sError;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Close the currently open file (if any).  If a flic was being written to the
@@ -221,44 +214,43 @@ short CRamFlx::Open(
 // Returns 0 if successfull, non-zero otherwise.
 //
 ///////////////////////////////////////////////////////////////////////////////
-short CRamFlx::Close(CImage* pimage)
-	{
-	short sError = 1;
-	
-	// If file is open, try to close it.
-	if (m_sOpenForRead)
-		{
-		// Clear flags
-		m_sOpenForRead = FALSE;
-		
-		// Free any memory associated with image buf, flic buf, and frame pointers
-		FreeBuf(&m_imagePrev);
+short CRamFlx::Close(CImage *pimage)
+{
+    short sError = 1;
 
-		if (m_pucFlxBuf != NULL)
-			{
-			m_file.Close();
-			free(m_pucFlxBuf);
-			}
-		
-		if (m_sNoDelta == TRUE)
-			{
-			free(m_plFrames);
-			}
-			
-		// Successfull
-		sError = 0;
-		}
-	else
-		sError = 0;
-		
-	// let's free the buffer passed in, if valid
-	if (pimage != NULL)
-		FreeBuf(pimage);
-		
-	return sError;
-	}
-	
-	
+    // If file is open, try to close it.
+    if (m_sOpenForRead)
+    {
+        // Clear flags
+        m_sOpenForRead = FALSE;
+
+        // Free any memory associated with image buf, flic buf, and frame pointers
+        FreeBuf(&m_imagePrev);
+
+        if (m_pucFlxBuf != NULL)
+        {
+            m_file.Close();
+            free(m_pucFlxBuf);
+        }
+
+        if (m_sNoDelta == TRUE)
+        {
+            free(m_plFrames);
+        }
+
+        // Successfull
+        sError = 0;
+    }
+    else
+        sError = 0;
+
+    // let's free the buffer passed in, if valid
+    if (pimage != NULL)
+        FreeBuf(pimage);
+
+    return sError;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Get copy of flic file header (file must have been opened or created).  When
@@ -266,21 +258,20 @@ short CRamFlx::Close(CImage* pimage)
 // Returns 0 if successfull, non-zero otherwise.
 //
 ///////////////////////////////////////////////////////////////////////////////
-short CRamFlx::GetHeader(FLX_FILE_HDR* pFileHdr)
-	{
-	short sError = 1;
-	
-	if (m_sOpenForRead)
-		{
-		// Copy our header struct to user's struct
-		*pFileHdr = m_filehdr;
-		sError = 0;
-		}
-	
-	return sError;
-	}
-	
-	
+short CRamFlx::GetHeader(FLX_FILE_HDR *pFileHdr)
+{
+    short sError = 1;
+
+    if (m_sOpenForRead)
+    {
+        // Copy our header struct to user's struct
+        *pFileHdr = m_filehdr;
+        sError = 0;
+    }
+
+    return sError;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Get the current frame number.  When reading, this is the frame that was
@@ -290,11 +281,10 @@ short CRamFlx::GetHeader(FLX_FILE_HDR* pFileHdr)
 //
 ///////////////////////////////////////////////////////////////////////////////
 short CRamFlx::GetFrameNum(void)
-	{
-	return m_sFrameNum;
-	}
-	
-	
+{
+    return m_sFrameNum;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Read the specified flic frame (1 to n, anything else is an error).  The
@@ -306,82 +296,78 @@ short CRamFlx::GetFrameNum(void)
 // Returns 0 if successfull, non-zero otherwise.
 //
 ///////////////////////////////////////////////////////////////////////////////
-short CRamFlx::ReadFrame(
-	short sFrameNum,			// Frame number to be read
-	CImage* pimageRead)		// Buffer for frame being read
-	{
-	short sError = 0;
-	
-	if (m_sOpenForRead && 
-	    (sFrameNum >= 1) && 
-	    (sFrameNum <= m_filehdr.sNumFrames))
-		{
-		if (m_sNoDelta == TRUE)
-			{
-			// Flics with no delta compression
-			if (sFrameNum != m_sFrameNum)
-				{
-				// Set position in buffer for frame
-				m_file.Seek(m_plFrames[sFrameNum], SEEK_SET);
-				// Decompress packets into image buffer
-				sError = ReadNextFrame(pimageRead);
-				// Set the frame number to the correct frame currently in image buffer
-				m_sFrameNum = sFrameNum;
-				}
-     		}
-		else
-			{
-			if (sFrameNum != m_sFrameNum)
-				{
-				short	sColorsModified	= FALSE;
-				short	sPixelsModified	= FALSE;
+short CRamFlx::ReadFrame(short sFrameNum,    // Frame number to be read
+                         CImage *pimageRead) // Buffer for frame being read
+{
+    short sError = 0;
 
-				// If specified frame is before (or equal to) the current frame,
-				// we need to restart the animation.
-				if (sFrameNum <= m_sFrameNum)
-					{
-					Restart();
-					// When restarting, we should set these flags for lack
-					// of a way of knowing for sure.
-					sColorsModified	= TRUE;
-					sPixelsModified	= TRUE;
-					}
-			
-				// Go frame-by-frame to the requested frame
-				while ((m_sFrameNum < sFrameNum) && (sError == 0))
-					{
-					sError = ReadNextFrame(pimageRead);
-					// If the colors are modified . . .
-					if (m_sColorsModified != FALSE)
-						{
-						// We need to store this info since the next
-						// frame may set m_sColorsModified to FALSE.
-						sColorsModified	= TRUE;
-						}
+    if (m_sOpenForRead && (sFrameNum >= 1) && (sFrameNum <= m_filehdr.sNumFrames))
+    {
+        if (m_sNoDelta == TRUE)
+        {
+            // Flics with no delta compression
+            if (sFrameNum != m_sFrameNum)
+            {
+                // Set position in buffer for frame
+                m_file.Seek(m_plFrames[sFrameNum], SEEK_SET);
+                // Decompress packets into image buffer
+                sError = ReadNextFrame(pimageRead);
+                // Set the frame number to the correct frame currently in image buffer
+                m_sFrameNum = sFrameNum;
+            }
+        }
+        else
+        {
+            if (sFrameNum != m_sFrameNum)
+            {
+                short sColorsModified = FALSE;
+                short sPixelsModified = FALSE;
 
-					// If the pixels are modified . . .
-					if (m_sPixelsModified != FALSE)
-						{
-						// We need to store this info since the next
-						// frame may set m_sPixelsModified to FALSE.
-						sPixelsModified	= TRUE;
-						}
-					}
+                // If specified frame is before (or equal to) the current frame,
+                // we need to restart the animation.
+                if (sFrameNum <= m_sFrameNum)
+                {
+                    Restart();
+                    // When restarting, we should set these flags for lack
+                    // of a way of knowing for sure.
+                    sColorsModified = TRUE;
+                    sPixelsModified = TRUE;
+                }
 
-				// If flags were set at all during the loop, 
-				// they need to be set now.
-				m_sColorsModified	= sColorsModified;
-				m_sPixelsModified	= sPixelsModified;
-				}
-			}
-		}
-	else
-		sError = 1;
-	
-	return sError;
-	}
-	
-	
+                // Go frame-by-frame to the requested frame
+                while ((m_sFrameNum < sFrameNum) && (sError == 0))
+                {
+                    sError = ReadNextFrame(pimageRead);
+                    // If the colors are modified . . .
+                    if (m_sColorsModified != FALSE)
+                    {
+                        // We need to store this info since the next
+                        // frame may set m_sColorsModified to FALSE.
+                        sColorsModified = TRUE;
+                    }
+
+                    // If the pixels are modified . . .
+                    if (m_sPixelsModified != FALSE)
+                    {
+                        // We need to store this info since the next
+                        // frame may set m_sPixelsModified to FALSE.
+                        sPixelsModified = TRUE;
+                    }
+                }
+
+                // If flags were set at all during the loop,
+                // they need to be set now.
+                m_sColorsModified = sColorsModified;
+                m_sPixelsModified = sPixelsModified;
+            }
+        }
+    }
+    else
+        sError = 1;
+
+    return sError;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Read the next flic frame (if flic was just opened, this will read frame 1).
@@ -389,43 +375,40 @@ short CRamFlx::ReadFrame(
 // Returns 0 if successfull, non-zero otherwise.
 //
 ///////////////////////////////////////////////////////////////////////////////
-short CRamFlx::ReadNextFrame(
-	CImage* pimageRead)		// Buffer for frame being read
-	{
-	short sError = 0;
+short CRamFlx::ReadNextFrame(CImage *pimageRead) // Buffer for frame being read
+{
+    short sError = 0;
 
-	if (m_sOpenForRead)
-		{
-		if (pimageRead == NULL)
-			{
-			// Apply delta to our buf
-			DoReadFrame(&m_imagePrev);
-			}
-		else
-			{
-			// Apply delta directly to user buf
-			DoReadFrame(pimageRead);
-			}
-		}
-	else
-		sError = 1;
+    if (m_sOpenForRead)
+    {
+        if (pimageRead == NULL)
+        {
+            // Apply delta to our buf
+            DoReadFrame(&m_imagePrev);
+        }
+        else
+        {
+            // Apply delta directly to user buf
+            DoReadFrame(pimageRead);
+        }
+    }
+    else
+        sError = 1;
 
-	return sError;
-	}
-	
-	
+    return sError;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Create a CImage based on the specified width, height, and number of colors.
 // Returns 0 if successfull, non-zero otherwise.
 //
 ///////////////////////////////////////////////////////////////////////////////
-short CRamFlx::CreateBuf(CImage* pimage, long lWidth, long lHeight, short sColors)
-	{
-	InitBuf(pimage);
-	return AllocBuf(pimage, lWidth, lHeight, sColors);
-	}
-
+short CRamFlx::CreateBuf(CImage *pimage, long lWidth, long lHeight, short sColors)
+{
+    InitBuf(pimage);
+    return AllocBuf(pimage, lWidth, lHeight, sColors);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -433,11 +416,10 @@ short CRamFlx::CreateBuf(CImage* pimage, long lWidth, long lHeight, short sColor
 // The CImage must not be used after this call!
 //
 ///////////////////////////////////////////////////////////////////////////////
-void CRamFlx::DestroyBuf(CImage* pimage)
-	{
-	FreeBuf(pimage);
-	}
-
+void CRamFlx::DestroyBuf(CImage *pimage)
+{
+    FreeBuf(pimage);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // EOF

@@ -93,7 +93,7 @@
 //
 //		08/04/97	JMI	Added m_sPlayAmbientSounds.
 //
-//		08/05/97	JMI	Added m_eNetConnectionType and 
+//		08/05/97	JMI	Added m_eNetConnectionType and
 //							ms_apszNetConnectionTypeNames[].
 //
 //		08/11/97 MJR	Added m_szHostName and modified connection types and text.
@@ -118,143 +118,137 @@
 
 #include "RSPiX.h"
 #ifdef PATHS_IN_INCLUDES
-	#include "WishPiX/Prefs/prefs.h"
+#include "WishPiX/Prefs/prefs.h"
 #else
-	#include "prefs.h"
+#include "prefs.h"
 #endif
 
 #include "settings.h"
 #include "localize.h"
 #include "SampleMaster.h"
 
-#define MAX_TITLE_SCREENS	10
+#define MAX_TITLE_SCREENS 10
 
 // Game settings
 class CGameSettings : CSettings
-	{
-	public:
-		char		m_pszCDPath[RSP_MAX_PATH+1];			// CD (Compact Disc) Path.  Where product was installed from.
-		char		m_pszHDPath[RSP_MAX_PATH+1];			// HD (Hard Drive) Path.  Where product was installed to.
-		char		m_pszVDPath[RSP_MAX_PATH+1];			// VD (Variable Drive) Path.  Either HD or CD path, depending on optional install.
-		char		m_pszSoundPath[RSP_MAX_PATH+1];		// Path for sound files
-		char		m_pszGamePath[RSP_MAX_PATH+1];		// Path for game sak and other game files
-		char		m_pszHoodsPath[RSP_MAX_PATH+1];		// Path for level hoods
-		char		m_szNoSakDir[RSP_MAX_PATH];			// NoSakDir path.  The root path to files in the absence of their SAK.
-		char		m_pszRealmPrefsFile[RSP_MAX_PATH+1];// Name of realm prefs file
+{
+  public:
+    char m_pszCDPath[RSP_MAX_PATH + 1]; // CD (Compact Disc) Path.  Where product was installed from.
+    char m_pszHDPath[RSP_MAX_PATH + 1]; // HD (Hard Drive) Path.  Where product was installed to.
+    char
+      m_pszVDPath[RSP_MAX_PATH + 1]; // VD (Variable Drive) Path.  Either HD or CD path, depending on optional install.
+    char m_pszSoundPath[RSP_MAX_PATH + 1];      // Path for sound files
+    char m_pszGamePath[RSP_MAX_PATH + 1];       // Path for game sak and other game files
+    char m_pszHoodsPath[RSP_MAX_PATH + 1];      // Path for level hoods
+    char m_szNoSakDir[RSP_MAX_PATH];            // NoSakDir path.  The root path to files in the absence of their SAK.
+    char m_pszRealmPrefsFile[RSP_MAX_PATH + 1]; // Name of realm prefs file
 
-		short		m_sDifficulty;								// Difficulty level (0 to 11)
-		short		m_sViolence;								// Violence level (0 to 11)
-		short		m_sCrossHair;								// TRUE, to use crosshair.
+    short m_sDifficulty; // Difficulty level (0 to 11)
+    short m_sViolence;   // Violence level (0 to 11)
+    short m_sCrossHair;  // TRUE, to use crosshair.
 
-		char		m_szServerName[RSP_MAX_PATH];			// Name of server for network game.
-		USHORT	m_usServerPort;							// Port on server for network game.
-		USHORT	m_usProtocol;								// Network protocol enum
-		char		m_szPlayerName[256];						// Player's name for multiplayer mode.
-		short		m_sPlayerColorIndex;						// Player's color index for multiplayer mode.
-		short		m_sNetBandwidth;							// Network bandwidth
-		short		m_sHostMinBandwidth;						// Host's minimum network bandwidth
-		short		m_sHostMaxPlayers;						// Host's max players
-		char		m_szHostName[RSP_MAX_PATH];			// Host name
-		short		m_sHostResetScoresEachLevel;			// Host's reset-scores-each-level flag
-		short		m_sHostRejuvenate;						// Host's rejuvenation flag
-		short		m_sHostTimeLimit;							// Host's time limit
-		short		m_sHostKillLimit;							// Host's kill limit
-		short		m_sNetGetInputInterval;					// Interval between getting input
-		short		m_sNetSendInputInterval;				// Interval between sending input
-		short		m_sNetMaxFrameLag;						// Maximum lag between output frame and input seq
-		short		m_sNetTimePerFrame;						// Time per frame
-		long		m_lNetMaxBlockingTime;					// Maximum network blocking time
-		long		m_lNetForceAbortTime;					// Maximum time after which to force abort
-/*** 12/5/97 AJC ***/
-		char		m_szNetSyncLogFile[RSP_MAX_PATH+1];	// Log file name for recording network syn time
-		RFile		m_rfNetSyncLog;							// Log file for network syn time
-		long		m_lStartRealmTime;						// Time when a client receives START_REALM from server
-		char		m_bLogNetTime;								// True, if user wants to log net time
-/*** 12/5/97 AJC ***/
-/*** 01/14/98 SPA ***/
-		long		m_lPeerDropMaxWaitTime;					// Maximum time to wait for peer data before
-															// dropping peer (in seconds!!)
-/*** 01/14/98 SPA ***/
+    char m_szServerName[RSP_MAX_PATH];         // Name of server for network game.
+    USHORT m_usServerPort;                     // Port on server for network game.
+    USHORT m_usProtocol;                       // Network protocol enum
+    char m_szPlayerName[256];                  // Player's name for multiplayer mode.
+    short m_sPlayerColorIndex;                 // Player's color index for multiplayer mode.
+    short m_sNetBandwidth;                     // Network bandwidth
+    short m_sHostMinBandwidth;                 // Host's minimum network bandwidth
+    short m_sHostMaxPlayers;                   // Host's max players
+    char m_szHostName[RSP_MAX_PATH];           // Host name
+    short m_sHostResetScoresEachLevel;         // Host's reset-scores-each-level flag
+    short m_sHostRejuvenate;                   // Host's rejuvenation flag
+    short m_sHostTimeLimit;                    // Host's time limit
+    short m_sHostKillLimit;                    // Host's kill limit
+    short m_sNetGetInputInterval;              // Interval between getting input
+    short m_sNetSendInputInterval;             // Interval between sending input
+    short m_sNetMaxFrameLag;                   // Maximum lag between output frame and input seq
+    short m_sNetTimePerFrame;                  // Time per frame
+    long m_lNetMaxBlockingTime;                // Maximum network blocking time
+    long m_lNetForceAbortTime;                 // Maximum time after which to force abort
+                                               /*** 12/5/97 AJC ***/
+    char m_szNetSyncLogFile[RSP_MAX_PATH + 1]; // Log file name for recording network syn time
+    RFile m_rfNetSyncLog;                      // Log file for network syn time
+    long m_lStartRealmTime;                    // Time when a client receives START_REALM from server
+    char m_bLogNetTime;                        // True, if user wants to log net time
+                                               /*** 12/5/97 AJC ***/
+                                               /*** 01/14/98 SPA ***/
+    long m_lPeerDropMaxWaitTime;               // Maximum time to wait for peer data before
+                                               // dropping peer (in seconds!!)
+                                               /*** 01/14/98 SPA ***/
 
-		long		m_lInitialDemoTimeOut;					// Initial demo timeout.
-		long		m_lPersistentDemoTimeOut;				// Persistent demo timeout.
-		short		m_sCanRecordDemos;						// TRUE, if the user can record demos.
-		char		m_szDemoDebugMovie[RSP_MAX_PATH];	// If supplied, turns on recording of demo movie to this file name
-		short		m_sNumAvailableDemos;					// Number of available demos
+    long m_lInitialDemoTimeOut;            // Initial demo timeout.
+    long m_lPersistentDemoTimeOut;         // Persistent demo timeout.
+    short m_sCanRecordDemos;               // TRUE, if the user can record demos.
+    char m_szDemoDebugMovie[RSP_MAX_PATH]; // If supplied, turns on recording of demo movie to this file name
+    short m_sNumAvailableDemos;            // Number of available demos
 
-		long		m_alTitleDurations[MAX_TITLE_SCREENS];// Time spent on title screen while "loading".
-																
-		short		m_sGammaVal;								// Gamma brighten value for palette.
-		short		m_sUseCurrentDeviceDimensions;		// If TRUE, the current display device dimensions are not changed.
-																	
-		short		m_sAlphaBlend;								// TRUE, if alpha blending is on.
-		short		m_sXRayEffect;								// TRUE, if x-ray effect is on.
-		short		m_s3dFog;									// TRUE, if 3D objects are rendered with fog (lighting).
-		short		m_sParticleEffects;						// TRUE, if particle effects are to be used.
-		short		m_sVolumeDistance;						// TRUE, if volume varied by distance is on.
-		short		m_sPlayAmbientSounds;					// TRUE, if we should play ambient sounds.
-																
-		short		m_sDisplayInfo;							// TRUE, to show display info.
-																
-		short		m_sCanTakeSnapShots;						// TRUE, to be able to take snap shots.
-																
-		char		m_szDontShowTitles[512];				// Comma delimited list of title filenames that won't be shown
+    long m_alTitleDurations[MAX_TITLE_SCREENS]; // Time spent on title screen while "loading".
 
-		short		m_sTrickySystemQuit;						// TRUE, to use 'trickier' system quit.
+    short m_sGammaVal;                   // Gamma brighten value for palette.
+    short m_sUseCurrentDeviceDimensions; // If TRUE, the current display device dimensions are not changed.
 
-		char		m_szSynchLogFile[RSP_MAX_PATH];		// If not "", logs if's to specified file.
+    short m_sAlphaBlend;        // TRUE, if alpha blending is on.
+    short m_sXRayEffect;        // TRUE, if x-ray effect is on.
+    short m_s3dFog;             // TRUE, if 3D objects are rendered with fog (lighting).
+    short m_sParticleEffects;   // TRUE, if particle effects are to be used.
+    short m_sVolumeDistance;    // TRUE, if volume varied by distance is on.
+    short m_sPlayAmbientSounds; // TRUE, if we should play ambient sounds.
 
-		double	m_dGameFilmScale;							// Percentage of default film size for Play mode.
-																	// For example, if 50, what was normally displayed on 640x480
-																	// would be 320x240.
+    short m_sDisplayInfo; // TRUE, to show display info.
 
-		short		m_sEditorViewWidth;						// Initial display size for editor.
-		short		m_sEditorViewHeight;						// Initial display size for editor.
+    short m_sCanTakeSnapShots; // TRUE, to be able to take snap shots.
 
-		short		m_sGripZoneRadius;						// Radius of non scroll area to be specified to grip.
+    char m_szDontShowTitles[512]; // Comma delimited list of title filenames that won't be shown
 
-		SampleMaster::SoundQuality	m_eCurSoundQuality;	// Current sound quality.
+    short m_sTrickySystemQuit; // TRUE, to use 'trickier' system quit.
 
-		short		m_asCategoryVolumes[SampleMaster::MAX_NUM_SOUND_CATEGORIES];	// Volumes for each category.
+    char m_szSynchLogFile[RSP_MAX_PATH]; // If not "", logs if's to specified file.
 
-	public:	// Statics.
-		
-		// Player color descriptions.
-		static char*	ms_apszPlayerColorDescriptions[];
-		// Number of color descriptions.
-		static const short	ms_sNumPlayerColorDescriptions;
+    double m_dGameFilmScale; // Percentage of default film size for Play mode.
+                             // For example, if 50, what was normally displayed on 640x480
+                             // would be 320x240.
 
-	public:
-		// Set settings to default values
-		CGameSettings(void);
+    short m_sEditorViewWidth;  // Initial display size for editor.
+    short m_sEditorViewHeight; // Initial display size for editor.
 
-		// Destructor
-		~CGameSettings();
+    short m_sGripZoneRadius; // Radius of non scroll area to be specified to grip.
 
-		// Read settings that are stored in preference file
-		short LoadPrefs(
-			RPrefs* pPrefs);
+    SampleMaster::SoundQuality m_eCurSoundQuality; // Current sound quality.
 
-		// Write settings that are stored in preference file
-		short SavePrefs(
-			RPrefs* pPrefs);
+    short m_asCategoryVolumes[SampleMaster::MAX_NUM_SOUND_CATEGORIES]; // Volumes for each category.
 
-		// Load settings that are stored in game file
-		short LoadGame(
-			RFile* pFile);
+  public: // Statics.
+    // Player color descriptions.
+    static char *ms_apszPlayerColorDescriptions[];
+    // Number of color descriptions.
+    static const short ms_sNumPlayerColorDescriptions;
 
-		// Save settings that are stored in game file
-		short SaveGame(
-			RFile* pFile);
+  public:
+    // Set settings to default values
+    CGameSettings(void);
 
-		// Temporarily set settings for demo mode (file is for saving current settings)
-		short PreDemo(
-			RFile* pFile);
+    // Destructor
+    ~CGameSettings();
 
-		// Restore settings to what they were prior to demo mode
-		short PostDemo(
-			RFile* pFile);
-	};
+    // Read settings that are stored in preference file
+    short LoadPrefs(RPrefs *pPrefs);
+
+    // Write settings that are stored in preference file
+    short SavePrefs(RPrefs *pPrefs);
+
+    // Load settings that are stored in game file
+    short LoadGame(RFile *pFile);
+
+    // Save settings that are stored in game file
+    short SaveGame(RFile *pFile);
+
+    // Temporarily set settings for demo mode (file is for saving current settings)
+    short PreDemo(RFile *pFile);
+
+    // Restore settings to what they were prior to demo mode
+    short PostDemo(RFile *pFile);
+};
 
 #endif // GAMESETTINGS_H
 ////////////////////////////////////////////////////////////////////////////////
