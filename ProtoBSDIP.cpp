@@ -102,11 +102,11 @@
 //
 // PUSH Bit Interpretation
 // By default, Windows NT versions 4.0 and 3.5x complete a recv() call when:
-// ·	Data arrives with the PUSH bit set.
-// ·	The user recv() buffer is full.
-// ·	0.5 seconds have elapsed since any data arrived.
+// Â·	Data arrives with the PUSH bit set.
+// Â·	The user recv() buffer is full.
+// Â·	0.5 seconds have elapsed since any data arrived.
 // If a client program is run on a computer with a TCP/IP implementation that
-// does not set the PUSH bit on sends, response delays may result.  It’s best
+// does not set the PUSH bit on sends, response delays may result.  It's best
 //  to correct this on the client side; however, a configuration parameter
 // (IgnorePushBitOnReceives) is added to Afd.sys to force it to treat all
 // arriving packets as though the PUSH bit were set.
@@ -117,8 +117,8 @@
 // to implementing delayed acknowledgments. The following conditions cause
 // an acknowledgment to be sent as data is received by TCP on a given
 // connection:
-// ·	No ACK is sent for the previous received segment.
-// ·	Segment is received, and no other segment arrives within 200ms for that connection.
+// Â·	No ACK is sent for the previous received segment.
+// Â·	Segment is received, and no other segment arrives within 200ms for that connection.
 // In summary, normally an ACK is sent for every other TCP segment received
 // on a connection, unless the delayed ACK timer (200ms) expires. There is no
 // configuration parameter to disable delayed ACKs.

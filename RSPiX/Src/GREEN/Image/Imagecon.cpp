@@ -1414,7 +1414,7 @@ short ConvertToSCREEN32_ARGB(RImage *pImage)
 // Description of this process from Win32 documentation:
 // This format can be compressed in encoded or absolute modes. Both
 // modes can occur anywhere in the same bitmap.
-// ·	Encoded mode consists of two bytes: the first byte specifies the
+// Â·	Encoded mode consists of two bytes: the first byte specifies the
 // number of consecutive pixels to be drawn using the color index
 // contained in the second byte. In addition, the first byte of the pair
 // can be set to zero to indicate an escape that denotes an end of line,
@@ -1430,7 +1430,7 @@ short ConvertToSCREEN32_ARGB(RImage *pImage)
 // indicating the horizontal and vertical offsets of the next pixel from
 // the current position.
 //
-// ·	In absolute mode, the first byte is zero and the second byte is a
+// Â·	In absolute mode, the first byte is zero and the second byte is a
 // value in the range 03H through FFH. The second byte represents the
 // number of bytes that follow, each of which contains the color index
 // of a single pixel. When the second byte is 2 or less, the escape has
