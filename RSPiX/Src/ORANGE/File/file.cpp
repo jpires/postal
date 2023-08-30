@@ -134,11 +134,11 @@
 //////////////////////////////////////////////////////////////////////////////
 // Headers.
 //////////////////////////////////////////////////////////////////////////////
-#include <stdlib.h>
+#include <cstdlib>
 #include <memory.h>
-#include <string.h>
-#include <limits.h>
-#include <float.h> // For float and double limits.
+#include <cstring>
+#include <climits>
+#include <cfloat> // For float and double limits.
 
 #if PLATFORM_UNIX
 #include <unistd.h>
@@ -146,7 +146,7 @@
 #include <sys/param.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <ctype.h>
+#include <cctype>
 #endif
 
 #ifdef WIN32
@@ -214,12 +214,12 @@ typedef HRESULT(WINAPI *fnSHGetFolderPathW)(HWND hwnd, int nFolder, HANDLE hToke
 // Called on every read and write with
 // the amount that is about to be
 // processed.
-RFile::CritiCall RFile::ms_criticall = NULL;
+RFile::CritiCall RFile::ms_criticall = nullptr;
 
 // For hooking Open(char*, ...) calls.
-RFile::OpenHook RFile::ms_hOpen = NULL;
+RFile::OpenHook RFile::ms_hOpen = nullptr;
 long RFile::ms_lOpenUser = 0L;
-RFile::CloseHook RFile::ms_hClose = NULL;
+RFile::CloseHook RFile::ms_hClose = nullptr;
 long RFile::ms_lCloseUser = 0L;
 
 // Used to byte swap by Write().
@@ -246,21 +246,21 @@ RList<RFile> RFile::ms_listOpen; // List of open RFiles connected to
 // Default constructor.
 //
 //////////////////////////////////////////////////////////////////////////////
-RFile::RFile(void)
+RFile::RFile()
 {
-    m_fs = NULL;
+    m_fs = nullptr;
     m_endian = BigEndian;
     m_flags = NoFlags;
-    m_pucFile = NULL;
+    m_pucFile = nullptr;
     m_sOwnMem = FALSE;
-    m_pucCur = NULL;
+    m_pucCur = nullptr;
     m_lSize = 0L;
     m_lGrowSize = 0L;
     m_sMemError = 0;
     m_sOpenSem = 0;
     m_sCloseSem = 0;
     m_lUser = 0;
-    m_pfileSynch = NULL;
+    m_pfileSynch = nullptr;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -268,9 +268,9 @@ RFile::RFile(void)
 // Destructor.
 //
 //////////////////////////////////////////////////////////////////////////////
-RFile::~RFile(void)
+RFile::~RFile()
 {
-    if (m_fs != NULL || m_pucFile != NULL)
+    if (m_fs != nullptr || m_pucFile != nullptr)
     {
         Close();
         TRACE("~RFile(): Closed the file that you forgot to, hoser!\n");
@@ -286,15 +286,15 @@ RFile::~RFile(void)
 //  (also zlib-licensed.)
 static int locateOneElement(char *buf)
 {
-    char *ptr = NULL;
-    DIR *dirp = NULL;
-    struct dirent *dent = NULL;
+    char *ptr = nullptr;
+    DIR *dirp = nullptr;
+    struct dirent *dent = nullptr;
 
     if (access(buf, F_OK) == 0)
         return 1; /* quick rejection: exists in current case. */
 
     ptr = strrchr(buf, '/'); /* find entry at end of path. */
-    if (ptr == NULL)
+    if (ptr == nullptr)
     {
         dirp = opendir(".");
         ptr = buf;
@@ -307,7 +307,7 @@ static int locateOneElement(char *buf)
         ptr++; /* point past dirsep to entry itself. */
     }
 
-    while ((dent = readdir(dirp)) != NULL)
+    while ((dent = readdir(dirp)) != nullptr)
     {
         if (strcasecmp(dent->d_name, ptr) == 0)
         {
@@ -417,9 +417,9 @@ extern const char *FindCorrectFile(const char *_pszName, const char *pszMode)
             const char *xdghomedir = getenv("XDG_DATA_HOME");
             const char *append = "";
 
-            if (xdghomedir == NULL)
+            if (xdghomedir == nullptr)
             {
-                if (homedir == NULL)
+                if (homedir == nullptr)
                     xdghomedir = "."; // oh well.
                 else
                 {
@@ -430,7 +430,7 @@ extern const char *FindCorrectFile(const char *_pszName, const char *pszMode)
 
             snprintf(prefpath, sizeof(prefpath), "%s%s/PostalPlus/", xdghomedir, append);
 
-            if (homedir != NULL)
+            if (homedir != nullptr)
             {
                 char oldpath[PATH_MAX];
                 snprintf(oldpath, sizeof(oldpath), "%s/.postal1", homedir);
@@ -509,7 +509,7 @@ extern const char *FindCorrectFile(const char *_pszName, const char *pszMode)
             if (in && out)
             {
                 int ch = 0;
-                while (1) // !!! FIXME: this is really lame.
+                while (true) // !!! FIXME: this is really lame.
                 {
                     ch = fgetc(in);
                     if (ch == EOF)
@@ -554,7 +554,7 @@ short RFile::Open(         // Returns 0 on success.
     short sRes = 0; // Assume success.
 
     // If not already open . . .
-    if (m_fs == NULL && m_pucFile == NULL)
+    if (m_fs == nullptr && m_pucFile == nullptr)
     {
         short sOpen = TRUE;
 
@@ -567,7 +567,7 @@ short RFile::Open(         // Returns 0 on success.
         m_flags = flags;
 
         // If hook defined . . .
-        if (ms_hOpen != NULL)
+        if (ms_hOpen != nullptr)
         {
             // If not re-entered . . .
             if (m_sOpenSem == 0)
@@ -589,7 +589,7 @@ short RFile::Open(         // Returns 0 on success.
             // Attempt to open file.
             m_fs = fopen(FindCorrectFile(pszFileName, pszFlags), pszFlags);
             // If successful . . .
-            if (m_fs != NULL)
+            if (m_fs != nullptr)
             {
                 // Attempt to set a better buffer size
                 int setres = 0;
@@ -643,7 +643,7 @@ short RFile::Open(         // Returns 0 on success.
                 if (sRes != 0)
                 {
                     fclose(m_fs);
-                    m_fs = NULL;
+                    m_fs = nullptr;
                 }
             }
             else
@@ -679,7 +679,7 @@ short RFile::Open( // Returns 0 on success.
     short sRes = 0; // Assume success.
 
     // If not already open . . .
-    if (m_fs == NULL && m_pucFile == NULL)
+    if (m_fs == nullptr && m_pucFile == nullptr)
     {
         // Store flags for this file.
         m_flags = Binary;
@@ -725,7 +725,7 @@ short RFile::Open( // Returns 0 on success.
     short sRes = 0; // Assume success.
 
     // If not already open . . .
-    if (m_fs == NULL && m_pucFile == NULL)
+    if (m_fs == nullptr && m_pucFile == nullptr)
     {
         // Store flags for this file.
         m_flags = Binary;
@@ -735,7 +735,7 @@ short RFile::Open( // Returns 0 on success.
 
         // Open memory.
         m_pucFile = m_pucCur = (UCHAR *)malloc(lSize);
-        if (m_pucFile != NULL)
+        if (m_pucFile != nullptr)
         {
             // Do own buffer.
             m_sOwnMem = TRUE;
@@ -777,7 +777,7 @@ short RFile::Open(		// Returns 0 on success.
 {
     short sRes = 0; // Assume success.
 
-    if (fs != NULL)
+    if (fs != nullptr)
     {
         // Store flags for this file.
         // Make sure Ascii and Binary are not both specified.
@@ -855,14 +855,14 @@ void RFile::SetEndian(Endian endian)
 // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RFile::Close(void)
+short RFile::Close()
 {
     short sRes = 0; // Assume success.
 
-    ASSERT(m_fs != NULL || m_pucFile != NULL);
+    ASSERT(m_fs != nullptr || m_pucFile != nullptr);
 
     // If we are synchronizing with another RFile . . .
-    if (m_pfileSynch != NULL)
+    if (m_pfileSynch != nullptr)
     {
         // De/Un/Resynch.
         m_pfileSynch->m_fs = m_fs;
@@ -877,20 +877,20 @@ short RFile::Close(void)
         m_pfileSynch->m_flags = m_flags;
 
         // Clear ("Close").
-        m_fs = NULL;
-        m_pucFile = NULL;
+        m_fs = nullptr;
+        m_pucFile = nullptr;
         m_sOwnMem = FALSE;
-        m_pucCur = NULL;
+        m_pucCur = nullptr;
         m_sMemError = FALSE;
 
-        m_pfileSynch = NULL;
+        m_pfileSynch = nullptr;
     }
     else
     {
         short sClose = TRUE;
 
         // If hook defined . . .
-        if (ms_hClose != NULL)
+        if (ms_hClose != nullptr)
         {
             // If not re-entered . . .
             if (m_sCloseSem == 0)
@@ -912,7 +912,7 @@ short RFile::Close(void)
                 if (fclose(m_fs) == 0)
                 {
                     // Success.
-                    m_fs = NULL;
+                    m_fs = nullptr;
 
 #ifdef ALLOW_RFILE_REOPEN
                     // Remove from open list.
@@ -940,16 +940,16 @@ short RFile::Close(void)
                     if (m_sOwnMem != FALSE)
                     {
                         // Make sure we still have a buffer (a resize could have failed).
-                        if (m_pucFile != NULL)
+                        if (m_pucFile != nullptr)
                         {
                             // Be gone.
                             free(m_pucFile);
                         }
                     }
 
-                    m_pucFile = NULL;
+                    m_pucFile = nullptr;
                     m_sOwnMem = FALSE;
-                    m_pucCur = NULL;
+                    m_pucCur = nullptr;
                     m_lSize = 0L;
                     m_lGrowSize = 0L;
                     m_sMemError = 0;
@@ -986,7 +986,7 @@ long RFile::Read(void *pData, long lNum)
             lToRead = MIN(lMaxRead, lNum);
 
             // If there is a CritiCall . . .
-            if (ms_criticall != NULL)
+            if (ms_criticall != nullptr)
             {
                 // Call it.
                 (*ms_criticall)(lToRead);
@@ -1407,7 +1407,7 @@ long RFile::Read(char *pszString)
                 break;
             }
 
-        } while (strchr(WHITE_SPACE, *pszString++) == NULL);
+        } while (strchr(WHITE_SPACE, *pszString++) == nullptr);
 
         // Note whether started by qutoes.
         short sInQuotes = FALSE;
@@ -1458,7 +1458,7 @@ long RFile::Read(char *pszString)
                         if (sInQuotes == FALSE)
                         {
                             // If this is whitespace . . .
-                            if (strchr(WHITE_SPACE, *pszString) != NULL)
+                            if (strchr(WHITE_SPACE, *pszString) != nullptr)
                             {
                                 // Done.
                                 *pszString = '\0';
@@ -1498,7 +1498,7 @@ long RFile::Write(const void *pData, long lNum)
             lToWrite = MIN(lMaxWrite, lNum);
 
             // If there is a CritiCall . . .
-            if (ms_criticall != NULL)
+            if (ms_criticall != nullptr)
             {
                 // Call it.
                 (*ms_criticall)(lNum);
@@ -1547,7 +1547,7 @@ long RFile::Write(const void *pData, long lNum)
                     // Enlarge . . .
                     UCHAR *pucNewFile = (UCHAR *)realloc(m_pucFile, lNewSize);
                     // If successful . . .
-                    if (pucNewFile != NULL)
+                    if (pucNewFile != nullptr)
                     {
                         // Set new buffer pointer.
                         m_pucFile = pucNewFile;
@@ -2023,7 +2023,7 @@ short RFile::Seek(long lPos, long lOrigin)
 // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
-long RFile::Tell(void)
+long RFile::Tell()
 {
     long lRes = -1L; // Assume error.
     if (IsFile() == TRUE)
@@ -2051,7 +2051,7 @@ long RFile::Tell(void)
 // Returns the size of the file on success.  Negative on error.
 //
 //////////////////////////////////////////////////////////////////////////////
-long RFile::GetSize(void)
+long RFile::GetSize()
 {
     long lRes;
 

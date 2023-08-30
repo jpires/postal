@@ -686,7 +686,7 @@ CInputSettings::InputInfo CInputSettings::ms_ainputinfo[CInputSettings::NumInput
 //////////////////////////////////////////////////////////////////////////////
 // Set settings to default values
 //////////////////////////////////////////////////////////////////////////////
-CInputSettings::CInputSettings(void)
+CInputSettings::CInputSettings()
 {
     // There is a separate function for these so outside sources can default
     // them at anytime.
@@ -868,7 +868,7 @@ short CInputSettings::PostDemo(RFile *pFile)
 ///////////////////////////////////////////////////////////////////////////////
 // Set rotation values to the defaults.
 ///////////////////////////////////////////////////////////////////////////////
-void CInputSettings::DefaultRotations(void)
+void CInputSettings::DefaultRotations()
 {
     m_dMovingSlowDegreesPerSec = 240.0;
     m_dMovingFastDegreesPerSec = 300.0;

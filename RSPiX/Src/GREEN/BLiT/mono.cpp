@@ -39,7 +39,7 @@ short rspBlitToMono(RImage *pimSrc, RImage *pimDst, short sDstX, short sDstY, sh
 {
 #ifdef _DEBUG
 
-    if ((pimSrc == NULL) || (pimDst == NULL))
+    if ((pimSrc == nullptr) || (pimDst == nullptr))
     {
         TRACE("BLiT: null CImage* passed\n");
         return -1;
@@ -87,7 +87,7 @@ short rspBlitToMono(RImage *pimSrc, RImage *pimDst, short sDstX, short sDstY, sh
     RFracU16 frOldX = { 0 };
     RFracU16 frOldY = { 0 }, frY = { 0 };
 
-    RFracU16 *afrSkipX = NULL, *afrSkipY = NULL;
+    RFracU16 *afrSkipX = nullptr, *afrSkipY = nullptr;
     afrSkipX = rspfrU16Strafe256(sDstW, sDenX);
     afrSkipY = rspfrU16Strafe256(sDstH, sDenY);
     // Make magnification possible:

@@ -32,8 +32,8 @@
 //						on mac).
 //
 //////////////////////////////////////////////////////////////////////
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include "System.h"
 
 #ifdef PATHS_IN_INCLUDES

@@ -309,7 +309,7 @@
 #define CHARACTER_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "character.h"
 #include "reality.h"
@@ -490,7 +490,7 @@ short CCharacter::Save( // Returns 0 if successfull, non-zero otherwise
 // Update object.
 // (virtual).
 ////////////////////////////////////////////////////////////////////////////////
-void CCharacter::Update(void) // Returns nothing.
+void CCharacter::Update() // Returns nothing.
 {
     if (m_u16IdWeapon != CIdBank::IdNil)
     {
@@ -527,7 +527,7 @@ void CCharacter::Update(void) // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CCharacter::Render(void)
+void CCharacter::Render()
 {
 
     // Call base class.
@@ -542,7 +542,7 @@ void CCharacter::Render(void)
 // Implements basic one-time functionality for each time State_Shot is
 // entered.
 ////////////////////////////////////////////////////////////////////////////////
-void CCharacter::OnShot(void)
+void CCharacter::OnShot()
 {
     CThing3d::OnShot();
 }
@@ -551,7 +551,7 @@ void CCharacter::OnShot(void)
 // Implements basic functionality while shot and returns true
 // until the state is completed.
 ////////////////////////////////////////////////////////////////////////////////
-bool CCharacter::WhileShot(void) // Returns true until state is complete
+bool CCharacter::WhileShot() // Returns true until state is complete
 {
     return CThing3d::WhileShot();
 }
@@ -560,7 +560,7 @@ bool CCharacter::WhileShot(void) // Returns true until state is complete
 // Implements basic functionality while being blown up and returns true
 // until the state is completed.
 ////////////////////////////////////////////////////////////////////////////////
-bool CCharacter::WhileBlownUp(void) // Returns true until state is complete.
+bool CCharacter::WhileBlownUp() // Returns true until state is complete.
 {
     return CThing3d::WhileBlownUp();
 }
@@ -569,7 +569,7 @@ bool CCharacter::WhileBlownUp(void) // Returns true until state is complete.
 // Implements basic functionality while being on fire and returns true
 // until the state is completed.
 ////////////////////////////////////////////////////////////////////////////////
-bool CCharacter::WhileBurning(void) // Returns true until state is complete.
+bool CCharacter::WhileBurning() // Returns true until state is complete.
 {
     bool bStatePersists = true; // Assume not done.
 
@@ -628,7 +628,7 @@ bool CCharacter::WhileBurning(void) // Returns true until state is complete.
 // Implements basic functionality while dying and returns true
 // until the state is completed.
 ////////////////////////////////////////////////////////////////////////////////
-bool CCharacter::WhileDying(void) // Returns true until state is complete.
+bool CCharacter::WhileDying() // Returns true until state is complete.
 {
     bool bStatePersists = true; // Assume not done.
 
@@ -694,7 +694,7 @@ bool CCharacter::WhileHoldingWeapon( // Returns true when weapon is released.
 // Implements basic one-time functionality for each time State_Dead is
 // entered.
 ////////////////////////////////////////////////////////////////////////////////
-void CCharacter::OnDead(void)
+void CCharacter::OnDead()
 {
     CHood *phood = m_pRealm->m_phood;
     // Render current dead frame into background to stay.
@@ -726,7 +726,7 @@ void CCharacter::OnDead(void)
 // Implements basic functionality while being run over and returns true
 // until the state is completed.
 ////////////////////////////////////////////////////////////////////////////////
-bool CCharacter::WhileRunOver(void) // Returns true until state is complete.
+bool CCharacter::WhileRunOver() // Returns true until state is complete.
 {
     return CThing3d::WhileRunOver();
 }
@@ -738,7 +738,7 @@ bool CCharacter::WhileRunOver(void) // Returns true until state is complete.
 // enters terrain.
 ////////////////////////////////////////////////////////////////////////////////
 // virtual.
-void CCharacter::OnWeaponDestroyed(void)
+void CCharacter::OnWeaponDestroyed()
 {
     // Each higher object should implement this as needed for that type of object
     // or not at all.  Please call this base though, in case we ever add something
@@ -921,7 +921,7 @@ void CCharacter::MakeBloody(short sDamage,      // In:  Damage to base carnage o
 
     // Create blood animation.
     CAnimThing *pat = new CAnimThing(m_pRealm);
-    if (pat != NULL)
+    if (pat != nullptr)
     {
         strcpy(pat->m_szResName, BLOOD_SPLAT_RES_NAME);
 
@@ -939,7 +939,7 @@ void CCharacter::MakeBloody(short sDamage,      // In:  Damage to base carnage o
     for (i = 0; i < sNumChunks; i++)
     {
         // Create blood particles . . .
-        CChunk *pchunk = NULL; // Initialized for safety.
+        CChunk *pchunk = nullptr; // Initialized for safety.
         // Note that this will fail if particles are disabled.
         if (Construct(CChunkID, m_pRealm, (CThing **)&pchunk) == 0)
         {
@@ -966,10 +966,10 @@ void CCharacter::MakeBloody(short sDamage,      // In:  Damage to base carnage o
 ////////////////////////////////////////////////////////////////////////////////
 // Creates blood pool animation.
 ////////////////////////////////////////////////////////////////////////////////
-void CCharacter::MakeBloodPool(void)
+void CCharacter::MakeBloodPool()
 {
     CAnimThing *pat = new CAnimThing(m_pRealm);
-    if (pat != NULL)
+    if (pat != nullptr)
     {
         strcpy(pat->m_szResName, BLOOD_POOL_RES_NAME);
 
@@ -1006,13 +1006,13 @@ void CCharacter::BloodToBackground(short sAnimX2d, // Position of animation in 2
     {
         // Get last frame.
         CAlphaAnim *paa = paachannel->GetItem(paachannel->NumItems() - 1);
-        ASSERT(paa != NULL);
+        ASSERT(paa != nullptr);
 
         short sX = sAnimX2d + paa->m_sX;
         short sY = sAnimY2d + paa->m_sY;
 
         // Note this does not handle alpha case yet.
-        if (paa->m_pimAlphaArray != NULL)
+        if (paa->m_pimAlphaArray != nullptr)
         {
             RRect rcClip(0,
                          0,
@@ -1035,7 +1035,7 @@ void CCharacter::BloodToBackground(short sAnimX2d, // Position of animation in 2
                     m_pRealm->m_phood->m_pimBackground, // Dst.
                     sX,                                 // 2D Dst coord.
                     sY,                                 // 2D Dst coord.
-                    NULL);                              // Dst.
+                    nullptr);                              // Dst.
         }
 
         rspReleaseResource(&g_resmgrGame, &paachannel);
@@ -1047,9 +1047,9 @@ void CCharacter::BloodToBackground(short sAnimX2d, // Position of animation in 2
 // This should be done when the character starts its shoot animation.
 // (virtual).
 ////////////////////////////////////////////////////////////////////////////////
-CWeapon *CCharacter::PrepareWeapon(void) // Returns the weapon ptr or NULL.
+CWeapon *CCharacter::PrepareWeapon() // Returns the weapon ptr or NULL.
 {
-    CWeapon *pweapon = NULL;
+    CWeapon *pweapon = nullptr;
 
     switch (m_eWeaponType)
     {
@@ -1099,9 +1099,9 @@ CWeapon *CCharacter::ShootWeapon( // Returns the weapon ptr or NULL
   CSmash::Bits bitsDontcare,      // Bits to use for bullet colllsion
   CSmash::Bits bitsExclude)       // Bits to use for bullet collision
 {
-    CWeapon *pweapon = NULL;
+    CWeapon *pweapon = nullptr;
     // Detatch the weapon.
-    ASSERT(m_panimCur != NULL);
+    ASSERT(m_panimCur != nullptr);
 
     // Get weapon's position relative to this character.
     double dWeaponRelX, dWeaponRelY, dWeaponRelZ;
@@ -1165,7 +1165,7 @@ CWeapon *CCharacter::ShootWeapon( // Returns the weapon ptr or NULL
                   SampleMaster::Destruction,   // In:  Sound Volume Category for user adjustment
                   255,                         // In:  Initial Sound Volume (0 - 255)
                   &m_siLastWeaponPlayInstance, // Out: Handle for adjusting sound volume
-                  NULL,                        // Out: Sample duration in ms, if not NULL.
+                  nullptr,                        // Out: Sample duration in ms, if not NULL.
                   250,                         // In:  Where to loop back to in milliseconds.
                                                //	-1 indicates no looping (unless m_sLoop is
                                                // explicitly set).
@@ -1243,7 +1243,7 @@ CWeapon *CCharacter::ShootWeapon( // Returns the weapon ptr or NULL
 // Validate weapon position.  If invalid, the weapon is destroyed and
 // the notification function, OnWeaponDestroyed() is called.
 ////////////////////////////////////////////////////////////////////////////////
-bool CCharacter::ValidateWeaponPosition(void) // Returns true, if weapon is in a valid position.
+bool CCharacter::ValidateWeaponPosition() // Returns true, if weapon is in a valid position.
                                               // Returns false, if weapon destroyed because it
                                               // it is not in a valid position.
 
@@ -1462,7 +1462,7 @@ bool CCharacter::FireBullets( // Returns true, if we hit someone/thing.
     }
 
     // Create shells/casings . . .
-    CChunk *pchunk = NULL; // Initialized for safety.
+    CChunk *pchunk = nullptr; // Initialized for safety.
     // Note that this will fail if particles are disabled.
     if (Construct(CChunkID, m_pRealm, (CThing **)&pchunk) == 0)
     {
@@ -1617,23 +1617,23 @@ bool CCharacter::IsPathClear(       // Returns true, if the entire path is clear
         line2.Z2 = fPosZ + sRadius;
     }
 
-    CSmash *psmashClosest = NULL;
+    CSmash *psmashClosest = nullptr;
     // Determine if anything with specified smash description was hit on along each edge . . .
     CSmash *psmash1;
     if (m_pRealm->m_smashatorium
           .QuickCheckClosest(&line1, bitsInclude, bitsDontCare, bitsExclude, &psmash1, psmashExclude) == false)
     {
-        psmash1 = NULL;
+        psmash1 = nullptr;
     }
     CSmash *psmash2;
     if (m_pRealm->m_smashatorium
           .QuickCheckClosest(&line2, bitsInclude, bitsDontCare, bitsExclude, &psmash2, psmashExclude) == false)
     {
-        psmash2 = NULL;
+        psmash2 = nullptr;
     }
 
     // If two smashes found . . .
-    if (psmash1 != NULL && psmash2 != NULL && psmash1 != psmash2)
+    if (psmash1 != nullptr && psmash2 != nullptr && psmash1 != psmash2)
     {
         // Determine closer on X/Z plane.
         if (ABS2(psmash1->m_sphere.sphere.X, psmash1->m_sphere.sphere.Y) <
@@ -1649,7 +1649,7 @@ bool CCharacter::IsPathClear(       // Returns true, if the entire path is clear
     else
     {
         // Whichever is not NULL.
-        if (psmash1 != NULL)
+        if (psmash1 != nullptr)
         {
             psmashClosest = psmash1;
         }
@@ -1660,7 +1660,7 @@ bool CCharacter::IsPathClear(       // Returns true, if the entire path is clear
     }
 
     // If anything hit . . .
-    if (psmashClosest != NULL)
+    if (psmashClosest != nullptr)
     {
         // Set *ppthing to thing hit.
         *ppthing = psmashClosest->m_pThing;
@@ -1673,7 +1673,7 @@ bool CCharacter::IsPathClear(       // Returns true, if the entire path is clear
     else
     {
         // Clear thing ptr.
-        *ppthing = NULL;
+        *ppthing = nullptr;
         // Set end pt.
         *psX = fPosX;
         *psY = fPosY;
@@ -1794,23 +1794,23 @@ bool CCharacter::IlluminateTarget( // Returns true if there is a target
         line2.Z2 = fPosZ + sRadius;
     }
 
-    CSmash *psmashClosest = NULL;
+    CSmash *psmashClosest = nullptr;
     // Determine if anything with specified smash description was hit on along each edge . . .
     CSmash *psmash1;
     if (m_pRealm->m_smashatorium
           .QuickCheckClosest(&line1, bitsInclude, bitsDontCare, bitsExclude, &psmash1, psmashExclude) == false)
     {
-        psmash1 = NULL;
+        psmash1 = nullptr;
     }
     CSmash *psmash2;
     if (m_pRealm->m_smashatorium
           .QuickCheckClosest(&line2, bitsInclude, bitsDontCare, bitsExclude, &psmash2, psmashExclude) == false)
     {
-        psmash2 = NULL;
+        psmash2 = nullptr;
     }
 
     // If two smashes found . . .
-    if (psmash1 != NULL && psmash2 != NULL && psmash1 != psmash2)
+    if (psmash1 != nullptr && psmash2 != nullptr && psmash1 != psmash2)
     {
         // Determine closer on X/Z plane.
         if (ABS2(psmash1->m_sphere.sphere.X, psmash1->m_sphere.sphere.Y) <
@@ -1826,7 +1826,7 @@ bool CCharacter::IlluminateTarget( // Returns true if there is a target
     else
     {
         // Whichever is not NULL.
-        if (psmash1 != NULL)
+        if (psmash1 != nullptr)
         {
             psmashClosest = psmash1;
         }
@@ -1837,7 +1837,7 @@ bool CCharacter::IlluminateTarget( // Returns true if there is a target
     }
 
     // If anything hit . . .
-    if (psmashClosest != NULL)
+    if (psmashClosest != nullptr)
     {
         // Set *ppthing to thing hit.
         *hThing = psmashClosest->m_pThing;
@@ -1850,7 +1850,7 @@ bool CCharacter::IlluminateTarget( // Returns true if there is a target
     else
     {
         // Clear thing ptr.
-        *hThing = NULL;
+        *hThing = nullptr;
         // Set end pt.
         //		*psX		= fPosX;
         //		*psY		= fPosY;
@@ -1919,7 +1919,7 @@ short CCharacter::Preload(CRealm *prealm) // In:  Calling realm.
 ////////////////////////////////////////////////////////////////////////////////
 // Called by destructor to clean up.
 ////////////////////////////////////////////////////////////////////////////////
-void CCharacter::Kill(void)
+void CCharacter::Kill()
 {
     // If we have a weapon sound play instance . . .
     if (m_siLastWeaponPlayInstance)

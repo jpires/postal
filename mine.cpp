@@ -127,7 +127,7 @@
 #define MINE_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "mine.h"
 #include "explode.h"
@@ -271,7 +271,7 @@ short CMine::Save(  // Returns 0 if successfull, non-zero otherwise
 // Startup
 ////////////////////////////////////////////////////////////////////////////////
 
-short CMine::Startup(void)
+short CMine::Startup()
 {
     return Init();
 }
@@ -280,7 +280,7 @@ short CMine::Startup(void)
 // Init
 ////////////////////////////////////////////////////////////////////////////////
 
-short CMine::Init(void)
+short CMine::Init()
 {
     short sResult = SUCCESS;
 
@@ -392,15 +392,15 @@ inline bool UpdateVelocity( // Returns true if velocity reaches zero because of 
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CMine::Update(void)
+void CMine::Update()
 {
-    CSmash *pSmashed = NULL;
+    CSmash *pSmashed = nullptr;
     double dDistance;
     short sShootAngle;
     short sShotX;
     short sShotY;
     short sShotZ;
-    CThing *pShotThing = NULL;
+    CThing *pShotThing = nullptr;
     GameMessage msg;
 
     if (!m_sSuspend)
@@ -460,7 +460,7 @@ void CMine::Update(void)
                     short sZ = m_dZ;
 
                     // If we have a parent . . .
-                    CThing *pthing = NULL; // Initialized for safety.
+                    CThing *pthing = nullptr; // Initialized for safety.
                     if (m_pRealm->m_idbank.GetThingByID(&pthing, m_idParent) == 0)
                     {
                         // Add in its position.
@@ -566,7 +566,7 @@ void CMine::Update(void)
                                               &sShotY,
                                               &sShotZ,
                                               &pShotThing);
-                            if (pShotThing != NULL)
+                            if (pShotThing != nullptr)
                             {
                                 msg.msg_Shot.eType = typeShot;
                                 msg.msg_Shot.sPriority = 0;
@@ -629,7 +629,7 @@ void CMine::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CMine::Render(void)
+void CMine::Render()
 {
     if (m_pImage)
     {
@@ -695,7 +695,7 @@ short CMine::Setup( // Returns 0 if successfull, non-zero otherwise
                SampleMaster::Weapon,                          // In:  user volume adjustment category
                DistanceToVolume(sX, sY, sZ, MineSndHalfLife), // Position
                &m_siMineBeep,                                 // Out: Handle to sound so it can be stopped
-               NULL,                                          // Out: Sample duration in ms
+               nullptr,                                          // Out: Sample duration in ms
                0,                                             // In:  Where to loop to
                -1,                                            // In:  Where to loop from
                                                               // In:  If less than 1, the end + lLoopEndTime is used.
@@ -713,11 +713,11 @@ short CMine::Setup( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CMine::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CMine::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
-    if (m_pImage == 0)
+    if (m_pImage == nullptr)
     {
         switch (m_id)
         {
@@ -757,7 +757,7 @@ short CMine::GetResources(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CMine::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CMine::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     rspReleaseResource(&g_resmgrGame, &m_pImage);
 
@@ -773,7 +773,7 @@ inline void SetText(  // Returns nothing.
   long lVal)          // In:  Value to set text to.
 {
     RGuiItem *pgui = pguiRoot->GetItemFromId(lId);
-    if (pgui != NULL)
+    if (pgui != nullptr)
     {
         pgui->SetText("%ld", lVal);
         pgui->Compose();
@@ -784,7 +784,7 @@ inline void SetText(  // Returns nothing.
 // Edit Modify
 ////////////////////////////////////////////////////////////////////////////////
 
-short CMine::EditModify(void)
+short CMine::EditModify()
 {
     short sResult = 0;
     RGuiItem *pGui = RGuiItem::LoadInstantiate(FullPathVD("res/editor/mine.gui"));

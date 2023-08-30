@@ -159,7 +159,7 @@
 #define BOUY_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "bouy.h"
 #include "navnet.h"
@@ -310,7 +310,7 @@ short CBouy::Save(  // Returns 0 if successfull, non-zero otherwise
     // Save the number of links that will follow in the file
     pFile->Write(&u16Data);
     CBouy *pLinkedBouy = m_aplDirectLinks.GetHead();
-    while (pLinkedBouy != NULL)
+    while (pLinkedBouy != nullptr)
     {
         u16Data = pLinkedBouy->GetInstanceID();
         pFile->Write(&u16Data);
@@ -331,7 +331,7 @@ short CBouy::Save(  // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CBouy::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CBouy::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -341,15 +341,15 @@ short CBouy::Startup(void) // Returns 0 if successfull, non-zero otherwise
     // Init other stuff
     // Get pointer to Navigation Net
     // If we don't have a pointer to the nav net yet, get it from the ID
-    if (m_pParentNavNet == NULL)
+    if (m_pParentNavNet == nullptr)
     {
         m_pRealm->m_idbank.GetThingByID((CThing **)&m_pParentNavNet, m_u16ParentInstanceID);
         // Re-register yourself with the network.
         m_pParentNavNet->AddBouy(this);
 
         linkinstanceid::Pointer i;
-        CBouy *pBouy = NULL;
-        for (i = m_LinkInstanceID.GetHead(); i != 0; i = m_LinkInstanceID.GetNext(i))
+        CBouy *pBouy = nullptr;
+        for (i = m_LinkInstanceID.GetHead(); i != nullptr; i = m_LinkInstanceID.GetNext(i))
         {
             m_pRealm->m_idbank.GetThingByID((CThing **)&pBouy, m_LinkInstanceID.GetData(i));
             // If its not already linked, then add it.
@@ -373,7 +373,7 @@ short CBouy::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CBouy::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CBouy::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -381,7 +381,7 @@ short CBouy::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CBouy::Suspend(void)
+void CBouy::Suspend()
 {
     m_sSuspend++;
 }
@@ -389,7 +389,7 @@ void CBouy::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CBouy::Resume(void)
+void CBouy::Resume()
 {
     m_sSuspend--;
 
@@ -401,7 +401,7 @@ void CBouy::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CBouy::Update(void) {}
+void CBouy::Update() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // AddLink - Add a 1 hop direct link to the routing table
@@ -423,7 +423,7 @@ short CBouy::AddLink(CBouy *pBouy)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CBouy::Render(void) {}
+void CBouy::Render() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to init new object at specified position
@@ -454,7 +454,7 @@ short CBouy::EditNew( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CBouy::EditModify(void)
+short CBouy::EditModify()
 {
     return 0;
 }
@@ -477,12 +477,12 @@ short CBouy::EditMove( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CBouy::EditUpdate(void) {}
+void CBouy::EditUpdate() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CBouy::EditRender(void)
+void CBouy::EditRender()
 {
     // No special flags
     if (ms_bShowBouys)
@@ -531,7 +531,7 @@ void CBouy::EditRect(RRect *pRect)
     pRect->sW = 10; // Safety.
     pRect->sH = 10; // Safety.
 
-    if (m_pImage != NULL)
+    if (m_pImage != nullptr)
     {
         pRect->sW = m_pImage->m_sWidth;
         pRect->sH = m_pImage->m_sHeight;
@@ -558,11 +558,11 @@ void CBouy::EditHotSpot( // Returns nothiing.
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CBouy::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CBouy::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
-    if (m_pImage == 0)
+    if (m_pImage == nullptr)
     {
         RImage *pimBouyRes;
         sResult = rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(IMAGE_FILE), &pimBouyRes);
@@ -570,7 +570,7 @@ short CBouy::GetResources(void) // Returns 0 if successfull, non-zero otherwise
         {
             // Allocate image . . .
             m_pImage = new RImage;
-            if (m_pImage != NULL)
+            if (m_pImage != nullptr)
             {
                 // Allocate image data . . .
                 if (m_pImage->CreateImage(pimBouyRes->m_sWidth, pimBouyRes->m_sHeight, RImage::BMP8) == 0)
@@ -580,7 +580,7 @@ short CBouy::GetResources(void) // Returns 0 if successfull, non-zero otherwise
                             m_pImage,   // Dst.
                             0,          // Dst.
                             0,          // Dst.
-                            NULL);      // Dst clip.
+                            nullptr);      // Dst clip.
 
                     // Put in ID.
                     RPrint print;
@@ -610,7 +610,7 @@ short CBouy::GetResources(void) // Returns 0 if successfull, non-zero otherwise
                 if (sResult != 0)
                 {
                     delete m_pImage;
-                    m_pImage = NULL;
+                    m_pImage = nullptr;
                 }
             }
             else
@@ -629,12 +629,12 @@ short CBouy::GetResources(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CBouy::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CBouy::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
-    if (m_pImage != NULL)
+    if (m_pImage != nullptr)
     {
         delete m_pImage;
-        m_pImage = NULL;
+        m_pImage = nullptr;
     }
 
     return 0;
@@ -645,7 +645,7 @@ short CBouy::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
 //				your own links.
 ////////////////////////////////////////////////////////////////////////////////
 
-void CBouy::Unlink(void)
+void CBouy::Unlink()
 {
     // Follow all of this bouy's direct links and unlink this bouy
     CBouy *pLinkedBouy = m_aplDirectLinks.GetHead();
@@ -670,17 +670,17 @@ void CBouy::Unlink(void)
 //							  routing table.
 ////////////////////////////////////////////////////////////////////////////////
 
-short CBouy::BuildRoutingTable(void)
+short CBouy::BuildRoutingTable()
 {
     short sResult = SUCCESS;
-    UCHAR *aVisited = NULL;
-    UCHAR *aDistance = NULL;
-    UCHAR *aParent = NULL;
-    UCHAR *pucCurrentNode = NULL;
-    UCHAR *pucAdjNode = NULL;
-    CBouy *pTraverseBouy = NULL;
+    UCHAR *aVisited = nullptr;
+    UCHAR *aDistance = nullptr;
+    UCHAR *aParent = nullptr;
+    UCHAR *pucCurrentNode = nullptr;
+    UCHAR *pucAdjNode = nullptr;
+    CBouy *pTraverseBouy = nullptr;
 
-    ASSERT(m_pParentNavNet != NULL);
+    ASSERT(m_pParentNavNet != nullptr);
     short sCurrentNumNodes = m_pParentNavNet->GetNumNodes();
     RQueue<UCHAR, 256> bfsQueue;
 
@@ -688,7 +688,7 @@ short CBouy::BuildRoutingTable(void)
     // reallocate it if there isn't enough.
     if (m_sRouteTableSize < sCurrentNumNodes)
     {
-        if (m_paucRouteTable != NULL)
+        if (m_paucRouteTable != nullptr)
             free(m_paucRouteTable);
         m_paucRouteTable = (UCHAR *)malloc(sCurrentNumNodes);
         m_sRouteTableSize = sCurrentNumNodes;
@@ -699,7 +699,7 @@ short CBouy::BuildRoutingTable(void)
     aDistance = (UCHAR *)malloc(sCurrentNumNodes);
     aParent = (UCHAR *)malloc(sCurrentNumNodes);
 
-    if (m_paucRouteTable != NULL && aVisited != NULL && aDistance != NULL && aParent != NULL)
+    if (m_paucRouteTable != nullptr && aVisited != nullptr && aDistance != nullptr && aParent != nullptr)
     {
         // Initialize the table to unreachable and initialize the
         // BSF data structures.

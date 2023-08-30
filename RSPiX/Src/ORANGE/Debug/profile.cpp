@@ -42,7 +42,7 @@
 // It currently uses Microseconds....
 //////////////////////////////////////////////////////////////////////////////
 
-#include <stdio.h>
+#include <cstdio>
 #include "profile.h"
 #include "ORANGE/str/str.h"
 

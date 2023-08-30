@@ -169,7 +169,7 @@ short CWeapon::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CWeapon::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CWeapon::Startup() // Returns 0 if successfull, non-zero otherwise
 {
 
     // Init other stuff
@@ -193,7 +193,7 @@ short CWeapon::Setup(short sX, short sY, short sZ)
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CWeapon::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CWeapon::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -201,7 +201,7 @@ short CWeapon::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CWeapon::Suspend(void)
+void CWeapon::Suspend()
 {
     m_sSuspend++;
 }
@@ -209,7 +209,7 @@ void CWeapon::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CWeapon::Resume(void)
+void CWeapon::Resume()
 {
     m_sSuspend--;
 
@@ -223,12 +223,12 @@ void CWeapon::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CWeapon::Update(void) {}
+void CWeapon::Update() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CWeapon::Render(void)
+void CWeapon::Render()
 {
     CSprite *pSprite = GetSprite();
 
@@ -297,7 +297,7 @@ short CWeapon::EditNew( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CWeapon::EditModify(void)
+short CWeapon::EditModify()
 {
     return 0;
 }
@@ -320,12 +320,12 @@ short CWeapon::EditMove( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CWeapon::EditUpdate(void) {}
+void CWeapon::EditUpdate() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CWeapon::EditRender(void)
+void CWeapon::EditRender()
 {
     // In some cases, object's might need to do a special-case render in edit
     // mode because Startup() isn't called.  In this case it doesn't matter, so
@@ -336,7 +336,7 @@ void CWeapon::EditRender(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CWeapon::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CWeapon::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -344,7 +344,7 @@ short CWeapon::GetResources(void) // Returns 0 if successfull, non-zero otherwis
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CWeapon::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CWeapon::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -365,7 +365,7 @@ double CWeapon::BounceAngle(double dRot)
 // ProcessMessage().
 // (virtual).
 ////////////////////////////////////////////////////////////////////////////////
-void CWeapon::ProcessMessages(void)
+void CWeapon::ProcessMessages()
 {
     // Check queue of messages.
     GameMessage msg;
@@ -460,12 +460,12 @@ void CWeapon::OnTriggerMsg(     // Returns nothing
 // PrepareShadow
 ////////////////////////////////////////////////////////////////////////////////
 
-short CWeapon::PrepareShadow(void)
+short CWeapon::PrepareShadow()
 {
     short sResult = SUCCESS;
 
     // If the shadow doesn't have resource loaded yet, load the default
-    if (m_spriteShadow.m_pImage == NULL)
+    if (m_spriteShadow.m_pImage == nullptr)
     {
         sResult = rspGetResource(&g_resmgrGame,
                                  m_pRealm->Make2dResPath(SHADOW_FILE),

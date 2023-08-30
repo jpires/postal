@@ -183,7 +183,7 @@
 #include "game.h"
 #include "realm.h"
 
-#include <string.h>
+#include <cstring>
 
 ////////////////////////////////////////////////////////////////////////////////
 // Macros/types/etc.
@@ -224,32 +224,32 @@ CHood::CHood(CRealm *pRealm)
   : CThing(pRealm, CHoodID)
 {
     // Initialize ptrs to resources.
-    m_pimBackground = NULL;
-    m_pTerrainMap = NULL;
-    m_pLayerMap = NULL;
+    m_pimBackground = nullptr;
+    m_pTerrainMap = nullptr;
+    m_pLayerMap = nullptr;
 
     short i;
     for (i = 0; i < MaxLayers; i++)
     {
-        m_apspryAlphas[i] = NULL;
-        m_apspryOpaques[i] = NULL;
+        m_apspryAlphas[i] = nullptr;
+        m_apspryOpaques[i] = nullptr;
     }
 
-    m_pimXRayMask = NULL;
-    m_pmaTransparency = NULL;
-    m_pltAmbient = NULL;
-    m_pltSpot = NULL;
+    m_pimXRayMask = nullptr;
+    m_pmaTransparency = nullptr;
+    m_pltAmbient = nullptr;
+    m_pltSpot = nullptr;
 
-    m_pimEmptyBar = NULL;
-    m_pimEmptyBarSelected = NULL;
-    m_pimFullBar = NULL;
-    m_pimFullBarSelected = NULL;
-    m_pimTopBar = NULL;
+    m_pimEmptyBar = nullptr;
+    m_pimEmptyBarSelected = nullptr;
+    m_pimFullBar = nullptr;
+    m_pimFullBarSelected = nullptr;
+    m_pimTopBar = nullptr;
 
-    m_pimNum = NULL;
-    m_pimNumLite = NULL;
-    m_pimNumLow = NULL;
-    m_pimNumGone = NULL;
+    m_pimNum = nullptr;
+    m_pimNumLite = nullptr;
+    m_pimNumLow = nullptr;
+    m_pimNumGone = nullptr;
 
     // Must flag resources as not yet existing
     m_bResourcesExist = false;
@@ -285,7 +285,7 @@ CHood::~CHood()
 {
     Kill();
     // Clear Realm's ptr.
-    m_pRealm->m_phood = NULL;
+    m_pRealm->m_phood = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -474,7 +474,7 @@ short CHood::Save(  // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CHood::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CHood::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -482,7 +482,7 @@ short CHood::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CHood::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CHood::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -490,22 +490,22 @@ short CHood::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CHood::Suspend(void) {}
+void CHood::Suspend() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CHood::Resume(void) {}
+void CHood::Resume() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CHood::Update(void) {}
+void CHood::Update() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CHood::Render(void) {}
+void CHood::Render() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // User callback on btn released within button.
@@ -595,7 +595,7 @@ short CHood::EditNew( // Returns 0 if successfull, non-zero otherwise
 
     // Load the GUI for editting.
     RGuiItem *pguiEdit = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_HD, GUI_FILE_NAME));
-    if (pguiEdit != NULL)
+    if (pguiEdit != nullptr)
     {
         // Get ptr to edit field . . .
         RGuiItem *pguiBaseName = pguiEdit->GetItemFromId(GUI_ID_BASENAME);
@@ -610,7 +610,7 @@ short CHood::EditNew( // Returns 0 if successfull, non-zero otherwise
         RGuiItem *pgui2dResPaths = pguiEdit->GetItemFromId(GUI_ID_2DRESPATHS);
         RGuiItem *pguiBrowse = pguiEdit->GetItemFromId(GUI_ID_BROWSE);
 
-        if (pguiBaseName != NULL)
+        if (pguiBaseName != nullptr)
         {
             // Set text to start with current base name.
             pguiBaseName->SetText("%s", m_acBaseName);
@@ -744,9 +744,9 @@ short CHood::EditNew( // Returns 0 if successfull, non-zero otherwise
                     }
                 }
 
-                if (pguiKillsPercentGoal != NULL)
+                if (pguiKillsPercentGoal != nullptr)
                 {
-                    m_pRealm->m_dKillsPercentGoal = strtod(pguiKillsPercentGoal->m_szText, NULL);
+                    m_pRealm->m_dKillsPercentGoal = strtod(pguiKillsPercentGoal->m_szText, nullptr);
                 }
 
                 // Init the hood
@@ -784,7 +784,7 @@ short CHood::EditNew( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CHood::EditModify(void)
+short CHood::EditModify()
 {
     return EditNew(0, 0, 0);
 }
@@ -803,17 +803,17 @@ short CHood::EditMove( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CHood::EditUpdate(void) {}
+void CHood::EditUpdate() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CHood::EditRender(void) {}
+void CHood::EditRender() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Init the hood
 ////////////////////////////////////////////////////////////////////////////////
-short CHood::Init(void) // Returns 0 if successfull, non-zero otherwise
+short CHood::Init() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -845,7 +845,7 @@ short CHood::Init(void) // Returns 0 if successfull, non-zero otherwise
             for (lIndex = 0; lIndex < MaxLayers; lIndex++)
             {
                 // If this layer exists . . .
-                if (m_apspryAlphas[lIndex] != NULL)
+                if (m_apspryAlphas[lIndex] != nullptr)
                 {
                     RSpry::ListOfSprites::Pointer p = m_apspryAlphas[lIndex]->m_listSprites.GetHead();
                     while (p)
@@ -867,7 +867,7 @@ short CHood::Init(void) // Returns 0 if successfull, non-zero otherwise
                 }
 
                 // If this layer exists . . .
-                if (m_apspryOpaques[lIndex] != NULL)
+                if (m_apspryOpaques[lIndex] != nullptr)
                 {
                     RSpry::ListOfSprites::Pointer p = m_apspryOpaques[lIndex]->m_listSprites.GetHead();
                     while (p)
@@ -923,7 +923,7 @@ short CHood::Init(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Setup pipeline to hood's specifications.
 ////////////////////////////////////////////////////////////////////////////////
-void CHood::SetupPipeline(void) // Returns nothing.
+void CHood::SetupPipeline() // Returns nothing.
 {
     // Some extra safety (to avoid crashing)
     if (m_dScale3d < 0.2)
@@ -947,7 +947,7 @@ void CHood::SetupPipeline(void) // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 // Kill the hood
 ////////////////////////////////////////////////////////////////////////////////
-short CHood::Kill(void) // Returns 0 if successfull, non-zero otherwise
+short CHood::Kill() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -999,7 +999,7 @@ extern int wideScreenWidth;
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CHood::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CHood::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -1201,7 +1201,7 @@ Error:
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CHood::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CHood::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -1210,43 +1210,43 @@ short CHood::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
     // those resources that were loaded.  The stuff being done here is safe
     // regardless of whether or not the resource was actually loaded.
 
-    if (m_pimBackground != NULL)
+    if (m_pimBackground != nullptr)
         rspReleaseResource(&(m_pRealm->m_resmgr), &m_pimBackground);
 
     long lIndex;
     for (lIndex = 0; lIndex < MaxLayers; lIndex++)
     {
-        if (m_apspryAlphas[lIndex] != NULL)
+        if (m_apspryAlphas[lIndex] != nullptr)
             rspReleaseResource(&(m_pRealm->m_resmgr), &(m_apspryAlphas[lIndex]));
 
-        if (m_apspryOpaques[lIndex] != NULL)
+        if (m_apspryOpaques[lIndex] != nullptr)
             rspReleaseResource(&(m_pRealm->m_resmgr), &(m_apspryOpaques[lIndex]));
     }
 
-    if (m_pTerrainMap != NULL)
+    if (m_pTerrainMap != nullptr)
     {
         rspReleaseResource(&(m_pRealm->m_resmgr), &m_pTerrainMap);
         // Clear Realm's map ptr
-        m_pRealm->m_pTerrainMap = NULL;
+        m_pRealm->m_pTerrainMap = nullptr;
     }
 
-    if (m_pLayerMap != NULL)
+    if (m_pLayerMap != nullptr)
     {
         rspReleaseResource(&(m_pRealm->m_resmgr), &m_pLayerMap);
         // Clear Realm's map ptr
-        m_pRealm->m_pLayerMap = NULL;
+        m_pRealm->m_pLayerMap = nullptr;
     }
 
-    if (m_pimXRayMask != NULL)
+    if (m_pimXRayMask != nullptr)
         rspReleaseResource(&(m_pRealm->m_resmgr), &m_pimXRayMask);
 
-    if (m_pmaTransparency != NULL)
+    if (m_pmaTransparency != nullptr)
         rspReleaseResource(&(m_pRealm->m_resmgr), &m_pmaTransparency);
 
-    if (m_pltAmbient != NULL)
+    if (m_pltAmbient != nullptr)
         rspReleaseResource(&(m_pRealm->m_resmgr), &m_pltAmbient);
 
-    if (m_pltSpot != NULL)
+    if (m_pltSpot != nullptr)
         rspReleaseResource(&(m_pRealm->m_resmgr), &m_pltSpot);
 
     if (m_pimEmptyBar)
@@ -1272,9 +1272,9 @@ short CHood::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Set the hood's palette.
 ////////////////////////////////////////////////////////////////////////////////
-void CHood::SetPalette(void) // Returns nothing.
+void CHood::SetPalette() // Returns nothing.
 {
-    ASSERT(m_pimBackground->m_pPalette != NULL);
+    ASSERT(m_pimBackground->m_pPalette != nullptr);
     ASSERT(m_pimBackground->m_pPalette->m_type == RPal::PDIB);
 
     rspSetPaletteEntries(0,                                     // 10,

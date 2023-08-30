@@ -203,8 +203,8 @@ extern short InputSettingsDlg_InitMenu( // Returns 0 on success.
 {
     short sRes = 0;                       // Assume success.
     short sInputIndex = 0;                // Safety.
-    U32 *pasPlayInputs = NULL;            // Input value array.
-    char **papszInputDescriptions = NULL; // Descriptions of input values.
+    U32 *pasPlayInputs = nullptr;            // Input value array.
+    char **papszInputDescriptions = nullptr; // Descriptions of input values.
     bool bIsJoystick = false;
 
     switch (pmenu->u32Id)
@@ -377,8 +377,8 @@ void InputSettingsDlg_Choice( // Returns nothing.
         {
             if (sMenuItem == ms_sResetItem || sMenuItem == ms_sResetItemOld)
             {
-                U32 *pasPlayInputs = NULL;            // Input value array.
-                char **papszInputDescriptions = NULL; // Descriptions of input values.
+                U32 *pasPlayInputs = nullptr;            // Input value array.
+                char **papszInputDescriptions = nullptr; // Descriptions of input values.
 
                 switch (pmenu->u32Id)
                 {
@@ -718,7 +718,7 @@ inline void ListenForInput( // Returns nothing.
 //////////////////////////////////////////////////////////////////////////////
 // Edit the input settings via menu.
 //////////////////////////////////////////////////////////////////////////////
-extern short EditInputSettings(void) // Returns nothing.
+extern short EditInputSettings() // Returns nothing.
 {
     short sRes = 0;              // Assume success.
     bool bDeleteKeybind = false; // If true, we want to delete the keybind we're on.

@@ -82,7 +82,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <ctype.h>
+#include <cctype>
 
 #include "RSPiX.h"
 #include "socket.h"
@@ -117,7 +117,7 @@ RSocket::ProtoType RSocket::RProtocol::ms_prototype = RSocket::NO_PROTOCOL;
 ////////////////////////////////////////////////////////////////////////////////
 RSocket::RSocket()
 {
-    m_pProtocol = 0;
+    m_pProtocol = nullptr;
 
     // Update number of sockets
     ms_sNumSockets++;
@@ -141,7 +141,7 @@ RSocket::~RSocket()
 ////////////////////////////////////////////////////////////////////////////////
 // Reset socket to its post-construction state
 ////////////////////////////////////////////////////////////////////////////////
-void RSocket::Reset(void)
+void RSocket::Reset()
 {
     // Force it to close now
     Close(true);
@@ -149,7 +149,7 @@ void RSocket::Reset(void)
     // If close failed, we're going to delete protocol anyway as part of reset
     delete m_pProtocol;
 
-    m_pProtocol = NULL;
+    m_pProtocol = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -172,7 +172,7 @@ short RSocket::Open(                // Returns 0 on success, non-zero otherwise
     if (ms_bDidStartup)
     {
         // Make sure socket isn't already open
-        if (m_pProtocol == NULL)
+        if (m_pProtocol == nullptr)
         {
             // Note that we create the protocol object here instead of when this
             // socket was itself constructed.  This is preferable because users might
@@ -182,7 +182,7 @@ short RSocket::Open(                // Returns 0 on success, non-zero otherwise
             // creation of the protocol to this point, we allow for the use of static
             // RSocket objects.
             m_pProtocol = ConstructProtocol(ms_prototype);
-            if (m_pProtocol != NULL)
+            if (m_pProtocol != nullptr)
             {
                 sResult = m_pProtocol->Open(usPort, sType, sOptionFlags, callback);
             }
@@ -196,7 +196,7 @@ short RSocket::Open(                // Returns 0 on success, non-zero otherwise
             if (sResult != 0)
             {
                 delete m_pProtocol;
-                m_pProtocol = 0;
+                m_pProtocol = nullptr;
             }
         }
         else
@@ -222,7 +222,7 @@ short RSocket::Close(         // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
-    if (m_pProtocol != NULL)
+    if (m_pProtocol != nullptr)
     {
         // Close socket
         sResult = m_pProtocol->Close(bForceNow);
@@ -230,7 +230,7 @@ short RSocket::Close(         // Returns 0 if successfull, non-zero otherwise
         {
             // Get rid of protocol
             delete m_pProtocol;
-            m_pProtocol = NULL;
+            m_pProtocol = nullptr;
         }
     }
 
@@ -250,14 +250,14 @@ short RSocket::Accept(                    // Return 0 if successfull, non-zero o
 {
     short sResult = FAILURE;
 
-    if (m_pProtocol != NULL)
+    if (m_pProtocol != nullptr)
     {
         // Make sure client doesn't already have a protocol
-        if (psocketClient->m_pProtocol == 0)
+        if (psocketClient->m_pProtocol == nullptr)
         {
             // Create protocol
             psocketClient->m_pProtocol = ConstructProtocol(ms_prototype);
-            if (psocketClient->m_pProtocol != NULL)
+            if (psocketClient->m_pProtocol != nullptr)
             {
                 sResult = m_pProtocol->Accept(psocketClient->m_pProtocol, paddressClient);
 
@@ -266,7 +266,7 @@ short RSocket::Accept(                    // Return 0 if successfull, non-zero o
                 {
                     // Get rid of protocol
                     delete psocketClient->m_pProtocol;
-                    psocketClient->m_pProtocol = 0;
+                    psocketClient->m_pProtocol = nullptr;
                 }
             }
             else
@@ -295,11 +295,11 @@ short RSocket::Accept(                    // Return 0 if successfull, non-zero o
 //
 // Most protocols only allow broadcasting on a datagram-style socket.
 ////////////////////////////////////////////////////////////////////////////////
-short RSocket::Broadcast(void) // Returns 0 if successfull, non-zero otherwise
+short RSocket::Broadcast() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = FAILURE;
 
-    if (m_pProtocol != NULL)
+    if (m_pProtocol != nullptr)
         sResult = m_pProtocol->Broadcast();
     else
     {
@@ -317,7 +317,7 @@ short RSocket::Listen(short sMaxQueued)
 {
     short sResult = FAILURE;
 
-    if (m_pProtocol != NULL)
+    if (m_pProtocol != nullptr)
         sResult = m_pProtocol->Listen(sMaxQueued);
     else
     {
@@ -335,7 +335,7 @@ short RSocket::Connect(RSocket::Address *paddress)
 {
     short sResult = 0;
 
-    if (m_pProtocol != NULL)
+    if (m_pProtocol != nullptr)
         sResult = m_pProtocol->Connect(paddress);
     else
     {
@@ -356,7 +356,7 @@ short RSocket::Send(   // Return 0 on success, non-zero otherwise
 {
     short sResult = FAILURE;
 
-    if (m_pProtocol != NULL)
+    if (m_pProtocol != nullptr)
         sResult = m_pProtocol->Send(pBuf, lNumBytes, plActualBytes);
     else
     {
@@ -379,7 +379,7 @@ short RSocket::SendTo(        // Return 0 on success, non-zero otherwise
 {
     short sResult = FAILURE;
 
-    if (m_pProtocol != NULL)
+    if (m_pProtocol != nullptr)
         sResult = m_pProtocol->SendTo(pBuf, lNumBytes, plActualBytes, paddress);
     else
     {
@@ -416,7 +416,7 @@ short RSocket::Receive( // Returns 0 on success, non-zero otherwise
 {
     short sResult = FAILURE;
 
-    if (m_pProtocol != NULL)
+    if (m_pProtocol != nullptr)
         sResult = m_pProtocol->Receive(pBuf, lMaxBytes, plActualBytes);
     else
     {
@@ -438,7 +438,7 @@ short RSocket::ReceiveFrom(   // Returns 0 on success, non-zero otherwise
 {
     short sResult = FAILURE;
 
-    if (m_pProtocol != NULL)
+    if (m_pProtocol != nullptr)
         sResult = m_pProtocol->ReceiveFrom(pBuf, lMaxBytes, plActualBytes, paddress);
     else
     {
@@ -455,11 +455,11 @@ short RSocket::ReceiveFrom(   // Returns 0 on success, non-zero otherwise
 // streams, this returns the total amount of data that can be read with a
 // single receive which is normally equal to the total amount of queued data.
 ////////////////////////////////////////////////////////////////////////////////
-long RSocket::CheckReceivableBytes(void)
+long RSocket::CheckReceivableBytes()
 {
     long lResult = 0;
 
-    if (m_pProtocol != NULL)
+    if (m_pProtocol != nullptr)
         lResult = m_pProtocol->CheckReceivableBytes();
 
     return lResult;
@@ -468,11 +468,11 @@ long RSocket::CheckReceivableBytes(void)
 ////////////////////////////////////////////////////////////////////////////////
 // CanAcceptWithoutBlocking
 ////////////////////////////////////////////////////////////////////////////////
-bool RSocket::CanAcceptWithoutBlocking(void)
+bool RSocket::CanAcceptWithoutBlocking()
 {
     bool bNoBlock = false;
 
-    if (m_pProtocol != NULL)
+    if (m_pProtocol != nullptr)
         bNoBlock = m_pProtocol->CanAcceptWithoutBlocking();
 
     return bNoBlock;
@@ -481,11 +481,11 @@ bool RSocket::CanAcceptWithoutBlocking(void)
 ////////////////////////////////////////////////////////////////////////////////
 // CanSendWithoutBlocking
 ////////////////////////////////////////////////////////////////////////////////
-bool RSocket::CanSendWithoutBlocking(void)
+bool RSocket::CanSendWithoutBlocking()
 {
     bool bNoBlock = false;
 
-    if (m_pProtocol != NULL)
+    if (m_pProtocol != nullptr)
         bNoBlock = m_pProtocol->CanSendWithoutBlocking();
 
     return bNoBlock;
@@ -494,11 +494,11 @@ bool RSocket::CanSendWithoutBlocking(void)
 ////////////////////////////////////////////////////////////////////////////////
 // CanReceiveWithoutBlocking
 ////////////////////////////////////////////////////////////////////////////////
-bool RSocket::CanReceiveWithoutBlocking(void)
+bool RSocket::CanReceiveWithoutBlocking()
 {
     bool bNoBlock = false;
 
-    if (m_pProtocol != NULL)
+    if (m_pProtocol != nullptr)
         bNoBlock = m_pProtocol->CanReceiveWithoutBlocking();
 
     return bNoBlock;
@@ -508,11 +508,11 @@ bool RSocket::CanReceiveWithoutBlocking(void)
 // Check socket's error status.  If the socket is not open, then the return
 // value will be false (no error)
 ////////////////////////////////////////////////////////////////////////////////
-bool RSocket::IsError(void)
+bool RSocket::IsError()
 {
     bool bResult = false;
 
-    if (m_pProtocol != NULL)
+    if (m_pProtocol != nullptr)
         bResult = m_pProtocol->IsError();
 
     return bResult;
@@ -577,7 +577,7 @@ short RSocket::Startup(         // Returns 0 if successfull, non-zero otherwise
 // Shutdown
 ////////////////////////////////////////////////////////////////////////////////
 // static
-void RSocket::Shutdown(void)
+void RSocket::Shutdown()
 {
     switch (ms_prototype)
     {
@@ -699,7 +699,7 @@ short RSocket::GetAddress(    // Returns 0 on success, non-zero otherwise
     }
 
     // Make sure we don't accidently use this pointer -- must use azName instead!
-    pszName = 0;
+    pszName = nullptr;
 
     // If the name is ready, try to get the address
     if (sResult == 0)
@@ -796,7 +796,7 @@ void RSocket::SetAddressPort(USHORT usPort,              // In:  New port number
 RSocket::RProtocol *RSocket::ConstructProtocol( // Returns pointer to prototype if successfull, 0 otherwise
   RSocket::ProtoType prototype)                 // In:  Protocol type to create
 {
-    RProtocol *pprotocol = 0;
+    RProtocol *pprotocol = nullptr;
 
     switch (prototype)
     {

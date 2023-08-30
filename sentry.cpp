@@ -154,27 +154,27 @@ short CSentry::ms_sFileCount;
 static char *ms_apszShootResNames[] = { "3d/sentry_shoot.sop",       "3d/sentry_shoot.mesh",
                                         "3d/sentry_shoot.tex",       "3d/sentry_shoot.hot",
                                         "3d/sentry_shoot.bounds",    "3d/sentry_shoot.floor",
-                                        "3d/sentry_shoot_tip.trans", NULL };
+                                        "3d/sentry_shoot_tip.trans", nullptr };
 
 static char *ms_apszStandResNames[] = { "3d/sentry_still.sop",       "3d/sentry_still.mesh",
                                         "3d/sentry_still.tex",       "3d/sentry_still.hot",
                                         "3d/sentry_still.bounds",    "3d/sentry_still.floor",
-                                        "3d/sentry_still_tip.trans", NULL };
+                                        "3d/sentry_still_tip.trans", nullptr };
 
 static char *ms_apszDieResNames[] = { "3d/sentry_damaged.sop",       "3d/sentry_damaged.mesh",
                                       "3d/sentry_damaged.tex",       "3d/sentry_damaged.hot",
                                       "3d/sentry_damaged.bounds",    "3d/sentry_damaged.floor",
-                                      "3d/sentry_damaged_tip.trans", NULL };
+                                      "3d/sentry_damaged_tip.trans", nullptr };
 
 static char *ms_apszBaseStandResNames[] = { "3d/stand_still.sop",         "3d/stand_still.mesh",
                                             "3d/stand_still.tex",         "3d/stand_still.hot",
                                             "3d/stand_still.bounds",      "3d/stand_still.floor",
-                                            "3d/stand_still_stand.trans", NULL };
+                                            "3d/stand_still_stand.trans", nullptr };
 
 static char *ms_apszBaseDieResNames[] = { "3d/stand_damaged.sop",         "3d/stand_damaged.mesh",
                                           "3d/stand_damaged.tex",         "3d/stand_damaged.hot",
                                           "3d/stand_damaged.bounds",      "3d/stand_damaged.floor",
-                                          "3d/stand_damaged_stand.trans", NULL };
+                                          "3d/stand_damaged_stand.trans", nullptr };
 
 // These are the points that are checked on the attribute map relative to his origin
 static RP3d ms_apt3dAttribCheck[] = {
@@ -323,7 +323,7 @@ short CSentry::Save( // Returns 0 if successfull, non-zero otherwise
 // Render - Override to skip over CDoofus::Render right to CCharacter::Render
 ////////////////////////////////////////////////////////////////////////////////
 
-void CSentry::Render(void)
+void CSentry::Render()
 {
 
     // Do our own render of the stationary base
@@ -360,7 +360,7 @@ void CSentry::Render(void)
         m_spriteBase.m_ptrans = &m_transBase;
     }
 
-    ASSERT(m_panimCurBase != NULL);
+    ASSERT(m_panimCurBase != nullptr);
 
     m_spriteBase.m_pmesh = (RMesh *)m_panimCurBase->m_pmeshes->GetAtTime(m_lAnimTime);
     m_spriteBase.m_psop = (RSop *)m_panimCurBase->m_psops->GetAtTime(m_lAnimTime);
@@ -381,7 +381,7 @@ void CSentry::Render(void)
 // Init - Call this after the resources are in place
 ////////////////////////////////////////////////////////////////////////////////
 
-short CSentry::Init(void)
+short CSentry::Init()
 {
     short sResult = 0;
 
@@ -431,14 +431,14 @@ short CSentry::Init(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Position the base and turret based on m_dX, Y, & Z.
 ////////////////////////////////////////////////////////////////////////////////
-void CSentry::UpdatePosition(void)
+void CSentry::UpdatePosition()
 {
     // Move Base and Turret into position
     m_dXBase = m_dX;
     m_dYBase = m_dY;
     m_dZBase = m_dZ;
 
-    if (m_panimCurBase != NULL)
+    if (m_panimCurBase != nullptr)
     {
         // Below was copied from DetachChild in Thing3d
 
@@ -464,7 +464,7 @@ void CSentry::UpdatePosition(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CSentry::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CSentry::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -480,7 +480,7 @@ short CSentry::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CSentry::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CSentry::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -493,7 +493,7 @@ short CSentry::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CSentry::Suspend(void)
+void CSentry::Suspend()
 {
     // Call base class suspend, and add anything else here if necessary
     CDoofus::Suspend();
@@ -502,7 +502,7 @@ void CSentry::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CSentry::Resume(void)
+void CSentry::Resume()
 {
     // Call the base class resume and add anything else you suspended
     CDoofus::Resume();
@@ -511,7 +511,7 @@ void CSentry::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CSentry::Update(void)
+void CSentry::Update()
 {
     short sHeight = m_sPrevHeight;
     long lThisTime;
@@ -601,7 +601,7 @@ void CSentry::Update(void)
                         m_panimCur = &m_animShoot;
                         m_lAnimTime += lTimeDifference;
                         CWeapon *pweapon = PrepareWeapon();
-                        if (pweapon != NULL)
+                        if (pweapon != nullptr)
                             pweapon->SetRangeToTarget(rspSqrt(lSqDistanceToDude));
                         ShootWeapon(ms_u32WeaponIncludeBits, ms_u32WeaponDontcareBits, ms_u32WeaponExcludeBits);
                         m_sNumRounds--;
@@ -775,10 +775,10 @@ void CSentry::EditHotSpot( // Returns nothiing.
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CSentry::EditModify(void)
+short CSentry::EditModify()
 {
     short sResult = 0;
-    RGuiItem *pGuiItem = NULL;
+    RGuiItem *pGuiItem = nullptr;
     RGuiItem *pGui = RGuiItem::LoadInstantiate(FullPathVD("res/editor/sentry.gui"));
     if (pGui)
     {
@@ -814,7 +814,7 @@ short CSentry::EditModify(void)
                     (i != TimedMine) && (i != RemoteControlMine) && (i != BouncingBettyMine))
                 {
                     pGuiItem = pWeaponList->AddString(ms_awdWeapons[i].pszName);
-                    if (pGuiItem != NULL)
+                    if (pGuiItem != nullptr)
                     {
                         // Store class ID so we can determine user selection
                         pGuiItem->m_lId = ms_awdWeapons[i].id;
@@ -880,7 +880,7 @@ short CSentry::EditModify(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CSentry::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CSentry::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -932,7 +932,7 @@ short CSentry::GetResources(void) // Returns 0 if successfull, non-zero otherwis
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CSentry::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CSentry::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     m_animShoot.Release();
     m_animStand.Release();

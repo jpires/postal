@@ -282,7 +282,7 @@ CInputSettings g_InputSettings;
 INPUT_MODE m_mode;
 
 // Buffer-related stuff
-U32 *m_pBuf = 0;    // Pointer to buffer. Must be a U32 to maintain demo compatibility!
+U32 *m_pBuf = nullptr;    // Pointer to buffer. Must be a U32 to maintain demo compatibility!
 long m_lBufIndex;   // Current index into buffer
 long m_lBufEntries; // Total entries in buffer
 
@@ -1091,7 +1091,7 @@ extern void SetInputMode(INPUT_MODE mode) // In:  Input mode
 // Get current input mode
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern INPUT_MODE GetInputMode(void) // Returns current mode
+extern INPUT_MODE GetInputMode() // Returns current mode
 {
     return m_mode;
 }
@@ -1101,7 +1101,7 @@ extern INPUT_MODE GetInputMode(void) // Returns current mode
 // Init demo mode.  Must be called before setting playback or record modes.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern short InputDemoInit(void)
+extern short InputDemoInit()
 {
     short sResult = 0;
 
@@ -1110,10 +1110,10 @@ extern short InputDemoInit(void)
     m_lBufEntries = 0;
 
     // Allocate buffer
-    if (m_pBuf == 0)
+    if (m_pBuf == nullptr)
     {
         m_pBuf = new U32[BUF_MAX_ENTRIES];
-        if (m_pBuf == 0)
+        if (m_pBuf == nullptr)
         {
             sResult = -1;
             TRACE("InputDemoInit(): Error allocating buffer!\n");
@@ -1129,11 +1129,11 @@ extern short InputDemoInit(void)
 // to call even if it wasn't.)
 //
 ////////////////////////////////////////////////////////////////////////////////
-void InputDemoKill(void)
+void InputDemoKill()
 {
     // Delete buffer
     delete[] m_pBuf;
-    m_pBuf = 0;
+    m_pBuf = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1230,7 +1230,7 @@ extern short InputDemoSave( // Returns 0 if successfull, non-zero otherwise
 // positions the mouse, if mouse input is active.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void ClearLocalInput(void)
+extern void ClearLocalInput()
 {
     // Reset last local input to nothing.
     ms_inputLastLocal = INPUT_IDLE;
@@ -1325,7 +1325,7 @@ static void FindCheatCombos( // Returns nothing.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-extern bool InputIsDemoOver(void)
+extern bool InputIsDemoOver()
 {
     bool bOver = true;
 

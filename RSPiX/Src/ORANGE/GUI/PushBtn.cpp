@@ -117,7 +117,7 @@ RPushBtn::~RPushBtn() {}
 void RPushBtn::Compose(   // Returns nothing.
   RImage *pim /*= NULL*/) // Dest image, uses m_im if NULL.
 {
-    if (pim == NULL)
+    if (pim == nullptr)
     {
         pim = &m_im;
     }
@@ -225,7 +225,7 @@ void RPushBtn::DrawBorder(   // Returns nothing.
     short sEdgeThickness = m_sBorderThickness;
     short sHighlightThickness = m_sBorderThickness;
 
-    if (pim == NULL)
+    if (pim == nullptr)
     {
         pim = &m_im;
     }
@@ -291,7 +291,7 @@ void RPushBtn::DrawBorder(   // Returns nothing.
 // (virtual	(Overridden here)).
 //
 //////////////////////////////////////////////////////////////////////////////
-short RPushBtn::GetTopLeftBorderThickness(void) // Returns border thickness
+short RPushBtn::GetTopLeftBorderThickness() // Returns border thickness
                                                 // including edge effect.
 {
     if (m_sBorderThickness == 0)
@@ -307,7 +307,7 @@ short RPushBtn::GetTopLeftBorderThickness(void) // Returns border thickness
 // (virtual	(Overridden here)).
 //
 //////////////////////////////////////////////////////////////////////////////
-short RPushBtn::GetBottomRightBorderThickness(void) // Returns border thickness
+short RPushBtn::GetBottomRightBorderThickness() // Returns border thickness
                                                     // including edge effect.
 {
     if (m_sBorderThickness == 0)

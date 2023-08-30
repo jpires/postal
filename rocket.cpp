@@ -178,7 +178,7 @@
 #define ROCKET_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "rocket.h"
 #include "dude.h"
@@ -216,8 +216,8 @@ static char *ms_apszResNames[] = { "3d/missile.sop",
                                    "3d/missile.hot",
                                    "3d/missile.bounds",
                                    "3d/missile.floor",
-                                   NULL,
-                                   NULL };
+                                   nullptr,
+                                   nullptr };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load object (should call base class version!)
@@ -304,7 +304,7 @@ short CRocket::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CRocket::Update(void)
+void CRocket::Update()
 {
     USHORT usAttrib;
     short sHeight;
@@ -352,7 +352,7 @@ void CRocket::Update(void)
                   SampleMaster::Weapon, // In:  Sound Volume Category for user adjustment
                   DistanceToVolume(m_dX, m_dY, m_dZ, LaunchSndHalfLife), // In:  Initial Sound Volume (0 - 255)
                   &m_siThrust,                                           // Out: Handle for adjusting sound volume
-                  NULL,                                                  // Out: Sample duration in ms, if not NULL.
+                  nullptr,                                                  // Out: Sample duration in ms, if not NULL.
                   2841,                                                  // In:  Where to loop back to in milliseconds.
                                                                          //	-1 indicates no looping (unless m_sLoop is
                                                                          // explicitly set).
@@ -410,9 +410,9 @@ void CRocket::Update(void)
                       (short)dNewX,         // In:  Destination X.
                       (short)dNewZ,         // In:  Destination Z.
                       0,                    // In:  Max traverser can step up.
-                      NULL,                 // Out: If not NULL, last clear point on path.
-                      NULL,                 // Out: If not NULL, last clear point on path.
-                      NULL,                 // Out: If not NULL, last clear point on path.
+                      nullptr,                 // Out: If not NULL, last clear point on path.
+                      nullptr,                 // Out: If not NULL, last clear point on path.
+                      nullptr,                 // Out: If not NULL, last clear point on path.
                       false))               // In:  If true, will consider the edge of the realm a path
                                             // inhibitor.  If false, reaching the edge of the realm
                                             // indicates a clear path.
@@ -438,7 +438,7 @@ void CRocket::Update(void)
                 // the weapon yet.
                 if (m_bArmed)
                 {
-                    CSmash *pSmashed = NULL;
+                    CSmash *pSmashed = nullptr;
                     m_pRealm->m_smashatorium.QuickCheckReset(&m_smash,
                                                              m_u32CollideIncludeBits,
                                                              m_u32CollideDontcareBits,
@@ -491,7 +491,7 @@ void CRocket::Update(void)
                 else
                 {
                     // Check for collision with self and if no collision, then arm
-                    CThing *pShooter = NULL;
+                    CThing *pShooter = nullptr;
                     m_pRealm->m_idbank.GetThingByID(&pShooter, m_u16ShooterID);
                     // If the shooter is valid, then arm when it clears the shooter
                     if (pShooter)
@@ -521,7 +521,7 @@ void CRocket::Update(void)
                 if (lThisTime > m_lSmokeTimer)
                 {
                     m_lSmokeTimer = lThisTime + ms_lSmokeTrailInterval;
-                    CFire *pSmoke = NULL;
+                    CFire *pSmoke = nullptr;
                     if (CThing::Construct(CThing::CFireID, m_pRealm, (CThing **)&pSmoke) == 0)
                     {
                         // This needs to be fixed by calculating the position of the back end of
@@ -543,7 +543,7 @@ void CRocket::Update(void)
 
                 m_bArmed = true;
                 {
-                    CSmash *pSmashed = NULL;
+                    CSmash *pSmashed = nullptr;
                     if (m_pRealm->m_smashatorium.QuickCheck(&m_smash,
                                                             m_u32CollideIncludeBits,
                                                             m_u32CollideDontcareBits,
@@ -556,7 +556,7 @@ void CRocket::Update(void)
                 if (lThisTime > m_lSmokeTimer)
                 {
                     m_lSmokeTimer = lThisTime + ms_lSmokeTrailInterval;
-                    CFire *pSmoke = NULL;
+                    CFire *pSmoke = nullptr;
                     if (CThing::Construct(CThing::CFireID, m_pRealm, (CThing **)&pSmoke) == 0)
                     {
                         // This needs to be fixed by calculating the position of the back end of
@@ -630,7 +630,7 @@ void CRocket::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CRocket::Render(void)
+void CRocket::Render()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
 
@@ -723,7 +723,7 @@ short CRocket::Setup( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CRocket::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CRocket::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -754,7 +754,7 @@ short CRocket::GetResources(void) // Returns 0 if successfull, non-zero otherwis
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CRocket::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CRocket::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     m_anim.Release();
 
@@ -784,7 +784,7 @@ short CRocket::Preload(CRealm *prealm) // In:  Calling realm.
 // ProcessMessages
 ////////////////////////////////////////////////////////////////////////////////
 
-void CRocket::ProcessMessages(void)
+void CRocket::ProcessMessages()
 {
     GameMessage msg;
 

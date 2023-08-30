@@ -299,7 +299,7 @@ static short GuiGetRes( // Returns 0 on success; non-zero on failure.
     if (rspGetResource(&g_resmgrShell, szFile, &pgui->m_pimBkdRes) == 0)
     {
         // Set palette via resource.
-        ASSERT(pgui->m_pimBkdRes->m_pPalette != NULL);
+        ASSERT(pgui->m_pimBkdRes->m_pPalette != nullptr);
         ASSERT(pgui->m_pimBkdRes->m_pPalette->m_type == RPal::PDIB);
 
         rspSetPaletteEntries(0,
@@ -361,7 +361,7 @@ static long SysUpdate( // Returns a non-zero ID to abort or zero
 // ScoreInit - Set up the RPrint for the score
 //////////////////////////////////////////////////////////////////////////////
 
-void ScoreInit(void)
+void ScoreInit()
 {
     // Setup print.
     ms_print.SetFont(STATUS_FONT_SIZE, &g_fontBig);
@@ -379,7 +379,7 @@ void ScoreInit(void)
 // ScoreReset - Reset the scores and the display time
 //////////////////////////////////////////////////////////////////////////////
 
-void ScoreReset(void)
+void ScoreReset()
 {
     g_scoreboard.Reset();
 }
@@ -389,7 +389,7 @@ void ScoreReset(void)
 //							  of each realm
 //////////////////////////////////////////////////////////////////////////////
 
-void ScoreResetDisplay(void)
+void ScoreResetDisplay()
 {
     g_scoreboard.m_lLastStatusDrawTime = 0;
     g_scoreboard.m_lLastScoreDrawTime = 0;
@@ -401,7 +401,7 @@ void ScoreResetDisplay(void)
 
 void ScoreRegisterKill(CRealm *pRealm, U16 u16DeadGuy, U16 u16Killer)
 {
-    CThing *pShooter = NULL;
+    CThing *pShooter = nullptr;
     pRealm->m_idbank.GetThingByID(&pShooter, u16Killer);
     if (pShooter && pShooter->GetClassID() == CThing::CDudeID)
     {
@@ -1125,7 +1125,7 @@ void ScoreDisplayHighScores( // Returns nothing.
             RListBox *plbScores = (RListBox *)pguiRoot->GetItemFromId(1000);
 
             // Set to the input field if the player gets a high score.
-            RGuiItem *pguiPlayersName = NULL;
+            RGuiItem *pguiPlayersName = nullptr;
 
             // Create and add all score items.
             short sScoreIndex;
@@ -1243,7 +1243,7 @@ void ScoreDisplayHighScores( // Returns nothing.
                 }
             }
 
-            if (ptextExplain1 != NULL && ptextExplain2 != NULL && plbScores != NULL && bGotAllScoreItems == true)
+            if (ptextExplain1 != nullptr && ptextExplain2 != nullptr && plbScores != nullptr && bGotAllScoreItems == true)
             {
                 // Get some colors free.
                 PalTranOn();
@@ -1295,7 +1295,7 @@ void ScoreDisplayHighScores( // Returns nothing.
                     // Do the dialog once to get the name.
                     guiDialog.DoModal(pguiRoot, pguiOk, pguiCancel);
                     // Clear the focus.
-                    RGuiItem::SetFocus(NULL);
+                    RGuiItem::SetFocus(nullptr);
 
                     ASSERT(pguiPlayersName);
                     // Get the user's name for saving.

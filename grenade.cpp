@@ -158,7 +158,7 @@
 #define GRENADE_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "grenade.h"
 #include "dude.h"
@@ -307,7 +307,7 @@ short CGrenade::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CGrenade::Update(void)
+void CGrenade::Update()
 {
     USHORT usAttrib;
     short sHeight = m_sPrevHeight;
@@ -568,7 +568,7 @@ void CGrenade::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CGrenade::Render(void)
+void CGrenade::Render()
 {
     // Animate.
     long lCurTime = m_pRealm->m_time.GetGameTime();
@@ -658,11 +658,11 @@ short CGrenade::Setup(									// Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CGrenade::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CGrenade::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
-    sResult = m_anim.Get(ms_apszResNames[m_style], NULL, NULL, NULL, RChannel_LoopAtStart | RChannel_LoopAtEnd);
+    sResult = m_anim.Get(ms_apszResNames[m_style], nullptr, nullptr, nullptr, RChannel_LoopAtStart | RChannel_LoopAtEnd);
     if (sResult == 0)
     {
         sResult = rspGetResource(&g_resmgrGame,
@@ -689,7 +689,7 @@ short CGrenade::GetResources(void) // Returns 0 if successfull, non-zero otherwi
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CGrenade::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CGrenade::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -715,7 +715,7 @@ short CGrenade::Preload(CRealm *prealm) // In:  Calling realm.
     short sStyle;
     for (sStyle = 0; sStyle < NumStyles; sStyle++)
     {
-        if (anim.Get(ms_apszResNames[sStyle], NULL, NULL, NULL, RChannel_LoopAtStart | RChannel_LoopAtEnd) == 0)
+        if (anim.Get(ms_apszResNames[sStyle], nullptr, nullptr, nullptr, RChannel_LoopAtStart | RChannel_LoopAtEnd) == 0)
         {
             anim.Release();
         }
@@ -737,7 +737,7 @@ short CGrenade::Preload(CRealm *prealm) // In:  Calling realm.
 // ProcessMessages
 ////////////////////////////////////////////////////////////////////////////////
 
-void CGrenade::ProcessMessages(void)
+void CGrenade::ProcessMessages()
 {
     GameMessage msg;
 
@@ -761,7 +761,7 @@ void CGrenade::ProcessMessages(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Smoke, if correct time.
 ////////////////////////////////////////////////////////////////////////////////
-void CGrenade::Smoke(void)
+void CGrenade::Smoke()
 {
     if (m_style == Dynamite)
     {

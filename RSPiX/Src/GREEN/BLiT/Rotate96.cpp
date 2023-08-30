@@ -1026,7 +1026,7 @@ short rspStrafeRotate(void *pReturnArray, // Output
     short sDstH = (sSrcH * dScale);  // used for making a copy
 
     // Make a copy of the input links so they can be center adjusted
-    short *psLinkX = NULL, *psLinkY = NULL;
+    short *psLinkX = nullptr, *psLinkY = nullptr;
     short j;
 
     if (sNumLinks > 0)
@@ -1074,8 +1074,8 @@ short rspStrafeRotate(void *pReturnArray, // Output
         *(pHotY.pL) = rspSQRT2 / 4. * sDstH - sY;
 
         // Dpo the links, if any:
-        *(ppLinkX.ppL) = NULL;
-        *(ppLinkY.ppL) = NULL;
+        *(ppLinkX.ppL) = nullptr;
+        *(ppLinkY.ppL) = nullptr;
 
         if (sNumLinks > 0)
         {

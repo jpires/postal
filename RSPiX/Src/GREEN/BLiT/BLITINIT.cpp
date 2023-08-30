@@ -100,7 +100,7 @@ extern short DeleteFSPR1(RImage *pImage);
 void LinkImage();
 void LinkImage()
 {
-    RImage *pim = NULL;
+    RImage *pim = nullptr;
     ConvertFromFSPR8(pim);
     ConvertToFSPR8(pim);
     DeleteFSPR8(pim);
@@ -156,9 +156,9 @@ RInitBLiT::~RInitBLiT()
     //	TRACE("BLiT has deceased\n");
 }
 
-RImage *RInitBLiT::pimScreenBuffer = NULL;
-RImage *RInitBLiT::pimScreenVisible = NULL;
-RImage *RInitBLiT::pimScreenBackPlane = NULL;
+RImage *RInitBLiT::pimScreenBuffer = nullptr;
+RImage *RInitBLiT::pimScreenVisible = nullptr;
+RImage *RInitBLiT::pimScreenBackPlane = nullptr;
 
 // this function is a way to refer to buffers in the new BLiT:
 // Note that a dib buffer MUST return a negative pitch!
@@ -167,9 +167,9 @@ void rspNameBuffers(RImage **ppimMemBuf, RImage **ppimVidBuf, RImage **ppimBackB
 {
     // Set aliases to the buffers and get the most current values possible.
     short sVidW, sVidH, sVidD, sMemW, sMemH;
-    rspGetVideoMode(&sVidD, &sVidW, &sVidH, NULL, &sMemW, &sMemH);
+    rspGetVideoMode(&sVidD, &sVidW, &sVidH, nullptr, &sMemW, &sMemH);
 
-    if (ppimMemBuf != NULL)
+    if (ppimMemBuf != nullptr)
     {
         *ppimMemBuf = RInitBLiT::pimScreenBuffer;
         (*ppimMemBuf)->m_sWidth = sMemW;  // assume same  for all...
@@ -195,7 +195,7 @@ void rspNameBuffers(RImage **ppimMemBuf, RImage **ppimVidBuf, RImage **ppimBackB
         }
     }
 
-    if (ppimVidBuf != NULL)
+    if (ppimVidBuf != nullptr)
     {
         *ppimVidBuf = RInitBLiT::pimScreenVisible;
         (*ppimVidBuf)->m_sWidth = sMemW;  // double if pixel doubled
@@ -221,7 +221,7 @@ void rspNameBuffers(RImage **ppimMemBuf, RImage **ppimVidBuf, RImage **ppimBackB
         }
     }
 
-    if (ppimBackBuf != NULL)
+    if (ppimBackBuf != nullptr)
     {
         *ppimBackBuf = RInitBLiT::pimScreenBackPlane;
         (*ppimBackBuf)->m_sWidth = sMemW;  // assume same  for all...
@@ -309,8 +309,8 @@ class RCompressedImageData
     RCompressedImageData()
     {
         usCompType = usSourceType = 0;
-        pCBuf = pCMem = pControlBlock = NULL;
-        pLineArry = pCtlArry = NULL;
+        pCBuf = pCMem = pControlBlock = nullptr;
+        pLineArry = pCtlArry = nullptr;
     }
 
     ~RCompressedImageData()
@@ -386,7 +386,7 @@ short rspLockBuffer()
         {
             // Get the up to date dimensions as well!
             short sVidW, sVidH, sVidD, sMemW, sMemH;
-            rspGetVideoMode(&sVidD, &sVidW, &sVidH, NULL, &sMemW, &sMemH);
+            rspGetVideoMode(&sVidD, &sVidW, &sVidH, nullptr, &sMemW, &sMemH);
 
             RInitBLiT::pimScreenBuffer->m_sWidth = sMemW;  // assume same  for all...
             RInitBLiT::pimScreenBuffer->m_sHeight = sMemH; // assume same  for all...
@@ -417,7 +417,7 @@ short rspUnlockBuffer()
     if (!gsBufferLocked) // need to actually DO the unlock
     {
         rspUnlockVideoBuffer();
-        RInitBLiT::pimScreenBuffer->m_pData = NULL;
+        RInitBLiT::pimScreenBuffer->m_pData = nullptr;
     }
 
     return 0;
@@ -438,7 +438,7 @@ short rspLockScreen()
         {
             // Set aliases to the buffers and get the most current values possible.
             short sVidW, sVidH, sVidD, sMemW, sMemH;
-            rspGetVideoMode(&sVidD, &sVidW, &sVidH, NULL, &sMemW, &sMemH);
+            rspGetVideoMode(&sVidD, &sVidW, &sVidH, nullptr, &sMemW, &sMemH);
 
             // Get up to date dimensions:
             RInitBLiT::pimScreenVisible->m_sWidth = sMemW;  // double if pixel doubled
@@ -470,7 +470,7 @@ short rspUnlockScreen()
     if (!gsScreenLocked) // need to actually DO the unlock
     {
         rspUnlockVideoPage();
-        RInitBLiT::pimScreenVisible->m_pData = NULL;
+        RInitBLiT::pimScreenVisible->m_pData = nullptr;
     }
 
     return 0;

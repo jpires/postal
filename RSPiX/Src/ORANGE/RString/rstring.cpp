@@ -188,7 +188,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #define RSTRING_CPP
 
-#include <ctype.h>
+#include <cctype>
 #include "rstring.h"
 
 // Static pointer that is initialized to point at an empty string.  Used
@@ -212,7 +212,7 @@ void RString::Grow(long lMinimumSize)
             // Change buffer size
             char *pOld = m_pBuf;
             m_pBuf = (char *)malloc(lMinimumSize);
-            ASSERT(m_pBuf != 0); // should be caught by new_handler, but just in case...
+            ASSERT(m_pBuf != nullptr); // should be caught by new_handler, but just in case...
             memcpy(m_pBuf, pOld, m_lBufSize);
             free(pOld);
         }
@@ -220,7 +220,7 @@ void RString::Grow(long lMinimumSize)
         {
             // Create new buffer
             m_pBuf = (char *)malloc(lMinimumSize);
-            ASSERT(m_pBuf != 0); // should be caught by new_handler, but just in case...
+            ASSERT(m_pBuf != nullptr); // should be caught by new_handler, but just in case...
             *m_pBuf = 0;         // write terminating null (string length must be 0 at this point)
         }
         m_lBufSize = lMinimumSize;
@@ -255,7 +255,7 @@ void RString::Shrink(long lMaximumSize)
                 // Change buffer size
                 char *pOld = m_pBuf;
                 m_pBuf = (char *)malloc(lMaximumSize);
-                ASSERT(m_pBuf != 0); // should be caught by new_handler, but just in case...
+                ASSERT(m_pBuf != nullptr); // should be caught by new_handler, but just in case...
                 memcpy(m_pBuf, pOld, m_lBufSize);
                 free(pOld);
                 m_lBufSize = lMaximumSize;
@@ -276,7 +276,7 @@ void RString::Shrink(long lMaximumSize)
 // Compact the buffer to the minimum size required to hold the current string.
 // If the string is empty, the buffer is freed.
 ////////////////////////////////////////////////////////////////////////////////
-void RString::Compact(void)
+void RString::Compact()
 {
     // If there's a string, shrink buffer to fit it, otherwise get rid of it
     if (m_lStrLen > 0)
@@ -505,7 +505,7 @@ void RString::Delete(long lPos, long lLen)
 ////////////////////////////////////////////////////////////////////////////////
 // Convert string to upper case
 ////////////////////////////////////////////////////////////////////////////////
-void RString::ToUpper(void)
+void RString::ToUpper()
 {
     long lLen = m_lStrLen;
     char *p = m_pBuf;
@@ -522,7 +522,7 @@ void RString::ToUpper(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Convert string to lower case
 ////////////////////////////////////////////////////////////////////////////////
-void RString::ToLower(void)
+void RString::ToLower()
 {
     long lLen = m_lStrLen;
     char *p = m_pBuf;

@@ -62,9 +62,9 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
 
 #include "System.h"
 
@@ -104,7 +104,7 @@
 // (public)
 //
 //////////////////////////////////////////////////////////////////////////////
-RSample::RSample(void)
+RSample::RSample()
 {
     // Intialize instantiables.
     Init();
@@ -136,7 +136,7 @@ RSample::RSample(void *pData, long lBufSize, long lSamplesPerSec, short sBitsPer
 // (public)
 //
 //////////////////////////////////////////////////////////////////////////////
-RSample::~RSample(void)
+RSample::~RSample()
 {
     // Make sure memory is freed and we're unlocked.
     Reset();
@@ -149,10 +149,10 @@ RSample::~RSample(void)
 // (public)
 //
 //////////////////////////////////////////////////////////////////////////////
-void RSample::Init(void)
+void RSample::Init()
 {
     // Initialize members.
-    m_pData = NULL;
+    m_pData = nullptr;
     m_sOwnBuf = FALSE;
     m_lBufSize = 0L;
     m_lSamplesPerSec = 0L;
@@ -168,7 +168,7 @@ void RSample::Init(void)
 // (public)
 //
 ///////////////////////////////////////////////////////////////////////////////
-void RSample::Reset(void)
+void RSample::Reset()
 {
     ASSERT(IsLocked() == FALSE);
 
@@ -176,11 +176,11 @@ void RSample::Reset(void)
     {
         if (m_sOwnBuf == TRUE)
         {
-            if (m_pData != NULL)
+            if (m_pData != nullptr)
             {
                 // Free data.
                 free(m_pData);
-                m_pData = NULL;
+                m_pData = nullptr;
             }
         }
 
@@ -247,7 +247,7 @@ static long IffReadUntil(char *pcForm, FILE *fsIn)
 // Returns size of data chunk on success, negative on error. (protected)
 //
 ///////////////////////////////////////////////////////////////////////////////
-long RSample::ReadWaveHeader(void)
+long RSample::ReadWaveHeader()
 {
     long lRes = 0L; // Assume success.
 
@@ -516,12 +516,12 @@ long RSample::Read(long lAmount)
     ASSERT(m_iff.IsOpen() != FALSE);
 
     // If current data size is different than desired or is not allocated . . .
-    if (m_pData == NULL || m_lBufSize != lAmount)
+    if (m_pData == nullptr || m_lBufSize != lAmount)
     {
         // Allocate desired amount.
         m_pData = (void *)malloc(lAmount);
         // If successful . . .
-        if (m_pData != NULL)
+        if (m_pData != nullptr)
         {
             // Remember we own this buffer (i.e., we allocated it and should
             // be responsible for freeing it).
@@ -577,7 +577,7 @@ long RSample::Read(long lAmount)
 // (public)
 //
 ///////////////////////////////////////////////////////////////////////////////
-short RSample::Close(void)
+short RSample::Close()
 {
     short sRes = 0;
 
@@ -831,7 +831,7 @@ short RSample::Save( // Returns 0 on success.
 // (public)
 //
 ///////////////////////////////////////////////////////////////////////////////
-short RSample::Lock(void)
+short RSample::Lock()
 {
     short sRes = 0; // Assume success.
 
@@ -857,7 +857,7 @@ short RSample::Lock(void)
 // (public)
 //
 ///////////////////////////////////////////////////////////////////////////////
-short RSample::Unlock(void)
+short RSample::Unlock()
 {
     ASSERT(m_sRefCnt > 0);
 
@@ -871,19 +871,19 @@ short RSample::Unlock(void)
 // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RSample::Convert8to16(void)
+short RSample::Convert8to16()
 {
     short sRes = 0; // Assume success.
 
     ASSERT(m_sBitsPerSample == 8);
     ASSERT(m_sRefCnt == 0);
-    ASSERT(m_pData != NULL);
+    ASSERT(m_pData != nullptr);
 
     // Allocate space for new data.
     S16 *ps16Dst = (S16 *)malloc(m_lBufSize);
 
     // If successful . . .
-    if (ps16Dst != NULL)
+    if (ps16Dst != nullptr)
     {
         U8 *pu8Src = (U8 *)m_pData;
 

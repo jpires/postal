@@ -31,7 +31,7 @@
 #include "Blue.h"
 #include "ORANGE/CDT/slist.h"
 
-#include <ctype.h>
+#include <cctype>
 
 extern SDL_Window *sdlWindow;
 static char *sdlAppName;
@@ -41,8 +41,8 @@ static int RequestedWidth = 0;
 static int RequestedHeight = 0;
 static int FramebufferWidth = 0;
 static int FramebufferHeight = 0;
-static Uint32 *TexturePointer = NULL;
-static Uint8 *PalettedTexturePointer = NULL;
+static Uint32 *TexturePointer = nullptr;
+static Uint8 *PalettedTexturePointer = nullptr;
 
 typedef struct // Stores information on usable video modes.
 {
@@ -231,7 +231,7 @@ extern short ClipQuiet( // Returns non-zero if image entirely clipped out.
 
 short CompareModes(PVIDEO_MODE pvm1, PVIDEO_MODE pvm2);
 
-extern void Disp_Init(void) // Returns nothing.
+extern void Disp_Init() // Returns nothing.
 {
     extern char **_argv;
     const int arg = rspCommandLine("resolution");
@@ -408,7 +408,7 @@ extern short rspSuggestVideoMode(   // Returns 0 if successfull, non-zero otherw
     if (sModeFound != FALSE)
     {
         // If pixel doubling was specified . . .
-        if (psScaling != NULL)
+        if (psScaling != nullptr)
         {
             // If pixel doubling is allowed . . .
             if (sScaling != FALSE)
@@ -524,7 +524,7 @@ static void addMode(int w, int h, int depth)
     }
 }
 
-extern void rspQueryVideoModeReset(void)
+extern void rspQueryVideoModeReset()
 {
     static bool enumerated = false;
     if (!enumerated)
@@ -571,7 +571,7 @@ extern short rspQueryVideoMode( // Returns 0 for each valid mode, then non-zero 
 
     PVIDEO_MODE pvm = slvmModes.GetCurrent();
 
-    if (pvm != NULL)
+    if (pvm != nullptr)
     {
         SET(psColorDepth, pvm->sColorDepth);
         SET(psWidth, pvm->sWidth);
@@ -592,7 +592,7 @@ extern short rspQueryVideoMode( // Returns 0 for each valid mode, then non-zero 
 
 static SDL_Renderer *createRendererToggleVsync(SDL_Window *window, const int index, bool vsync)
 {
-    SDL_Renderer *retval = NULL;
+    SDL_Renderer *retval = nullptr;
     if (vsync)
         retval = SDL_CreateRenderer(window, index, SDL_RENDERER_PRESENTVSYNC);
     if (!retval)
@@ -603,7 +603,7 @@ static SDL_Renderer *createRendererToggleVsync(SDL_Window *window, const int ind
 static SDL_Renderer *createRendererByName(SDL_Window *window, const char *name)
 {
     const bool vsync = !rspCommandLine("novsync");
-    if (name == NULL)
+    if (name == nullptr)
         return createRendererToggleVsync(window, -1, vsync);
     else
     {
@@ -615,7 +615,7 @@ static SDL_Renderer *createRendererByName(SDL_Window *window, const char *name)
                 return createRendererToggleVsync(window, i, vsync);
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -708,7 +708,7 @@ extern short rspSetVideoMode( // Returns 0 if successfull, non-zero otherwise
         SDL_snprintf(buf, sizeof(buf), "Couldn't create window: %s.", SDL_GetError());
         fprintf(stderr, "POSTAL: %s\n", buf);
         SDL_Quit();
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "POSTAL", buf, NULL);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "POSTAL", buf, nullptr);
         exit(1);
     }
     int w = 0, h = 0;
@@ -725,7 +725,7 @@ extern short rspSetVideoMode( // Returns 0 if successfull, non-zero otherwise
     else
     {
         bRequestedRenderer = false;
-        sdlRenderer = createRendererByName(sdlWindow, NULL);
+        sdlRenderer = createRendererByName(sdlWindow, nullptr);
     }
 
     if (!sdlRenderer)
@@ -738,9 +738,9 @@ extern short rspSetVideoMode( // Returns 0 if successfull, non-zero otherwise
                      SDL_GetError());
         fprintf(stderr, "POSTAL: %s\n", buf);
         SDL_DestroyWindow(sdlWindow);
-        sdlWindow = NULL;
+        sdlWindow = nullptr;
         SDL_Quit();
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "POSTAL", buf, NULL);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "POSTAL", buf, nullptr);
         exit(1);
     }
 
@@ -766,11 +766,11 @@ extern short rspSetVideoMode( // Returns 0 if successfull, non-zero otherwise
         SDL_snprintf(buf, sizeof(buf), "Couldn't create texture: %s", SDL_GetError());
         fprintf(stderr, "POSTAL: %s\n", buf);
         SDL_DestroyRenderer(sdlRenderer);
-        sdlRenderer = NULL;
+        sdlRenderer = nullptr;
         SDL_DestroyWindow(sdlWindow);
-        sdlWindow = NULL;
+        sdlWindow = nullptr;
         SDL_Quit();
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "POSTAL", buf, NULL);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "POSTAL", buf, nullptr);
         exit(1);
     }
 
@@ -778,7 +778,7 @@ extern short rspSetVideoMode( // Returns 0 if successfull, non-zero otherwise
     PalettedTexturePointer = new Uint8[FramebufferWidth * FramebufferHeight];
     SDL_memset(TexturePointer, '\0', FramebufferWidth * FramebufferHeight * sizeof(Uint32));
     SDL_memset(PalettedTexturePointer, '\0', FramebufferWidth * FramebufferHeight * sizeof(Uint8));
-    SDL_UpdateTexture(sdlTexture, NULL, TexturePointer, FramebufferWidth * 4);
+    SDL_UpdateTexture(sdlTexture, nullptr, TexturePointer, FramebufferWidth * 4);
 
     SDL_ShowCursor(0);
     // SDL_SetRelativeMouseMode(mouse_grabbed ? SDL_TRUE : SDL_FALSE);
@@ -794,7 +794,7 @@ extern short rspSetVideoMode( // Returns 0 if successfull, non-zero otherwise
 // achieved if rspSetVideoMode fails.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern void rspKillVideoMode(void)
+extern void rspKillVideoMode()
 {
     /* no-op ... SDL_Quit() will catch this. */
 }
@@ -809,7 +809,7 @@ extern void rspKillVideoMode(void)
 // subsequent call to rspSetVideoMode.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern void rspKillVideoBuffer(void)
+extern void rspKillVideoBuffer()
 {
     /* no-op ... SDL_Quit() will catch this. */
 }
@@ -821,7 +821,7 @@ extern void rspKillVideoBuffer(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-extern void rspUpdateDisplayRects(void)
+extern void rspUpdateDisplayRects()
 {
     // no-op, just blast it all to the GPU.
 }
@@ -833,7 +833,7 @@ extern void rspCacheDirtyRect(short sX,      // x coord of upper-left corner of 
 {
 }
 
-extern void rspPresentFrame(void)
+extern void rspPresentFrame()
 {
     if (!sdlWindow)
         return;
@@ -848,9 +848,9 @@ extern void rspPresentFrame(void)
             *dst = apeApp[*src].argb;
     }
 
-    SDL_UpdateTexture(sdlTexture, NULL, TexturePointer, FramebufferWidth * 4);
+    SDL_UpdateTexture(sdlTexture, nullptr, TexturePointer, FramebufferWidth * 4);
     SDL_RenderClear(sdlRenderer);
-    SDL_RenderCopy(sdlRenderer, sdlTexture, NULL, NULL);
+    SDL_RenderCopy(sdlRenderer, sdlTexture, nullptr, nullptr);
     SDL_RenderPresent(sdlRenderer); // off to the screen with you.
 
     static Uint32 lastframeticks = 0;
@@ -879,7 +879,7 @@ extern void rspPresentFrame(void)
 #endif
 }
 
-extern void rspUpdateDisplay(void) {}
+extern void rspUpdateDisplay() {}
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -916,7 +916,7 @@ extern short rspLockVideoPage( // Returns 0 if screen memory could be locked.
 // See function comment in appropriate CPP (BGDisp/BXDisp).
 //
 ///////////////////////////////////////////////////////////////////////////////
-extern void rspUnlockVideoPage(void) // Returns nothing.
+extern void rspUnlockVideoPage() // Returns nothing.
 {
     /* no-op. */
 }
@@ -942,7 +942,7 @@ extern short rspLockVideoFlipPage( // Returns 0 if flip screen memory could be
 // See function comment in appropriate CPP (BGDisp/BXDisp).
 //
 ///////////////////////////////////////////////////////////////////////////////
-extern void rspUnlockVideoFlipPage(void) // Returns nothing.
+extern void rspUnlockVideoFlipPage() // Returns nothing.
 {
 }
 
@@ -973,7 +973,7 @@ extern short rspLockVideoBuffer( // Returns 0 if system buffer could be locked.
 // See function comment in appropriate CPP (BGDisp/BXDisp).
 //
 ///////////////////////////////////////////////////////////////////////////////
-extern void rspUnlockVideoBuffer(void) // Returns nothing.
+extern void rspUnlockVideoBuffer() // Returns nothing.
 {
 }
 
@@ -983,7 +983,7 @@ extern void rspUnlockVideoBuffer(void) // Returns nothing.
 // See function comment in appropriate CPP (BGDisp/BXDisp).
 //
 ///////////////////////////////////////////////////////////////////////////////
-extern short rspAllowPageFlip(void) // Returns 0 on success.
+extern short rspAllowPageFlip() // Returns 0 on success.
 {
     return 0;
 }
@@ -1120,7 +1120,7 @@ extern void rspGetPaletteEntries(short sStartIndex,       // Palette entry to st
 // In the future, this may support optional VBLANK-synced updates.
 //
 ///////////////////////////////////////////////////////////////////////////////
-extern void rspUpdatePalette(void) {}
+extern void rspUpdatePalette() {}
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Set entries in the color map used to tweak values set via
@@ -1257,7 +1257,7 @@ extern void rspSetForegroundCallback( // Returns nothing.
     /* no-op. */
 }
 
-extern short rspIsBackground(void) // Returns TRUE if in background, FALSE otherwise
+extern short rspIsBackground() // Returns TRUE if in background, FALSE otherwise
 {
     extern bool GSDLAppIsActive;
     return (short)(!GSDLAppIsActive);

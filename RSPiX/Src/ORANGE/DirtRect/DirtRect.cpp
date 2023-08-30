@@ -205,7 +205,7 @@ short RDirtyRects::Add(RDRect *pdr)
         {
             // No existing rectangle was close enough.
             RDRect *pdrNew = new RDRect;
-            if (pdrNew != NULL)
+            if (pdrNew != nullptr)
             {
                 if (RList<RDRect>::Add(pdrNew) == 0)
                 {
@@ -253,10 +253,10 @@ short RDirtyRects::Add(short sX, short sY, short sW, short sH)
 // Empty the list of dirty rectangles.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RDirtyRects::Empty(void)
+void RDirtyRects::Empty()
 {
     RDRect *pdr = GetHead();
-    while (pdr != NULL)
+    while (pdr != nullptr)
     {
         Remove();
         delete pdr;
@@ -280,7 +280,7 @@ short RDirtyRects::Combine(RDRect *pdr)
     if (m_sMinDistanceX >= 0)
     {
         RDRect *pdrExisting = GetHead();
-        while (pdrExisting != NULL)
+        while (pdrExisting != nullptr)
         {
             if (pdrExisting->sX - (pdr->sX + pdr->sW) <= m_sMinDistanceX)
             {

@@ -115,7 +115,7 @@ CNetMsgr::InfoMsg CNetMsgr::ms_aInfoMsg[NetMsg::NumMessages] = { { NetMsg::NOTHI
 ////////////////////////////////////////////////////////////////////////////////
 // Update (must be called regularly)
 ////////////////////////////////////////////////////////////////////////////////
-void CNetMsgr::Update(void)
+void CNetMsgr::Update()
 {
     switch (m_state)
     {
@@ -433,7 +433,7 @@ void CNetMsgr::SendMsg(NetMsg *pmsg,             // In:  Message to send
 ////////////////////////////////////////////////////////////////////////////////
 // Receive data (copy data from socket into input buffer)
 ////////////////////////////////////////////////////////////////////////////////
-void CNetMsgr::ReceiveData(void)
+void CNetMsgr::ReceiveData()
 {
 
     // If there's bytes waiting to be received and no errors, then get them.
@@ -486,7 +486,7 @@ void CNetMsgr::ReceiveData(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Send data (copy data output buffer to socket)
 ////////////////////////////////////////////////////////////////////////////////
-void CNetMsgr::SendData(void)
+void CNetMsgr::SendData()
 {
 
     // If we have data to send and there's no errors, then try to send it.  It's

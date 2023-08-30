@@ -134,7 +134,7 @@
 #define NAPALM_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "napalm.h"
 #include "dude.h"
@@ -171,8 +171,8 @@ static char *ms_apszResNames[] = { "3d/napalmcan.sop",
                                    "3d/napalmcan.hot",
                                    "3d/napalmcan.bounds",
                                    "3d/napalmcan.floor",
-                                   NULL,
-                                   NULL };
+                                   nullptr,
+                                   nullptr };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load object (should call base class version!)
@@ -260,7 +260,7 @@ short CNapalm::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CNapalm::Update(void)
+void CNapalm::Update()
 {
     short sHeight;
     double dNewX;
@@ -467,7 +467,7 @@ void CNapalm::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CNapalm::Render(void)
+void CNapalm::Render()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
 
@@ -562,7 +562,7 @@ short CNapalm::Setup(									// Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CNapalm::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CNapalm::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -593,7 +593,7 @@ short CNapalm::GetResources(void) // Returns 0 if successfull, non-zero otherwis
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CNapalm::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CNapalm::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     m_anim.Release();
 
@@ -625,7 +625,7 @@ short CNapalm::Preload(CRealm *prealm) // In:  Calling realm.
 // ProcessMessages
 ////////////////////////////////////////////////////////////////////////////////
 
-void CNapalm::ProcessMessages(void)
+void CNapalm::ProcessMessages()
 {
     GameMessage msg;
 

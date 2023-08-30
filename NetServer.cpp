@@ -111,7 +111,7 @@ short CNetServer::Startup(          // Returns 0 if successfull, non-zero otherw
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown
 ////////////////////////////////////////////////////////////////////////////////
-void CNetServer::Shutdown(void)
+void CNetServer::Shutdown()
 {
     Reset();
 }
@@ -119,7 +119,7 @@ void CNetServer::Shutdown(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update server.  This should be called regularly.
 ////////////////////////////////////////////////////////////////////////////////
-void CNetServer::Update(void)
+void CNetServer::Update()
 {
     short sResult = 0;
 
@@ -785,7 +785,7 @@ void CNetServer::SendMsg(NetMsg *pmsg) // In:  Message to send
 // to be sent AND there is a send error, then that data can't be sent, so we
 // return false to indicate "no more data".
 ////////////////////////////////////////////////////////////////////////////////
-bool CNetServer::IsMoreToSend(void) // Returns true if more to send, false otherwise
+bool CNetServer::IsMoreToSend() // Returns true if more to send, false otherwise
 {
     bool bResult = false;
     for (Net::ID id = 0; id < Net::MaxNumIDs; id++)
@@ -999,7 +999,7 @@ bool CNetServer::NextRealm(Net::SEQ seq) // In:  The seq on which to go to next 
 // on, at which point this function would be called to tell all the other
 // players to proceed.
 ////////////////////////////////////////////////////////////////////////////////
-void CNetServer::Proceed(void)
+void CNetServer::Proceed()
 {
     // Send PROCEED message to all joined clients
     NetMsg msg;
@@ -1036,7 +1036,7 @@ void CNetServer::StartDroppingClientDuringGame(Net::ID id)
 // so the drop process is not yet complete.  A return of false indicates that
 // no clients needed inputs, so we can proceed directly to the next phase.
 ////////////////////////////////////////////////////////////////////////////////
-bool CNetServer::GotAllDropAcks(void)
+bool CNetServer::GotAllDropAcks()
 {
     // Go through all the responses and find
     //		(1) the lowest frame seq,
@@ -1136,7 +1136,7 @@ bool CNetServer::GotAllDropAcks(void)
 // Finish the process of dropping client.  If there's more clients in the drop
 // queue, this could also start the dropping of the next victim
 ////////////////////////////////////////////////////////////////////////////////
-void CNetServer::FinishDroppingClientDuringGame(void)
+void CNetServer::FinishDroppingClientDuringGame()
 {
     // Send INPUT_MARK message to all clients so they can mark the last active
     // input seq of the dropped client.

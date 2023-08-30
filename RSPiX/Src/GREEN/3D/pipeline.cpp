@@ -36,7 +36,7 @@
 long RPipeLine::ms_lNumPts = 0;
 long RPipeLine::ms_lNumPipes = 0;
 
-RP3d *RPipeLine::ms_pPts = NULL;
+RP3d *RPipeLine::ms_pPts = nullptr;
 
 RPipeLine::RPipeLine()
 {
@@ -46,9 +46,9 @@ RPipeLine::RPipeLine()
 
 void RPipeLine::Init()
 {
-    m_pimClipBuf = NULL;
-    m_pimShadowBuf = NULL;
-    m_pZB = NULL;
+    m_pimClipBuf = nullptr;
+    m_pimShadowBuf = nullptr;
+    m_pZB = nullptr;
     m_sUseBoundingRect = FALSE;
     m_dShadowScale = 1.0;
 
@@ -64,15 +64,15 @@ short RPipeLine::Create(long lNum, short sW)
     if (sW)
     {
         // Will only overwrite memory if it needs MORE!
-        if ((m_pZB != NULL) && (sW > m_pZB->m_sW))
+        if ((m_pZB != nullptr) && (sW > m_pZB->m_sW))
         {
             delete m_pZB;
             delete m_pimClipBuf;
-            m_pimClipBuf = NULL;
-            m_pZB = NULL;
+            m_pimClipBuf = nullptr;
+            m_pZB = nullptr;
         }
 
-        if (m_pZB == NULL)
+        if (m_pZB == nullptr)
         {
             m_pZB = new RZBuffer(sW, sW); // no need to clear it yet!
             m_pimClipBuf = new RImage;
@@ -85,13 +85,13 @@ short RPipeLine::Create(long lNum, short sW)
     if (!lNum)
         return 0;
 
-    if ((ms_pPts != NULL) && (lNum > ms_lNumPts))
+    if ((ms_pPts != nullptr) && (lNum > ms_lNumPts))
     {
         free(ms_pPts);
-        ms_pPts = NULL;
+        ms_pPts = nullptr;
     }
 
-    if (ms_pPts == NULL)
+    if (ms_pPts == nullptr)
     {
         ms_pPts = (RP3d *)malloc(sizeof(RP3d) * lNum);
     }
@@ -114,7 +114,7 @@ short RPipeLine::CreateShadow(short sAngleY, double dTanDeclension, short sBufSi
     // Allocate the buffer, if applicable:
     if (sBufSize <= 0) // default case:
     {
-        if (m_pimShadowBuf == NULL) // do a default allocation
+        if (m_pimShadowBuf == nullptr) // do a default allocation
         {
             if (m_pimClipBuf) // use as reference:
             {
@@ -142,7 +142,7 @@ short RPipeLine::CreateShadow(short sAngleY, double dTanDeclension, short sBufSi
             else
             {
                 delete m_pimShadowBuf;
-                m_pimShadowBuf = NULL;
+                m_pimShadowBuf = nullptr;
             }
         }
         m_pimShadowBuf = new RImage;
@@ -171,7 +171,7 @@ RPipeLine::~RPipeLine()
         if (ms_pPts)
             free(ms_pPts);
         ms_lNumPts = 0;
-        ms_pPts = NULL;
+        ms_pPts = nullptr;
     }
 }
 
@@ -351,7 +351,7 @@ void RPipeLine::Render(RImage *pimDst,
         v2 = *psVertex++;
         v3 = *psVertex++;
 
-        if (1) // NotCulled(ms_pPts+v1,ms_pPts+v2,ms_pPts+v3))
+        if (true) // NotCulled(ms_pPts+v1,ms_pPts+v2,ms_pPts+v3))
         {
             // Render the sucker!
             DrawTri_ZColorFog(pDst,
@@ -451,7 +451,7 @@ void RPipeLine::BoundingSphereToScreen(RP3d &ptCenter, RP3d &ptRadius, RTransfor
 
 void RPipeLine::ClearClipBuffer()
 {
-    if (m_pimClipBuf == NULL)
+    if (m_pimClipBuf == nullptr)
         return;
 
     rspRect(ULONG(0), m_pimClipBuf, 0, 0, m_pimClipBuf->m_sWidth, m_pimClipBuf->m_sHeight);
@@ -459,7 +459,7 @@ void RPipeLine::ClearClipBuffer()
 
 void RPipeLine::ClearShadowBuffer()
 {
-    if (m_pimShadowBuf == NULL)
+    if (m_pimShadowBuf == nullptr)
         return;
 
     rspRect(ULONG(0), m_pimShadowBuf, 0, 0, m_pimShadowBuf->m_sWidth, m_pimShadowBuf->m_sHeight);

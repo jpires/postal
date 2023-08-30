@@ -43,10 +43,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
-#include <ctype.h>
+#include <cstdio>
+#include <cstring>
+#include <cassert>
+#include <cctype>
 
 #include "Blue.h"
 #include "prefline.h"
@@ -129,14 +129,14 @@ RPrefsLine::RPrefsLine(RPrefsLine::ePrefsLineType Type, const char *pszLine)
 RPrefsLine::~RPrefsLine()
 {
     delete[] m_pszLine;
-    m_pszLine = NULL;
+    m_pszLine = nullptr;
     return;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Method to get a constant pointer to the Line of text.
 ////////////////////////////////////////////////////////////////////////////////
-const char *RPrefsLine::GetLine(void)
+const char *RPrefsLine::GetLine()
 {
     return (m_pszLine);
 }
@@ -224,7 +224,7 @@ short RPrefsLine::GetVariableName(char *pszVariable)
 	if (sRes != 0)
 		strcpy(pszVariable, "");
 #else
-        sRes = GetVar(m_pszLine, pszVariable, NULL);
+        sRes = GetVar(m_pszLine, pszVariable, nullptr);
 #endif
     return (sRes);
 }
@@ -274,7 +274,7 @@ short RPrefsLine::GetVariableValue(char *pszValue)
 	if (sRes != 0)
 		strcpy(pszValue, "");
 #else
-        sRes = GetVar(m_pszLine, NULL, pszValue);
+        sRes = GetVar(m_pszLine, nullptr, pszValue);
 #endif
     return (sRes);
 }
@@ -303,13 +303,13 @@ short RPrefsLine::SetVariableValue(const char *pszValue)
 			pszVariable[i] = m_pszLine[i];
 		pszVariable[i] = '\0';
 #else
-        sRes = GetVar(m_pszLine, pszVariable, NULL);
+        sRes = GetVar(m_pszLine, pszVariable, nullptr);
         if (sRes == 0)
 #endif
         {
             ASSERT(m_pszLine);
             delete[] m_pszLine;
-            m_pszLine = NULL;
+            m_pszLine = nullptr;
             sprintf(pszLine, "%s = %s", pszVariable, pszValue);
             m_pszLine = new char[strlen(pszLine) + 1];
             strcpy(m_pszLine, pszLine);

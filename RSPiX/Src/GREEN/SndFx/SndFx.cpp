@@ -48,7 +48,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "Blue.h"
 
@@ -101,9 +101,9 @@ RSndFx::PCMINFO RSndFx::ms_apcminfo[RSP_SNDFX_MAX_BITSPERSAMPLE + 1] = // Stores
       { 0x40000000, 0x7FFFFFFF }, // 32 Bit.
   };
 
-U8 *RSndFx::ms_pu8Fade = NULL;   // Unsigned 8 bit output
+U8 *RSndFx::ms_pu8Fade = nullptr;   // Unsigned 8 bit output
                                  // fade table.
-S16 *RSndFx::ms_ps16Fade = NULL; // Signed 16 bit output
+S16 *RSndFx::ms_ps16Fade = nullptr; // Signed 16 bit output
                                  // fade table.
 
 short RSndFx::ms_sNumFadeSteps = 0; // Number of fade steps.
@@ -174,7 +174,7 @@ RSndFx::~RSndFx()
 // (public)
 //
 //////////////////////////////////////////////////////////////////////////////
-void RSndFx::Init(void)
+void RSndFx::Init()
 {
     // Initialize members.
     m_fx = NoFX; // Currently active effects.
@@ -197,7 +197,7 @@ void RSndFx::Init(void)
 // (public)
 //
 ///////////////////////////////////////////////////////////////////////////////
-void RSndFx::Clear(void)
+void RSndFx::Clear()
 {
     Init();
 }
@@ -208,18 +208,18 @@ void RSndFx::Clear(void)
 // (static/public)
 //
 ///////////////////////////////////////////////////////////////////////////////
-void RSndFx::CleanUp(void)
+void RSndFx::CleanUp()
 {
-    if (ms_pu8Fade != NULL)
+    if (ms_pu8Fade != nullptr)
     {
         free(ms_pu8Fade);
-        ms_pu8Fade = NULL;
+        ms_pu8Fade = nullptr;
     }
 
-    if (ms_ps16Fade != NULL)
+    if (ms_ps16Fade != nullptr)
     {
         free(ms_ps16Fade);
-        ms_ps16Fade = NULL;
+        ms_ps16Fade = nullptr;
     }
 }
 
@@ -228,7 +228,7 @@ void RSndFx::CleanUp(void)
 // Reset effects to start over.
 //
 ///////////////////////////////////////////////////////////////////////////////
-void RSndFx::Reset(void)
+void RSndFx::Reset()
 {
     ///////////////// Fade In /////////////////////////////////////////////////
 
@@ -274,7 +274,7 @@ short RSndFx::SetFadeAccuracy( // Returns 0 on success.
             case 8:
             {
                 ms_pu8Fade = (U8 *)malloc((long)sNumSteps * 256L * sizeof(S16));
-                if (ms_pu8Fade != NULL)
+                if (ms_pu8Fade != nullptr)
                 {
                     short sStep;
                     short sSample;
@@ -314,7 +314,7 @@ short RSndFx::SetFadeAccuracy( // Returns 0 on success.
             case 16:
             {
                 ms_ps16Fade = (S16 *)malloc((long)sNumSteps * 256L * sizeof(S16));
-                if (ms_ps16Fade != NULL)
+                if (ms_ps16Fade != nullptr)
                 {
                     short sStep;
                     short sSample;
@@ -440,7 +440,7 @@ void RSndFx::Do(                // Returns nothing.
         if (m_fx != 0)
         {
             // If there is no destination . . .
-            if (pucDstData == NULL)
+            if (pucDstData == nullptr)
             {
                 pucDstData = pucSrcData;
             }

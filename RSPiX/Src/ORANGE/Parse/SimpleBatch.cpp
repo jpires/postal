@@ -30,7 +30,7 @@ short RBatch::GetLine()
         m_sLinePos[i] = 0;
     }
 
-    if (m_fp == NULL)
+    if (m_fp == nullptr)
     {
         TRACE("RBatch:  File not open.\n");
         return -1;
@@ -59,7 +59,7 @@ short RBatch::GetLine()
                 sTokenChar = 0;
             }
 
-            m_fp = NULL;
+            m_fp = nullptr;
 
             sRet = -1;
             sLoop = FALSE;
@@ -189,7 +189,7 @@ short RBatch::GetLine()
 
 char *RBatch::CreateError(short sToken)
 {
-    if (m_fp == NULL)
+    if (m_fp == nullptr)
     {
         sprintf(ms_Error, "RBatch(%s):\n*   Premature end of file!\n", m_pszFileName);
         return ms_Error;
@@ -217,7 +217,7 @@ char *RBatch::NextToken()
     {
         if (GetLine() == short(-1))
         {
-            return NULL;
+            return nullptr;
         }
         m_sCurToken = -1;
     }
@@ -230,7 +230,7 @@ search:
     {
         if ((GetLine() == -1) && (m_sNumTokens == 0))
         {
-            return NULL;
+            return nullptr;
         }
         m_sCurToken = 0; // search for non null line
     }

@@ -279,7 +279,7 @@ static bool IsInList( // Returns true if in list.  false otherwise.
 
     // Tokenize.
     char *pszToken = strtok(szTokenize, TOKEN_DELIMITERS);
-    while (pszToken != NULL)
+    while (pszToken != nullptr)
     {
         if (rspStricmp(pszToken, pszSearchFor) == 0)
         {
@@ -288,7 +288,7 @@ static bool IsInList( // Returns true if in list.  false otherwise.
             break;
         }
 
-        pszToken = strtok(NULL, TOKEN_DELIMITERS);
+        pszToken = strtok(nullptr, TOKEN_DELIMITERS);
     }
 
     return bFound;
@@ -316,7 +316,7 @@ static short DisplayImage( // Returns nothing.
         short sY = g_pimScreenBuf->m_sHeight / 2 - pimTitle->m_sHeight / 2;
 
         // Set palette
-        ASSERT(pimTitle->m_pPalette != NULL);
+        ASSERT(pimTitle->m_pPalette != nullptr);
         ASSERT(pimTitle->m_pPalette->m_type == RPal::PDIB);
 
         // Get the new palette.
@@ -496,7 +496,7 @@ extern short StartTitle(                    // Returns 0 if successfull, non-zer
                   SampleMaster::BackgroundMusic, // In:  Sound Volume Category for user adjustment
                   255,                           // In:  Initial Sound Volume (0 - 255)
                   &ms_siMusak,                   // Out: Handle for adjusting sound volume
-                  NULL,                          // Out: Sample duration in ms, if not NULL.
+                  nullptr,                          // Out: Sample duration in ms, if not NULL.
                   MUSAK_START_TIME,              // In:  Where to loop back to in milliseconds.
                                                  //	-1 indicates no looping (unless m_sLoop is
                                                  // explicitly set).
@@ -528,7 +528,7 @@ extern short StartTitle(                    // Returns 0 if successfull, non-zer
 // TitleGetNumTitles - give the number of title screens in use
 ////////////////////////////////////////////////////////////////////////////////
 
-extern short TitleGetNumTitles(void)
+extern short TitleGetNumTitles()
 {
     return NUM_ELEMENTS(ms_apszFiles);
 }
@@ -593,7 +593,7 @@ extern short DoTitle( // Returns 0 if successfull, non-zero otherwise
 // due to an overestimated lTotalUnits) and allows all resources to be freed.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern short EndTitle(void) // Returns 0 if successfull, non-zero otherwise
+extern short EndTitle() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -638,7 +638,7 @@ extern short EndTitle(void) // Returns 0 if successfull, non-zero otherwise
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-void Title_GameEndSequence(void)
+void Title_GameEndSequence()
 {
     long lDisplayTime = 0;
     long lTotalTime = 0;
@@ -784,13 +784,13 @@ void Title_GameEndSequence(void)
     }
 
     // Unset the callback
-    RFile::ms_criticall = 0;
+    RFile::ms_criticall = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Disable RipCord static logo.
 ////////////////////////////////////////////////////////////////////////////////
-extern void Title_DisableRipcordStaticLogo(void)
+extern void Title_DisableRipcordStaticLogo()
 {
     ms_bDisableRipcordStaticLogo = true;
 }

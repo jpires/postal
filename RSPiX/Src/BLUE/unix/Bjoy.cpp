@@ -30,7 +30,7 @@
 
 #include "SDL.h"
 #include "Blue.h"
-#include <math.h>
+#include <cmath>
 
 //////////////////////////////////////////////////////////////////////////////
 // Macros.
@@ -83,7 +83,7 @@ static SDL_GameController *ms_Controllers[NUM_JOYSTICKS];
 // should still be called.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern void Joy_Init(void)
+extern void Joy_Init()
 {
     if (SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER) == -1)
         return;
@@ -252,7 +252,7 @@ extern bool GetDudeFireAngle(double *d_Angle)
 //////////////////////////////////////////////////////////////////////////////
 extern void rspUpdateJoy(short sJoy)
 {
-    if ((sJoy > NUM_JOYSTICKS) || (ms_Controllers[sJoy] == NULL))
+    if ((sJoy > NUM_JOYSTICKS) || (ms_Controllers[sJoy] == nullptr))
         return;
 
     SDL_GameController *controller = ms_Controllers[sJoy];
@@ -262,7 +262,7 @@ extern void rspUpdateJoy(short sJoy)
     {
         // uhoh, controller was unplugged.
         SDL_GameControllerClose(controller);
-        ms_Controllers[sJoy] = NULL;
+        ms_Controllers[sJoy] = nullptr;
         SDL_memset(&ms_ajsCurr[sJoy], '\0', sizeof(JoyState));
         SDL_memset(&ms_ajsPrev[sJoy], '\0', sizeof(JoyState));
     }

@@ -114,7 +114,7 @@ FCC RIff::ms_afccRiffForms[MAX_FORMS] = {
 // Default constructor.
 //
 //////////////////////////////////////////////////////////////////////////////
-RIff::RIff(void)
+RIff::RIff()
 {
     Init();
 }
@@ -124,10 +124,10 @@ RIff::RIff(void)
 // Destructor.
 //
 //////////////////////////////////////////////////////////////////////////////
-RIff::~RIff(void)
+RIff::~RIff()
 {
     // If open . . .
-    if (RFile::m_fs != NULL)
+    if (RFile::m_fs != nullptr)
     {
         Close();
     }
@@ -151,7 +151,7 @@ short RIff::CreateChunk(FCC fccChunk, FCC fccForm /*= 0*/)
     // Attempt to allocate CHUNK for stack . . .
     PCHUNK pChunk = new CHUNK;
     // If successful . . .
-    if (pChunk != NULL)
+    if (pChunk != nullptr)
     {
         // Attempt to write the form name . . .
         if (Write(&fccChunk, 4L) == 4L)
@@ -304,7 +304,7 @@ short RIff::EndChunk(FCC fccChunk /*= 0*/, FCC fccForm /*= 0*/)
 // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RIff::Close(void)
+short RIff::Close()
 {
     short sRes = RFile::Close();
 
@@ -403,7 +403,7 @@ short RIff::Find(char *pszPath) // Returns 0 on success.
 // them.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RIff::Next(void) // Returns 0 if successful, 1 if no more chunks,
+short RIff::Next() // Returns 0 if successful, 1 if no more chunks,
                        // negative on error.
 {
     short sRes = 0; // Assume success.
@@ -465,7 +465,7 @@ short RIff::Next(void) // Returns 0 if successful, 1 if no more chunks,
 // After calling Descend, there is no current chunk until Next is called.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RIff::Descend(void) // Returns 0 if successful, 1 if no subchunks,
+short RIff::Descend() // Returns 0 if successful, 1 if no subchunks,
                           // negative on error.
 {
     short sRes = 0; // Assume success.
@@ -474,7 +474,7 @@ short RIff::Descend(void) // Returns 0 if successful, 1 if no subchunks,
     if (m_chunk.fccForm != 0L)
     {
         PCHUNK pchunk = new CHUNK;
-        if (pchunk != NULL)
+        if (pchunk != nullptr)
         {
             // Copy chunk.
             *pchunk = m_chunk;
@@ -527,7 +527,7 @@ short RIff::Descend(void) // Returns 0 if successful, 1 if no subchunks,
 // are valid.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RIff::Ascend(void) // Returns 0 if successful, 1 if no more chunks,
+short RIff::Ascend() // Returns 0 if successful, 1 if no more chunks,
                          // negative on error.
 {
     short sRes = 0; // Assume success.
@@ -631,7 +631,7 @@ short RIff::IsForm( // Returns TRUE if fcc is a form; FALSE otherwise.
 // Read chunk header.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RIff::ReadChunkHeader(void) // Returns 0 on success.
+short RIff::ReadChunkHeader() // Returns 0 on success.
 {
     // Read common header info.
     Read(&(m_chunk.fccChunk));

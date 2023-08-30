@@ -185,7 +185,7 @@ short CSndRelay::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CSndRelay::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CSndRelay::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -193,7 +193,7 @@ short CSndRelay::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CSndRelay::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CSndRelay::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -201,7 +201,7 @@ short CSndRelay::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CSndRelay::Suspend(void)
+void CSndRelay::Suspend()
 {
     m_sSuspend++;
 }
@@ -209,7 +209,7 @@ void CSndRelay::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CSndRelay::Resume(void)
+void CSndRelay::Resume()
 {
     m_sSuspend--;
 }
@@ -217,7 +217,7 @@ void CSndRelay::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CSndRelay::Update(void)
+void CSndRelay::Update()
 {
     if (!m_sSuspend)
     {
@@ -225,7 +225,7 @@ void CSndRelay::Update(void)
         if (m_bEnabled == true)
         {
             // Attempt to get ptr to our parent . . .
-            CSoundThing *pst = NULL; // Safety.
+            CSoundThing *pst = nullptr; // Safety.
             if (m_pRealm->m_idbank.GetThingByID((CThing **)&pst, m_idParent) == 0)
             {
                 // Make sure this is what we think it is . . .
@@ -261,7 +261,7 @@ void CSndRelay::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CSndRelay::Render(void) {}
+void CSndRelay::Render() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to init new object at specified position
@@ -329,17 +329,17 @@ static void CheckEnableGuiCall( // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CSndRelay::EditModify(void)
+short CSndRelay::EditModify()
 {
     short sResult = 0;
 
     // Load gui dialog
     RGuiItem *pgui = RGuiItem::LoadInstantiate(FullPathVD(GUI_FILE_NAME));
-    if (pgui != NULL)
+    if (pgui != nullptr)
     {
         // Init "ID" edit
         REdit *peditParentId = (REdit *)pgui->GetItemFromId(100);
-        ASSERT(peditParentId != NULL);
+        ASSERT(peditParentId != nullptr);
         ASSERT(peditParentId->m_type == RGuiItem::Edit);
         if (m_idParent != CIdBank::IdNil)
         {
@@ -354,7 +354,7 @@ short CSndRelay::EditModify(void)
 
         // Init "enable" push button
         RMultiBtn *pmbEnable = (RMultiBtn *)pgui->GetItemFromId(200);
-        ASSERT(pmbEnable != NULL);
+        ASSERT(pmbEnable != nullptr);
         pmbEnable->m_sState = (m_bInitiallyEnabled == true) ? 2 : 1;
         pmbEnable->Compose();
 
@@ -450,12 +450,12 @@ void CSndRelay::EditHotSpot( // Returns nothiing.
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CSndRelay::EditUpdate(void) {}
+void CSndRelay::EditUpdate() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CSndRelay::EditRender(void)
+void CSndRelay::EditRender()
 {
     // Setup simple, non-animating sprite
     m_sprite.m_sInFlags = 0;
@@ -478,7 +478,7 @@ void CSndRelay::EditRender(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Init object
 ////////////////////////////////////////////////////////////////////////////////
-short CSndRelay::Init(void) // Returns 0 if successfull, non-zero otherwise
+short CSndRelay::Init() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -486,7 +486,7 @@ short CSndRelay::Init(void) // Returns 0 if successfull, non-zero otherwise
 
     m_bEnabled = m_bInitiallyEnabled;
 
-    if (m_sprite.m_pImage == 0)
+    if (m_sprite.m_pImage == nullptr)
     {
         sResult = rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(IMAGE_FILE), &m_sprite.m_pImage);
         if (sResult == 0)
@@ -507,9 +507,9 @@ short CSndRelay::Init(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Kill object
 ////////////////////////////////////////////////////////////////////////////////
-short CSndRelay::Kill(void) // Returns 0 if successfull, non-zero otherwise
+short CSndRelay::Kill() // Returns 0 if successfull, non-zero otherwise
 {
-    if (m_sprite.m_pImage != 0)
+    if (m_sprite.m_pImage != nullptr)
         rspReleaseResource(&g_resmgrGame, &m_sprite.m_pImage);
 
     m_pRealm->m_scene.RemoveSprite(&m_sprite);
@@ -520,7 +520,7 @@ short CSndRelay::Kill(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Process our message queue.
 ////////////////////////////////////////////////////////////////////////////////
-void CSndRelay::ProcessMessages(void)
+void CSndRelay::ProcessMessages()
 {
     // Check queue of messages.
     GameMessage msg;

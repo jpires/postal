@@ -177,7 +177,7 @@
 // Headers.
 //////////////////////////////////////////////////////////////////////////////
 
-#include <string.h>
+#include <cstring>
 
 #include "Blue.h"
 
@@ -231,11 +231,11 @@ REdit::REdit()
                               // GUI_MAX_STR.
     m_sBehavior = 0;          // Flags.  See enums in header.
 
-    m_encCall = NULL; // Callback when a user input notification
-                      // should occur such as too much input or
-                      // invalid character generated (e.g., alphas
-                      // in NUMBERS_ONLY mode).  A good place to
-                      // generate a beep or something.
+    m_encCall = nullptr; // Callback when a user input notification
+                         // should occur such as too much input or
+                         // invalid character generated (e.g., alphas
+                         // in NUMBERS_ONLY mode).  A good place to
+                         // generate a beep or something.
 
     m_lNextCaretUpdate = 0; // Time in ms of next caret update.
     m_sCaretState = 0;      // Current state the caret is in until
@@ -387,7 +387,7 @@ short REdit::DrawText(    // Returns 0 on success.
 {
     short sRes = 0; // Assume success.
 
-    if (pim == NULL)
+    if (pim == nullptr)
     {
         // Use internal image.
         pim = &m_im;
@@ -907,7 +907,7 @@ short REdit::ReadMembers( // Returns 0 on success.
     // If okay so far . . .
     if (sRes == 0)
     {
-        ASSERT(pfile != NULL);
+        ASSERT(pfile != nullptr);
         ASSERT(pfile->IsOpen() != FALSE);
 
         // Switch on version.
@@ -962,7 +962,7 @@ short REdit::WriteMembers( // Returns 0 on success.
     // If okay so far . . .
     if (sRes == 0)
     {
-        ASSERT(pfile != NULL);
+        ASSERT(pfile != nullptr);
         ASSERT(pfile->IsOpen() != FALSE);
 
         // Write this class's members.
@@ -990,7 +990,7 @@ short REdit::WriteMembers( // Returns 0 on success.
 ////////////////////////////////////////////////////////////////////////
 // Clips the caret to within the string length.
 ////////////////////////////////////////////////////////////////////////
-void REdit::ClipCaret(void) // Returns nothing.
+void REdit::ClipCaret() // Returns nothing.
 {
     long lLen = strlen(m_szText);
     if (m_sCaretPos > lLen)

@@ -444,7 +444,7 @@ void rspAlphaBlitT(short sAlphaLevel,
     short sSrcX = 0, sSrcY = 0, sDstW = pimSrc->m_sWidth, sDstH = pimSrc->m_sHeight;
 
     // right here adjust things if you need to clip to other thatn the full dst im
-    if (prDst == NULL)
+    if (prDst == nullptr)
     {
         if (rspSimpleClip(sSrcX, sSrcY, sDstX, sDstY, sDstW, sDstH, 0, 0, pimDst->m_sWidth, pimDst->m_sHeight) == -1)
             return; // clipped out
@@ -471,7 +471,7 @@ void rspAlphaBlitT(short sAlphaLevel,
     UCHAR **ppucAlpha = pMultiX->m_pGeneralAlpha[sAlphaLevel];
     if (!ppucAlpha) // it is opaque!
     {
-        rspBlitT(0, pimSrc, pimDst, sSrcX, sSrcY, sDstX, sDstY, sDstW, sDstH, NULL, NULL);
+        rspBlitT(0, pimSrc, pimDst, sSrcX, sSrcY, sDstX, sDstY, sDstW, sDstH, nullptr, nullptr);
         return;
     }
 
@@ -504,7 +504,7 @@ void rspFastAlphaBlitT(short sAlphaLevel,
     short sSrcX = 0, sSrcY = 0, sDstW = pimSrc->m_sWidth, sDstH = pimSrc->m_sHeight;
 
     // right here adjust things if you need to clip to other thatn the full dst im
-    if (prDst == NULL)
+    if (prDst == nullptr)
     {
         if (rspSimpleClip(sSrcX, sSrcY, sDstX, sDstY, sDstW, sDstH, 0, 0, pimDst->m_sWidth, pimDst->m_sHeight) == -1)
             return; // clipped out
@@ -529,7 +529,7 @@ void rspFastAlphaBlitT(short sAlphaLevel,
     UCHAR **ppucAlpha = pMultiX[sAlphaLevel];
     if (!ppucAlpha) // it is opaque!
     {
-        rspBlitT(0, pimSrc, pimDst, sSrcX, sSrcY, sDstX, sDstY, sDstW, sDstH, NULL, NULL);
+        rspBlitT(0, pimSrc, pimDst, sSrcX, sSrcY, sDstX, sDstY, sDstW, sDstH, nullptr, nullptr);
         return;
     }
 

@@ -40,7 +40,7 @@
 CGrip::CGrip()
 {
     // Clear for testing/debugging
-    m_pCamera = 0;
+    m_pCamera = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

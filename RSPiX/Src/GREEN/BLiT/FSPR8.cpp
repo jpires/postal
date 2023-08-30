@@ -32,7 +32,7 @@
 #include "specialtyp.h"
 #endif
 
-#include <string.h>
+#include <cstring>
 
 //***************************************************************************
 // NOTES:  The FSPR8 compression format is NOT based around the idea of
@@ -66,7 +66,7 @@ IMAGELINKLATE(FSPR8, ConvertToFSPR8, ConvertFromFSPR8, LoadFSPR8, SaveFSPR8, NUL
 
 short DeleteFSPR8(RImage *pImage)
 {
-    if (pImage->m_pSpecial != NULL)
+    if (pImage->m_pSpecial != nullptr)
     {
         delete (RSpecialFSPR8 *)pImage->m_pSpecial;
     }
@@ -282,7 +282,7 @@ short ConvertFromFSPR8(RImage *pImage)
 
     // Remove pSpecial:
     delete (RSpecialFSPR8 *)pImage->m_pSpecial;
-    pImage->m_pSpecial = pImage->m_pSpecialMem = NULL;
+    pImage->m_pSpecial = pImage->m_pSpecialMem = nullptr;
 
     return (short)pImage->m_type;
 }
@@ -309,7 +309,7 @@ short ConvertToFSPR8(RImage *pImage)
         return RImage::NOT_SUPPORTED;
     }
 
-    if (pImage->m_pData == NULL)
+    if (pImage->m_pData == nullptr)
     {
         TRACE("Convert:  Invalid image passed to convert to FSPR8\n");
         return RImage::NOT_SUPPORTED;
@@ -541,7 +541,7 @@ short rspBlit(RImage *pimSrc, RImage *pimDst, short sDstX, short sDstY, const RR
     // 1) preliminary parameter validation:
 #ifdef _DEBUG
 
-    if ((pimSrc == NULL) || (pimDst == NULL))
+    if ((pimSrc == nullptr) || (pimDst == nullptr))
     {
         TRACE("BLiT: null CImage* passed\n");
         return -1;

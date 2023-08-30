@@ -353,9 +353,9 @@
 // code to imagecon.cpp.
 //
 //////////////////////////////////////////////////////////////////////
-#include <stdio.h>
-#include <stdlib.h> // For malloc, etc.
-#include <string.h> // For memcpy...
+#include <cstdio>
+#include <cstdlib> // For malloc, etc.
+#include <cstring> // For memcpy...
 
 #include "Blue.h"
 
@@ -424,7 +424,7 @@ short RImage::sCreateMem(void **hMem, ULONG ulSize)
 {
     //	Make sure the data
     //	hasn't already been allocated
-    if (*hMem != NULL)
+    if (*hMem != nullptr)
     {
         TRACE("RPal::AllocMem() called by CreateData() -- A buffer has already been allocated\n");
         // Image allocated already
@@ -434,7 +434,7 @@ short RImage::sCreateMem(void **hMem, ULONG ulSize)
     {
         if (ulSize > 0)
         {
-            if ((*hMem = calloc(ulSize, 1)) == NULL)
+            if ((*hMem = calloc(ulSize, 1)) == nullptr)
             {
                 TRACE("RPal::AllocMem() called by CreateData() -- The buffer could not be allocated\n");
                 // Image buffer couldn't be allocated
@@ -450,7 +450,7 @@ short RImage::sCreateMem(void **hMem, ULONG ulSize)
         {
             TRACE("RPal::AllocMem() called by CreateData() - Warning attempting to allocate 0 bytes, quit screwing "
                   "around\n");
-            *hMem = NULL;
+            *hMem = nullptr;
             return 0;
         }
     }
@@ -481,7 +481,7 @@ short RImage::sCreateMem(void **hMem, ULONG ulSize)
 short RImage::sCreateAlignedMem(void **hMem, void **hData, ULONG ulSize)
 {
     // Make sure the data hasn't already been allocated
-    if (*hMem != NULL)
+    if (*hMem != nullptr)
     {
         TRACE("RImage::AllocMem called by CreateData() - buffer has already been allocatd\n");
         // buffer already exists
@@ -493,7 +493,7 @@ short RImage::sCreateAlignedMem(void **hMem, void **hData, ULONG ulSize)
         {
             // allocate an extra 15 bytes so that the data ponter can be aligned
             // to the nearest 128-bit boundry for Blit speed reasons
-            if ((*hMem = calloc(ulSize + 15, 1)) == NULL)
+            if ((*hMem = calloc(ulSize + 15, 1)) == nullptr)
             {
                 TRACE("RImage::AllocMem() called by CreateData() - buffer could not be allocated\n");
                 // calloc failed
@@ -511,7 +511,7 @@ short RImage::sCreateAlignedMem(void **hMem, void **hData, ULONG ulSize)
         {
             TRACE("RImage::AllocMem() called by CreateData() - Warning attempted to create a buffer of 0 bytes, quit "
                   "screwing around\n");
-            *hMem = NULL;
+            *hMem = nullptr;
             return SUCCESS;
         }
     }
@@ -538,10 +538,10 @@ short RImage::sDestroyMem(void **hMem)
 {
     // Make sure the memory
     // hasn't already been freed
-    if (*hMem != NULL)
+    if (*hMem != nullptr)
     {
         free(*hMem);
-        *hMem = NULL;
+        *hMem = nullptr;
     }
 
     // Always return success because
@@ -715,7 +715,7 @@ RImage::~RImage()
 //
 //////////////////////////////////////////////////////////////////////
 
-void RImage::InitMembers(void)
+void RImage::InitMembers()
 {
     // Initialize member variables to zero
     m_type = NOT_SUPPORTED;
@@ -729,12 +729,12 @@ void RImage::InitMembers(void)
     m_sWinY = 0;
     m_lPitch = 0;
     m_sDepth = 0;
-    m_pMem = NULL;
-    m_pData = NULL;
-    m_pPalette = NULL;
-    m_pPalMem = NULL;
-    m_pSpecial = NULL;
-    m_pSpecialMem = NULL;
+    m_pMem = nullptr;
+    m_pData = nullptr;
+    m_pPalette = nullptr;
+    m_pPalMem = nullptr;
+    m_pSpecial = nullptr;
+    m_pSpecialMem = nullptr;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -765,7 +765,7 @@ short RImage::CreateData(ULONG ulNewSize)
         TRACE("RImage::CreateData - Warning: pData is pointing to data\n");
 
     ALLOCFUNC caf = GETALLOCFUNC(m_type);
-    if (caf != NULL)
+    if (caf != nullptr)
         if ((*caf)(this) != SUCCESS)
             TRACE("RImage::CreateData - Error creating data for special type %d\n", m_type);
 
@@ -858,10 +858,10 @@ short RImage::CreateImage( // Returns 0 if successful.
 //
 //////////////////////////////////////////////////////////////////////
 
-void *RImage::DetachData(void)
+void *RImage::DetachData()
 {
     void *pDetachment = m_pMem;
-    m_pMem = m_pData = NULL;
+    m_pMem = m_pData = nullptr;
     return pDetachment;
 }
 
@@ -905,7 +905,7 @@ short RImage::DetachData(void **hMem, void **hData)
     {
         *hMem = m_pMem;
         *hData = m_pData;
-        m_pMem = m_pData = NULL;
+        m_pMem = m_pData = nullptr;
         return SUCCESS;
     }
     else
@@ -936,9 +936,9 @@ short RImage::DestroyData()
     // Only if the data was not supplied by the user.
     if (m_pMem)
     {
-        m_pData = NULL;
+        m_pData = nullptr;
         sRes = sDestroyMem((void **)&m_pMem);
-        m_pMem = NULL;
+        m_pMem = nullptr;
     }
 
     if (m_pSpecialMem)
@@ -946,11 +946,11 @@ short RImage::DestroyData()
         // If there is a special delete function for this image type
         // call it so that it can clean up its pSpecial Memory
         DELETEFUNC cdf = GETDELETEFUNC(this->m_type);
-        if (cdf != NULL)
+        if (cdf != nullptr)
         {
             if ((*cdf)(this) == SUCCESS)
             {
-                m_pSpecialMem = NULL;
+                m_pSpecialMem = nullptr;
             }
         }
         else
@@ -958,7 +958,7 @@ short RImage::DestroyData()
             // Else do the best you can
             free(m_pSpecialMem);
 
-            m_pSpecialMem = NULL;
+            m_pSpecialMem = nullptr;
         }
     }
 
@@ -1024,7 +1024,7 @@ short RImage::SetPalette(RPal *pPal)
         TRACE("RImage::SetPalette - Warning: m_pPalette points to an Image-allocated palette\n");
         TRACE("                     The previous palette will be deleted and your palette will be set\n");
         delete (m_pPalMem);
-        m_pPalMem = NULL;
+        m_pPalMem = nullptr;
     }
     m_pPalette = pPal;
     return SUCCESS;
@@ -1046,10 +1046,10 @@ short RImage::SetPalette(RPal *pPal)
 //
 //////////////////////////////////////////////////////////////////////
 
-short RImage::CreatePalette(void)
+short RImage::CreatePalette()
 {
     m_pPalMem = m_pPalette = new RPal();
-    if (m_pPalette == NULL)
+    if (m_pPalette == nullptr)
         return FAILURE;
     else
         return SUCCESS;
@@ -1103,10 +1103,10 @@ short RImage::CreatePalette(ULONG ulSize)
 //
 //////////////////////////////////////////////////////////////////////
 
-RPal *RImage::DetachPalette(void)
+RPal *RImage::DetachPalette()
 {
     RPal *pDetachment = m_pPalette;
-    m_pPalette = m_pPalMem = NULL;
+    m_pPalette = m_pPalMem = nullptr;
     return pDetachment;
 }
 
@@ -1128,12 +1128,12 @@ RPal *RImage::DetachPalette(void)
 //
 //////////////////////////////////////////////////////////////////////
 
-short RImage::DestroyPalette(void)
+short RImage::DestroyPalette()
 {
     if (m_pPalMem)
     {
         delete m_pPalMem;
-        m_pPalMem = m_pPalette = NULL;
+        m_pPalMem = m_pPalette = nullptr;
     }
     return SUCCESS;
 }
@@ -1227,7 +1227,7 @@ RImage::Type RImage::Convert(Type type)
         {
             // Verify function exists . . .
             CONVFROMFUNC cft = GETFROMFUNC(m_type);
-            if (cft != NULL)
+            if (cft != nullptr)
             {
                 // Convert to a standard type.
                 typeRes = (Type)(*cft)(this);
@@ -1248,7 +1248,7 @@ RImage::Type RImage::Convert(Type type)
             {
                 // Verify function exists . . .
                 CONVTOFUNC ctt = GETTOFUNC(type);
-                if (ctt != NULL)
+                if (ctt != nullptr)
                 {
                     typeRes = (Type)(*ctt)(this);
                 }
@@ -1774,7 +1774,7 @@ short RImage::SaveDib(RFile *pcf)
         long lDibPitch = WIDTHUCHAR((((long)m_sWidth * (long)m_sDepth + 7L) & ~7L) / 8L);
 
         long ulColorData = 0;
-        if (m_pPalette != NULL)
+        if (m_pPalette != nullptr)
         {
             ulColorData = m_pPalette->m_ulSize;
         }
@@ -1845,7 +1845,7 @@ short RImage::SaveDib(RFile *pcf)
                                                                 {
                                                                     if (pcf->Write(&dh.ulClrImportant) == 1L)
                                                                     {
-                                                                        if (m_pPalette != NULL)
+                                                                        if (m_pPalette != nullptr)
                                                                         {
                                                                             if (pcf->Write(m_pPalette->m_pData,
                                                                                            m_pPalette->m_ulSize) ==
@@ -2154,7 +2154,7 @@ short RImage::Save(RFile *pcf) const
 
         // Call the special Save function for this type if any
         SAVEFUNC csf = GETSAVEFUNC(m_type);
-        if (csf != NULL)
+        if (csf != nullptr)
         // Note this must be changed to pass the version.
 #ifdef _MSC_VER
         // #pragma message( __FILE__ "(2022) : Calls to SAVEFUNC must be changed to take a version!")
@@ -2193,7 +2193,7 @@ short RImage::Save(RFile *pcf) const
 short RImage::WritePixelData(RFile *pcf) const
 {
     short sReturn = SUCCESS;
-    UCHAR *pLineData = NULL;
+    UCHAR *pLineData = nullptr;
 
     if (m_sWidth <= m_sWinWidth && m_sHeight <= m_sWinHeight)
     {
@@ -2406,7 +2406,7 @@ short RImage::Load(RFile *pcf)
 short RImage::ReadPixelData(RFile *pcf)
 {
     short sReturn = SUCCESS;
-    UCHAR *pLineData = NULL;
+    UCHAR *pLineData = nullptr;
 
     if (m_sWidth <= m_sWinWidth && m_sHeight <= m_sWinHeight)
     {

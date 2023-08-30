@@ -31,23 +31,23 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 #ifndef WIN32
 #include <unistd.h>
 #include <sys/param.h>
 #endif
 
-#include <time.h>
+#include <ctime>
 
 // Blue //////////////////////////////////////////////////////////////////////
 #include "SDL.h"
 #include "BLUE/Blue.h"
 
-SDL_Window *sdlWindow = NULL;
-SDL_Surface *sdlShadowSurface = NULL;
+SDL_Window *sdlWindow = nullptr;
+SDL_Surface *sdlShadowSurface = nullptr;
 
 bool mouse_grabbed = false;
 static short ms_sQuit = 0;
@@ -61,11 +61,11 @@ static short ms_sQuit = 0;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-extern void Disp_Init(void);
-extern void Key_Init(void);
-extern void Joy_Init(void);
+extern void Disp_Init();
+extern void Key_Init();
+extern void Joy_Init();
 
-short rspInitBlue(void)
+short rspInitBlue()
 {
     short sRes = 0; // Assume success.
 
@@ -99,7 +99,7 @@ short rspInitBlue(void)
 // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
-void rspKillBlue(void)
+void rspKillBlue()
 {
     // Kill display module.
     SDL_Quit();
@@ -120,7 +120,7 @@ extern void Key_Event(SDL_Event *event);
 
 bool GSDLAppIsActive = true;
 
-extern void rspDoSystem(void) // Returns nothing.
+extern void rspDoSystem() // Returns nothing.
 {
     rspPresentFrame();
 
@@ -176,7 +176,7 @@ extern void rspSetDoSystemMode( // Returns nothing.
 // Get system-specific quit status.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern short rspGetQuitStatus(void) // Returns TRUE if quit detected, FALSE otherwise
+extern short rspGetQuitStatus() // Returns TRUE if quit detected, FALSE otherwise
 {
     return ms_sQuit;
 }
@@ -213,7 +213,7 @@ extern int rspCommandLine(const char *cmd)
     return 0;
 }
 
-extern void rspPlatformInit(void)
+extern void rspPlatformInit()
 {
 #if PLATFORM_MACOSX
     // MacOS X has this concept of "Application Bundles" which makes the whole

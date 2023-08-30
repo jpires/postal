@@ -102,7 +102,7 @@
 #define ITEM3D_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "item3d.h"
 #include "reality.h"
@@ -307,7 +307,7 @@ short CItem3d::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CItem3d::Update(void)
+void CItem3d::Update()
 {
     if (!m_sSuspend)
     {
@@ -366,7 +366,7 @@ void CItem3d::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CItem3d::Render(void) // Returns nothing.
+void CItem3d::Render() // Returns nothing.
 {
     // Sometimes this thing can exist after a failed EditModify().
     if (m_panimCur->m_psops)
@@ -408,12 +408,12 @@ short CItem3d::EditNew( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CItem3d::EditModify(void) // Returns 0 if successfull, non-zero otherwise
+short CItem3d::EditModify() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = CThing3d::EditModify();
 
     RGuiItem *pguiRoot = RGuiItem::LoadInstantiate(FullPathVD(EDIT_GUI_FILE));
-    if (pguiRoot != NULL)
+    if (pguiRoot != nullptr)
     {
         // Get listbox.
         RListBox *plb = (RListBox *)pguiRoot->GetItemFromId(LIST_BOX_ID);
@@ -456,7 +456,7 @@ short CItem3d::EditModify(void) // Returns 0 if successfull, non-zero otherwise
             for (i = Custom; i < NumTypes; i++)
             {
                 pguiItem = plb->AddString(ms_apszKnownAnimDescriptions[i]);
-                if (pguiItem != NULL)
+                if (pguiItem != nullptr)
                 {
                     // Set item number.
                     pguiItem->m_ulUserData = i;
@@ -474,7 +474,7 @@ short CItem3d::EditModify(void) // Returns 0 if successfull, non-zero otherwise
             if (DoGui(pguiRoot) == 1)
             {
                 RGuiItem *pguiSel = plb->GetSel();
-                if (pguiSel != NULL)
+                if (pguiSel != nullptr)
                 {
                     m_type = (ItemType)pguiSel->m_ulUserData;
                     if (m_type != Custom)
@@ -498,8 +498,8 @@ short CItem3d::EditModify(void) // Returns 0 if successfull, non-zero otherwise
                 strcpy(m_szChildAnimBaseName, peditChildName->m_szText);
 
                 // Get new rotation velocities.
-                m_dExtRotVelY = strtod(peditRotY->m_szText, NULL);
-                m_dExtRotVelZ = strtod(peditRotZ->m_szText, NULL);
+                m_dExtRotVelY = strtod(peditRotY->m_szText, nullptr);
+                m_dExtRotVelZ = strtod(peditRotZ->m_szText, nullptr);
             }
             else
             {
@@ -531,7 +531,7 @@ short CItem3d::EditModify(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Init item3d
 ////////////////////////////////////////////////////////////////////////////////
-short CItem3d::Init(void) // Returns 0 if successfull, non-zero otherwise
+short CItem3d::Init() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -564,7 +564,7 @@ short CItem3d::Init(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Kill item3d
 ////////////////////////////////////////////////////////////////////////////////
-void CItem3d::Kill(void)
+void CItem3d::Kill()
 {
     // Free resources
     FreeResources();
@@ -573,7 +573,7 @@ void CItem3d::Kill(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CItem3d::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CItem3d::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -589,13 +589,13 @@ short CItem3d::GetResources(void) // Returns 0 if successfull, non-zero otherwis
     }
 
     // Load main anim.
-    sResult = m_anim.Get(m_szAnimBaseName, m_szAnimRigidName, NULL, NULL, RChannel_LoopAtStart | RChannel_LoopAtEnd);
+    sResult = m_anim.Get(m_szAnimBaseName, m_szAnimRigidName, nullptr, nullptr, RChannel_LoopAtStart | RChannel_LoopAtEnd);
 
     // If there is a child name . . .
     if (m_szChildAnimBaseName[0])
     {
         // Load child naim.
-        sResult |= m_animChild.Get(m_szChildAnimBaseName, NULL, NULL, NULL, RChannel_LoopAtStart | RChannel_LoopAtEnd);
+        sResult |= m_animChild.Get(m_szChildAnimBaseName, nullptr, nullptr, nullptr, RChannel_LoopAtStart | RChannel_LoopAtEnd);
     }
 
     // Get shadow.
@@ -615,7 +615,7 @@ short CItem3d::GetResources(void) // Returns 0 if successfull, non-zero otherwis
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-void CItem3d::FreeResources(void)
+void CItem3d::FreeResources()
 {
     // If we have any anim resources . . .
     if (m_anim.m_pmeshes)
@@ -696,7 +696,7 @@ short CItem3d::Setup(                           // Returns 0 on success.
 
     m_type = type;
 
-    if (pszCustomBaseName != NULL)
+    if (pszCustomBaseName != nullptr)
     {
         strcpy(m_szAnimBaseName, pszCustomBaseName);
     }

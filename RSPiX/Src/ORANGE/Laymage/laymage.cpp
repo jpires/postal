@@ -89,8 +89,8 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include "System.h"
 
 #ifdef PATHS_IN_INCLUDES
@@ -125,11 +125,11 @@ RLaymage::RLaymage()
     short i;
 
     for (i = 0; i < LAYMAGE_MAXCHANNELS; i++)
-        m_pcChannels[i] = NULL;
+        m_pcChannels[i] = nullptr;
 
     m_sNumLayers = 0;
-    m_apImages = NULL;
-    m_apszLayerNames = NULL;
+    m_apImages = nullptr;
+    m_apszLayerNames = nullptr;
     m_lTellLayers = 0;
     m_lTellChannels = 0;
 }
@@ -176,8 +176,8 @@ void RLaymage::Reset()
     FreeLayerArrays();
 
     m_sNumLayers = 0;
-    m_apImages = NULL;
-    m_apszLayerNames = NULL;
+    m_apImages = nullptr;
+    m_apszLayerNames = nullptr;
     m_lTellLayers = 0;
     m_lTellChannels = 0;
 }
@@ -197,7 +197,7 @@ void RLaymage::Reset()
 //
 //////////////////////////////////////////////////////////////////////
 
-void RLaymage::ClearChannelBuffers(void)
+void RLaymage::ClearChannelBuffers()
 {
     short i;
 
@@ -205,7 +205,7 @@ void RLaymage::ClearChannelBuffers(void)
         if (m_pcChannels[i])
         {
             free(m_pcChannels[i]);
-            m_pcChannels[i] = NULL;
+            m_pcChannels[i] = nullptr;
         }
 }
 
@@ -850,7 +850,7 @@ short RLaymage::ReadLayerInfo(short sLayerNum, RFile *pcfLayer, RFile *pcfChanne
     else
     {
         // If the layer name hasn't been set, set it to "background" to match the photoshop default name
-        if (m_apszLayerNames[sLayerNum] == 0)
+        if (m_apszLayerNames[sLayerNum] == nullptr)
         {
             m_apszLayerNames[sLayerNum] = new char[20 + 1];
             strcpy(m_apszLayerNames[sLayerNum], "background");
@@ -936,8 +936,8 @@ short RLaymage::ReadLayerName(short sLayerNum, RFile *pcfLayer)
     ULONG ulData;
     USHORT usData;
     UCHAR ucData;
-    ULONG *pulChannelLength = NULL;
-    short *psChannelID = NULL;
+    ULONG *pulChannelLength = nullptr;
+    short *psChannelID = nullptr;
     USHORT usNextChannel = 0;
     USHORT usNumChannels = 0;
     ULONG ulTop;
@@ -958,7 +958,7 @@ short RLaymage::ReadLayerName(short sLayerNum, RFile *pcfLayer)
 
     pulChannelLength = (ULONG *)calloc(usNumChannels, sizeof(ULONG));
     psChannelID = (short *)calloc(usNumChannels, sizeof(short));
-    if (pulChannelLength == NULL || psChannelID == NULL)
+    if (pulChannelLength == nullptr || psChannelID == nullptr)
     {
         TRACE("RLaymage::ReadLayerInfo - Error allocating buffers for channel data\n");
         sReturn = FAILURE;
@@ -1315,14 +1315,14 @@ short RLaymage::Save(RFile * /*pcf*/)
 RImage *RLaymage::GetLayer(char *pszLayerName)
 {
     short i = 0;
-    RImage *pLayerImage = NULL;
+    RImage *pLayerImage = nullptr;
 
-    while (i < m_sNumLayers && pLayerImage == NULL)
+    while (i < m_sNumLayers && pLayerImage == nullptr)
     {
         if (strcmp(pszLayerName, m_apszLayerNames[i]) == 0)
         {
             pLayerImage = m_apImages[i];
-            if (pLayerImage == NULL)
+            if (pLayerImage == nullptr)
             {
                 ReadLayer(i);
                 pLayerImage = m_apImages[i];
@@ -1356,13 +1356,13 @@ RImage *RLaymage::GetLayer(char *pszLayerName)
 
 RImage *RLaymage::GetLayer(short sLayerNumber)
 {
-    RImage *pLayerImage = NULL;
+    RImage *pLayerImage = nullptr;
 
     if (sLayerNumber >= 0 && sLayerNumber < m_sNumLayers)
     {
         pLayerImage = m_apImages[sLayerNumber];
         // If this layer is not in memory, load it in now
-        if (pLayerImage == NULL)
+        if (pLayerImage == nullptr)
         {
             ReadLayer(sLayerNumber);
             pLayerImage = m_apImages[sLayerNumber];
@@ -1402,10 +1402,10 @@ void RLaymage::FreeLayer(char *pszLayerName)
             i++;
     }
 
-    if (bFound && m_apImages[i] != NULL)
+    if (bFound && m_apImages[i] != nullptr)
     {
         delete m_apImages[i];
-        m_apImages[i] = NULL;
+        m_apImages[i] = nullptr;
     }
 }
 
@@ -1432,7 +1432,7 @@ void RLaymage::FreeLayer(short sLayerNumber)
         if (m_apImages[sLayerNumber])
         {
             delete m_apImages[sLayerNumber];
-            m_apImages[sLayerNumber] = NULL;
+            m_apImages[sLayerNumber] = nullptr;
         }
 }
 
@@ -1451,7 +1451,7 @@ void RLaymage::FreeLayer(short sLayerNumber)
 //
 //////////////////////////////////////////////////////////////////////
 
-void RLaymage::FreeAllLayers(void)
+void RLaymage::FreeAllLayers()
 {
     short i;
 
@@ -1460,7 +1460,7 @@ void RLaymage::FreeAllLayers(void)
         if (m_apImages[i])
         {
             delete m_apImages[i];
-            m_apImages[i] = NULL;
+            m_apImages[i] = nullptr;
         }
     }
 }
@@ -1514,13 +1514,13 @@ short RLaymage::GetLayerName(short sLayer, char *pszNameBuffer)
 //
 //////////////////////////////////////////////////////////////////////
 
-void RLaymage::FreeLayerArrays(void)
+void RLaymage::FreeLayerArrays()
 {
     if (m_apImages)
     {
         FreeAllLayers();
         delete[] m_apImages;
-        m_apImages = NULL;
+        m_apImages = nullptr;
     }
 
     if (m_apszLayerNames)
@@ -1530,7 +1530,7 @@ void RLaymage::FreeLayerArrays(void)
             if (m_apszLayerNames[i])
                 delete[] m_apszLayerNames[i];
         delete[] m_apszLayerNames;
-        m_apszLayerNames = NULL;
+        m_apszLayerNames = nullptr;
     }
 }
 
@@ -1573,8 +1573,8 @@ short RLaymage::AllocateLayerArrays(short sNumLayers)
     {
         for (i = 0; i < sNumLayers; i++)
         {
-            m_apImages[i] = NULL;
-            m_apszLayerNames[i] = NULL;
+            m_apImages[i] = nullptr;
+            m_apszLayerNames[i] = nullptr;
         }
     }
 

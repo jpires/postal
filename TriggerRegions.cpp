@@ -72,13 +72,13 @@ RMultiGridIndirect *CreateRegionMap(short sWidth, short sHeight, short sMaxPlane
     {
         TRACE("CreateRegionMap: alloc error!\n");
 
-        return NULL;
+        return nullptr;
     }
 
     if (pMGI->Alloc(sWidth, sHeight, sMaxPlanes, sTileW, sTileH) != SUCCESS)
     {
         TRACE("CreateRegionMap: alloc error!\n");
-        return NULL;
+        return nullptr;
     }
 
     // Create and install the MultiGrid.
@@ -87,14 +87,14 @@ RMultiGridIndirect *CreateRegionMap(short sWidth, short sHeight, short sMaxPlane
     if (!pmg)
     {
         TRACE("CreateRegionMap: alloc error!\n");
-        return NULL;
+        return nullptr;
     }
 
     if (pmg->Alloc(sWidth, sHeight) != SUCCESS)
     {
         TRACE("CreateRegionMap: alloc error!\n");
         delete pmg;
-        return NULL;
+        return nullptr;
     }
 
     pMGI->InstallMultiGrid(pmg);
@@ -170,7 +170,7 @@ short CompressMap(RMultiGridIndirect *pMGI, short sTileW, short sTileH)
 void SpewTriggers(CRealm *pRealm, USHORT usDudeUID, short sX, short sZ)
 {
     UCHAR aucHitList[MGI_MAX_PLANES];
-    if (pRealm->m_pTriggerMap == NULL)
+    if (pRealm->m_pTriggerMap == nullptr)
         return; // No triggers
 
     short sMax = pRealm->m_pTriggerMap->m_sMaxPlanes;
@@ -190,7 +190,7 @@ void SpewTriggers(CRealm *pRealm, USHORT usDudeUID, short sX, short sZ)
     while (*pHit && sNum) // got a hit:
     {
         // send a trigger message out:
-        CThing *pThing = NULL;
+        CThing *pThing = nullptr;
 
         if (pRealm->m_idbank.GetThingByID(&pThing, pRealm->m_asPylonUIDs[*pHit]) == SUCCESS)
         {

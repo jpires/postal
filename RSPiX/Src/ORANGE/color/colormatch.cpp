@@ -15,7 +15,7 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
-#include <string.h>
+#include <cstring>
 #include "Blue.h"
 #ifdef PATHS_IN_INCLUDES
 #include "GREEN/Image/Image.h"
@@ -287,7 +287,7 @@ void RAlpha::FinishEffect(short sPalStart, short sPalLen)
 
     while (sChannel < csLAST_EFFECT)
     {
-        UCHAR *pucChannel = NULL;
+        UCHAR *pucChannel = nullptr;
 
         switch (sChannel)
         {
@@ -367,7 +367,7 @@ RAlpha::RAlpha()
 {
     // m_pAlphas = NULL;
     for (short i = 0; i < 256; i++)
-        m_pAlphas[i] = NULL;
+        m_pAlphas[i] = nullptr;
     m_sAlphaDepth = 0;
 }
 
@@ -380,7 +380,7 @@ void RAlpha::Erase()
             if (m_pAlphas[i])
             {
                 free(m_pAlphas[i]);
-                m_pAlphas[i] = NULL;
+                m_pAlphas[i] = nullptr;
             }
         }
         // free(m_pAlphas);
@@ -598,7 +598,7 @@ RMultiAlpha::~RMultiAlpha()
 {
     for (short i = 0; i < m_sNumLevels; i++)
     {
-        if (m_pAlphaList[i] != NULL)
+        if (m_pAlphaList[i] != nullptr)
             delete m_pAlphaList[i];
     }
 
@@ -627,14 +627,14 @@ short RMultiAlpha::Alloc(short sDepth)
 void RMultiAlpha::Erase()
 {
     m_sNumLevels = 0;
-    m_pAlphaList = NULL;
+    m_pAlphaList = nullptr;
     for (short i = 0; i < 256; i++)
     {
-        m_pGeneralAlpha[i] = NULL;
+        m_pGeneralAlpha[i] = nullptr;
         m_pSaveLevels[i] = UCHAR(0);
     }
     m_sGeneral = TRUE;
-    m_pLevelOpacity = NULL;
+    m_pLevelOpacity = nullptr;
 }
 
 // Note: this type can be supported with one alphablit
@@ -695,7 +695,7 @@ short RMultiAlpha::Load(RFile *pFile)
     for (i = 0; i < 256; i++)
     {
         if ((m_pSaveLevels[i] == 0) || (m_pSaveLevels[i] > m_sNumLevels))
-            m_pGeneralAlpha[i] = NULL;
+            m_pGeneralAlpha[i] = nullptr;
         else
             m_pGeneralAlpha[i] = m_pAlphaList[m_pSaveLevels[i] - 1]->m_pAlphas;
     }
@@ -733,7 +733,7 @@ short RMultiAlpha::Load(char *pszFile)
     RFile fplocal;
     RFile *fp = &fplocal; // needs to be freed automatically!
 
-    if (m_pAlphaList != NULL)
+    if (m_pAlphaList != nullptr)
     {
         TRACE("RMultiAlpha::Load: MultAlpha NOT EMPTY!\n");
         return -1;
@@ -778,7 +778,7 @@ short RMultiAlpha::CreateLayer(short sLayerNumber, double dOpacity, short sPalSt
         return -1;
     }
 
-    if (m_pAlphaList[sLayerNumber] != NULL)
+    if (m_pAlphaList[sLayerNumber] != nullptr)
     {
         TRACE("RMultiAlpha::CreateAlphaLayer: Error: Layer exists.\n");
         return -1;
@@ -802,13 +802,13 @@ short RMultiAlpha::Finish(short sGeneral)
     {
         m_sGeneral = FALSE;
 
-        m_pGeneralAlpha[0] = NULL;         // shift things up one.
+        m_pGeneralAlpha[0] = nullptr;         // shift things up one.
         for (i = 0; i < m_sNumLevels; i++) // make it look like (m_sNumLevels+2)
         {
             m_pSaveLevels[i] = i;
             // Use NULL as a code for opacity, 0 is hooked as transparent
             if (m_pLevelOpacity[i] == 255)
-                m_pGeneralAlpha[i + 1] = NULL;
+                m_pGeneralAlpha[i + 1] = nullptr;
             else
                 m_pGeneralAlpha[i + 1] = m_pAlphaList[i]->m_pAlphas;
         }
@@ -816,7 +816,7 @@ short RMultiAlpha::Finish(short sGeneral)
         m_pSaveLevels[m_sNumLevels] = m_sNumLevels;
         for (i = m_sNumLevels + 1; i < 256; i++)
         {
-            m_pGeneralAlpha[i] = NULL;
+            m_pGeneralAlpha[i] = nullptr;
             m_pSaveLevels[i] = m_sNumLevels + 1;
         }
     }
@@ -864,7 +864,7 @@ short RMultiAlpha::Finish(short sGeneral)
         for (i = 0; i < 256; i++)
         {
             if ((m_pSaveLevels[i] == 0) || (m_pSaveLevels[i] > m_sNumLevels))
-                m_pGeneralAlpha[i] = NULL;
+                m_pGeneralAlpha[i] = nullptr;
             else
                 m_pGeneralAlpha[i] = m_pAlphaList[m_pSaveLevels[i] - 1]->m_pAlphas;
         }
@@ -915,7 +915,7 @@ UCHAR ***RMultiAlpha::pppucCreateFastMultiAlpha(short sStartSrc,
     UCHAR ***pppucFastAligned = (UCHAR ***)((ULONG(pppucFastMem) + 4095) & (~4095));
 
     if (!pppucFastMem)
-        return NULL;
+        return nullptr;
     UCHAR *pInfo = (UCHAR *)pppucFastAligned;
     // For freeing:
     long lMemOffset = ULONG(pppucFastAligned) - ULONG(pppucFastMem);
@@ -936,7 +936,7 @@ UCHAR ***RMultiAlpha::pppucCreateFastMultiAlpha(short sStartSrc,
     //------------------------------------------------------------------------
     // Create the needed pointers into the normal MultiAlpha:
     //------------------------------------------------------------------------
-    UCHAR **ppucLevel = NULL;
+    UCHAR **ppucLevel = nullptr;
 
     // Copy the abridged data from the current MultiAlpha in
     // level majorest, source major, destination minor form:
@@ -959,7 +959,7 @@ UCHAR ***RMultiAlpha::pppucCreateFastMultiAlpha(short sStartSrc,
         ppucLevel = m_pGeneralAlpha[a];
         if (!ppucLevel)
         {
-            pppucFastAligned[a] = NULL;
+            pppucFastAligned[a] = nullptr;
             continue;
         } // Final 100% alphas are not stored
 
@@ -1003,7 +1003,7 @@ short RMultiAlpha::DeleteFastMultiAlpha(UCHAR ****pfmaDel)
     ASSERT(lDelta < 4096); // best error checking I can do.
 
     free(pByteAligned - lDelta);
-    *pfmaDel = NULL;
+    *pfmaDel = nullptr;
 
     return SUCCESS;
 }
@@ -1068,7 +1068,7 @@ void RFastMultiAlphaWrapper::Clear()
 
 RFastMultiAlphaWrapper::RFastMultiAlphaWrapper()
 {
-    m_pppucFastMultiAlpha = NULL;
+    m_pppucFastMultiAlpha = nullptr;
     Clear();
 }
 
@@ -1106,7 +1106,7 @@ short RFastMultiAlphaWrapper::Attach(UCHAR ***pppucFMA,
                                      short sNumDst,
                                      short sNumLayers)
 {
-    ASSERT(m_pppucFastMultiAlpha == NULL);
+    ASSERT(m_pppucFastMultiAlpha == nullptr);
     ASSERT(sStartSrc >= 0);
     ASSERT(sNumSrc > 0);
     ASSERT(sStartDst >= 0);
@@ -1150,7 +1150,7 @@ UCHAR ***RFastMultiAlphaWrapper::pppucGetFMA()
     TRACE("YOU MUST INSTEAD STORE THE POINTER SOMEWHERE AND REUSE IT!\n");
 
     ASSERT(FALSE);
-    return NULL;
+    return nullptr;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -1225,7 +1225,7 @@ short RFastMultiAlphaWrapper::Save(RFile *pf)
 short RFastMultiAlphaWrapper::Load(RFile *pf)
 {
     ASSERT(pf);
-    ASSERT(m_pppucFastMultiAlpha == NULL);
+    ASSERT(m_pppucFastMultiAlpha == nullptr);
 
     short sVer = 1;
     char szType[32];

@@ -81,9 +81,9 @@ class CLogTabVar_GetAction : CLogTabVar<CPerson *>
         m_papszStrings = CDoofus::ms_apszActionNames;
     }
 
-    short GetVal(CPerson *pPerson) { return pPerson->m_eCurrentAction; }
+    short GetVal(CPerson *pPerson) override { return pPerson->m_eCurrentAction; }
 
-    void SetVal(CPerson *pPerson, short sVal) {}
+    void SetVal(CPerson *pPerson, short sVal) override {}
 } givename_getaction;
 
 // Action output variable
@@ -102,9 +102,9 @@ class CLogTabVar_SetAction : CLogTabVar<CPerson *>
         m_papszStrings = CDoofus::ms_apszActionNames;
     }
 
-    short GetVal(CPerson *pPerson) { return pPerson->m_eSuggestedAction; }
+    short GetVal(CPerson *pPerson) override { return pPerson->m_eSuggestedAction; }
 
-    void SetVal(CPerson *pPerson, short sVal) { pPerson->m_eSuggestedAction = (CDoofus::Action)sVal; }
+    void SetVal(CPerson *pPerson, short sVal) override { pPerson->m_eSuggestedAction = (CDoofus::Action)sVal; }
 } givename_setaction;
 
 // Distance to target input variable
@@ -127,7 +127,7 @@ class CLogTabVar_TargetDist : CLogTabVar<CPerson *>
         m_papszStrings = ms_sz;
     }
 
-    short GetVal(CPerson *pPerson)
+    short GetVal(CPerson *pPerson) override
     {
 // Define local arguements which may become inputs:
 // (They are the squared distances...)
@@ -156,7 +156,7 @@ class CLogTabVar_TargetDist : CLogTabVar<CPerson *>
             return 0;
     }
 
-    void SetVal(CPerson *pPerson, short sVal) {}
+    void SetVal(CPerson *pPerson, short sVal) override {}
 } givename_targetdist;
 
 // Availability of Popout pylon
@@ -176,13 +176,13 @@ class CLogTabVar_PopoutAvailable : CLogTabVar<CPerson *>
         m_papszStrings = ms_sz;
     }
 
-    short GetVal(CPerson *pPerson)
+    short GetVal(CPerson *pPerson) override
     {
         pPerson->Logic_PylonDetect();
         return pPerson->m_bPylonPopoutAvailable;
     }
 
-    void SetVal(CPerson *pPerson, short sVal) {}
+    void SetVal(CPerson *pPerson, short sVal) override {}
 } givename_popoutavailable;
 
 // Availability of Run and Shoot pylon
@@ -202,13 +202,13 @@ class CLogTabVar_RunShootAvailable : CLogTabVar<CPerson *>
         m_papszStrings = ms_sz;
     }
 
-    short GetVal(CPerson *pPerson)
+    short GetVal(CPerson *pPerson) override
     {
         pPerson->Logic_PylonDetect();
         return pPerson->m_bPylonRunShootAvailable;
     }
 
-    void SetVal(CPerson *pPerson, short sVal) {}
+    void SetVal(CPerson *pPerson, short sVal) override {}
 } givename_runshootavailable;
 
 // Availability of Safety pylon
@@ -228,13 +228,13 @@ class CLogTabVar_SafetyAvailable : CLogTabVar<CPerson *>
         m_papszStrings = ms_sz;
     }
 
-    short GetVal(CPerson *pPerson)
+    short GetVal(CPerson *pPerson) override
     {
         pPerson->Logic_PylonDetect();
         return pPerson->m_bPylonSafeAvailable;
     }
 
-    void SetVal(CPerson *pPerson, short sVal) {}
+    void SetVal(CPerson *pPerson, short sVal) override {}
 } givename_safetyavailable;
 
 // Availability of Pylon
@@ -254,7 +254,7 @@ class CLogTabVar_PylonAvailable : CLogTabVar<CPerson *>
         m_papszStrings = ms_sz;
     }
 
-    short GetVal(CPerson *pPerson)
+    short GetVal(CPerson *pPerson) override
     {
         short sResult = 0;
         pPerson->Logic_PylonDetect();
@@ -278,7 +278,7 @@ class CLogTabVar_PylonAvailable : CLogTabVar<CPerson *>
         return sResult;
     }
 
-    void SetVal(CPerson *pPerson, short sVal) {}
+    void SetVal(CPerson *pPerson, short sVal) override {}
 } givename_pylonavailable;
 
 // The this character's health
@@ -298,9 +298,9 @@ class CLogTabVar_MyHealth : CLogTabVar<CPerson *>
         m_papszStrings = ms_sz;
     }
 
-    short GetVal(CPerson *pPerson) { return pPerson->m_stockpile.m_sHitPoints / 34; }
+    short GetVal(CPerson *pPerson) override { return pPerson->m_stockpile.m_sHitPoints / 34; }
 
-    void SetVal(CPerson *pPerson, short sVal) {}
+    void SetVal(CPerson *pPerson, short sVal) override {}
 } givename_myhealth;
 
 // The target CDude's health
@@ -320,7 +320,7 @@ class CLogTabVar_DudeHealth : CLogTabVar<CPerson *>
         m_papszStrings = ms_sz;
     }
 
-    short GetVal(CPerson *pPerson)
+    short GetVal(CPerson *pPerson) override
     {
         short sResult = 0;
 
@@ -347,7 +347,7 @@ class CLogTabVar_DudeHealth : CLogTabVar<CPerson *>
         return sResult;
     }
 
-    void SetVal(CPerson *pPerson, short sVal) {}
+    void SetVal(CPerson *pPerson, short sVal) override {}
 } givename_dudehealth;
 
 // Is the pylon area being triggered right now?
@@ -367,9 +367,9 @@ class CLogTabVar_IsTriggered : CLogTabVar<CPerson *>
         m_papszStrings = ms_sz;
     }
 
-    short GetVal(CPerson *pPerson) { return (pPerson->m_pPylonStart != NULL && pPerson->m_pPylonStart->Triggered()); }
+    short GetVal(CPerson *pPerson) override { return (pPerson->m_pPylonStart != nullptr && pPerson->m_pPylonStart->Triggered()); }
 
-    void SetVal(CPerson *pPerson, short sVal) {}
+    void SetVal(CPerson *pPerson, short sVal) override {}
 } givename_istriggered;
 
 // This is the first high level state variable available to the logic table
@@ -390,9 +390,9 @@ class CLogTabVar_UserState1 : CLogTabVar<CPerson *>
         m_papszStrings = ms_sz;
     }
 
-    short GetVal(CPerson *pPerson) { return pPerson->m_sUserState1; }
+    short GetVal(CPerson *pPerson) override { return pPerson->m_sUserState1; }
 
-    void SetVal(CPerson *pPerson, short sVal) { pPerson->m_sUserState1 = sVal; }
+    void SetVal(CPerson *pPerson, short sVal) override { pPerson->m_sUserState1 = sVal; }
 } givename_userstate1;
 
 // Did the enemy just get shot?
@@ -412,9 +412,9 @@ class CLogTabVar_RecentlyShot : CLogTabVar<CPerson *>
         m_papszStrings = ms_sz;
     }
 
-    short GetVal(CPerson *pPerson) { return (pPerson->m_pRealm->m_time.GetGameTime() < pPerson->m_lShotTimeout); }
+    short GetVal(CPerson *pPerson) override { return (pPerson->m_pRealm->m_time.GetGameTime() < pPerson->m_lShotTimeout); }
 
-    void SetVal(CPerson *pPerson, short sVal) {}
+    void SetVal(CPerson *pPerson, short sVal) override {}
 } givename_recentlyshot;
 
 // Did the anamy get stuck on terrain?
@@ -434,9 +434,9 @@ class CLogTabVar_RecentlyStuck : CLogTabVar<CPerson *>
         m_papszStrings = ms_sz;
     }
 
-    short GetVal(CPerson *pPerson) { return (pPerson->m_pRealm->m_time.GetGameTime() < pPerson->m_lStuckTimeout); }
+    short GetVal(CPerson *pPerson) override { return (pPerson->m_pRealm->m_time.GetGameTime() < pPerson->m_lStuckTimeout); }
 
-    void SetVal(CPerson *pPerson, short sVal)
+    void SetVal(CPerson *pPerson, short sVal) override
     {
         // Set to false
         if (sVal == 0)
@@ -465,9 +465,9 @@ class CLogTabVar_IsPanic : CLogTabVar<CPerson *>
         m_papszStrings = ms_sz;
     }
 
-    short GetVal(CPerson *pPerson) { return pPerson->m_bPanic; }
+    short GetVal(CPerson *pPerson) override { return pPerson->m_bPanic; }
 
-    void SetVal(CPerson *pPerson, short sVal) {}
+    void SetVal(CPerson *pPerson, short sVal) override {}
 } givename_ispanic;
 
 // Check to see if someone yelled for help in your area
@@ -487,7 +487,7 @@ class CLogTabVar_HelpCall : CLogTabVar<CPerson *>
         m_papszStrings = ms_sz;
     }
 
-    short GetVal(CPerson *pPerson)
+    short GetVal(CPerson *pPerson) override
     {
         if (pPerson->m_pRealm->m_time.GetGameTime() < pPerson->m_lLastHelpCallTime + pPerson->ms_lHelpTimeout &&
             pPerson->m_lLastHelpCallTime > 0)
@@ -496,7 +496,7 @@ class CLogTabVar_HelpCall : CLogTabVar<CPerson *>
             return 0;
     }
 
-    void SetVal(CPerson *pPerson, short sVal) {}
+    void SetVal(CPerson *pPerson, short sVal) override {}
 } givename_helpcall;
 
 // This is the first high level state variable available to the logic table
@@ -517,9 +517,9 @@ class CLogTabVar_UserGlobal : CLogTabVar<CPerson *>
         m_papszStrings = ms_sz;
     }
 
-    short GetVal(CPerson *pPerson) { return pPerson->ms_sLogTabUserGlobal; }
+    short GetVal(CPerson *pPerson) override { return pPerson->ms_sLogTabUserGlobal; }
 
-    void SetVal(CPerson *pPerson, short sVal) { pPerson->ms_sLogTabUserGlobal = sVal; }
+    void SetVal(CPerson *pPerson, short sVal) override { pPerson->ms_sLogTabUserGlobal = sVal; }
 } givename_userglobal;
 
 ////////////////////////////////////////////////////////////////////////////////

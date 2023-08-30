@@ -79,10 +79,10 @@ short CFlagbase::ms_sFileCount;
 /// Throwing Animation Files ////////////////////////////////////////////////////
 // An array of pointers to resource names (one for each channel of the animation)
 static char *ms_apszRedResNames[] = { "3d/rbase.sop",    "3d/rbase.mesh",  "3d/rbase.tex", "3d/rbase.hot",
-                                      "3d/rbase.bounds", "3d/rbase.floor", NULL,           NULL };
+                                      "3d/rbase.bounds", "3d/rbase.floor", nullptr,           nullptr };
 
 static char *ms_apszBlueResNames[] = { "3d/bbase.sop",    "3d/bbase.mesh",  "3d/bbase.tex", "3d/bbase.hot",
-                                       "3d/bbase.bounds", "3d/bbase.floor", NULL,           NULL };
+                                       "3d/bbase.bounds", "3d/bbase.floor", nullptr,           nullptr };
 
 // These are the points that are checked on the attribute map relative to his origin
 static RP3d ms_apt3dAttribCheck[] = {
@@ -238,7 +238,7 @@ short CFlagbase::Save( // Returns 0 if successfull, non-zero otherwise
 // Init - Call this after the resources are in place
 ////////////////////////////////////////////////////////////////////////////////
 
-short CFlagbase::Init(void)
+short CFlagbase::Init()
 {
     short sResult = 0;
 
@@ -266,7 +266,7 @@ short CFlagbase::Init(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CFlagbase::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CFlagbase::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -282,7 +282,7 @@ short CFlagbase::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CFlagbase::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CFlagbase::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -294,13 +294,13 @@ short CFlagbase::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CFlagbase::Update(void)
+void CFlagbase::Update()
 {
     short sHeight = m_sPrevHeight;
     long lThisTime;
     long lTimeDifference;
     long lSqDistanceToDude = 0;
-    CSmash *pSmashed = NULL;
+    CSmash *pSmashed = nullptr;
 
     if (!m_sSuspend)
     {
@@ -473,18 +473,18 @@ void CFlagbase::EditHotSpot( // Returns nothiing.
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CFlagbase::EditModify(void)
+short CFlagbase::EditModify()
 {
     short sResult = 0;
     U16 u16OrigColor = m_u16Color;
-    RGuiItem *pGuiItem = NULL;
+    RGuiItem *pGuiItem = nullptr;
     RGuiItem *pguiRoot = RGuiItem::LoadInstantiate(FullPathVD("res/editor/flagbase.gui"));
-    if (pguiRoot != NULL)
+    if (pguiRoot != nullptr)
     {
         REdit *peditFlagID = (REdit *)pguiRoot->GetItemFromId(GUI_FLAGID_EDIT_ID);
         REdit *peditColor = (REdit *)pguiRoot->GetItemFromId(GUI_COLOR_EDIT_ID);
 
-        if (peditFlagID != NULL && peditColor != NULL)
+        if (peditFlagID != nullptr && peditColor != nullptr)
         {
             ASSERT(peditFlagID->m_type == RGuiItem::Edit);
             ASSERT(peditColor->m_type == RGuiItem::Edit);
@@ -517,7 +517,7 @@ short CFlagbase::EditModify(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CFlagbase::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CFlagbase::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -548,7 +548,7 @@ short CFlagbase::GetResources(void) // Returns 0 if successfull, non-zero otherw
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CFlagbase::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CFlagbase::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     m_animFlagWave.Release();
 

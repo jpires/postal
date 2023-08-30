@@ -95,7 +95,7 @@ short RListContents::SaveChildren( // Returns 0 on success.
     // Determine number of child items.
     short sNum = 0;
     RGuiItem *pgui = m_listguiChildren.GetHead();
-    while (pgui != NULL)
+    while (pgui != nullptr)
     {
         sNum++;
 
@@ -107,7 +107,7 @@ short RListContents::SaveChildren( // Returns 0 on success.
 
     // Save children in reverse order.
     pgui = m_listguiChildren.GetTail();
-    while (pgui != NULL && sRes == 0 && pfile->Error() == FALSE)
+    while (pgui != nullptr && sRes == 0 && pfile->Error() == FALSE)
     {
         // Before each item is a value indicating whether the item
         // is an encapsulator.
@@ -135,7 +135,7 @@ short RListContents::LoadChildren( // Returns 0 on success.
 
     ASSERT(pfile->IsOpen() != FALSE);
     // Need to know parent.
-    ASSERT(GetParent() != NULL);
+    ASSERT(GetParent() != nullptr);
 
     short sNum;
     // Read number of children.
@@ -152,7 +152,7 @@ short RListContents::LoadChildren( // Returns 0 on success.
         pfile->Read(&sEncapsulator);
 
         pgui = LoadInstantiate(pfile);
-        if (pgui != NULL)
+        if (pgui != nullptr)
         {
             pgui->SetParent(this);
             // If the item is an encapsulator . . .

@@ -265,7 +265,7 @@
 #define PERSON_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "person.h"
 #include "TexEdit.h"
@@ -476,7 +476,7 @@ short CPerson::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CPerson::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CPerson::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -493,7 +493,7 @@ short CPerson::Startup(void) // Returns 0 if successfull, non-zero otherwise
 // Init - Call this after the resources are in place
 ////////////////////////////////////////////////////////////////////////////////
 
-short CPerson::Init(void)
+short CPerson::Init()
 {
     short sResult = 0;
 
@@ -583,9 +583,9 @@ short CPerson::Init(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CPerson::Update(void)
+void CPerson::Update()
 {
-    CThing *pDemon = NULL;
+    CThing *pDemon = nullptr;
 
     if (!m_sSuspend)
     {
@@ -822,7 +822,7 @@ void CPerson::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object.
 ////////////////////////////////////////////////////////////////////////////////
-void CPerson::Render(void)
+void CPerson::Render()
 {
     if (m_sShowState != FALSE)
     {
@@ -833,7 +833,7 @@ void CPerson::Render(void)
         //		m_sprite.m_pszText = ms_apszStateNames[m_state];
     }
     else
-        m_sprite.m_pszText = NULL;
+        m_sprite.m_pszText = nullptr;
 
     CDoofus::Render();
 }
@@ -841,7 +841,7 @@ void CPerson::Render(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object.
 ////////////////////////////////////////////////////////////////////////////////
-void CPerson::EditRender(void)
+void CPerson::EditRender()
 {
     CDoofus::EditRender();
 
@@ -869,7 +869,7 @@ void CPerson::EditRender(void)
         }
         else
         {
-            m_sprite.m_pszText = NULL;
+            m_sprite.m_pszText = nullptr;
         }
     }
 }
@@ -878,7 +878,7 @@ void CPerson::EditRender(void)
 // Logic_Writhing - special case for the cop since he has to crawl
 ////////////////////////////////////////////////////////////////////////////////
 
-void CPerson::Logic_Writhing(void)
+void CPerson::Logic_Writhing()
 {
     //	m_dAnimRot = m_dRot;
 
@@ -995,7 +995,7 @@ void CPerson::Logic_Writhing(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CPerson::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CPerson::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -1036,7 +1036,7 @@ static void LogicUserBrowse( // Returns nothing
   RGuiItem *pgui)            // In: GUI pressed.
 {
     RGuiItem *pguiLogicFileName = (RGuiItem *)pgui->m_ulUserInstance;
-    ASSERT(pguiLogicFileName != NULL);
+    ASSERT(pguiLogicFileName != nullptr);
 
     // Get the logic file name . . .
     char szLogicFile[RSP_MAX_PATH];
@@ -1062,11 +1062,11 @@ static void LogicUserBrowse( // Returns nothing
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CPerson::EditModify(void)
+short CPerson::EditModify()
 {
     short sResult = 0;
     Personatorium::Index eCurrentType = m_ePersonType;
-    RGuiItem *pGuiItem = NULL;
+    RGuiItem *pGuiItem = nullptr;
     RGuiItem *pGui = RGuiItem::LoadInstantiate(FullPathVD("res/editor/person.gui"));
     if (pGui)
     {
@@ -1097,7 +1097,7 @@ short CPerson::EditModify(void)
             for (i = 0; i < Personatorium::NumPersons; i++)
             {
                 pGuiItem = pPersonalityList->AddString(g_apersons[i].pszDescription);
-                if (pGuiItem != NULL)
+                if (pGuiItem != nullptr)
                 {
                     pGuiItem->m_lId = PERSONALITY_ITEM_ID_BASE + i;
                     pGuiItem->m_ulUserData = (ULONG)i;
@@ -1126,7 +1126,7 @@ short CPerson::EditModify(void)
                     (i != TimedMine) && (i != RemoteControlMine) && (i != BouncingBettyMine))
                 {
                     pGuiItem = pWeaponList->AddString(ms_awdWeapons[i].pszName);
-                    if (pGuiItem != NULL)
+                    if (pGuiItem != nullptr)
                     {
                         // Store class ID so we can determine user selection
                         pGuiItem->m_lId = ms_awdWeapons[i].id;
@@ -1255,12 +1255,12 @@ short CPerson::EditModify(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CPerson::EditUpdate(void) {}
+void CPerson::EditUpdate() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CPerson::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CPerson::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
     short sLoadResult = 0;
@@ -1640,7 +1640,7 @@ short CPerson::GetResources(void) // Returns 0 if successfull, non-zero otherwis
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CPerson::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CPerson::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     m_animRun.Release();
     m_animStand.Release();
@@ -1721,7 +1721,7 @@ SampleMaster::SoundInstance CPerson::PlaySoundWrithing(long *plDuration) // Out:
 // PlaySoundShot - choose among the shot sound effects
 ////////////////////////////////////////////////////////////////////////////////
 
-SampleMaster::SoundInstance CPerson::PlaySoundShot(void)
+SampleMaster::SoundInstance CPerson::PlaySoundShot()
 {
     m_siPlaying = 0;
     SampleMasterID *psmid = &g_smidNil;
@@ -1794,7 +1794,7 @@ SampleMaster::SoundInstance CPerson::PlaySoundShot(void)
 // PlaySoundBlownup - choose among the blown up sound effects
 ////////////////////////////////////////////////////////////////////////////////
 
-SampleMaster::SoundInstance CPerson::PlaySoundBlownup(void)
+SampleMaster::SoundInstance CPerson::PlaySoundBlownup()
 {
     m_siPlaying = 0;
     SampleMasterID *psmid = &g_smidNil;
@@ -1825,7 +1825,7 @@ SampleMaster::SoundInstance CPerson::PlaySoundBlownup(void)
 // PlaySoundBurning - choose among burning yells
 ////////////////////////////////////////////////////////////////////////////////
 
-SampleMaster::SoundInstance CPerson::PlaySoundBurning(void)
+SampleMaster::SoundInstance CPerson::PlaySoundBurning()
 {
     m_siPlaying = 0;
     SampleMasterID *psmid = &g_smidNil;
@@ -1856,7 +1856,7 @@ SampleMaster::SoundInstance CPerson::PlaySoundBurning(void)
 // PlaySoundShooting - choose among comments to say before shooting
 ////////////////////////////////////////////////////////////////////////////////
 
-SampleMaster::SoundInstance CPerson::PlaySoundShooting(void)
+SampleMaster::SoundInstance CPerson::PlaySoundShooting()
 {
     m_siPlaying = 0;
     SampleMasterID *psmid = &g_smidNil;
@@ -1898,7 +1898,7 @@ SampleMaster::SoundInstance CPerson::PlaySoundShooting(void)
 // PlaySoundDying - choose among dying sounds and comments
 ////////////////////////////////////////////////////////////////////////////////
 
-SampleMaster::SoundInstance CPerson::PlaySoundDying(void)
+SampleMaster::SoundInstance CPerson::PlaySoundDying()
 {
     m_siPlaying = 0;
     SampleMasterID *psmid = &g_smidNil;
@@ -1932,7 +1932,7 @@ SampleMaster::SoundInstance CPerson::PlaySoundDying(void)
 // PlaySoundRandom - choose among several random comments
 ////////////////////////////////////////////////////////////////////////////////
 
-SampleMaster::SoundInstance CPerson::PlaySoundRandom(void)
+SampleMaster::SoundInstance CPerson::PlaySoundRandom()
 {
     m_siPlaying = 0;
     SampleMasterID *psmid = &g_smidNil;

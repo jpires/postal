@@ -649,10 +649,10 @@ class CPlayInfo
     ////////////////////////////////////////////////////////////////////////////////
     // Constructor
     ////////////////////////////////////////////////////////////////////////////////
-    CPlayInfo(void)
+    CPlayInfo()
     {
-        m_pclient = 0;
-        m_pserver = 0;
+        m_pclient = nullptr;
+        m_pserver = nullptr;
 
         m_sRealmNum = 0;
         m_szRealm[0] = 0;
@@ -671,7 +671,7 @@ class CPlayInfo
 
         m_sFrameTime = 0;
 
-        m_pfileDemoModeDebugMovie = 0;
+        m_pfileDemoModeDebugMovie = nullptr;
 
         m_gamestate = Game_Ok;
 
@@ -702,22 +702,22 @@ class CPlayInfo
     ////////////////////////////////////////////////////////////////////////////////
     // Simple wrappers that allow "read-only" access to member variables
     ////////////////////////////////////////////////////////////////////////////////
-    CNetClient *Client(void) { return m_pclient; }
-    CNetServer *Server(void) { return m_pserver; }
-    short RealmNum(void) { return m_sRealmNum; }
-    const char *RealmName(void) { return m_szRealm; }
-    bool JustOneRealm(void) { return m_bJustOneRealm; }
-    CRealm *Realm(void) { return m_prealm; }
-    CCamera *Camera(void) { return m_pcamera; }
-    CGrip *Grip(void) { return m_pgrip; }
-    bool Gauntlet(void) { return m_bGauntlet; }
-    bool AddOn(void) { return m_bAddOn; }
-    bool Rejuvenate(void) { return m_bRejuvenate; }
-    short TimeLimit(void) { return m_sTimeLimit > 0 ? m_sTimeLimit : 0; }
-    short KillLimit(void) { return m_sKillLimit > 0 ? m_sKillLimit : 0; }
-    short CoopLevels(void) { return m_sCoopLevels; }
-    short FrameTime(void) { return m_sFrameTime; }
-    RFile *DemoModeDebugMovie(void) { return m_pfileDemoModeDebugMovie; }
+    CNetClient *Client() { return m_pclient; }
+    CNetServer *Server() { return m_pserver; }
+    short RealmNum() { return m_sRealmNum; }
+    const char *RealmName() { return m_szRealm; }
+    bool JustOneRealm() { return m_bJustOneRealm; }
+    CRealm *Realm() { return m_prealm; }
+    CCamera *Camera() { return m_pcamera; }
+    CGrip *Grip() { return m_pgrip; }
+    bool Gauntlet() { return m_bGauntlet; }
+    bool AddOn() { return m_bAddOn; }
+    bool Rejuvenate() { return m_bRejuvenate; }
+    short TimeLimit() { return m_sTimeLimit > 0 ? m_sTimeLimit : 0; }
+    short KillLimit() { return m_sKillLimit > 0 ? m_sKillLimit : 0; }
+    short CoopLevels() { return m_sCoopLevels; }
+    short FrameTime() { return m_sFrameTime; }
+    RFile *DemoModeDebugMovie() { return m_pfileDemoModeDebugMovie; }
 
     ////////////////////////////////////////////////////////////////////////////////
     // Change the frame time (MP only)
@@ -727,22 +727,22 @@ class CPlayInfo
     ////////////////////////////////////////////////////////////////////////////////
     // Set the SAK purge flag.
     ////////////////////////////////////////////////////////////////////////////////
-    void SetPurgeSaks(void) { m_bPurgeSaks = true; }
+    void SetPurgeSaks() { m_bPurgeSaks = true; }
 
     ////////////////////////////////////////////////////////////////////////////////
     // Clear the SAK purge flag.
     ////////////////////////////////////////////////////////////////////////////////
-    void ClearPurgeSaks(void) { m_bPurgeSaks = false; }
+    void ClearPurgeSaks() { m_bPurgeSaks = false; }
 
     ////////////////////////////////////////////////////////////////////////////////
     // Query the SAK purge flag status.
     ////////////////////////////////////////////////////////////////////////////////
-    bool PurgeSaks(void) { return m_bPurgeSaks; }
+    bool PurgeSaks() { return m_bPurgeSaks; }
 
     ////////////////////////////////////////////////////////////////////////////////
     // Get pointer to local dude if one exists, otherwise returns 0.
     ////////////////////////////////////////////////////////////////////////////////
-    CDude *LocalDudePointer(void)
+    CDude *LocalDudePointer()
     {
         CDude *pdudeLocal;
         if (m_prealm->m_idbank.GetThingByID((CThing **)&pdudeLocal, m_idLocalDude) != 0)
@@ -753,16 +753,16 @@ class CPlayInfo
     ////////////////////////////////////////////////////////////////////////////////
     // Query the game mode
     ////////////////////////////////////////////////////////////////////////////////
-    bool IsMP(void) { return (m_pclient) ? true : false; }
+    bool IsMP() { return (m_pclient) ? true : false; }
 
-    bool IsServer(void) { return (m_pserver) ? true : false; }
+    bool IsServer() { return (m_pserver) ? true : false; }
 
     ////////////////////////////////////////////////////////////////////////////////
     // Set the game state
     ////////////////////////////////////////////////////////////////////////////////
-    void SetGameState_Ok(void) { m_gamestate = Game_Ok; }
+    void SetGameState_Ok() { m_gamestate = Game_Ok; }
 
-    void SetGameState_RestartRealm(void)
+    void SetGameState_RestartRealm()
     {
         // This should NEVER occur in MP mode
         ASSERT(!IsMP());
@@ -787,15 +787,15 @@ class CPlayInfo
     ////////////////////////////////////////////////////////////////////////////////
     // Query the game state
     ////////////////////////////////////////////////////////////////////////////////
-    bool IsRealmDone(void) { return (m_gamestate >= Game_RedoRealm) ? true : false; }
+    bool IsRealmDone() { return (m_gamestate >= Game_RedoRealm) ? true : false; }
 
-    bool IsRestartingRealm(void) { return (m_gamestate == Game_RedoRealm) ? true : false; }
+    bool IsRestartingRealm() { return (m_gamestate == Game_RedoRealm) ? true : false; }
 
-    bool IsNextRealm(void) { return (m_gamestate == Game_NextRealm) ? true : false; }
+    bool IsNextRealm() { return (m_gamestate == Game_NextRealm) ? true : false; }
 
-    bool IsGameOver(void) { return (m_gamestate >= Game_GameOver) ? true : false; }
+    bool IsGameOver() { return (m_gamestate >= Game_GameOver) ? true : false; }
 
-    bool IsGameAborted(void) { return (m_gamestate == Game_GameAborted) ? true : false; }
+    bool IsGameAborted() { return (m_gamestate == Game_GameAborted) ? true : false; }
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -820,7 +820,7 @@ class CPlay
     ////////////////////////////////////////////////////////////////////////////////
     // Constructor
     ////////////////////////////////////////////////////////////////////////////////
-    CPlay(void) {}
+    CPlay() {}
 
     ////////////////////////////////////////////////////////////////////////////////
     // Destructor
@@ -1036,7 +1036,7 @@ class CPlayGroup
     ////////////////////////////////////////////////////////////////////////////////
     // Constructor
     ////////////////////////////////////////////////////////////////////////////////
-    CPlayGroup(void) {}
+    CPlayGroup() {}
 
     ////////////////////////////////////////////////////////////////////////////////
     // Destructor
@@ -1061,7 +1061,7 @@ class CPlayGroup
         // is so it could hold on to it.  Unfortunately, the pointer is defined by
         // this class, and this class must follow the definition of CPlay, so you
         // end up with a classic which-comes-first-the-chicken-or-the-egg problem.
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
         {
             if (m_Plays.GetData(p) == pPlay)
             {
@@ -1078,7 +1078,7 @@ class CPlayGroup
       CPlayInfo *pinfo) // I/O: Play info
     {
         short sResult = 0;
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             sResult |= m_Plays.GetData(p)->PrepareGame(pinfo);
         return sResult;
     }
@@ -1092,7 +1092,7 @@ class CPlayGroup
     {
         short sResult = 0;
         *pbGameReady = true;
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
         {
             bool bGameReady = false;
             sResult |= m_Plays.GetData(p)->IsGameReady(pinfo, &bGameReady);
@@ -1108,7 +1108,7 @@ class CPlayGroup
       CPlayInfo *pinfo) // I/O: Play info
     {
         short sResult = 0;
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             sResult |= m_Plays.GetData(p)->StartGame(pinfo);
         return sResult;
     }
@@ -1118,7 +1118,7 @@ class CPlayGroup
     ////////////////////////////////////////////////////////////////////////////////
     void StartCutscene(CPlayInfo *pinfo) // I/O: Play info
     {
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             m_Plays.GetData(p)->StartCutscene(pinfo);
     }
 
@@ -1129,7 +1129,7 @@ class CPlayGroup
       CPlayInfo *pinfo) // I/O: Play info
     {
         short sResult = 0;
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             sResult |= m_Plays.GetData(p)->PrepareRealm(pinfo);
         return sResult;
     }
@@ -1143,7 +1143,7 @@ class CPlayGroup
     {
         short sResult = 0;
         *pbRealmReady = true;
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
         {
             bool bRealmReady = false;
             sResult |= m_Plays.GetData(p)->IsRealmReady(pinfo, &bRealmReady);
@@ -1157,7 +1157,7 @@ class CPlayGroup
     ////////////////////////////////////////////////////////////////////////////////
     void DoCutscene(CPlayInfo *pinfo) // I/O: Play info
     {
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             m_Plays.GetData(p)->DoCutscene(pinfo);
     }
 
@@ -1166,7 +1166,7 @@ class CPlayGroup
     ////////////////////////////////////////////////////////////////////////////////
     void EndCutscene(CPlayInfo *pinfo) // I/O: Play info
     {
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             m_Plays.GetData(p)->EndCutscene(pinfo);
     }
 
@@ -1177,7 +1177,7 @@ class CPlayGroup
       CPlayInfo *pinfo) // I/O: Play info
     {
         short sResult = 0;
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             sResult |= m_Plays.GetData(p)->StartRealm(pinfo);
         return sResult;
     }
@@ -1188,7 +1188,7 @@ class CPlayGroup
     void CoreLoopUserInput(CPlayInfo *pinfo, // I/O: Play info
                            RInputEvent *pie) // I/O: Input event
     {
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             m_Plays.GetData(p)->CoreLoopUserInput(pinfo, pie);
     }
 
@@ -1197,7 +1197,7 @@ class CPlayGroup
     ////////////////////////////////////////////////////////////////////////////////
     void CoreLoopUpdate(CPlayInfo *pinfo) // I/O: Play info
     {
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             m_Plays.GetData(p)->CoreLoopUpdate(pinfo);
     }
 
@@ -1207,7 +1207,7 @@ class CPlayGroup
     ////////////////////////////////////////////////////////////////////////////////
     void CoreLoopRender(CPlayInfo *pinfo) // I/O: Play info
     {
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             m_Plays.GetData(p)->CoreLoopRender(pinfo);
     }
 
@@ -1217,7 +1217,7 @@ class CPlayGroup
     ////////////////////////////////////////////////////////////////////////////////
     virtual void CoreLoopRenderOnTop(CPlayInfo *pinfo) // I/O: Play info
     {
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             m_Plays.GetData(p)->CoreLoopRenderOnTop(pinfo);
     }
 
@@ -1226,7 +1226,7 @@ class CPlayGroup
     ////////////////////////////////////////////////////////////////////////////////
     virtual void CoreLoopDraw(CPlayInfo *pinfo) // I/O: Play info
     {
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             m_Plays.GetData(p)->CoreLoopDraw(pinfo);
 
         // Update the display in the dirtied areas defined by m_drl.
@@ -1258,7 +1258,7 @@ class CPlayGroup
       CPlayInfo *pinfo)  // I/O: Play info
     {
         bool bDone = true;
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             bDone &= m_Plays.GetData(p)->IsCoreLoopDone(pinfo);
         return bDone;
     }
@@ -1268,7 +1268,7 @@ class CPlayGroup
     ////////////////////////////////////////////////////////////////////////////////
     void EndRealm(CPlayInfo *pinfo) // I/O: Play info
     {
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             m_Plays.GetData(p)->EndRealm(pinfo);
 
         // Any dirty rects left over, we don't care about.
@@ -1280,7 +1280,7 @@ class CPlayGroup
     ////////////////////////////////////////////////////////////////////////////////
     void UnprepareGame(CPlayInfo *pinfo) // I/O: Play info
     {
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             m_Plays.GetData(p)->UnprepareGame(pinfo);
     }
 
@@ -1289,7 +1289,7 @@ class CPlayGroup
     ////////////////////////////////////////////////////////////////////////////////
     void StartRealmErr(CPlayInfo *pinfo) // I/O: Play info
     {
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             m_Plays.GetData(p)->StartRealmErr(pinfo);
     }
 
@@ -1298,7 +1298,7 @@ class CPlayGroup
     ////////////////////////////////////////////////////////////////////////////////
     void IsRealmReadyErr(CPlayInfo *pinfo) // I/O: Play info
     {
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             m_Plays.GetData(p)->IsRealmReadyErr(pinfo);
     }
 
@@ -1307,7 +1307,7 @@ class CPlayGroup
     ////////////////////////////////////////////////////////////////////////////////
     void PrepareRealmErr(CPlayInfo *pinfo) // I/O: Play info
     {
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             m_Plays.GetData(p)->PrepareRealmErr(pinfo);
     }
 
@@ -1316,7 +1316,7 @@ class CPlayGroup
     ////////////////////////////////////////////////////////////////////////////////
     void StartGameErr(CPlayInfo *pinfo) // I/O: Play info
     {
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             m_Plays.GetData(p)->StartGameErr(pinfo);
     }
 
@@ -1325,7 +1325,7 @@ class CPlayGroup
     ////////////////////////////////////////////////////////////////////////////////
     void IsGameReadyErr(CPlayInfo *pinfo) // I/O: Play info
     {
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             m_Plays.GetData(p)->IsGameReadyErr(pinfo);
     }
 
@@ -1334,7 +1334,7 @@ class CPlayGroup
     ////////////////////////////////////////////////////////////////////////////////
     void PrepareGameErr(CPlayInfo *pinfo) // I/O: Play info
     {
-        for (Plays::Pointer p = m_Plays.GetHead(); p != 0; p = m_Plays.GetNext(p))
+        for (Plays::Pointer p = m_Plays.GetHead(); p != nullptr; p = m_Plays.GetNext(p))
             m_Plays.GetData(p)->PrepareGameErr(pinfo);
     }
 };
@@ -1381,7 +1381,7 @@ class CPlayNet : public CPlay
     ////////////////////////////////////////////////////////////////////////////////
     // Constructor
     ////////////////////////////////////////////////////////////////////////////////
-    CPlayNet(void)
+    CPlayNet()
     {
         // Note that if any of this fails, we don't care (we just won't use them).
         short sIndex;
@@ -1404,7 +1404,7 @@ class CPlayNet : public CPlay
                 else
                 {
                     delete m_apeditChats[sIndex];
-                    m_apeditChats[sIndex] = NULL;
+                    m_apeditChats[sIndex] = nullptr;
                 }
             }
         }
@@ -1414,13 +1414,13 @@ class CPlayNet : public CPlay
     // Destructor
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
-    ~CPlayNet()
+    ~CPlayNet() override
     {
         short sIndex;
         for (sIndex = 0; sIndex < NUM_CHATS; sIndex++)
         {
             delete m_apeditChats[sIndex];
-            m_apeditChats[sIndex] = NULL;
+            m_apeditChats[sIndex] = nullptr;
         }
     }
 
@@ -1504,7 +1504,7 @@ class CPlayNet : public CPlay
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
     short PrepareRealm( // Returns 0 if successfull, non-zero otherwise
-      CPlayInfo *pinfo) // I/O: Play info
+      CPlayInfo *pinfo) override // I/O: Play info
     {
         CNetClient *pclient = pinfo->Client();
         if (pclient)
@@ -1577,8 +1577,8 @@ class CPlayNet : public CPlay
     ////////////////////////////////////////////////////////////////////////////////
     // Start realm
     ////////////////////////////////////////////////////////////////////////////////
-    virtual short StartRealm( // Returns 0 if successfull, non-zero otherwise
-      CPlayInfo *pinfo)       // I/O: Play info
+    short StartRealm( // Returns 0 if successfull, non-zero otherwise
+      CPlayInfo *pinfo) override       // I/O: Play info
     {
         if (pinfo->IsMP())
         {
@@ -1606,7 +1606,7 @@ class CPlayNet : public CPlay
     // Core loop user input
     ////////////////////////////////////////////////////////////////////////////////
     void CoreLoopUserInput(CPlayInfo *pinfo, // I/O: Play info
-                           RInputEvent *pie) // I/O: Input event
+                           RInputEvent *pie) override // I/O: Input event
     {
         if (pinfo->IsMP())
         {
@@ -1769,7 +1769,7 @@ class CPlayNet : public CPlay
     // Core loop update
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
-    void CoreLoopUpdate(CPlayInfo *pinfo) // I/O: Play info
+    void CoreLoopUpdate(CPlayInfo *pinfo) override // I/O: Play info
     {
         // If we're in MP mode, then  there's always a client and there may be a server
         if (pinfo->IsMP())
@@ -2029,7 +2029,7 @@ class CPlayNet : public CPlay
     // Core loop render -- create and update images to the composite buffer but do
     // NOT update the screen.
     ////////////////////////////////////////////////////////////////////////////////
-    void CoreLoopRender(CPlayInfo *pinfo) // I/O: Play info
+    void CoreLoopRender(CPlayInfo *pinfo) override // I/O: Play info
     {
         if (pinfo->IsMP())
         {
@@ -2059,7 +2059,7 @@ class CPlayNet : public CPlay
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
     bool IsCoreLoopDone( // Returns true if done, false otherwise
-      CPlayInfo *pinfo)  // I/O: Play info
+      CPlayInfo *pinfo) override  // I/O: Play info
     {
         bool bDone;
         if (pinfo->IsMP())
@@ -2128,7 +2128,7 @@ class CPlayStatus : public CPlay
     ////////////////////////////////////////////////////////////////////////////////
     // Constructor
     ////////////////////////////////////////////////////////////////////////////////
-    CPlayStatus(void)
+    CPlayStatus()
       : m_bUpdateRealm(true) // valgrind fix.  --ryan.
     {
     }
@@ -2137,14 +2137,14 @@ class CPlayStatus : public CPlay
     // Destructor
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
-    ~CPlayStatus() {}
+    ~CPlayStatus() override {}
 
     ////////////////////////////////////////////////////////////////////////////////
     // Start realm
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
     short StartRealm(   // Returns 0 if successfull, non-zero otherwise
-      CPlayInfo *pinfo) // I/O: Play info
+      CPlayInfo *pinfo) override // I/O: Play info
     {
         if (!pinfo->m_bBadRealmMP)
         {
@@ -2240,7 +2240,7 @@ class CPlayStatus : public CPlay
     // Core loop update
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
-    void CoreLoopUpdate(CPlayInfo *pinfo) // I/O: Play info
+    void CoreLoopUpdate(CPlayInfo *pinfo) override // I/O: Play info
     {
         if (!pinfo->m_bBadRealmMP)
         {
@@ -2270,7 +2270,7 @@ class CPlayStatus : public CPlay
             //==============================================================================
             CDude *pdudeLocal = pinfo->LocalDudePointer();
             // If the local dude is dead . . .
-            if (pdudeLocal != NULL)
+            if (pdudeLocal != nullptr)
             {
                 if (pdudeLocal->IsDead())
                 {
@@ -2293,7 +2293,7 @@ class CPlayStatus : public CPlay
     // a cheat to make sure that the m_bDrawFrame flag has already been set.
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
-    void CoreLoopRenderOnTop(CPlayInfo *pinfo) // I/O: Play info
+    void CoreLoopRenderOnTop(CPlayInfo *pinfo) override // I/O: Play info
     {
         if (!pinfo->m_bBadRealmMP)
         {
@@ -2406,7 +2406,7 @@ static void EnumSaveGamesSlots(Menu *menu)
         else
         {
             struct tm *tm;
-            if ((tm = localtime((const time_t *)&statbuf.st_mtime)) != NULL)
+            if ((tm = localtime((const time_t *)&statbuf.st_mtime)) != nullptr)
             {
                 strftime(timebuf, sizeof(timebuf), "%m/%d/%y %H:%M", tm);
                 str = timebuf;
@@ -2421,7 +2421,7 @@ static void EnumSaveGamesSlots(Menu *menu)
         menu->ami[i].pszText = strdup(gamename);
 #endif
 
-        menu->ami[i].sEnabled = (menu->ami[i].pszText != NULL);
+        menu->ami[i].sEnabled = (menu->ami[i].pszText != nullptr);
         if (!menu->ami[i].sEnabled)
             break;
     }
@@ -2457,7 +2457,7 @@ class CPlayInput : public CPlay
     ////////////////////////////////////////////////////////////////////////////////
     // Constructor
     ////////////////////////////////////////////////////////////////////////////////
-    CPlayInput(void)
+    CPlayInput()
     {
         // We don't care if this fails.
         m_peditChatIn = (REdit *)RGuiItem::LoadInstantiate(FullPathHD(CHAT_IN_GUI));
@@ -2478,7 +2478,7 @@ class CPlayInput : public CPlay
             else
             {
                 delete m_peditChatIn;
-                m_peditChatIn = NULL;
+                m_peditChatIn = nullptr;
             }
         }
 #ifdef MOBILE
@@ -2490,17 +2490,17 @@ class CPlayInput : public CPlay
     // Destructor
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
-    ~CPlayInput()
+    ~CPlayInput() override
     {
         delete m_peditChatIn;
-        m_peditChatIn = NULL;
+        m_peditChatIn = nullptr;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
     // Start realm
     ////////////////////////////////////////////////////////////////////////////////
-    virtual short StartRealm( // Returns 0 if successfull, non-zero otherwise
-      CPlayInfo *pinfo)       // I/O: Play info
+    short StartRealm( // Returns 0 if successfull, non-zero otherwise
+      CPlayInfo *pinfo) override       // I/O: Play info
     {
         // Reset time he's been dead ('cause he isn't dead yet)
         m_lDemoDeadTime = -1;
@@ -2515,15 +2515,15 @@ class CPlayInput : public CPlay
     // End realm
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
-    void EndRealm(CPlayInfo *pinfo) // I/O: Play info
+    void EndRealm(CPlayInfo *pinfo) override // I/O: Play info
     {
     }
 
     ////////////////////////////////////////////////////////////////////////////////
     // Core loop user input
     ////////////////////////////////////////////////////////////////////////////////
-    virtual void CoreLoopUserInput(CPlayInfo *pinfo, // I/O: Play info
-                                   RInputEvent *pie) // I/O: Input event
+    void CoreLoopUserInput(CPlayInfo *pinfo, // I/O: Play info
+                                   RInputEvent *pie) override // I/O: Input event
     {
 
         // If we're in the menu, then just do that
@@ -2662,7 +2662,7 @@ class CPlayInput : public CPlay
                                     g_GameSettings.m_sCrossHair = !g_GameSettings.m_sCrossHair;
 
                                     // Toggle local dude's flag (if he exists)
-                                    if (pdudeLocal != NULL)
+                                    if (pdudeLocal != nullptr)
                                         pdudeLocal->m_bTargetingHelpEnabled = (g_GameSettings.m_sCrossHair != FALSE)
                                                                                 ? true
                                                                                 : false;
@@ -2915,7 +2915,7 @@ class CPlayInput : public CPlay
                 if (GetInputMode() != INPUT_MODE_LIVE)
                 {
                     // If the local dude dies, we wait a short period of time and then end the game.
-                    if (pdudeLocal != NULL)
+                    if (pdudeLocal != nullptr)
                     {
                         if (pdudeLocal->IsDead() == true)
                         {
@@ -2956,7 +2956,7 @@ class CPlayInput : public CPlay
     ////////////////////////////////////////////////////////////////////////////////
     // Unprepare game
     ////////////////////////////////////////////////////////////////////////////////
-    virtual void UnprepareGame(CPlayInfo *pinfo) // I/O: Play info
+    void UnprepareGame(CPlayInfo *pinfo) override // I/O: Play info
     {
         // If we're still on the menu, end it now
         if (pinfo->m_bInMenu)
@@ -2968,7 +2968,7 @@ class CPlayInput : public CPlay
     // NOT update the screen.
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
-    void CoreLoopRenderOnTop(CPlayInfo *pinfo) // I/O: Play info
+    void CoreLoopRenderOnTop(CPlayInfo *pinfo) override // I/O: Play info
     {
         if (!pinfo->m_bBadRealmMP)
         {
@@ -3063,7 +3063,7 @@ class CPlayInput : public CPlay
 
         short sPosY = g_pimScreenBuf->m_sHeight / 2 - sTotalH; // / 2;
 
-        print.print(0, sPosY, "PAUSED");
+        print.print(nullptr, sPosY, "PAUSED");
 
         if (pszMsg)
         {
@@ -3075,7 +3075,7 @@ class CPlayInput : public CPlay
 
             print.SetColor(PAUSED_BASE_PAL_INDEX + 2, 0, PAUSED_BASE_PAL_INDEX + 3);
 
-            print.print(0, sPosY, "%s", pszMsg);
+            print.print(nullptr, sPosY, "%s", pszMsg);
         }
 
         // Unlock the buffer now that we're done drawing to it.
@@ -3407,20 +3407,20 @@ class CPlayRealm : public CPlay
     ////////////////////////////////////////////////////////////////////////////////
     // Constructor
     ////////////////////////////////////////////////////////////////////////////////
-    CPlayRealm(void) {}
+    CPlayRealm() {}
 
     ////////////////////////////////////////////////////////////////////////////////
     // Destructor
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
-    ~CPlayRealm() {}
+    ~CPlayRealm() override {}
 
     ////////////////////////////////////////////////////////////////////////////////
     // Prepare game
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
     short PrepareGame(  // Returns 0 if successfull, non-zero otherwise
-      CPlayInfo *pinfo) // I/O: Play info
+      CPlayInfo *pinfo) override // I/O: Play info
     {
         // Note whether multiplayer.
         pinfo->Realm()->m_flags.bMultiplayer = pinfo->IsMP();
@@ -3454,7 +3454,7 @@ class CPlayRealm : public CPlay
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
     short PrepareRealm( // Returns 0 if successfull, non-zero otherwise
-      CPlayInfo *pinfo) // I/O: Play info
+      CPlayInfo *pinfo) override // I/O: Play info
     {
         short sResult = 0;
 
@@ -3559,7 +3559,7 @@ class CPlayRealm : public CPlay
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
     short StartRealm(   // Returns 0 if successfull, non-zero otherwise
-      CPlayInfo *pinfo) // I/O: Play info
+      CPlayInfo *pinfo) override // I/O: Play info
     {
         if (!pinfo->m_bBadRealmMP)
         {
@@ -3595,7 +3595,7 @@ class CPlayRealm : public CPlay
     // NOT update the screen.
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
-    void CoreLoopRender(CPlayInfo *pinfo) // I/O: Play info
+    void CoreLoopRender(CPlayInfo *pinfo) override // I/O: Play info
     {
         if (!pinfo->m_bBadRealmMP)
         {
@@ -3658,7 +3658,7 @@ class CPlayRealm : public CPlay
                 // In demo mode (record or playback) we don't draw the results of the frame if
                 // we're falling behind.  However, we always draw when doing a demo-mode-movie .
                 pinfo->m_bDrawFrame = true;
-                if ((pinfo->DemoModeDebugMovie() == 0) && (GetInputMode() != INPUT_MODE_LIVE))
+                if ((pinfo->DemoModeDebugMovie() == nullptr) && (GetInputMode() != INPUT_MODE_LIVE))
                 {
                     // If we've fallen behind the demo frame rate by our max lag . . .
                     if (prealm->m_time.GetRealTime() - prealm->m_time.GetGameTime() > DEMO_MAX_LAG)
@@ -3678,7 +3678,7 @@ class CPlayRealm : public CPlay
 
                 // Track the local dude with the grip/camera and adjust the sound, too
                 CDude *pdudeLocal = pinfo->LocalDudePointer();
-                if (pdudeLocal != NULL)
+                if (pdudeLocal != nullptr)
                 {
                     // Update grip/camera
                     short sX, sY;
@@ -3730,7 +3730,7 @@ class CPlayRealm : public CPlay
     ////////////////////////////////////////////////////////////////////////////////
     // Core loop draw -- Draw CoreLoopRender() results to the screen.
     ////////////////////////////////////////////////////////////////////////////////
-    virtual void CoreLoopDraw(CPlayInfo *pinfo) // I/O: Play info
+    void CoreLoopDraw(CPlayInfo *pinfo) override // I/O: Play info
     {
         // Only if we're not on the menu and not a bad realm
         if (!pinfo->m_bInMenu && !pinfo->m_bBadRealmMP)
@@ -3749,7 +3749,7 @@ class CPlayRealm : public CPlay
     // End realm
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
-    void EndRealm(CPlayInfo *pinfo) // I/O: Play info
+    void EndRealm(CPlayInfo *pinfo) override // I/O: Play info
     {
         if (!pinfo->m_bBadRealmMP)
         {
@@ -3800,7 +3800,7 @@ class CPlayRealm : public CPlay
                           LevelPersist *palevelpersist) // In:  Players' level persistent data.
     {
         // Union player's pre-existing stockpile with warped-in dude and give him his prior weapon
-        ASSERT(pdude != NULL);
+        ASSERT(pdude != nullptr);
         pdude->m_stockpile.Union(&(palevelpersist[pdude->m_sDudeNum].stockpile));
         pdude->SetWeapon(palevelpersist[pdude->m_sDudeNum].weapon, true);
 
@@ -3862,7 +3862,7 @@ class CPlayRealm : public CPlay
                 TRACE("SetupDudes(): CWarp::CreateWarpFromDude() failed.\n");
 
             delete pdude;
-            pdude = 0;
+            pdude = nullptr;
 
             pln = plnNext;
         }
@@ -3903,17 +3903,17 @@ class CPlayRealm : public CPlay
                             plnWarp = plnWarpHead->m_pnNext;
 
                         pwarp = (CWarp *)plnWarp->m_powner;
-                        ASSERT(pwarp != NULL);
+                        ASSERT(pwarp != nullptr);
 
                         // Warp in dude (creates a new dude since the pointer starts out NULL)
-                        pdude = NULL;
+                        pdude = nullptr;
                         if (pwarp->WarpIn(&pdude, CWarp::CopyStockPile) == 0)
                         {
                             // SPECIAL CASE!!!  In multiplayer mode, we overwrite the dude numbers
                             // that are assigned by the CDude constructor, instead using the
                             // corresponding network ID.  This isn't a great solution, but it
                             // was the best we could do given the little time we have left.
-                            ASSERT(pdude != NULL);
+                            ASSERT(pdude != nullptr);
                             pdude->m_sDudeNum = (short)id;
 
                             // Set general dude stuff
@@ -3939,10 +3939,10 @@ class CPlayRealm : public CPlay
             {
                 // Use the first warp
                 pwarp = (CWarp *)plnWarp->m_powner;
-                ASSERT(pwarp != NULL);
+                ASSERT(pwarp != nullptr);
 
                 // Warp in dude (creates a new dude since the pointer starts out NULL)
-                pdude = NULL;
+                pdude = nullptr;
                 if (pwarp->WarpIn(&pdude, CWarp::CopyStockPile) == 0)
                 {
                     // Set general dude stuff
@@ -4225,19 +4225,19 @@ class CPlayRealm : public CPlay
                                 short sButtons;
                                 do
                                 {
-                                    rspGetMouse(NULL, NULL, &sButtons);
+                                    rspGetMouse(nullptr, nullptr, &sButtons);
                                     UpdateSystem();
                                 } while (sButtons);
                                 do
                                 {
-                                    rspGetMouse(NULL, NULL, &sButtons);
+                                    rspGetMouse(nullptr, nullptr, &sButtons);
                                     UpdateSystem();
                                 } while (!sButtons);
                                 if (sButtons & 2)
                                     m_bMakeDemoMovie_WaitForClick = false;
                                 do
                                 {
-                                    rspGetMouse(NULL, NULL, &sButtons);
+                                    rspGetMouse(nullptr, nullptr, &sButtons);
                                     UpdateSystem();
                                 } while (sButtons);
 
@@ -4288,19 +4288,19 @@ class CPlayScore : public CPlay
     ////////////////////////////////////////////////////////////////////////////////
     // Constructor
     ////////////////////////////////////////////////////////////////////////////////
-    CPlayScore(void) {}
+    CPlayScore() {}
 
     ////////////////////////////////////////////////////////////////////////////////
     // Destructor
     ////////////////////////////////////////////////////////////////////////////////
-    virtual ~CPlayScore() {}
+    ~CPlayScore() override {}
 
     ////////////////////////////////////////////////////////////////////////////////
     // Prepare game
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
     short PrepareGame(  // Returns 0 if successfull, non-zero otherwise
-      CPlayInfo *pinfo) // I/O: Play info
+      CPlayInfo *pinfo) override // I/O: Play info
     {
         // Init and reset score module
         ScoreInit();
@@ -4313,7 +4313,7 @@ class CPlayScore : public CPlay
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
     short StartRealm(   // Returns 0 if successfull, non-zero otherwise
-      CPlayInfo *pinfo) // I/O: Play info
+      CPlayInfo *pinfo) override // I/O: Play info
     {
         if (!pinfo->m_bBadRealmMP)
         {
@@ -4340,7 +4340,7 @@ class CPlayScore : public CPlay
     // End realm
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
-    void EndRealm(CPlayInfo *pinfo) // I/O: Play info
+    void EndRealm(CPlayInfo *pinfo) override // I/O: Play info
     {
         if (!pinfo->m_bBadRealmMP)
         {
@@ -4375,19 +4375,19 @@ class CPlayCutscene : public CPlay
     ////////////////////////////////////////////////////////////////////////////////
     // Constructor
     ////////////////////////////////////////////////////////////////////////////////
-    CPlayCutscene(void) {}
+    CPlayCutscene() {}
 
     ////////////////////////////////////////////////////////////////////////////////
     // Destructor
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
-    ~CPlayCutscene() {}
+    ~CPlayCutscene() override {}
 
     ////////////////////////////////////////////////////////////////////////////////
     // Start cutscene
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
-    void StartCutscene(CPlayInfo *pinfo) // I/O: Play info
+    void StartCutscene(CPlayInfo *pinfo) override // I/O: Play info
     {
         // Clear input events (don't let user press anything before the cutscene appears)
         rspClearAllInputEvents();
@@ -4423,7 +4423,7 @@ class CPlayCutscene : public CPlay
     // Do cutscene
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
-    void DoCutscene(CPlayInfo *pinfo) // I/O: Play info
+    void DoCutscene(CPlayInfo *pinfo) override // I/O: Play info
     {
         // If this is NOT simple and NOT multiplayer, do the effect while waiting for user input
         if (!m_bSimple && !pinfo->IsMP())
@@ -4462,7 +4462,7 @@ class CPlayCutscene : public CPlay
     // End cutscene
     ////////////////////////////////////////////////////////////////////////////////
     /* virtual */
-    void EndCutscene(CPlayInfo *pinfo) // I/O: Play info
+    void EndCutscene(CPlayInfo *pinfo) override // I/O: Play info
     {
         // End cutscene
         CutSceneEnd();
@@ -4492,7 +4492,7 @@ class CPlayCutscene : public CPlay
 // unless timed out for safety.
 //
 ////////////////////////////////////////////////////////////////////////////////
-inline void SynchronousSampleAbortion(void)
+inline void SynchronousSampleAbortion()
 {
     // Stop all currently playing samples abruptly.
     AbortAllSamples();
@@ -4544,7 +4544,7 @@ extern short Play(                // Returns 0 if successfull, non-zero otherwis
     // #endif
 
     // If this is the last demo level, then load the mult alpha needed for the ending
-    RMultiAlpha *pDemoMultiAlpha = NULL;
+    RMultiAlpha *pDemoMultiAlpha = nullptr;
 
     if (g_bLastLevelDemo)
     {
@@ -4790,7 +4790,7 @@ extern short Play(                // Returns 0 if successfull, non-zero otherwis
                                                    SampleMaster::Unspecified,
                                                    255,
                                                    &g_siFinalScene,
-                                                   NULL,
+                                                   nullptr,
                                                    0,
                                                    0,
                                                    true);
@@ -5085,7 +5085,7 @@ extern short Play(                // Returns 0 if successfull, non-zero otherwis
 // Snap picture to disk.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void Play_SnapPicture(void)
+extern void Play_SnapPicture()
 {
     // Feedback is nice.
     PlaySample(g_smidClick, SampleMaster::UserFeedBack);
@@ -5190,7 +5190,7 @@ extern short Play_GetRealmInfo(  // Returns 0 if successfull, 1 if no such realm
   short sMaxTitleLen /*= NULL*/) // In:  Max length of returned title, including terminating null
 {
     ASSERT(sRealmNum >= 0);
-    ASSERT(pszFile != NULL);
+    ASSERT(pszFile != nullptr);
     ASSERT(sMaxFileLen > 0);
 
     short sResult = 0;
@@ -5231,7 +5231,7 @@ extern short Play_GetRealmInfo(  // Returns 0 if successfull, 1 if no such realm
             strcpy(pszFile, szText);
 
             // Check if caller wants the title, too
-            if ((sMaxTitleLen > 0) && (pszTitle != NULL))
+            if ((sMaxTitleLen > 0) && (pszTitle != nullptr))
             {
                 // Get title from prefs file
                 prefsRealm.GetVal((char *)strSection, "Title", "Untitled", szText);

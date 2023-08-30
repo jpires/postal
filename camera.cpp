@@ -50,9 +50,9 @@
 CCamera::CCamera()
 {
     // Clear these for testing/debugging
-    m_pScene = 0;
-    m_pimFilm = 0;
-    m_pHood = 0;
+    m_pScene = nullptr;
+    m_pimFilm = nullptr;
+    m_pHood = nullptr;
     // Default to clipping to realm edges.
     m_bClip = true;
 }
@@ -146,9 +146,9 @@ void CCamera::SetFilm(RImage *pimFilm,  // In:  Film (where the picture ends up)
 ////////////////////////////////////////////////////////////////////////////////
 // Snap a picture with the lens cover on (i.e. - set film's view area to black)
 ////////////////////////////////////////////////////////////////////////////////
-void CCamera::SnapWithLensCoverOn(void)
+void CCamera::SnapWithLensCoverOn()
 {
-    ASSERT(m_pimFilm != NULL);
+    ASSERT(m_pimFilm != nullptr);
 
     // Draw black rectangle (automatically clips to image size)
     rspRect(RSP_BLACK_INDEX, m_pimFilm, m_sFilmViewX, m_sFilmViewY, m_sViewW, m_sViewH);
@@ -157,10 +157,10 @@ void CCamera::SnapWithLensCoverOn(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Snap a picture using the preset parameters (scene, view, and film)
 ////////////////////////////////////////////////////////////////////////////////
-void CCamera::Snap(void)
+void CCamera::Snap()
 {
-    ASSERT(m_pScene != NULL);
-    ASSERT(m_pimFilm != NULL);
+    ASSERT(m_pScene != nullptr);
+    ASSERT(m_pimFilm != nullptr);
 
     /*
         // Init film clipping rect to view's location on the film
@@ -213,7 +213,7 @@ void CCamera::Snap(short sViewW,      // In:  View's width
 ////////////////////////////////////////////////////////////////////////////////
 // Update internal state after setting new values
 ////////////////////////////////////////////////////////////////////////////////
-void CCamera::Update(void)
+void CCamera::Update()
 {
     // If clipping is on . . .
     if (m_bClip == true)
@@ -227,7 +227,7 @@ void CCamera::Update(void)
             m_sSceneViewY = 0;
 
         // Limit to right edge of scene
-        if (m_pHood != 0)
+        if (m_pHood != nullptr)
         {
             short sClipX = (m_sSceneViewX + m_sViewW) - m_pHood->GetWidth();
             if (sClipX > 0)

@@ -69,7 +69,7 @@ static unsigned char m_aucWin32B2[10] = { 240, 164, 128, 0, 0, 0, 255, 255, 255,
 void rspSetWin32StaticColors(short sLock /*= 0*/) // In:  1 means lock colors, 0 means don't
 {
     // Make sure display module is alive before we call it
-    if (1) //( (SDL_WasInit(SDL_INIT_VIDEO)) && (SDL_GetVideoSurface() != NULL) )
+    if (true) //( (SDL_WasInit(SDL_INIT_VIDEO)) && (SDL_GetVideoSurface() != NULL) )
     {
         // Set the colors (note that colors 0 and 255 can't really be changed!)
         rspSetPaletteEntries(0, 10, m_aucWin32R1, m_aucWin32G1, m_aucWin32B1, 1);

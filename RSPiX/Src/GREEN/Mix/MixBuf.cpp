@@ -91,8 +91,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #ifdef PATHS_IN_INCLUDES
 #include "BLUE/system.h"
@@ -551,7 +551,7 @@ inline void MixX86( // Returns nothing.
 // Default constructor.
 //
 //////////////////////////////////////////////////////////////////////////////
-RMixBuf::RMixBuf(void)
+RMixBuf::RMixBuf()
 {
     ms_sNumBufs++;
 
@@ -582,7 +582,7 @@ RMixBuf::RMixBuf(UCHAR *pu8Dst, // In:  Destination buffer.
 // Destructor.
 //
 //////////////////////////////////////////////////////////////////////////////
-RMixBuf::~RMixBuf(void)
+RMixBuf::~RMixBuf()
 {
     Reset();
 
@@ -598,11 +598,11 @@ RMixBuf::~RMixBuf(void)
 // Intialize members.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RMixBuf::Init(void)
+void RMixBuf::Init()
 {
-    m_pu8Dst = NULL;
+    m_pu8Dst = nullptr;
     m_ulDstSize = 0L;
-    m_pu8Mix = NULL;
+    m_pu8Mix = nullptr;
     m_ulMixSize = 0L;
     m_sInUse = FALSE;
     m_sOwnMixBuf = FALSE;
@@ -613,13 +613,13 @@ void RMixBuf::Init(void)
 // Free dynamic data and re-init.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RMixBuf::Reset(void)
+void RMixBuf::Reset()
 {
     ASSERT(m_sInUse == FALSE);
 
     if (m_sOwnMixBuf == TRUE)
     {
-        if (m_pu8Mix != NULL)
+        if (m_pu8Mix != nullptr)
         {
             free(m_pu8Mix);
         }
@@ -637,11 +637,11 @@ void RMixBuf::Reset(void)
 // Set all data to silence.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RMixBuf::Silence(void)
+void RMixBuf::Silence()
 {
     ASSERT(m_sInUse == FALSE);
 
-    if (m_pu8Mix != NULL)
+    if (m_pu8Mix != nullptr)
     {
         switch (ms_lMixBitsPerSample)
         {
@@ -695,7 +695,7 @@ short RMixBuf::SetSize(ULONG ulSize)
     // Allocate new data chunk.
     m_pu8Mix = (UCHAR *)malloc(ulSize);
     // If successful . . .
-    if (m_pu8Mix != NULL)
+    if (m_pu8Mix != nullptr)
     {
         // Success.
         m_sOwnMixBuf = TRUE;
@@ -725,7 +725,7 @@ void RMixBuf::SetDest( // Returns nothing.
     if (m_pu8Mix == m_pu8Dst)
     {
         // Clear it.
-        m_pu8Mix = NULL;
+        m_pu8Mix = nullptr;
         m_ulMixSize = 0;
     }
 
@@ -1001,7 +1001,7 @@ short RMixBuf::Mix(ULONG ulStartPos,
 // Prepare for destination.  If necessary, converts to destination format.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RMixBuf::PrepareForDest(void)
+void RMixBuf::PrepareForDest()
 {
     // If we are not mixing at the sample depth we intend to play at . . .
     if (ms_lDstBitsPerSample != ms_lMixBitsPerSample)

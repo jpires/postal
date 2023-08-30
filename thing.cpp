@@ -303,64 +303,64 @@ RProcessGui CThing::ms_pgDoGui;
 CThing::ClassInfo CThing::ms_aClassInfo[CThing::TotalIDs] = {
     // Object Allocator					Preload function			Object Name				User can create in Editor
     // =====================			=====================	================
-    { CHood::Construct, 0, "Hood", false },
-    { CDude::Construct, 0, "Dude", false },
-    { CDoofus::Construct, 0, "Doofus", false },
-    { NULL, /* Tkachuk */ 0, "Tkachuk", false },
-    { NULL, /* CRocketMan */ 0, "RocketMan", false },
-    { NULL, /* CGrenader */ 0, "Grenader", false },
+    { CHood::Construct, nullptr, "Hood", false },
+    { CDude::Construct, nullptr, "Dude", false },
+    { CDoofus::Construct, nullptr, "Doofus", false },
+    { nullptr, /* Tkachuk */ nullptr, "Tkachuk", false },
+    { nullptr, /* CRocketMan */ nullptr, "RocketMan", false },
+    { nullptr, /* CGrenader */ nullptr, "Grenader", false },
     { CRocket::Construct, CRocket::Preload, "Rocket", false },
     { CGrenade::Construct, CGrenade::Preload, "Grenade", false },
-    { CBall::Construct, 0, "Ball", false },
+    { CBall::Construct, nullptr, "Ball", false },
     { CExplode::Construct, CExplode::Preload, "Explode", false },
-    { CBouy::Construct, 0, "Buoy", true },
-    { CNavigationNet::Construct, 0, "NavNet", true },
-    { CGameEditThing::Construct, 0, "GameEditThing", false },
+    { CBouy::Construct, nullptr, "Buoy", true },
+    { CNavigationNet::Construct, nullptr, "NavNet", true },
+    { CGameEditThing::Construct, nullptr, "GameEditThing", false },
     { CNapalm::Construct, CNapalm::Preload, "Napalm", false },
     { CFire::Construct, CFire::Preload, "Fire", false },
-    { NULL, /* CImbecile */ 0, "Imbecile", false },
+    { nullptr, /* CImbecile */ nullptr, "Imbecile", false },
     { CFirebomb::Construct, CFirebomb::Preload, "Firebomb", false },
-    { CFirefrag::Construct, 0, "Firefrag", false },
-    { CAnimThing::Construct, 0, "AnimThing", true },
-    { CSoundThing::Construct, 0, "SoundThing", true },
-    { NULL, /* CGunner */ 0, "Gunner", false },
-    { CBand::Construct, 0, "Band", true },
-    { CItem3d::Construct, 0, "Item3d", true },
-    { CBarrel::Construct, 0, "Barrel", true },
-    { CMine::ConstructProximity, 0, "ProximityMine", true },
-    { CDispenser::Construct, 0, "Dispenser", true },
+    { CFirefrag::Construct, nullptr, "Firefrag", false },
+    { CAnimThing::Construct, nullptr, "AnimThing", true },
+    { CSoundThing::Construct, nullptr, "SoundThing", true },
+    { nullptr, /* CGunner */ nullptr, "Gunner", false },
+    { CBand::Construct, nullptr, "Band", true },
+    { CItem3d::Construct, nullptr, "Item3d", true },
+    { CBarrel::Construct, nullptr, "Barrel", true },
+    { CMine::ConstructProximity, nullptr, "ProximityMine", true },
+    { CDispenser::Construct, nullptr, "Dispenser", true },
     { CFireball::Construct, CFireball::Preload, "Fireball", false },
-    { NULL, /* CCop */ 0, "Cop", false },
-    { NULL, /* CPistol */ 0, "Pistol", false },
-    { NULL, /* CMachineGun */ 0, "MachineGun", false },
-    { NULL, /* CShotGun */ 0, "ShotGun", false },
-    { CPerson::Construct, 0, "Person", true },
+    { nullptr, /* CCop */ nullptr, "Cop", false },
+    { nullptr, /* CPistol */ nullptr, "Pistol", false },
+    { nullptr, /* CMachineGun */ nullptr, "MachineGun", false },
+    { nullptr, /* CShotGun */ nullptr, "ShotGun", false },
+    { CPerson::Construct, nullptr, "Person", true },
     { CMine::ConstructTimed, CMine::Preload, "TimedMine", true },
-    { CMine::ConstructBouncingBetty, 0, /*CMine::Preload*/ "BouncingBettyMine", true },
-    { CMine::ConstructRemoteControl, 0, /*CMine::Preload*/ "RemoteControlMine", false },
-    { CPylon::Construct, 0, "Pylon", true },
+    { CMine::ConstructBouncingBetty, nullptr, /*CMine::Preload*/ "BouncingBettyMine", true },
+    { CMine::ConstructRemoteControl, nullptr, /*CMine::Preload*/ "RemoteControlMine", false },
+    { CPylon::Construct, nullptr, "Pylon", true },
     { CPowerUp::Construct, CPowerUp::Preload, "PowerUp", true },
-    { COstrich::Construct, 0, "Ostrich", true },
-    { CTrigger::Construct, 0, "Trigger", false },
+    { COstrich::Construct, nullptr, "Ostrich", true },
+    { CTrigger::Construct, nullptr, "Trigger", false },
     { CHeatseeker::Construct, CHeatseeker::Preload, "Heatseeker", false },
-    { CChunk::Construct, 0, "Chunk", false },
-    { NULL, /* CAssault */ 0, "AssaultWeapon", false },
-    { CSentry::Construct, 0, "Sentry", true },
-    { NULL, /* CSentryGun */ 0, "CentryGun", false },
-    { CWarp::Construct, 0, "Warp", true },
+    { CChunk::Construct, nullptr, "Chunk", false },
+    { nullptr, /* CAssault */ nullptr, "AssaultWeapon", false },
+    { CSentry::Construct, nullptr, "Sentry", true },
+    { nullptr, /* CSentryGun */ nullptr, "CentryGun", false },
+    { CWarp::Construct, nullptr, "Warp", true },
     { CDemon::Construct, CDemon::Preload, "Demon", true },
-    { NULL, /* CCharacter */ CCharacter::Preload, "Character", false },
-    { NULL, /*CGoalTimer */ 0, "GoalTimer", false },
-    { CFlag::Construct, 0, "Flag", true },
-    { CFlagbase::Construct, 0, "Flagbase", true },
-    { CFirestream::Construct, 0, "Firestream", false },
+    { nullptr, /* CCharacter */ CCharacter::Preload, "Character", false },
+    { nullptr, /*CGoalTimer */ nullptr, "GoalTimer", false },
+    { CFlag::Construct, nullptr, "Flag", true },
+    { CFlagbase::Construct, nullptr, "Flagbase", true },
+    { CFirestream::Construct, nullptr, "Firestream", false },
     { CDeathWad::Construct, CDeathWad::Preload, "DeathWad", false },
-    { NULL, /*CDoubleBarrel */ 0, "DoubleBarrel", false },
-    { NULL, /*CUziID */ 0, "Uzi", false },
-    { NULL, /*CAutoRifleID */ 0, "AutoRifle", false },
-    { NULL, /*CSmallPistolID */ 0, "SmallPistol", false },
-    { CGrenade::ConstructDynamite, 0, "Dynamite", false },
-    { CSndRelay::Construct, 0, "SndRelay", true },
+    { nullptr, /*CDoubleBarrel */ nullptr, "DoubleBarrel", false },
+    { nullptr, /*CUziID */ nullptr, "Uzi", false },
+    { nullptr, /*CAutoRifleID */ nullptr, "AutoRifle", false },
+    { nullptr, /*CSmallPistolID */ nullptr, "SmallPistol", false },
+    { CGrenade::ConstructDynamite, nullptr, "Dynamite", false },
+    { CSndRelay::Construct, nullptr, "SndRelay", true },
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -388,11 +388,11 @@ CThing::CThing(CRealm *pRealm, // In:  Pointer to realm
     m_pRealm = pRealm;
 
     m_everything.m_powner = this;
-    m_everything.m_pnNext = NULL;
-    m_everything.m_pnPrev = NULL;
+    m_everything.m_pnNext = nullptr;
+    m_everything.m_pnPrev = nullptr;
     m_nodeClass.m_powner = this;
-    m_nodeClass.m_pnNext = NULL;
-    m_nodeClass.m_pnPrev = NULL;
+    m_nodeClass.m_pnNext = nullptr;
+    m_nodeClass.m_pnPrev = nullptr;
 
     // Add this object to realm and save its assigned position in realm's container
     //	pRealm->AddThing(this, id, &m_iterEvery, &m_iterClass);
@@ -402,7 +402,7 @@ CThing::CThing(CRealm *pRealm, // In:  Pointer to realm
     m_u16InstanceId = CIdBank::IdNil;
 
     // Clear editor's RHot*.
-    m_phot = NULL;
+    m_phot = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -547,7 +547,7 @@ void CThing::SetInstanceID( // Returns nothing.
 short CThing::SendThingMessage(pGameMessage pMessage, short sPriority, U16 u16ID)
 {
     short sResult = SUCCESS;
-    CThing *pThing = NULL;
+    CThing *pThing = nullptr;
 
     m_pRealm->m_idbank.GetThingByID(&pThing, u16ID);
     if (pThing)
@@ -564,7 +564,7 @@ short CThing::SendThingMessage(pGameMessage pMessage, short sPriority, CThing *p
     // If you were using 0xebeb as your priority, stop that.
     ASSERT(sPriority != 0xebeb);
 
-    if (pThing != NULL)
+    if (pThing != nullptr)
         pThing->m_MessageQueue.EnQ(pMessage, &sPriority);
     else
         sResult = -1;
@@ -643,7 +643,7 @@ short CThing::ConstructWithID( // Returns 0 if successfull, non-zero otherwise
             if (sResult != 0)
             {
                 delete *ppNew;
-                *ppNew = NULL;
+                *ppNew = nullptr;
             }
         }
     }

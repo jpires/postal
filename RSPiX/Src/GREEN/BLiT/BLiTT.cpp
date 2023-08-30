@@ -95,7 +95,7 @@ short rspBlitT(ULONG ucTransparent,
     // 1) preliminary parameter validation:
 #ifdef _DEBUG
 
-    if ((pimSrc == NULL) || (pimDst == NULL))
+    if ((pimSrc == nullptr) || (pimDst == nullptr))
     {
         TRACE("rspBlitT: null CImage* passed\n");
         return -1;

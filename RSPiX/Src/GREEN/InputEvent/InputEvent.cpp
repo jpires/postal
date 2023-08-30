@@ -181,7 +181,7 @@ short rspGetNextInputEvent( // Returns 1 if there is an event, 0 if none.
 // rspClearKeyEvents().
 //
 //////////////////////////////////////////////////////////////////////////////
-void rspClearAllInputEvents(void) // Returns nothing.
+void rspClearAllInputEvents() // Returns nothing.
 {
     // Invalidate any stored events.
     ms_sKeyEvent = FALSE;
@@ -196,7 +196,7 @@ void rspClearAllInputEvents(void) // Returns nothing.
 // Clears any pending key input events.  Calls rspClearKeyEvents().
 //
 //////////////////////////////////////////////////////////////////////////////
-void rspClearKeyInputEvents(void) // Returns nothing.
+void rspClearKeyInputEvents() // Returns nothing.
 {
     // Invalidate any stored event.
     ms_sKeyEvent = FALSE;
@@ -209,7 +209,7 @@ void rspClearKeyInputEvents(void) // Returns nothing.
 // Clears any pending mouse input events.  Calls rspClearMouseEvents().
 //
 //////////////////////////////////////////////////////////////////////////////
-void rspClearMouseInputEvents(void) // Returns nothing.
+void rspClearMouseInputEvents() // Returns nothing.
 {
     // Invalidate any stored event.
     ms_sMouseEvent = FALSE;

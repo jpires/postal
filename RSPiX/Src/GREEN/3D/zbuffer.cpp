@@ -15,7 +15,7 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
-#include <stdlib.h>
+#include <cstdlib>
 #include "System.h"
 #ifdef PATHS_IN_INCLUDES
 #include "GREEN/3D/zbuffer.h"
@@ -30,7 +30,7 @@ void RZBuffer::Init()
 {
     m_sW = m_sH = 0;
     m_lP = 0;
-    m_pBuf = NULL;
+    m_pBuf = nullptr;
 }
 
 RZBuffer::RZBuffer()

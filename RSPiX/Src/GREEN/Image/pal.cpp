@@ -169,7 +169,7 @@ RPal::RPal()
     m_sStartIndex = 0;
     m_sNumEntries = 0;
     m_sPalEntrySize = 0;
-    m_pData = NULL;
+    m_pData = nullptr;
     m_sCanDestroyData = FALSE;
 }
 
@@ -378,7 +378,7 @@ short RPal::DestroyData()
 
 short RPal::SetData(void *pUserData)
 {
-    if (pUserData != NULL && m_pData == NULL)
+    if (pUserData != nullptr && m_pData == nullptr)
     {
         m_pData = (UCHAR *)pUserData;
         m_sCanDestroyData = FALSE;
@@ -415,10 +415,10 @@ short RPal::SetData(void *pUserData)
 //
 //////////////////////////////////////////////////////////////////////
 
-UCHAR *RPal::DetachData(void)
+UCHAR *RPal::DetachData()
 {
     UCHAR *pDetachment = m_pData;
-    m_pData = NULL;
+    m_pData = nullptr;
     m_sCanDestroyData = FALSE;
     return pDetachment;
 }
@@ -680,9 +680,9 @@ short RPal::GetEntries(short sStart,             // In:  Starting palette entry
                        long lAddToPointers)      // In:  What to add to pointers to move to next value
 {
     // Validate parameters
-    ASSERT(pDstRed != NULL);
-    ASSERT(pDstGreen != NULL);
-    ASSERT(pDstBlue != NULL);
+    ASSERT(pDstRed != nullptr);
+    ASSERT(pDstGreen != nullptr);
+    ASSERT(pDstBlue != nullptr);
     if ((sStart < m_sStartIndex) || ((sStart + sCount - 1) > (m_sStartIndex + m_sNumEntries - 1)))
     {
         TRACE("RPal::GetEntries(): Specified range (%d to %d) exceeds palette's range (%d to %d)!\n",
@@ -835,9 +835,9 @@ short RPal::SetEntries(short sStart,             // In:  Starting palette entry
                        long lAddToPointers)      // In:  What to add to pointers to move to next value
 {
     // Validate parameters
-    ASSERT(pSrcRed != NULL);
-    ASSERT(pSrcGreen != NULL);
-    ASSERT(pSrcBlue != NULL);
+    ASSERT(pSrcRed != nullptr);
+    ASSERT(pSrcGreen != nullptr);
+    ASSERT(pSrcBlue != nullptr);
     if ((sStart < m_sStartIndex) || ((sStart + sCount - 1) > (m_sStartIndex + m_sNumEntries - 1)))
     {
         TRACE("RPal::PutEntries(): Specified range (%d to %d) exceeds palette's range (%d to %d)!\n",

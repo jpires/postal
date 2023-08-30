@@ -435,7 +435,7 @@ short RImageFile::Load( // Returns SUCCESS on success or FAILURE on failure.
                 {
                     // Call the special load function for this type if any
                     LOADFUNC clf = GETLOADFUNC(pim->m_type);
-                    if (clf != NULL)
+                    if (clf != nullptr)
                         sRes = (*clf)(pim, pfile /*, ulVersion*/);
                 }
             }

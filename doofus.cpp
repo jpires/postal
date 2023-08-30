@@ -430,7 +430,7 @@
 #define DOOFUS_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "doofus.h"
 #include "dude.h"
@@ -507,7 +507,7 @@ CDoofus::WeaponDetails CDoofus::ms_awdWeapons[NumWeaponTypes] = {
     {
       // pszName, pszResName, CThing ID
       "Verbal Abuse",
-      NULL,
+      nullptr,
       TotalIDs,
     },
 
@@ -523,7 +523,7 @@ CDoofus::WeaponDetails CDoofus::ms_awdWeapons[NumWeaponTypes] = {
     {
       // pszName, pszResName, CThing ID
       "Grenade",
-      NULL,
+      nullptr,
       CGrenadeID,
     },
 
@@ -539,7 +539,7 @@ CDoofus::WeaponDetails CDoofus::ms_awdWeapons[NumWeaponTypes] = {
     {
       // pszName, pszResName, CThing ID
       "Cocktail",
-      NULL,
+      nullptr,
       CFirebombID,
     },
 
@@ -547,7 +547,7 @@ CDoofus::WeaponDetails CDoofus::ms_awdWeapons[NumWeaponTypes] = {
     {
       // pszName, pszResName, CThing ID
       "ProximityMine",
-      NULL,
+      nullptr,
       CProximityMineID,
     },
 
@@ -555,7 +555,7 @@ CDoofus::WeaponDetails CDoofus::ms_awdWeapons[NumWeaponTypes] = {
     {
       // pszName, pszResName, CThing ID
       "TimedMine",
-      NULL,
+      nullptr,
       CTimedMineID,
     },
 
@@ -563,7 +563,7 @@ CDoofus::WeaponDetails CDoofus::ms_awdWeapons[NumWeaponTypes] = {
     {
       // pszName, pszResName, CThing ID
       "RemoteMine",
-      NULL,
+      nullptr,
       CRemoteControlMineID,
     },
 
@@ -571,7 +571,7 @@ CDoofus::WeaponDetails CDoofus::ms_awdWeapons[NumWeaponTypes] = {
     {
       // pszName, pszResName, CThing ID
       "BouncingBetty",
-      NULL,
+      nullptr,
       CBouncingBettyMineID,
     },
 
@@ -667,7 +667,7 @@ CDoofus::WeaponDetails CDoofus::ms_awdWeapons[NumWeaponTypes] = {
     {
       // pszName, pszResName, CThing ID
       "Dynamite",
-      NULL,
+      nullptr,
       CDynamiteID,
     },
 
@@ -704,25 +704,25 @@ CDoofus::CDoofus(CRealm *pRealm, ClassIDType id)
   : CCharacter(pRealm, id)
 {
     m_sSuspend = 0;
-    m_pNavNet = NULL;
+    m_pNavNet = nullptr;
     m_u16NavNetID = 0;
     m_idDude = CIdBank::IdNil;
-    m_pNextBouy = NULL;
+    m_pNextBouy = nullptr;
     m_sNextX = m_sNextZ = 0;
     m_ucDestBouyID = m_ucNextBouyID = 0;
     m_lAlignTimer = 0;
     m_lEvalTimer = 0;
     m_lShootTimer = 0;
     m_lShotTimeout = 0;
-    m_pPylonStart = NULL;
-    m_pPylonEnd = NULL;
+    m_pPylonStart = nullptr;
+    m_pPylonEnd = nullptr;
     m_lCommentTimer = 0;
     m_usCommentCounter = 0;
     m_lLastHelpCallTime = 0;
     m_lSampleTimeIsPlaying = 0;
     m_bRecentlyStuck = false;
     m_bCivilian = false;
-    m_ptransExecutionTarget = NULL;
+    m_ptransExecutionTarget = nullptr;
     m_spriteWeapon.m_pthing = this;
     m_ucSpecialBouy0ID = 0;
     m_ucSpecialBouy1ID = 0;
@@ -912,12 +912,12 @@ short CDoofus::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CDoofus::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CDoofus::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     CCharacter::Startup();
 
     // If we don't have a pointer to the Nav Net yet, get it from the ID
-    if (m_pNavNet == NULL)
+    if (m_pNavNet == nullptr)
     {
         if (m_pRealm->m_idbank.GetThingByID((CThing **)&m_pNavNet, m_u16NavNetID) == 0)
         {
@@ -928,12 +928,12 @@ short CDoofus::Startup(void) // Returns 0 if successfull, non-zero otherwise
             }
             else
             {
-                m_pNavNet = NULL;
+                m_pNavNet = nullptr;
             }
         }
 
         // If still no nav net . . .
-        if (m_pNavNet == NULL)
+        if (m_pNavNet == nullptr)
         {
             // Message depends on user mode.
             if (m_pRealm->m_flags.bEditing)
@@ -1032,7 +1032,7 @@ short CDoofus::EditNew( // Returns 0 if successfull, non-zero otherwise
 //				direction.
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Render(void)
+void CDoofus::Render()
 {
     double dSaveRotation = m_dRot;
     m_dRot = m_dAnimRot;
@@ -1041,7 +1041,7 @@ void CDoofus::Render(void)
 
     m_dRot = dSaveRotation;
 
-    CAnim3D *panimWeapon = NULL;
+    CAnim3D *panimWeapon = nullptr;
 
     if (m_panimCur->m_pevent)
     {
@@ -1056,7 +1056,7 @@ void CDoofus::Render(void)
             if (panimWeapon)
             {
                 // If this anim is empty (and not intentional) . . .
-                if (panimWeapon->m_pmeshes == NULL && m_eWeaponType != TotalIDs)
+                if (panimWeapon->m_pmeshes == nullptr && m_eWeaponType != TotalIDs)
                 {
                     // Get fallback weapon, if any.
                     panimWeapon = GetWeaponAnim(m_eFallbackWeaponType);
@@ -1096,7 +1096,7 @@ void CDoofus::Render(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CDoofus::EditRender(void)
+void CDoofus::EditRender()
 {
     // In some cases, object's might need to do a special-case render in edit
     // mode because Startup() isn't called.  In this case it doesn't matter, so
@@ -1108,7 +1108,7 @@ void CDoofus::EditRender(void)
 // SelectDude
 ////////////////////////////////////////////////////////////////////////////////
 
-short CDoofus::SelectDudeBouy(void)
+short CDoofus::SelectDudeBouy()
 {
     short sReturn = SUCCESS;
     //	CDude* pDude;
@@ -1153,15 +1153,15 @@ short CDoofus::SelectDudeBouy(void)
 // SelectRandomBouy - make sure it exists before setting it
 ////////////////////////////////////////////////////////////////////////////////
 
-UCHAR CDoofus::SelectRandomBouy(void)
+UCHAR CDoofus::SelectRandomBouy()
 {
     UCHAR ucSelect = 0;
-    CBouy *pBouy = NULL;
+    CBouy *pBouy = nullptr;
 
     if (m_pNavNet->GetNumNodes() <= 1)
         return 0;
 
-    while (pBouy == NULL)
+    while (pBouy == nullptr)
     {
         ucSelect = GetRandom() % m_pNavNet->GetNumNodes();
         pBouy = m_pNavNet->GetBouy(ucSelect);
@@ -1174,7 +1174,7 @@ UCHAR CDoofus::SelectRandomBouy(void)
 //					 this enemy's CDude pointer.
 ////////////////////////////////////////////////////////////////////////////////
 
-short CDoofus::SelectDude(void)
+short CDoofus::SelectDude()
 {
     //	Things::iterator i;
     //	Things* pDudes;
@@ -1277,7 +1277,7 @@ double CDoofus::SQDistanceToDude()
 // AlignToBouy - When timer is up, recalculate direction to bouy
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::AlignToBouy(void)
+void CDoofus::AlignToBouy()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
     if (lThisTime > m_lAlignTimer || m_bRecentlyStuck)
@@ -1291,7 +1291,7 @@ void CDoofus::AlignToBouy(void)
             if (m_ucNextBouyID > 0)
             {
                 m_pNextBouy = m_pNavNet->GetBouy(m_ucNextBouyID);
-                if (m_pNextBouy != NULL)
+                if (m_pNextBouy != nullptr)
                 {
                     m_sNextX = m_pNextBouy->GetX();
                     m_sNextZ = m_pNextBouy->GetZ();
@@ -1389,7 +1389,7 @@ bool CDoofus::TryClearShot(double dRot, short sVariance)
     {
         short sTries = 0;
         short sX, sY, sZ;
-        CThing *pthing = NULL;
+        CThing *pthing = nullptr;
         double dRotAttempt = dRot;
 
         // Do a translation to the weapon position so that it is at the correct
@@ -1465,7 +1465,7 @@ bool CDoofus::TryClearShot(double dRot, short sVariance)
 // Update - default implementation of logic for enemy characters
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Update(void)
+void CDoofus::Update()
 {
     if (!m_sSuspend)
     {
@@ -1565,7 +1565,7 @@ void CDoofus::Update(void)
 // Logic_Shot - You got shot so check your damage
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_Shot(void)
+void CDoofus::Logic_Shot()
 {
     if (m_stockpile.m_sHitPoints > NEAR_DEATH_HITPOINTS)
     // Restore previous state & go back to what you were doing
@@ -1610,7 +1610,7 @@ void CDoofus::Logic_Shot(void)
 // Logic_BlownUp - You were blown up so pop up into the air and come down again
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_BlownUp(void)
+void CDoofus::Logic_BlownUp()
 {
     // Make him animate
     m_lAnimTime += (m_pRealm->m_time.GetGameTime() - m_lPrevTime);
@@ -1627,7 +1627,7 @@ void CDoofus::Logic_BlownUp(void)
 // Logic_Burning - You are on fire, so run aroudn burning until you are dead
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_Burning(void)
+void CDoofus::Logic_Burning()
 {
     m_lAnimTime += m_pRealm->m_time.GetGameTime() - m_lPrevTime;
 
@@ -1645,7 +1645,7 @@ void CDoofus::Logic_Burning(void)
 // Logic_Die - You are about to die, so look like it!
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_Die(void)
+void CDoofus::Logic_Die()
 {
     // Change our smashatorium bits
     // enable this if you want them to always writhe when dead - for testing
@@ -1728,7 +1728,7 @@ void CDoofus::Logic_Die(void)
 //						  executed or until the pain is no longer tolerable.
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_Writhing(void)
+void CDoofus::Logic_Writhing()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
     long lTimeDifference = lThisTime - m_lPrevTime;
@@ -1795,7 +1795,7 @@ void CDoofus::Logic_Writhing(void)
 // Logic_Guard - Guard the area until a CDude is nearby
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_Guard(void)
+void CDoofus::Logic_Guard()
 {
     long lThisTime;
     long lTimeDifference;
@@ -1829,7 +1829,7 @@ void CDoofus::Logic_Guard(void)
             if (CDoofus::TryClearShot(m_dRot, 20) == true)
             {
                 CWeapon *pweapon = PrepareWeapon();
-                if (pweapon != NULL)
+                if (pweapon != nullptr)
                 {
                     // Keep it hidden, for now.
                     pweapon->GetSprite()->m_sInFlags |= CSprite::InHidden;
@@ -1857,7 +1857,7 @@ void CDoofus::Logic_Guard(void)
 // Logic_Patrol - Keep an eye on the CDude and look like you're doing something
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_Patrol(void)
+void CDoofus::Logic_Patrol()
 {
     // Turn to face dude but do not attack yet
     m_dShootAngle = m_dAnimRot = m_dRot = FindDirection();
@@ -1867,7 +1867,7 @@ void CDoofus::Logic_Patrol(void)
 // Logic_Hunt - Find a CDude, use the bouy network to get to him wherever he is
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_Hunt(void)
+void CDoofus::Logic_Hunt()
 {
     // Find the destination bouy (one closest to the Dude)
     m_eDestinationState = State_HuntHold;
@@ -1876,7 +1876,7 @@ void CDoofus::Logic_Hunt(void)
     if (m_ucNextBouyID > 0)
     {
         m_pNextBouy = m_pNavNet->GetBouy(m_ucNextBouyID);
-        if (m_pNextBouy != NULL)
+        if (m_pNextBouy != nullptr)
         {
             m_sNextX = m_pNextBouy->GetX();
             m_sNextZ = m_pNextBouy->GetZ();
@@ -1907,7 +1907,7 @@ void CDoofus::Logic_Hunt(void)
 //						  move to a closer bouy once the Dude changes his position.
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_HuntHold(void)
+void CDoofus::Logic_HuntHold()
 {
     // Evaluate the logic table suggestion to see if you should change states
     m_eCurrentAction = Action_AdvanceHold;
@@ -1925,7 +1925,7 @@ void CDoofus::Logic_HuntHold(void)
             if (m_ucNextBouyID != m_ucDestBouyID)
             {
                 m_pNextBouy = m_pNavNet->GetBouy(m_ucNextBouyID);
-                if (m_pNextBouy != NULL)
+                if (m_pNextBouy != nullptr)
                 {
                     m_sNextX = m_pNextBouy->GetX();
                     m_sNextZ = m_pNextBouy->GetZ();
@@ -1940,7 +1940,7 @@ void CDoofus::Logic_HuntHold(void)
                 if (SelectDude() == SUCCESS && SQDistanceToDude() < ms_dGuardDistance)
                 {
                     CWeapon *pweapon = PrepareWeapon();
-                    if (pweapon != NULL)
+                    if (pweapon != nullptr)
                     {
                         // Keep it hidden, for now.
                         pweapon->GetSprite()->m_sInFlags |= CSprite::InHidden;
@@ -1965,7 +1965,7 @@ void CDoofus::Logic_HuntHold(void)
 // Logic_HuntNext - going to next bouy in network en route to final destination
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_MoveNext(void)
+void CDoofus::Logic_MoveNext()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
     long lElapsedTime = lThisTime - m_lPrevTime;
@@ -2083,7 +2083,7 @@ void CDoofus::Logic_MoveNext(void)
 // Logic_PositionSet - Get yourself set up to get into range for shooting
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_PositionSet(void)
+void CDoofus::Logic_PositionSet()
 {
     if (!ReevaluateState())
     {
@@ -2208,7 +2208,7 @@ void CDoofus::Logic_PositionSet(void)
 // Logic_DelayShoot - wait for timer to expire then shoot if clear
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_DelayShoot(void)
+void CDoofus::Logic_DelayShoot()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
 
@@ -2218,7 +2218,7 @@ void CDoofus::Logic_DelayShoot(void)
         if (TryClearShot(m_dRot, 20) == true && SelectDude() == SUCCESS)
         {
             CWeapon *pweapon = PrepareWeapon();
-            if (pweapon != NULL)
+            if (pweapon != nullptr)
             {
                 pweapon->GetSprite()->m_sInFlags |= CSprite::InHidden;
                 pweapon->SetRangeToTarget(rspSqrt(SQDistanceToDude()));
@@ -2239,7 +2239,7 @@ void CDoofus::Logic_DelayShoot(void)
 // Logic_PositionMove - Move into position then shoot
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_PositionMove(void)
+void CDoofus::Logic_PositionMove()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
     long lTimeDifference = lThisTime - m_lPrevTime;
@@ -2252,7 +2252,7 @@ void CDoofus::Logic_PositionMove(void)
         if (CDoofus::TryClearShot(m_dRot, 20) == true && SelectDude() == SUCCESS)
         {
             CWeapon *pweapon = PrepareWeapon();
-            if (pweapon != NULL)
+            if (pweapon != nullptr)
             {
                 // Keep it hidden, for now.
                 pweapon->GetSprite()->m_sInFlags |= CSprite::InHidden;
@@ -2295,7 +2295,7 @@ void CDoofus::Logic_PositionMove(void)
 // Logic_Engage - engage the Dude and start fighting at close range
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_Engage(void)
+void CDoofus::Logic_Engage()
 {
     m_dShootAngle = m_dAnimRot = m_dRot = FindDirection();
     m_state = State_PositionSet;
@@ -2306,13 +2306,13 @@ void CDoofus::Logic_Engage(void)
 // Logic_BeSafe - Stay behind the SafeSpot bouy if the Dude is facing you
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_BeSafe(void) {}
+void CDoofus::Logic_BeSafe() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Logic_Firefight - Shoot and move
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_Firefight(void) {}
+void CDoofus::Logic_Firefight() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Logic_PylonDetect - If you detect that a pylon is near, find out what kind
@@ -2321,10 +2321,10 @@ void CDoofus::Logic_Firefight(void) {}
 //							  the suggested action requires the use of a pylon.
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_PylonDetect(void)
+void CDoofus::Logic_PylonDetect()
 {
     CSmash *pSmashPylon;
-    CPylon *pPylon = NULL;
+    CPylon *pPylon = nullptr;
     double dSmashedX = 0.0;
     double dSmashedZ = 0.0;
 
@@ -2367,9 +2367,9 @@ void CDoofus::Logic_PylonDetect(void)
                   (short)dSmashedX,    // In:  Destination X.
                   (short)dSmashedZ,    // In:  Destination Z.
                   0,                   // In:  Max traverser can step up.
-                  NULL,                // Out: If not NULL, last clear point on path.
-                  NULL,                // Out: If not NULL, last clear point on path.
-                  NULL,                // Out: If not NULL, last clear point on path.
+                  nullptr,                // Out: If not NULL, last clear point on path.
+                  nullptr,                // Out: If not NULL, last clear point on path.
+                  nullptr,                // Out: If not NULL, last clear point on path.
                   true))               // In:  If true, will consider the edge of the realm a path
                                        // inhibitor.  If false, reaching the edge of the realm
                                        // indicates a clear path.
@@ -2422,7 +2422,7 @@ void CDoofus::Logic_PylonDetect(void)
 // Logic_HideBegin - Go to the hiding pylon and then wait once you get there
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_HideBegin(void)
+void CDoofus::Logic_HideBegin()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
     // If we'renot using the run animation yet then switch to it
@@ -2460,7 +2460,7 @@ void CDoofus::Logic_HideBegin(void)
 // Logic_Hide - Wait here and hope nobody sees you and blows you away.
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_Hide(void)
+void CDoofus::Logic_Hide()
 {
     ReevaluateState();
 }
@@ -2470,7 +2470,7 @@ void CDoofus::Logic_Hide(void)
 //						  phase here by going to that pylon.
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_PopBegin(void)
+void CDoofus::Logic_PopBegin()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
     double dStartX = m_dX;
@@ -2528,7 +2528,7 @@ void CDoofus::Logic_PopBegin(void)
 // Logic_PopWait - Wait at covered pylon until a CDude steps on the trigger
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_PopWait(void)
+void CDoofus::Logic_PopWait()
 {
     // If the stand animation is not being used yet then switch to it.
     //	if (m_panimCur != &m_animStand)
@@ -2554,7 +2554,7 @@ void CDoofus::Logic_PopWait(void)
     }
     else
     {
-        m_pPylonStart = NULL;
+        m_pPylonStart = nullptr;
     }
 }
 
@@ -2565,7 +2565,7 @@ void CDoofus::Logic_PopWait(void)
 //						logic choice based on enemy attributes.
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_Popout(void)
+void CDoofus::Logic_Popout()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
     long lElapsedTime = lThisTime - m_lPrevTime;
@@ -2598,7 +2598,7 @@ void CDoofus::Logic_Popout(void)
         m_sNextX = m_pPylonStart->GetX();
         m_sNextZ = m_pPylonStart->GetZ();
         CWeapon *pweapon = PrepareWeapon();
-        if (pweapon != NULL)
+        if (pweapon != nullptr)
         {
             // Keep it hidden, for now.
             pweapon->GetSprite()->m_sInFlags |= CSprite::InHidden;
@@ -2614,7 +2614,7 @@ void CDoofus::Logic_Popout(void)
 // Logic_Shoot - run the animation to the proper time and then shoot the weapon
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_Shoot(void)
+void CDoofus::Logic_Shoot()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
     long lTimeDifference = lThisTime - m_lPrevTime;
@@ -2627,7 +2627,7 @@ void CDoofus::Logic_Shoot(void)
             if (m_u16IdWeapon == CIdBank::IdNil)
             {
                 // Must prepare more fire.
-                if (PrepareWeapon() == NULL)
+                if (PrepareWeapon() == nullptr)
                     break;
             }
             // Intentional fall through.
@@ -2708,7 +2708,7 @@ void CDoofus::Logic_Shoot(void)
 //						  the motion update
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_ShootRun(void)
+void CDoofus::Logic_ShootRun()
 {
     double dSeconds = (m_pRealm->m_time.GetGameTime() - m_lPrevTime) / 1000.0;
 
@@ -2724,7 +2724,7 @@ void CDoofus::Logic_ShootRun(void)
 // Logic_RunShootBegin - Set up the destination pylon and shooting interval
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_RunShootBegin(void)
+void CDoofus::Logic_RunShootBegin()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
     long lElapsedTime = lThisTime - m_lPrevTime;
@@ -2787,7 +2787,7 @@ void CDoofus::Logic_RunShootBegin(void)
 //						  and shoot again, then duck behind the second bouy.  Repeat
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_RunShoot(void)
+void CDoofus::Logic_RunShoot()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
     long lElapsedTime = lThisTime - m_lPrevTime;
@@ -2812,7 +2812,7 @@ void CDoofus::Logic_RunShoot(void)
             // After shooting, go back to beginning
             m_eNextState = State_RunShoot;
             CWeapon *pweapon = PrepareWeapon();
-            if (pweapon != NULL)
+            if (pweapon != nullptr)
             {
                 // Keep it hidden, for now.
                 pweapon->GetSprite()->m_sInFlags |= CSprite::InHidden;
@@ -2917,7 +2917,7 @@ void CDoofus::Logic_RunShoot(void)
     }
     else
     {
-        m_pPylonStart = NULL;
+        m_pPylonStart = nullptr;
     }
 }
 
@@ -2925,7 +2925,7 @@ void CDoofus::Logic_RunShoot(void)
 // Logic_RunShootWait - Wait at the endpoint before going again.
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_RunShootWait(void)
+void CDoofus::Logic_RunShootWait()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
 
@@ -2949,7 +2949,7 @@ void CDoofus::Logic_RunShootWait(void)
 //						 run away from the Dude, taking shelter wherever you can.
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_Retreat(void)
+void CDoofus::Logic_Retreat()
 {
     // Get your closest bouy, pick a random destination bouy, then
     // start traversing 3 away from your current one and set that
@@ -2961,7 +2961,7 @@ void CDoofus::Logic_Retreat(void)
     if (m_ucNextBouyID > 0)
     {
         m_pNextBouy = m_pNavNet->GetBouy(m_ucNextBouyID);
-        if (m_pNextBouy != NULL)
+        if (m_pNextBouy != nullptr)
         {
             m_sNextX = m_pNextBouy->GetX();
             m_sNextZ = m_pNextBouy->GetZ();
@@ -2987,7 +2987,7 @@ void CDoofus::Logic_Retreat(void)
 // Logic_PanicBegin - Pick a random bouy to run to and set animation
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_PanicBegin(void)
+void CDoofus::Logic_PanicBegin()
 {
     // See if dude is still alive
     SelectDude();
@@ -3005,7 +3005,7 @@ void CDoofus::Logic_PanicBegin(void)
     if (m_ucNextBouyID > 0)
     {
         m_pNextBouy = m_pNavNet->GetBouy(m_ucNextBouyID);
-        if (m_pNextBouy != NULL)
+        if (m_pNextBouy != nullptr)
         {
             m_sNextX = m_pNextBouy->GetX();
             m_sNextZ = m_pNextBouy->GetZ();
@@ -3028,7 +3028,7 @@ void CDoofus::Logic_PanicBegin(void)
 // Logic_PanicContinue - End of panic state - pick another bouy
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_PanicContinue(void)
+void CDoofus::Logic_PanicContinue()
 {
     m_state = State_PanicBegin;
 }
@@ -3037,7 +3037,7 @@ void CDoofus::Logic_PanicContinue(void)
 // Logic_MarchBegin - Pick an endpoint and march to it.
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_MarchBegin(void)
+void CDoofus::Logic_MarchBegin()
 {
     // See if Dude is still alive
     SelectDude();
@@ -3061,7 +3061,7 @@ void CDoofus::Logic_MarchBegin(void)
     if (m_ucNextBouyID > 0)
     {
         m_pNextBouy = m_pNavNet->GetBouy(m_ucNextBouyID);
-        if (m_pNextBouy != NULL)
+        if (m_pNextBouy != nullptr)
         {
             m_sNextX = m_pNextBouy->GetX();
             m_sNextZ = m_pNextBouy->GetZ();
@@ -3086,7 +3086,7 @@ void CDoofus::Logic_MarchBegin(void)
 // Logic_WalkBegin - Pick a random bouy to run to and set animation
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_WalkBegin(void)
+void CDoofus::Logic_WalkBegin()
 {
     // See if dude is still alive
     SelectDude();
@@ -3096,7 +3096,7 @@ void CDoofus::Logic_WalkBegin(void)
     if (m_ucNextBouyID > 0)
     {
         m_pNextBouy = m_pNavNet->GetBouy(m_ucNextBouyID);
-        if (m_pNextBouy != NULL)
+        if (m_pNextBouy != nullptr)
         {
             m_sNextX = m_pNextBouy->GetX();
             m_sNextZ = m_pNextBouy->GetZ();
@@ -3119,7 +3119,7 @@ void CDoofus::Logic_WalkBegin(void)
 // Logic_WalkContinue - End of walk state - pick another bouy
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_WalkContinue(void)
+void CDoofus::Logic_WalkContinue()
 {
     m_state = State_WalkBegin;
 }
@@ -3129,7 +3129,7 @@ void CDoofus::Logic_WalkContinue(void)
 //						 up your positioning
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_Helping(void)
+void CDoofus::Logic_Helping()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
 
@@ -3142,7 +3142,7 @@ void CDoofus::Logic_Helping(void)
             if (CDoofus::TryClearShot(m_dRot, 20) == true)
             {
                 CWeapon *pweapon = PrepareWeapon();
-                if (pweapon != NULL)
+                if (pweapon != nullptr)
                 {
                     // Keep it hidden, for now.
                     pweapon->GetSprite()->m_sInFlags |= CSprite::InHidden;
@@ -3172,7 +3172,7 @@ void CDoofus::Logic_Helping(void)
 //							when there is a fire in your path.
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::Logic_AvoidFire(void)
+void CDoofus::Logic_AvoidFire()
 {
     if (AvoidFire())
     {
@@ -3193,11 +3193,11 @@ void CDoofus::Logic_AvoidFire(void)
 //					it will save your previous state info and change your state.
 ////////////////////////////////////////////////////////////////////////////////
 
-bool CDoofus::AvoidFire(void)
+bool CDoofus::AvoidFire()
 {
     bool bFireDanger = false;
 
-    CSmash *pSmashed = NULL;
+    CSmash *pSmashed = nullptr;
 
     // Change this to quick check closest
     if (m_pRealm->m_smashatorium.QuickCheck(&m_smashAvoid, CSmash::Fire, CSmash::Good | CSmash::Bad, 0, &pSmashed))
@@ -3224,9 +3224,9 @@ bool CDoofus::AvoidFire(void)
 //					  they can choose to react.
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::YellForHelp(void)
+void CDoofus::YellForHelp()
 {
-    CSmash *pSmashed = NULL;
+    CSmash *pSmashed = nullptr;
     CSmash smashYell;
     double dSmashedX;
     double dSmashedZ;
@@ -3267,9 +3267,9 @@ void CDoofus::YellForHelp(void)
                   (short)dSmashedX,    // In:  Destination X.
                   (short)dSmashedZ,    // In:  Destination Z.
                   0,                   // In:  Max traverser can step up.
-                  NULL,                // Out: If not NULL, last clear point on path.
-                  NULL,                // Out: If not NULL, last clear point on path.
-                  NULL,                // Out: If not NULL, last clear point on path.
+                  nullptr,                // Out: If not NULL, last clear point on path.
+                  nullptr,                // Out: If not NULL, last clear point on path.
+                  nullptr,                // Out: If not NULL, last clear point on path.
                   true))               // In:  If true, will consider the edge of the realm a path
                                        // inhibitor.  If false, reaching the edge of the realm
                                        // indicates a clear path.
@@ -3287,7 +3287,7 @@ void CDoofus::YellForHelp(void)
 //							Returns true if the state changed
 ////////////////////////////////////////////////////////////////////////////////
 
-bool CDoofus::ReevaluateState(void)
+bool CDoofus::ReevaluateState()
 {
     bool bChanged = false;
 
@@ -3364,7 +3364,7 @@ bool CDoofus::ReevaluateState(void)
                 if (m_bPylonPopoutAvailable)
                 {
                     m_pPylonEnd = m_pPylonStart->GetPylon(m_pPylonStart->m_msg.msg_Popout.ucIDNext);
-                    ASSERT(m_pPylonEnd != NULL);
+                    ASSERT(m_pPylonEnd != nullptr);
                     m_sNextX = m_pPylonStart->GetX();
                     m_sNextZ = m_pPylonStart->GetZ();
                     m_state = State_PopBegin;
@@ -3378,7 +3378,7 @@ bool CDoofus::ReevaluateState(void)
                 if (m_bPylonRunShootAvailable)
                 {
                     m_pPylonEnd = m_pPylonStart->GetPylon(m_pPylonStart->m_msg.msg_ShootCycle.ucIDNext);
-                    ASSERT(m_pPylonEnd != NULL);
+                    ASSERT(m_pPylonEnd != nullptr);
                     m_sNextX = m_pPylonStart->GetX();
                     m_sNextZ = m_pPylonStart->GetZ();
                     m_state = State_RunShootBegin;
@@ -3601,7 +3601,7 @@ void CDoofus::OnHelpMsg(  // Returns nothing
 // OnDead - override of CCharacter version
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::OnDead(void)
+void CDoofus::OnDead()
 {
     CCharacter::OnDead();
 }
@@ -3611,7 +3611,7 @@ void CDoofus::OnDead(void)
 // This should be done when the character starts its shoot animation.
 // (virtual (overriden here) ).
 ////////////////////////////////////////////////////////////////////////////////
-CWeapon *CDoofus::PrepareWeapon(void) // Returns the weapon ptr or NULL.
+CWeapon *CDoofus::PrepareWeapon() // Returns the weapon ptr or NULL.
 {
     // Play sound even if we have no weapon...seems like they're threatening him.
     PlaySoundShooting();
@@ -3624,7 +3624,7 @@ CWeapon *CDoofus::PrepareWeapon(void) // Returns the weapon ptr or NULL.
     }
     else
     {
-        pweapon = NULL;
+        pweapon = nullptr;
     }
 
     return pweapon;
@@ -3636,7 +3636,7 @@ CWeapon *CDoofus::PrepareWeapon(void) // Returns the weapon ptr or NULL.
 
 CWeapon *CDoofus::ShootWeapon(CSmash::Bits bitsInclude, CSmash::Bits bitsDontcare, CSmash::Bits bitsExclude)
 {
-    CWeapon *pWeapon = NULL;
+    CWeapon *pWeapon = nullptr;
     double dSaveDirection = m_dRot;
 
     // Don't adjust shooting angle if shooting on the run
@@ -3731,7 +3731,7 @@ CWeapon *CDoofus::ShootWeapon(CSmash::Bits bitsInclude, CSmash::Bits bitsDontcar
 // RunIdleAnimation - Check the idle timer and pick an idle animation to run
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDoofus::RunIdleAnimation(void)
+void CDoofus::RunIdleAnimation()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
 
@@ -3849,7 +3849,7 @@ void CDoofus::RunIdleAnimation(void)
 // Position our smash approriately.
 // (virtual).
 ////////////////////////////////////////////////////////////////////////////////
-void CDoofus::PositionSmash(void)
+void CDoofus::PositionSmash()
 {
     // If not in writhing state . . .
     if (m_state != State_Writhing)
@@ -3962,7 +3962,7 @@ bool CDoofus::WhileHoldingWeapon( // Returns true when weapon is released.
 // any of this class's resources (e.g., ms_aanimWeapons[]), call this
 // when getting your resources.
 ////////////////////////////////////////////////////////////////////////////////
-short CDoofus::GetResources(void)
+short CDoofus::GetResources()
 {
     short sResult = 0;
 
@@ -3978,9 +3978,9 @@ short CDoofus::GetResources(void)
             if (ms_awdWeapons[i].pszResName)
             {
                 sLoadResult = ms_aanimWeapons[i].Get(ms_awdWeapons[i].pszResName,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL,
+                                                     nullptr,
+                                                     nullptr,
+                                                     nullptr,
                                                      RChannel_LoopAtStart | RChannel_LoopAtEnd);
 
                 if (sLoadResult != 0)
@@ -4000,7 +4000,7 @@ short CDoofus::GetResources(void)
 // any of this class's resources (e.g., ms_aanimWeapons[]), call this
 // when releasing your resources.
 ////////////////////////////////////////////////////////////////////////////////
-void CDoofus::ReleaseResources(void)
+void CDoofus::ReleaseResources()
 {
     ASSERT(ms_lWeaponResRefCount > 0);
 

@@ -227,7 +227,7 @@ inline void SetText(  // Returns nothing.
   long lVal)          // In:  Value to set text to.
 {
     RGuiItem *pgui = pguiRoot->GetItemFromId(lId);
-    if (pgui != NULL)
+    if (pgui != nullptr)
     {
         pgui->SetText("%ld", lVal);
         pgui->Compose();
@@ -245,7 +245,7 @@ inline void CheckMultiBtn( // Returns nothing.
     short sRes = 0; // Assume nothing;
 
     RMultiBtn *pmb = (RMultiBtn *)pguiRoot->GetItemFromId(lId);
-    if (pmb != NULL)
+    if (pmb != nullptr)
     {
         ASSERT(pmb->m_type == RGuiItem::MultiBtn);
 
@@ -265,7 +265,7 @@ inline short IsMultiBtnChecked( // Returns multibtn's state.
     short sRes = 0; // Assume nothing;
 
     RMultiBtn *pmb = (RMultiBtn *)pguiRoot->GetItemFromId(lId);
-    if (pmb != NULL)
+    if (pmb != nullptr)
     {
         ASSERT(pmb->m_type == RGuiItem::MultiBtn);
 
@@ -407,7 +407,7 @@ short CStockPile::UserEdit(       // Returns 0 on success.
         if (pguiChild)
         {
             // Get it outta there before we delete the tree.
-            pguiChild->SetParent(NULL);
+            pguiChild->SetParent(nullptr);
         }
 
         delete pgui;
@@ -602,7 +602,7 @@ void CStockPile::Copy(          // Returns nothing.
 ///////////////////////////////////////////////////////////////////////////////
 // Zero the stockpile.
 ///////////////////////////////////////////////////////////////////////////////
-void CStockPile::Zero(void) // Returns nothing.
+void CStockPile::Zero() // Returns nothing.
 {
     short sTypeIndex;
     for (sTypeIndex = 0; sTypeIndex < NumStockPileItems; sTypeIndex++)
@@ -615,7 +615,7 @@ void CStockPile::Zero(void) // Returns nothing.
 // Truncate based on maximums that can be carried.
 // Note that this varies based on m_sBackpack.
 ///////////////////////////////////////////////////////////////////////////////
-void CStockPile::Truncate(void) // Returns nothing.
+void CStockPile::Truncate() // Returns nothing.
 {
     // If we have a backpack . . .
     if (m_sBackpack != 0)
@@ -751,7 +751,7 @@ short &CStockPile::GetWeapon( // Returns a reference to the indexed item.
 ////////////////////////////////////////////////////////////////////////////////
 // Determine if this stockpile is empty.
 ////////////////////////////////////////////////////////////////////////////////
-bool CStockPile::IsEmpty(void) // Returns true, if the stockpile is
+bool CStockPile::IsEmpty() // Returns true, if the stockpile is
                                // empty.
 {
     // Inventory.

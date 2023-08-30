@@ -190,12 +190,12 @@ void RDlg::Do(      // Returns nothing.
             short sParentW, sParentH;
 
             // Get mouse position RSPiX relative.
-            rspGetMouse(&sTopPosX, &sTopPosY, NULL);
+            rspGetMouse(&sTopPosX, &sTopPosY, nullptr);
             sPosX = sTopPosX;
             sPosY = sTopPosY;
 
             RGuiItem *pguiParent = GetParent();
-            if (pguiParent != NULL)
+            if (pguiParent != nullptr)
             {
                 pguiParent->TopPosToChild(&sPosX, &sPosY);
                 sParentW = pguiParent->m_im.m_sWidth;
@@ -203,7 +203,7 @@ void RDlg::Do(      // Returns nothing.
             }
             else
             {
-                rspGetVideoMode(NULL, NULL, NULL, NULL, &sParentW, &sParentH);
+                rspGetVideoMode(nullptr, nullptr, nullptr, nullptr, &sParentW, &sParentH);
             }
 
             // Stay within parent.
@@ -259,7 +259,7 @@ void RDlg::CursorEvent( // Returns nothing.
 void RDlg::Compose(       // Returns nothing.
   RImage *pim /*= NULL*/) // Dest image, uses m_im if NULL.
 {
-    if (pim == NULL)
+    if (pim == nullptr)
     {
         pim = &m_im;
     }
@@ -293,7 +293,7 @@ void RDlg::Compose(       // Returns nothing.
 // (virtual).
 //
 //////////////////////////////////////////////////////////////////////////////
-void RDlg::SetEventArea(void) // Returns nothing.
+void RDlg::SetEventArea() // Returns nothing.
 {
     // Call base to set to defaults.
     RGuiItem::GetClient(&m_sEventAreaX, &m_sEventAreaY, &m_sEventAreaW, &m_sEventAreaH);

@@ -86,7 +86,7 @@ short rspDither(RImage *pimSrc,  // MUST BE 24-bit!
     ASSERT(lMilli > 0);
     ASSERT(sStartMap >= 0);
     ASSERT(sNumMap > 0);
-    ASSERT(pimDst->m_pData == NULL); // we create it!
+    ASSERT(pimDst->m_pData == nullptr); // we create it!
 
 #ifdef _DEBUG
 #endif
@@ -355,7 +355,7 @@ short rspSimpleMap(RImage *pimSrc,  // MUST BE 24-bit!
     ASSERT(lMilli > 0);
     ASSERT(sStartMap >= 0);
     ASSERT(sNumMap > 0);
-    ASSERT(pimDst->m_pData == NULL); // we create it!
+    ASSERT(pimDst->m_pData == nullptr); // we create it!
 
 #ifdef _DEBUG
 #endif
@@ -466,7 +466,7 @@ short rspDither(long lBackR, // Don't dither to this color!
     ASSERT(lMilli > 0);
     ASSERT(sStartMap >= 0);
     ASSERT(sNumMap > 0);
-    ASSERT(pimDst->m_pData == NULL); // we create it!
+    ASSERT(pimDst->m_pData == nullptr); // we create it!
 
 #ifdef _DEBUG
 #endif
@@ -766,7 +766,7 @@ short rspDither(UCHAR ucForeAlpha, // lower limit for foreground
     ASSERT(lMilli > 0);
     ASSERT(sStartMap >= 0);
     ASSERT(sNumMap > 0);
-    ASSERT(pimDst->m_pData == NULL); // we create it!
+    ASSERT(pimDst->m_pData == nullptr); // we create it!
 
 #ifdef _DEBUG
 #endif
@@ -1050,7 +1050,7 @@ short rspSimpleMap(UCHAR ucForeAlpha, // alpha threshhold
     ASSERT(lMilli > 0);
     ASSERT(sStartMap >= 0);
     ASSERT(sNumMap > 0);
-    ASSERT(pimDst->m_pData == NULL); // we create it!
+    ASSERT(pimDst->m_pData == nullptr); // we create it!
 
 #ifdef _DEBUG
 #endif

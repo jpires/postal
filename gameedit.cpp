@@ -707,7 +707,7 @@
 
 #include "RSPiX.h"
 
-#include <ctype.h>
+#include <cctype>
 #include <set>
 
 // This is used to get rid of all trace of the editor code when it's disabled
@@ -1128,8 +1128,8 @@ static char ms_szFileName[RSP_MAX_PATH] = "";
 
 static short ms_sMoving = FALSE; // TRUE, if moving/placing a thing (ms_pthingSel).
 
-static CThing *ms_pthingSel = NULL; // CThing* to thing currently selected.
-static RHot *ms_photSel = NULL;     // RHot* to hotbox associated with selected thing.
+static CThing *ms_pthingSel = nullptr; // CThing* to thing currently selected.
+static RHot *ms_photSel = nullptr;     // RHot* to hotbox associated with selected thing.
 
 // Initial width and height of display so we can
 // restore video mode when done editting.
@@ -1141,7 +1141,7 @@ static short ms_sInitialDeviceHeight = 0;
 
 // The current camera.
 // Scrollbars' callback update camera pointed to by this.
-static CCamera *ms_pcameraCur = NULL;
+static CCamera *ms_pcameraCur = nullptr;
 
 // Global GUIs (used in both editing and edit play modes).
 static RScrollBar ms_sbVert;
@@ -1149,7 +1149,7 @@ static RScrollBar ms_sbHorz;
 
 // This points to the CHood's hotbox which is the root of all other CThing
 // hotboxes.
-static RHot *ms_photHood = NULL;
+static RHot *ms_photHood = nullptr;
 
 // This is the hotbox priority of the farthest item from the user.
 // Start out as close to front as possible.
@@ -1159,28 +1159,28 @@ static short ms_sBackPriority = FRONTMOST_HOT_PRIORITY;
 static short ms_sDragState = 0;
 
 // Root level GUIs to load from *.gui files.
-static RGuiItem *ms_pguiRealmBar = NULL;
-static RGuiItem *ms_pguiPickObj = NULL;
-static RGuiItem *ms_pguiLayers = NULL;
-static RGuiItem *ms_pguiCameras = NULL;
-static RGuiItem *ms_pguiGUIs = NULL;
-static RGuiItem *ms_pguiMap = NULL;
-static RGuiItem *ms_pguiNavNets = NULL;
-static RGuiItem *ms_pguiShowAttribs = NULL;
-static RGuiItem *ms_pguiInfo = NULL;
+static RGuiItem *ms_pguiRealmBar = nullptr;
+static RGuiItem *ms_pguiPickObj = nullptr;
+static RGuiItem *ms_pguiLayers = nullptr;
+static RGuiItem *ms_pguiCameras = nullptr;
+static RGuiItem *ms_pguiGUIs = nullptr;
+static RGuiItem *ms_pguiMap = nullptr;
+static RGuiItem *ms_pguiNavNets = nullptr;
+static RGuiItem *ms_pguiShowAttribs = nullptr;
+static RGuiItem *ms_pguiInfo = nullptr;
 
 // Child GUIs that need to be frequently accessed.
-static RListBox *ms_plbLayers = NULL;
-static RGuiItem *ms_pguiMapZone = NULL;
-static RGuiItem *ms_pguiInfoXPos = NULL;
-static RGuiItem *ms_pguiInfoYPos = NULL;
-static RGuiItem *ms_pguiInfoZPos = NULL;
+static RListBox *ms_plbLayers = nullptr;
+static RGuiItem *ms_pguiMapZone = nullptr;
+static RGuiItem *ms_pguiInfoXPos = nullptr;
+static RGuiItem *ms_pguiInfoYPos = nullptr;
+static RGuiItem *ms_pguiInfoZPos = nullptr;
 
 // The current ratio being used for the map.
 static double ms_dMapRatio = 0.0;
 
 // The current CGameEditThing.
-static CGameEditThing *ms_pgething = NULL;
+static CGameEditThing *ms_pgething = nullptr;
 
 // List of cameras and their GUI.
 static RList<View> ms_listViews;
@@ -1192,7 +1192,7 @@ static bool ms_bDragScroll = true;
 static TriggerRgn ms_argns[256];
 
 // Current pylon being editted.
-static CPylon *ms_pylonEdit = NULL; // NULL for none.
+static CPylon *ms_pylonEdit = nullptr; // NULL for none.
 
 // Current block size for drawing.
 static short ms_sDrawBlockSize = 5;
@@ -1258,9 +1258,9 @@ static void GetCursor( // Returns nothing.
   short *psZ,          // Out: Z coord of event.
   short *psEvent);     // Out: Event type.
 
-static short InitCursor(void);
+static short InitCursor();
 
-static void KillCursor(void);
+static void KillCursor();
 
 static void DrawCursor(short sCursorX,    // In:  Cursor hotspot x coord
                        short sCursorY,    // In:  Cursor hotspot y coord
@@ -1302,7 +1302,7 @@ static short CreateNewThing( // Returns 0 on success.
   short sPosZ,               // Position for new CThing.
   CThing **ppthing,          // Out: Pointer to new thing.
   RHot **pphot,              // Out: Pointer to new hotbox for thing.
-  RFile *pfile = NULL);      // In:  Optional file to load from (instead of EditNew()).
+  RFile *pfile = nullptr);      // In:  Optional file to load from (instead of EditNew()).
 
 // Move a thing to the specified location and update its RHot with an
 // EditRect() call.
@@ -1330,7 +1330,7 @@ static short SetDisplayArea( // Returns 0 on success.
 
 // Set display mode and display area such that camera view
 // is specified size.
-static short SetCameraArea(void); // Returns 0 on success.
+static short SetCameraArea(); // Returns 0 on success.
 
 // Adjust the display area by the specified deltas.
 static short AdjustDisplaySize( // Returns 0 on success.
@@ -1348,7 +1348,7 @@ static short SizeUpdate( // Returns 0 on success.
 
 // Resets all RHots including and descended from ms_photHood
 // to FRONTMOST_HOT_PRIORITY.
-static void ResetHotPriorities(void); // Returns nothing.
+static void ResetHotPriorities(); // Returns nothing.
 
 // Callback from GUIs.  This will set ms_lPressedId to pgui->m_lId.
 static void GuiPressedCall( // Returns nothing.
@@ -1407,7 +1407,7 @@ static void RemoveView( // Returns nothing.
                         // selected view.
 
 // Removes all current views.
-static void RemoveViews(void);
+static void RemoveViews();
 
 // Creates a new View and adds it to the list of Views.
 static short CreateView( // Returns 0 on success.
@@ -1432,7 +1432,7 @@ static void ClearGUI( // Returns nothing.
   RGuiItem *pgui);    // In:  GUI's whose area we should clean.
 
 // Clear all views.
-static void ClearViews(void); // Returns nothing.
+static void ClearViews(); // Returns nothing.
 
 // Do focus hotbox logic and such for GUIs.
 static void DoView(  // Returns nothing.
@@ -1551,7 +1551,7 @@ static void AttribMaskBtnPressed( // Returns nothing.
   RGuiItem *pgui_pmb);            // In:  Ptr to the pressed GUI (which is a multibtn).
 
 // Resizes the attribute sprite, if allocated.
-static short SizeShowAttribsSprite(void); // Returns 0 on success.
+static short SizeShowAttribsSprite(); // Returns 0 on success.
 
 // Convert a .RLM filename to a .RGN one.
 static void RlmNameToRgnName( // Returns nothing.
@@ -1582,7 +1582,7 @@ static void InitFileCounter( // Returns nothing.
 
 // Kill load/save counter.  Can be called multiple times w/o corresponding
 // Init().
-static void KillFileCounter(void); // Returns nothing.
+static void KillFileCounter(); // Returns nothing.
 
 // Callback from realm during time intensive operations.
 static bool RealmOpProgress(   // Returns true to continue; false to
@@ -1599,10 +1599,10 @@ inline void SetPressedCall( // Returns nothing.
   RGuiItem *pguiRoot,       // Root item.
   long lId)                 // ID of GUI item to set.
 {
-    ASSERT(pguiRoot != NULL);
+    ASSERT(pguiRoot != nullptr);
 
     RGuiItem *pgui = pguiRoot->GetItemFromId(lId);
-    if (pgui != NULL)
+    if (pgui != nullptr)
     {
         // Set callback.
         pgui->m_bcUser = GuiPressedCall;
@@ -1642,15 +1642,15 @@ inline void SetMBValsAndCallback( // Returns nothing.
 // Run the game editor
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void GameEdit(void)
+extern void GameEdit()
 {
     // Clear any members that need to be intialized on each entrance.
-    ms_pcameraCur = NULL;
-    ms_pthingSel = NULL;
-    ms_photSel = NULL;
-    ms_plbLayers = NULL;
-    ms_pgething = NULL;
-    ms_photHood = NULL;
+    ms_pcameraCur = nullptr;
+    ms_pthingSel = nullptr;
+    ms_photSel = nullptr;
+    ms_plbLayers = nullptr;
+    ms_pgething = nullptr;
+    ms_photHood = nullptr;
 
     // Disable 'Organ' on 'Audio Options' menu.
     menuAudioOptions.ami[1].sEnabled = FALSE;
@@ -1674,7 +1674,7 @@ extern void GameEdit(void)
     rspGetVideoMode(&ms_sInitialDeviceDepth,
                     &ms_sInitialDeviceWidth,
                     &ms_sInitialDeviceHeight,
-                    NULL,
+                    nullptr,
                     &ms_sInitialDisplayWidth,
                     &ms_sInitialDisplayHeight);
 
@@ -1699,7 +1699,7 @@ extern void GameEdit(void)
 #endif
 
     // Clear rubber band links for bouys
-    m_pBouyLink0 = m_pBouyLink1 = NULL;
+    m_pBouyLink0 = m_pBouyLink1 = nullptr;
 
     // Init cursor stuff
     if (InitCursor() == 0)
@@ -1711,7 +1711,7 @@ extern void GameEdit(void)
         // Create a realm.  At some point we will probably extend the editor to
         // be able to handle multiple realms at once.  For now it just has one.
         CRealm *prealm = new CRealm;
-        ASSERT(prealm != 0);
+        ASSERT(prealm != nullptr);
 
         // This realm will only be used for editting, so it make it known.
         prealm->m_flags.bEditing = true;
@@ -1729,7 +1729,7 @@ extern void GameEdit(void)
         //////////////////////////////////////////////////////////////////////
 
         CCamera *pcamera = new CCamera;
-        ASSERT(pcamera != NULL);
+        ASSERT(pcamera != nullptr);
         pcamera->SetScene(&(prealm->m_scene));
         // Update display size sensitive objects.
         SizeUpdate(pcamera, prealm);
@@ -1758,8 +1758,8 @@ extern void GameEdit(void)
         ms_pguiInfo = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, INFO_GUI_FILE));
 
         // Make sure we got all our GUIs . . .
-        if (ms_pguiRealmBar != NULL && ms_pguiPickObj != NULL && ms_pguiLayers != NULL && ms_pguiCameras != NULL &&
-            ms_pguiGUIs != NULL && ms_pguiMap != NULL && ms_pguiNavNets != NULL && ms_pguiShowAttribs && ms_pguiInfo)
+        if (ms_pguiRealmBar != nullptr && ms_pguiPickObj != nullptr && ms_pguiLayers != nullptr && ms_pguiCameras != nullptr &&
+            ms_pguiGUIs != nullptr && ms_pguiMap != nullptr && ms_pguiNavNets != nullptr && ms_pguiShowAttribs && ms_pguiInfo)
         {
             // Set items that are to notify us.
             SetPressedCall(ms_pguiRealmBar, GUI_ID_NEW_REALM);
@@ -1777,7 +1777,7 @@ extern void GameEdit(void)
             // Get object picker list box.
             RListBox *plbPicker = (RListBox *)ms_pguiPickObj->GetItemFromId(GUI_ID_PICK_LIST);
 
-            ASSERT(plbPicker != NULL);
+            ASSERT(plbPicker != nullptr);
             ASSERT(plbPicker->m_type == RGuiItem::ListBox);
 
             // Add available objects to listbox.
@@ -1790,7 +1790,7 @@ extern void GameEdit(void)
                 {
                     // Add string for each item to listbox.
                     pguiItem = plbPicker->AddString((char *)CThing::ms_aClassInfo[idCur].pszClassName);
-                    if (pguiItem != NULL)
+                    if (pguiItem != nullptr)
                     {
                         pguiItem->m_lId = LIST_ITEM_GUI_ID_BASE + idCur;
                         pguiItem->m_ulUserData = (ULONG)idCur;
@@ -1806,7 +1806,7 @@ extern void GameEdit(void)
 
             // Select the DEFAULT_THING_ID.
             RGuiItem *pguiDefThing = ms_pguiPickObj->GetItemFromId(DEFAULT_THING_ID + LIST_ITEM_GUI_ID_BASE);
-            if (pguiDefThing != NULL)
+            if (pguiDefThing != nullptr)
             {
                 plbPicker->SetSel(pguiDefThing);
                 // Ensure that the default item is visible.  Not scrolled off somewhere.
@@ -1819,7 +1819,7 @@ extern void GameEdit(void)
             // Get layer tweaker list box.
             ms_plbLayers = (RListBox *)ms_pguiLayers->GetItemFromId(GUI_ID_LAYER_LIST);
 
-            ASSERT(ms_plbLayers != NULL);
+            ASSERT(ms_plbLayers != nullptr);
             ASSERT(ms_plbLayers->m_type == RGuiItem::ListBox);
 
             // Add available layers to listbox.
@@ -1828,7 +1828,7 @@ extern void GameEdit(void)
             {
                 // Add string for each item to listbox.
                 pguiItem = ms_plbLayers->AddString(CRealm::ms_apszLayerNames[sLayer]);
-                if (pguiItem != NULL)
+                if (pguiItem != nullptr)
                 {
                     // Remember which layer it's associated with.
                     pguiItem->m_ulUserData = (ULONG)sLayer;
@@ -1986,23 +1986,23 @@ extern void GameEdit(void)
 
             // Done with GUIs.
             delete ms_pguiRealmBar;
-            ms_pguiRealmBar = NULL;
+            ms_pguiRealmBar = nullptr;
             delete ms_pguiPickObj;
-            ms_pguiPickObj = NULL;
+            ms_pguiPickObj = nullptr;
             delete ms_pguiLayers;
-            ms_pguiLayers = NULL;
+            ms_pguiLayers = nullptr;
             delete ms_pguiCameras;
-            ms_pguiCameras = NULL;
+            ms_pguiCameras = nullptr;
             delete ms_pguiGUIs;
-            ms_pguiGUIs = NULL;
+            ms_pguiGUIs = nullptr;
             delete ms_pguiMap;
-            ms_pguiMap = NULL;
+            ms_pguiMap = nullptr;
             delete ms_pguiNavNets;
-            ms_pguiNavNets = NULL;
+            ms_pguiNavNets = nullptr;
             delete ms_pguiShowAttribs;
-            ms_pguiShowAttribs = NULL;
+            ms_pguiShowAttribs = nullptr;
             delete ms_pguiInfo;
-            ms_pguiInfo = NULL;
+            ms_pguiInfo = nullptr;
         }
         else
         {
@@ -2011,11 +2011,11 @@ extern void GameEdit(void)
 
         // Done with the realm.
         delete prealm;
-        prealm = NULL;
+        prealm = nullptr;
         // Done with the camera.
         delete pcamera;
-        pcamera = NULL;
-        ms_pcameraCur = NULL;
+        pcamera = nullptr;
+        ms_pcameraCur = nullptr;
 
         // Kill cursor stuff
         KillCursor();
@@ -2023,7 +2023,7 @@ extern void GameEdit(void)
 
     // If there is an image, delete it.
     delete ms_spriteAttributes.m_pImage;
-    ms_spriteAttributes.m_pImage = NULL;
+    ms_spriteAttributes.m_pImage = nullptr;
 
     // If paste buffer open . . .
     if (ms_filePaste.IsOpen() != FALSE)
@@ -2084,7 +2084,7 @@ static bool DoInput( // Returns true when done.
 
     Menu *pmenu = GetCurrentMenu();
     // If there is a menu . . .
-    if (pmenu != NULL)
+    if (pmenu != nullptr)
     {
         // This is CHEEZY AS HELL but the normal menu callback calls
         // game.cpp which sets its action flag telling it to call this
@@ -2101,7 +2101,7 @@ static bool DoInput( // Returns true when done.
         DoMenuInput(&ie, 0);
 
         // If there is no longer a menu . . .
-        if (GetCurrentMenu() == NULL)
+        if (GetCurrentMenu() == nullptr)
         {
             // Show the mouse.
             rspShowMouseCursor();
@@ -2113,7 +2113,7 @@ static bool DoInput( // Returns true when done.
     else
     {
         // If editting a pylon trigger region . . .
-        if (ms_pylonEdit != NULL)
+        if (ms_pylonEdit != nullptr)
         {
             static short sButtons = 0;
             // Get cursor position and event
@@ -2181,7 +2181,7 @@ static bool DoInput( // Returns true when done.
                         switch (ie.lKey & 0x0000FFFF)
                         {
                             case 27:
-                                EditPylonTriggerRegion(NULL);
+                                EditPylonTriggerRegion(nullptr);
                                 break;
                             case EDIT_KEY_ENLARGE_DISPLAY1:
                             case EDIT_KEY_ENLARGE_DISPLAY2:
@@ -2288,7 +2288,7 @@ static bool DoInput( // Returns true when done.
                         {
                             CThing *pThing;
                             CListNode<CThing> *pNext = prealm->m_aclassHeads[CThing::CBouyID].m_pnNext;
-                            while (pNext->m_powner != NULL)
+                            while (pNext->m_powner != nullptr)
                             {
                                 pThing = pNext->m_powner;
                                 if (pThing)
@@ -2304,7 +2304,7 @@ static bool DoInput( // Returns true when done.
                         {
                             CThing *pThing;
                             CListNode<CThing> *pNext = prealm->m_aclassHeads[CThing::CBouyID].m_pnNext;
-                            while (pNext->m_powner != NULL)
+                            while (pNext->m_powner != nullptr)
                             {
                                 pThing = pNext->m_powner;
                                 if (pThing)
@@ -2336,7 +2336,7 @@ static bool DoInput( // Returns true when done.
                         {
 #if 1
                             // If menu is not running . . .
-                            if (GetCurrentMenu() == NULL)
+                            if (GetCurrentMenu() == nullptr)
                             {
                                 // Fade out and preserve colors.
                                 PalTranOn();
@@ -2402,9 +2402,9 @@ static bool DoInput( // Returns true when done.
                     case EDIT_KEY_MODIFY1:
                     case EDIT_KEY_MODIFY2:
                         // Verify there is a selection . . .
-                        if (ms_pthingSel != NULL)
+                        if (ms_pthingSel != nullptr)
                         {
-                            ASSERT(ms_photSel != NULL);
+                            ASSERT(ms_photSel != nullptr);
                             // Modify.
                             ms_pthingSel->EditModify();
                             // Size may have changed.
@@ -2504,7 +2504,7 @@ static bool DoInput( // Returns true when done.
 
                         if (pthing)
                         {
-                            SetSel(pthing, NULL);
+                            SetSel(pthing, nullptr);
                         }
 
                         break;
@@ -2535,7 +2535,7 @@ static bool DoInput( // Returns true when done.
             ms_sbVert.m_hot.Do(&ie);
             ms_sbHorz.m_hot.Do(&ie);
             // If there's a hood hotbox and no item being dragged . . .
-            if (ms_photHood != NULL && ms_sMoving == FALSE)
+            if (ms_photHood != nullptr && ms_sMoving == FALSE)
             {
                 // Pass the event to the Thing hotboxes in Realm coords.
                 RInputEvent ieRealm = ie;
@@ -2564,7 +2564,7 @@ static bool DoInput( // Returns true when done.
             GetCursor(&ie, &sCursorX, &sCursorY, &sCursorZ, &sCursorEvent);
 
             // If there is a realm . . .
-            if (prealm != NULL)
+            if (prealm != nullptr)
             {
                 // Map the cursor position to a realm coordinate.
                 MapScreen2Realm(prealm, pcamera, sCursorX, sCursorZ, &sCursorX, &sCursorY, &sCursorZ);
@@ -2586,7 +2586,7 @@ static bool DoInput( // Returns true when done.
 
                 case CURSOR_LEFT_DRAG_BEGIN:
                     // If there is a selection . . .
-                    if (ms_pthingSel != NULL)
+                    if (ms_pthingSel != nullptr)
                     {
                         // Let's not drag the hood . . .
                         if (ms_pthingSel->GetClassID() != CThing::CHoodID)
@@ -2595,7 +2595,7 @@ static bool DoInput( // Returns true when done.
                             ms_sMoving = TRUE;
 
                             // Make sure this is valid.
-                            ASSERT(ms_photSel != NULL);
+                            ASSERT(ms_photSel != nullptr);
 
                             // Get hotspot for item in 2D.
                             short sOffsetX;
@@ -2629,8 +2629,8 @@ static bool DoInput( // Returns true when done.
                     // If there is an item being moved . . .
                     if (ms_sMoving != FALSE)
                     {
-                        ASSERT(ms_pthingSel != NULL);
-                        ASSERT(ms_photSel != NULL);
+                        ASSERT(ms_pthingSel != nullptr);
+                        ASSERT(ms_photSel != nullptr);
 
                         MoveThing(ms_pthingSel,
                                   ms_photSel,
@@ -2724,15 +2724,15 @@ static bool DoInput( // Returns true when done.
                     NewRealm(prealm);
                     // Setup camera.
                     pcamera->SetHood(prealm->m_phood);
-                    m_pBouyLink0 = NULL;
-                    m_pBouyLink1 = NULL;
+                    m_pBouyLink0 = nullptr;
+                    m_pBouyLink1 = nullptr;
                     break;
 
                 case GUI_ID_OPEN_REALM:
                     // Load realm
                     LoadRealm(prealm);
-                    m_pBouyLink0 = NULL;
-                    m_pBouyLink1 = NULL;
+                    m_pBouyLink0 = nullptr;
+                    m_pBouyLink1 = nullptr;
                     break;
 
                 case GUI_ID_SAVE_REALM:
@@ -2746,7 +2746,7 @@ static bool DoInput( // Returns true when done.
                     break;
 
                 case GUI_ID_PLAY_REALM:
-                    if (prealm->m_phood != NULL)
+                    if (prealm->m_phood != nullptr)
                     {
                         CancelDrag(prealm);
 
@@ -2770,8 +2770,8 @@ static bool DoInput( // Returns true when done.
                 case GUI_ID_CLOSE_REALM:
                     // Clear the ream.
                     CloseRealm(prealm);
-                    m_pBouyLink0 = NULL;
-                    m_pBouyLink1 = NULL;
+                    m_pBouyLink0 = nullptr;
+                    m_pBouyLink1 = nullptr;
                     break;
 
                 case GUI_ID_EXIT:
@@ -2780,8 +2780,8 @@ static bool DoInput( // Returns true when done.
                     {
                         // Exit the editor
                         bExit = true;
-                        m_pBouyLink0 = NULL;
-                        m_pBouyLink1 = NULL;
+                        m_pBouyLink0 = nullptr;
+                        m_pBouyLink1 = nullptr;
                     }
                     break;
 
@@ -2794,7 +2794,7 @@ static bool DoInput( // Returns true when done.
                 {
                     // Get currently selected list item.
                     RGuiItem *pguiSel = ms_plbLayers->GetSel();
-                    if (pguiSel != NULL)
+                    if (pguiSel != nullptr)
                     {
                         // Get layer to toggle.
                         CRealm::Layer layer = (CRealm::Layer)pguiSel->m_ulUserData;
@@ -2816,7 +2816,7 @@ static bool DoInput( // Returns true when done.
 
                 case GUI_ID_CLOSE_CAMERA:
                 {
-                    RemoveView(NULL);
+                    RemoveView(nullptr);
                     break;
                 }
 
@@ -2872,11 +2872,11 @@ static bool DoInput( // Returns true when done.
 
                     // Get object picker list box.
                     RListBox *plbPicker = (RListBox *)ms_pguiPickObj->GetItemFromId(GUI_ID_PICK_LIST);
-                    if (plbPicker != NULL)
+                    if (plbPicker != nullptr)
                     {
                         RGuiItem *pguiSel = plbPicker->GetSel();
                         // If there is a selection . . .
-                        if (pguiSel != NULL)
+                        if (pguiSel != nullptr)
                         {
                             // Get ID of list item representing thing to create.
                             ms_lPressedId = pguiSel->m_lId;
@@ -2933,13 +2933,13 @@ static bool DoInput( // Returns true when done.
             }
 
             // If the mapped is pressed . . .
-            if (ms_pguiMapZone != NULL)
+            if (ms_pguiMapZone != nullptr)
             {
                 if (ms_pguiMapZone->m_sPressed != FALSE)
                 {
                     // Determine position.
                     short sPosX, sPosY;
-                    rspGetMouse(&sPosX, &sPosY, NULL);
+                    rspGetMouse(&sPosX, &sPosY, nullptr);
                     ms_pguiMapZone->TopPosToClient(&sPosX, &sPosY);
                     // Map position into map coords scroll to it.
                     ms_sbVert.SetPos(sPosY / ms_dMapRatio - pcamera->m_sViewH / 2);
@@ -2981,7 +2981,7 @@ static void DoOutput( // Returns nothing.
   short sCursorZ)     // Cursor Z position.
 {
     // If not in menu . . .
-    if (GetCurrentMenu() == NULL)
+    if (GetCurrentMenu() == nullptr)
     {
         // Lock the composite buffer for much access.
         rspLockBuffer();
@@ -3054,7 +3054,7 @@ static void DoOutput( // Returns nothing.
         DrawNetwork(prealm, pcamera);
 
         // If there's a selected item . . .
-        if (ms_pthingSel != NULL)
+        if (ms_pthingSel != nullptr)
         {
             static RRect rc;
             static short sColorSwap = 0;
@@ -3078,7 +3078,7 @@ static void DoOutput( // Returns nothing.
         }
 
         // If there's no current hood . . .
-        if (prealm->m_phood == NULL)
+        if (prealm->m_phood == nullptr)
         {
             // Erase entire screen.
             rspRect(RSP_BLACK_INDEX, g_pimScreenBuf, 0, 0, g_pimScreenBuf->m_sWidth, g_pimScreenBuf->m_sHeight);
@@ -3120,10 +3120,10 @@ static void DoOutput( // Returns nothing.
         ms_pguiGUIs->Draw(g_pimScreenBuf);
 
         // If editting a pylon . . .
-        if (ms_pylonEdit != NULL)
+        if (ms_pylonEdit != nullptr)
         {
             UCHAR ucId = ms_pylonEdit->m_ucID;
-            ASSERT(ms_argns[ucId].pimRgn != NULL);
+            ASSERT(ms_argns[ucId].pimRgn != nullptr);
 
             // Draw trigger region.
 #if 0 // Now done with a sprite.
@@ -3210,7 +3210,7 @@ static void GetCursor( // Returns nothing.
     // Default to no event
     *psEvent = CURSOR_NOTHING;
 
-    ASSERT(pie != NULL);
+    ASSERT(pie != nullptr);
 
     short sMouseX = pie->sPosX;
     short sMouseY = pie->sPosY;
@@ -3328,7 +3328,7 @@ static void GetCursor( // Returns nothing.
     else
     {
         // If there was no mouse event, just get the current mouse position
-        rspGetMouse(&sMouseX, &sMouseY, NULL);
+        rspGetMouse(&sMouseX, &sMouseY, nullptr);
     }
 
     // If we're in "maybe" drag mode, check if we should go to "full" drag mode
@@ -3351,7 +3351,7 @@ static void GetCursor( // Returns nothing.
     if (ms_sDragState == 2)
     {
         // For now, it's hardwired to never assume the drag is used to modify the cursor
-        if (0)
+        if (false)
         {
             // Save info we need when adjusting cursor's y coord
             sOrigCursorY = sCursorY;
@@ -3387,12 +3387,12 @@ static void GetCursor( // Returns nothing.
 // Init cursor
 //
 ////////////////////////////////////////////////////////////////////////////////
-static short InitCursor(void)
+static short InitCursor()
 {
     short sResult = 0;
 
     m_pimCursorBase = new RImage;
-    ASSERT(m_pimCursorBase != NULL);
+    ASSERT(m_pimCursorBase != nullptr);
     if (m_pimCursorBase->Load(FullPath(GAME_PATH_VD, CURSOR_BASE_IMAGE_FILE)) != 0)
     {
         sResult = -1;
@@ -3408,7 +3408,7 @@ static short InitCursor(void)
     }
 
     m_pimCursorTip = new RImage;
-    ASSERT(m_pimCursorTip != NULL);
+    ASSERT(m_pimCursorTip != nullptr);
     if (m_pimCursorTip->Load(FullPath(GAME_PATH_VD, CURSOR_TIP_IMAGE_FILE)) != 0)
     {
         sResult = -1;
@@ -3432,13 +3432,13 @@ Exit:
 // Kill cursor
 //
 ////////////////////////////////////////////////////////////////////////////////
-static void KillCursor(void)
+static void KillCursor()
 {
     // Delete cursors (delete doesn't mind if pointer is already 0)
     delete m_pimCursorBase;
-    m_pimCursorBase = 0;
+    m_pimCursorBase = nullptr;
     delete m_pimCursorTip;
-    m_pimCursorTip = 0;
+    m_pimCursorTip = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3500,7 +3500,7 @@ static short NewRealm(CRealm *prealm)
         ms_bDrawNetwork = true;
 
         // Clear the network lines from the previous level (if any)
-        UpdateNetLines(NULL);
+        UpdateNetLines(nullptr);
 
         // Set disk path for this realm.
         prealm->m_resmgr.SetBasePath(g_GameSettings.m_szNoSakDir);
@@ -3591,24 +3591,24 @@ static short CloseRealm(CRealm *prealm)
     // If successful so far . . .
     if (sResult == 0)
     {
-        if (ms_pcameraCur != NULL)
+        if (ms_pcameraCur != nullptr)
         {
             // Clear hood ptr.
-            ms_pcameraCur->SetHood(NULL);
+            ms_pcameraCur->SetHood(nullptr);
         }
 
         // Clear realm in case it contains anything
         prealm->Clear();
 
         // This's gone now.
-        ms_pgething = NULL;
+        ms_pgething = nullptr;
 
         // If there are any . . .
-        if (ms_photHood != NULL)
+        if (ms_photHood != nullptr)
         {
             // Destroy all child hotboxes.
             RHot *phot = ms_photHood->m_listChildren.GetHead();
-            while (phot != NULL)
+            while (phot != nullptr)
             {
                 delete phot;
 
@@ -3617,7 +3617,7 @@ static short CloseRealm(CRealm *prealm)
 
             // Destroy root/hood hotbox.
             delete ms_photHood;
-            ms_photHood = NULL;
+            ms_photHood = nullptr;
         }
 
         // Clean up trigger regions.
@@ -3629,7 +3629,7 @@ static short CloseRealm(CRealm *prealm)
 
         // Better clear these.
         ms_sMoving = FALSE;
-        SetSel(NULL, NULL);
+        SetSel(nullptr, nullptr);
 
         // Set filename such that initially open and save dialogs start in
         // *.RLM dir.
@@ -3719,14 +3719,14 @@ static short LoadRealm(CRealm *prealm)
                                                            (U32)phood,              // User value (CThing*).
                                                            FRONTMOST_HOT_PRIORITY); // New items towards front.
                     // If successful . . .
-                    if (ms_photHood != NULL)
+                    if (ms_photHood != nullptr)
                     {
                         // Setup hotboxes for all objects.
                         CListNode<CThing> *pList;
                         CThing *pthing;
                         short sActivateHot;
                         pList = prealm->m_everythingHead.m_pnNext;
-                        while (pList->m_powner != NULL && sResult == 0)
+                        while (pList->m_powner != nullptr && sResult == 0)
                         {
                             pthing = pList->m_powner;
                             // Already got one for Hood.  If not the Hood . . .
@@ -3764,7 +3764,7 @@ static short LoadRealm(CRealm *prealm)
                                                           FRONTMOST_HOT_PRIORITY); // New items towards front.
 
                                 // If successful . . .
-                                if (pthing->m_phot != NULL)
+                                if (pthing->m_phot != nullptr)
                                 {
                                     // Make child of Hood's hotbox.
                                     pthing->m_phot->SetParent(ms_photHood);
@@ -3804,7 +3804,7 @@ static short LoadRealm(CRealm *prealm)
                     // Make sure our loaded settings are unaffected.
                     short sViewPosX = 0;
                     short sViewPosY = 0;
-                    if (ms_pgething != NULL)
+                    if (ms_pgething != nullptr)
                     {
                         sViewPosX = ms_pgething->m_sViewPosX;
                         sViewPosY = ms_pgething->m_sViewPosY;
@@ -3817,7 +3817,7 @@ static short LoadRealm(CRealm *prealm)
                     SizeUpdate(ms_pcameraCur, prealm);
 
                     // If there is an editor thing . . .
-                    if (ms_pgething != NULL)
+                    if (ms_pgething != nullptr)
                     {
                         // Update view position.
                         ms_sbVert.SetPos(sViewPosY);
@@ -4009,7 +4009,7 @@ static void PlayRealm(CRealm *pEditRealm, // In:  Realm to play.
             // Create a new realm so we don't accidentally rely on any side-effects
             // that may result from using the editor's realm.
             CRealm *prealm = new CRealm;
-            ASSERT(prealm != NULL);
+            ASSERT(prealm != nullptr);
 
             // Setup progress callback right away.
             //				prealm->m_fnProgress	= RealmOpProgress;
@@ -4099,7 +4099,7 @@ static void PlayRealm(CRealm *pEditRealm, // In:  Realm to play.
 
                     // Setup camera
                     CCamera *pcamera = new CCamera;
-                    ASSERT(pcamera != NULL);
+                    ASSERT(pcamera != nullptr);
                     pcamera->SetScene(&(prealm->m_scene));
 
                     // Update display size sensitive objects.
@@ -4123,19 +4123,19 @@ static void PlayRealm(CRealm *pEditRealm, // In:  Realm to play.
                     bool bTracking = true;
 
                     // Get thing to track . . .
-                    CThing *pthingTrack = NULL;
+                    CThing *pthingTrack = nullptr;
                     U16 u16IdTrack = CIdBank::IdNil;
-                    if (ms_pgething != NULL)
+                    if (ms_pgething != nullptr)
                     {
                         u16IdTrack = ms_pgething->m_u16CameraTrackId;
                     }
 
                     // Make sure no Scrollbars have focus.
-                    RGuiItem::SetFocus(NULL);
+                    RGuiItem::SetFocus(nullptr);
 
                     CListNode<CThing> *pNext = prealm->m_aclassHeads[CThing::CDudeID].m_pnNext;
                     U16 u16IdDude = CIdBank::IdNil;
-                    while (pNext->m_powner != NULL)
+                    while (pNext->m_powner != nullptr)
                     {
                         CDude *pdude = (CDude *)pNext->m_powner;
                         // if this is the local dude...
@@ -4153,8 +4153,8 @@ static void PlayRealm(CRealm *pEditRealm, // In:  Realm to play.
                     if (u16IdDude == CIdBank::IdNil)
                     {
                         // Create one using warps (if any):
-                        CDude *pdude = NULL;
-                        CWarp *pwarp = NULL;
+                        CDude *pdude = nullptr;
+                        CWarp *pwarp = nullptr;
                         // If there's a specific warp desired . . .
                         if (prealm->m_idbank.GetThingByID((CThing **)&pwarp, idSpecificWarp) == 0)
                         {
@@ -4173,7 +4173,7 @@ static void PlayRealm(CRealm *pEditRealm, // In:  Realm to play.
                         }
 
                         // If no dude yet . . .
-                        if (pdude == NULL)
+                        if (pdude == nullptr)
                         {
                             // Warp one in anywhere . . .
                             if (CWarp::WarpInAnywhere( // Returns 0 on success.
@@ -4202,7 +4202,7 @@ static void PlayRealm(CRealm *pEditRealm, // In:  Realm to play.
                         }
                     }
 
-                    CDude *pdudeLocal = NULL;
+                    CDude *pdudeLocal = nullptr;
                     if (prealm->m_idbank.GetThingByID((CThing **)&pdudeLocal, u16IdDude) == 0)
                     {
                         pdudeLocal->m_sTextureIndex = MAX(
@@ -4210,7 +4210,7 @@ static void PlayRealm(CRealm *pEditRealm, // In:  Realm to play.
                           MIN((short)(CDude::MaxTextures - 1), g_GameSettings.m_sPlayerColorIndex));
 
                         // Don't use later.
-                        pdudeLocal = NULL;
+                        pdudeLocal = nullptr;
                     }
 
                     RInputEvent ie;
@@ -4353,7 +4353,7 @@ static void PlayRealm(CRealm *pEditRealm, // In:  Realm to play.
                                                 ms_sbHorz.m_im.m_sHeight);
 
                                         // Reset the grip, if necessary.
-                                        if (pthingTrack != NULL && bTracking == true)
+                                        if (pthingTrack != nullptr && bTracking == true)
                                         {
                                             RRect rc;
                                             pthingTrack->EditRect(&rc);
@@ -4363,7 +4363,7 @@ static void PlayRealm(CRealm *pEditRealm, // In:  Realm to play.
                                             grip.ResetTarget(rc.sX + sHotX, rc.sY + sHotY, rc.sH / 2);
 
                                             // Make sure no Scrollbars have focus.
-                                            RGuiItem::SetFocus(NULL);
+                                            RGuiItem::SetFocus(nullptr);
                                         }
                                     }
                                     else // We are now using scrollbars.
@@ -4405,7 +4405,7 @@ static void PlayRealm(CRealm *pEditRealm, // In:  Realm to play.
 
                                     prealm->Suspend();
 
-                                    ShowRealmStatistics(prealm, NULL);
+                                    ShowRealmStatistics(prealm, nullptr);
 
                                     prealm->Resume();
 
@@ -4486,7 +4486,7 @@ static void PlayRealm(CRealm *pEditRealm, // In:  Realm to play.
                         }
 
                         // Update grip/camera
-                        if (pthingTrack != NULL)
+                        if (pthingTrack != nullptr)
                         {
                             RRect rc;
                             pthingTrack->EditRect(&rc);
@@ -4525,7 +4525,7 @@ static void PlayRealm(CRealm *pEditRealm, // In:  Realm to play.
                         pcamera->Snap();
 
                         // If there is a local dude . . .
-                        CDude *pdudeLocal = NULL;
+                        CDude *pdudeLocal = nullptr;
                         // If there's a local dude, get him.
                         prealm->m_idbank.GetThingByID((CThing **)&pdudeLocal, u16IdDude);
 
@@ -4592,8 +4592,8 @@ static void PlayRealm(CRealm *pEditRealm, // In:  Realm to play.
 
                     // Done with the camera.
                     delete pcamera;
-                    pcamera = NULL;
-                    ms_pcameraCur = NULL;
+                    pcamera = nullptr;
+                    ms_pcameraCur = nullptr;
                 }
                 else
                 {
@@ -4673,7 +4673,7 @@ static short CreateNewThing( // Returns 0 on success.
     {
         if (prealm->m_asClassNumThings[CThing::CHoodID] > 0 || id == CThing::CHoodID)
         {
-            if (!(id == CThing::CBouyID && prealm->GetCurrentNavNet() == NULL))
+            if (!(id == CThing::CBouyID && prealm->GetCurrentNavNet() == nullptr))
             {
                 // Create new object of currently selected type
                 if (CThing::ConstructWithID(id, prealm, ppthing) == 0)
@@ -4681,7 +4681,7 @@ static short CreateNewThing( // Returns 0 on success.
                     // Successfully allocated object.
 
                     // If loading from file specified . . .
-                    if (pfile != NULL)
+                    if (pfile != nullptr)
                     {
                         // Remember its ID.
                         U16 idInstance = (*ppthing)->GetInstanceID();
@@ -4753,7 +4753,7 @@ static short CreateNewThing( // Returns 0 on success.
                                                                (U32)*ppthing,           // User value (CThing*).
                                                                FRONTMOST_HOT_PRIORITY); // New items towards front.
 
-                        if (*pphot != NULL)
+                        if (*pphot != nullptr)
                         {
                             // If this is not THE HOOD . . .
                             if (id != CThing::CHoodID)
@@ -4766,7 +4766,7 @@ static short CreateNewThing( // Returns 0 on success.
                             {
                                 case CThing::CDudeID:
                                     // If there is an editor thing . . .
-                                    if (ms_pgething != NULL)
+                                    if (ms_pgething != nullptr)
                                     {
                                         // If no camera focus yet . . .
                                         if (ms_pgething->m_u16CameraTrackId == CIdBank::IdNil)
@@ -4794,7 +4794,7 @@ static short CreateNewThing( // Returns 0 on success.
                             {
                                 // On error, destroy object
                                 delete *pphot;
-                                *pphot = NULL;
+                                *pphot = nullptr;
                             }
                         }
                         else
@@ -4809,7 +4809,7 @@ static short CreateNewThing( // Returns 0 on success.
                     {
                         // On error, destroy object
                         delete *ppthing;
-                        *ppthing = NULL;
+                        *ppthing = nullptr;
                     }
                 }
             }
@@ -4844,8 +4844,8 @@ static void MoveThing( // Returns nothing.
   short sPosY,         // New position.
   short sPosZ)         // New position.
 {
-    ASSERT(pthing != NULL);
-    ASSERT(phot != NULL);
+    ASSERT(pthing != nullptr);
+    ASSERT(phot != nullptr);
 
     // Move to 3D position.
     pthing->EditMove(sPosX, sPosY, sPosZ);
@@ -4950,7 +4950,7 @@ static short SetDisplayArea( // Returns 0 on success.
 // is specified size.
 //
 ////////////////////////////////////////////////////////////////////////////////
-static short SetCameraArea(void) // Returns 0 on success.
+static short SetCameraArea() // Returns 0 on success.
 {
     short sDepth = 8; // Safety.
     rspGetVideoMode(&sDepth);
@@ -4983,7 +4983,7 @@ static short AdjustDisplaySize( // Returns 0 on success.
     short sDeviceD = 8;    // Safety.
 
     // Get current settings.
-    rspGetVideoMode(&sDeviceD, NULL, NULL, NULL, &sDisplayW, &sDisplayH);
+    rspGetVideoMode(&sDeviceD, nullptr, nullptr, nullptr, &sDisplayW, &sDisplayH);
 
     // New area.
     if (SetDisplayArea(sDeviceD, sDisplayW + sAdjustX, sDisplayH + sAdjustY) == 0)
@@ -5014,13 +5014,13 @@ static short SizeUpdate( // Returns 0 on success.
     short sDisplayD = 8;   // Safety.
 
     // Get current settings.
-    rspGetVideoMode(&sDisplayD, NULL, NULL, NULL, &sDisplayW, &sDisplayH);
+    rspGetVideoMode(&sDisplayD, nullptr, nullptr, nullptr, &sDisplayW, &sDisplayH);
 
     short sViewW = sDisplayW - DISPLAY_RIGHT_BORDER - SCROLL_BAR_THICKNESS;
     short sViewH = sDisplayH - DISPLAY_BOTTOM_BORDER - SCROLL_BAR_THICKNESS;
 
     // Get the hood . . .
-    CHood *phood = NULL;
+    CHood *phood = nullptr;
     if (prealm->m_asClassNumThings[CThing::CHoodID] > 0)
         phood = (CHood *)prealm->m_aclassHeads[CThing::CHoodID].GetNext();
     else
@@ -5034,7 +5034,7 @@ static short SizeUpdate( // Returns 0 on success.
     rspNameBuffers(&g_pimScreenBuf);
 
     // If there's a camera to update . . .
-    if (pcamera != NULL)
+    if (pcamera != nullptr)
     {
         pcamera->SetHood(phood);
         // Adjust camera by same amount.
@@ -5044,31 +5044,31 @@ static short SizeUpdate( // Returns 0 on success.
     }
 
     // Put GUIs somewhere out of the way.
-    if (ms_pguiRealmBar != NULL)
+    if (ms_pguiRealmBar != nullptr)
     {
         ms_pguiRealmBar->Move(REALM_BAR_X, REALM_BAR_Y);
     }
-    if (ms_pguiPickObj != NULL)
+    if (ms_pguiPickObj != nullptr)
     {
         ms_pguiPickObj->Move(PICKOBJ_LIST_X, PICKOBJ_LIST_Y);
     }
-    if (ms_pguiLayers != NULL)
+    if (ms_pguiLayers != nullptr)
     {
         ms_pguiLayers->Move(LAYERS_LIST_X, LAYERS_LIST_Y);
     }
-    if (ms_pguiCameras != NULL)
+    if (ms_pguiCameras != nullptr)
     {
         ms_pguiCameras->Move(CAMERAS_LIST_X, CAMERAS_LIST_Y);
     }
-    if (ms_pguiGUIs != NULL)
+    if (ms_pguiGUIs != nullptr)
     {
         ms_pguiGUIs->Move(GUIS_BAR_X, GUIS_BAR_Y);
     }
-    if (ms_pguiNavNets != NULL)
+    if (ms_pguiNavNets != nullptr)
     {
         ms_pguiNavNets->Move(NAVNETS_X, NAVNETS_Y);
     }
-    if (ms_pguiMap != NULL)
+    if (ms_pguiMap != nullptr)
     {
         ms_pguiMap->Move(MAP_X, MAP_Y);
     }
@@ -5096,7 +5096,7 @@ static short SizeUpdate( // Returns 0 on success.
     if (ms_sbVert.Create(sViewW, 0, SCROLL_BAR_THICKNESS, sViewH + SCROLL_BAR_THICKNESS, sDisplayD) == 0)
     {
         // Set scroll range.
-        if (phood != NULL)
+        if (phood != nullptr)
         {
             ms_sbVert.SetRange(-lEdgeOvershoot, phood->GetHeight() - sViewH + lEdgeOvershoot);
         }
@@ -5118,7 +5118,7 @@ static short SizeUpdate( // Returns 0 on success.
     if (ms_sbHorz.Create(0, sViewH, sViewW, SCROLL_BAR_THICKNESS, sDisplayD) == 0)
     {
         // Set scroll range.
-        if (phood != NULL)
+        if (phood != nullptr)
         {
             ms_sbHorz.SetRange(-lEdgeOvershoot, phood->GetWidth() - sViewW + lEdgeOvershoot);
         }
@@ -5152,7 +5152,7 @@ static CGameEditThing *GetEditorThing( // Returns ptr to editor thing for
                                        // specified realm or NULL.
   CRealm *prealm)                      // Realm to get editor thing from.
 {
-    CGameEditThing *pgething = NULL;
+    CGameEditThing *pgething = nullptr;
 
     if (prealm->m_asClassNumThings[CThing::CGameEditThingID] > 0)
     {
@@ -5193,7 +5193,7 @@ static void ListItemPressedCall( // Returns nothing.
         GuiPressedCall(pgui);
         // Select item.
         RListBox *plb = (RListBox *)pgui->m_ulUserInstance;
-        if (plb != NULL)
+        if (plb != nullptr)
         {
             // Set new item as selection.
             plb->SetSel(pgui);
@@ -5218,7 +5218,7 @@ void NavNetListPressedCall( // Returns nothing
     // Select item
     RGuiItem *pitem = (RGuiItem *)pgui->GetParent();
     RListBox *plb = (RListBox *)pitem->GetParent();
-    if (plb != NULL)
+    if (plb != nullptr)
     {
         // Set selection
         plb->SetSel(pgui);
@@ -5246,28 +5246,28 @@ static void ScrollPosUpdate( // Returns nothing.
     {
         case RScrollBar::Vertical:
             // If there's a camera . . .
-            if (ms_pcameraCur != NULL)
+            if (ms_pcameraCur != nullptr)
             {
                 ms_pcameraCur->m_sSceneViewY = psb->GetPos();
                 ms_pcameraCur->Update();
             }
 
             // If there is an editor object . . .
-            if (ms_pgething != NULL)
+            if (ms_pgething != nullptr)
             {
                 ms_pgething->m_sViewPosY = psb->GetPos();
             }
             break;
         case RScrollBar::Horizontal:
             // If there's a camera . . .
-            if (ms_pcameraCur != NULL)
+            if (ms_pcameraCur != nullptr)
             {
                 ms_pcameraCur->m_sSceneViewX = psb->GetPos();
                 ms_pcameraCur->Update();
             }
 
             // If there is an editor object . . .
-            if (ms_pgething != NULL)
+            if (ms_pgething != nullptr)
             {
                 ms_pgething->m_sViewPosX = psb->GetPos();
             }
@@ -5287,7 +5287,7 @@ static void ThingHotCall( // Returns nothing.
                           // pie->sUsed = TRUE, if used.
 {
     CThing *pthing = (CThing *)phot->m_ulUser;
-    ASSERT(pthing != NULL);
+    ASSERT(pthing != nullptr);
 
     // If not used . . .
     if (pie->sUsed == FALSE)
@@ -5323,13 +5323,13 @@ static void ThingHotCall( // Returns nothing.
                     }
 
                     // Unselect.
-                    SetSel(NULL, NULL);
+                    SetSel(nullptr, nullptr);
                 }
                 // If EDIT_KEY_SETCAMERATRACK held down . . .
                 else if (aucKeys[EDIT_KEY_SETCAMERATRACK] != 0)
                 {
                     // If there is an editor thing . . .
-                    if (ms_pgething != NULL)
+                    if (ms_pgething != nullptr)
                     {
                         // If this thing is not the hood . . .
                         if (pthing->GetClassID() != CThing::CHoodID)
@@ -5380,14 +5380,14 @@ static void ThingHotCall( // Returns nothing.
                 {
                     // If no bouys have been clicked on yet, set the
                     // starting bouy link and start drawing the line
-                    if ((m_pBouyLink0 == NULL && m_pBouyLink1 == NULL) ||
-                        (m_pBouyLink0 != NULL && m_pBouyLink1 != NULL))
+                    if ((m_pBouyLink0 == nullptr && m_pBouyLink1 == nullptr) ||
+                        (m_pBouyLink0 != nullptr && m_pBouyLink1 != nullptr))
                     {
                         m_pBouyLink0 = (CBouy *)ms_pthingSel;
-                        m_pBouyLink1 = NULL;
+                        m_pBouyLink1 = nullptr;
                     }
                     // This is the ending bouy
-                    else if (m_pBouyLink0 != NULL && m_pBouyLink1 == NULL)
+                    else if (m_pBouyLink0 != nullptr && m_pBouyLink1 == nullptr)
                     {
                         m_pBouyLink1 = (CBouy *)ms_pthingSel;
                         m_pBouyLink0->AddLink(m_pBouyLink1);
@@ -5401,9 +5401,9 @@ static void ThingHotCall( // Returns nothing.
                 // If they double clicked on something other than a bouy
                 // while they were drawing a bouy link line, then abort
                 // the link draw.
-                else if (m_pBouyLink0 != NULL && m_pBouyLink1 == NULL)
+                else if (m_pBouyLink0 != nullptr && m_pBouyLink1 == nullptr)
                 {
-                    m_pBouyLink0 = m_pBouyLink1 = NULL;
+                    m_pBouyLink0 = m_pBouyLink1 = nullptr;
                 }
 
                 // Note that we used the event.
@@ -5470,7 +5470,7 @@ static void DrawBouyLink( // Returns nothing.
     short sMouseY;
     short sButtons;
 
-    if (ms_bDrawNetwork && m_pBouyLink0 != NULL && m_pBouyLink1 != NULL && m_pBouyLink0->Visible() &&
+    if (ms_bDrawNetwork && m_pBouyLink0 != nullptr && m_pBouyLink1 != nullptr && m_pBouyLink0->Visible() &&
         m_pBouyLink1->Visible())
     {
         // These lines show the paths the characters would take so
@@ -5484,7 +5484,7 @@ static void DrawBouyLink( // Returns nothing.
 
         rspLine(249, g_pimScreenBuf, sBouyLink0X, sBouyLink0Y, sBouyLink1X, sBouyLink1Y);
     }
-    else if (m_pBouyLink0 != NULL && m_pBouyLink1 == NULL)
+    else if (m_pBouyLink0 != nullptr && m_pBouyLink1 == nullptr)
     {
         // These lines show the paths the characters would take so
         // they should be only on the X/Z plane and, therefore, Y
@@ -5503,15 +5503,15 @@ static void DrawBouyLink( // Returns nothing.
 // to FRONTMOST_HOT_PRIORITY.
 //
 ////////////////////////////////////////////////////////////////////////////////
-static void ResetHotPriorities(void) // Returns nothing.
+static void ResetHotPriorities() // Returns nothing.
 {
-    if (ms_photHood != NULL)
+    if (ms_photHood != nullptr)
     {
         // Set Hood's priority.
         ms_photHood->SetPriority(FRONTMOST_HOT_PRIORITY);
         // Do children.
         RHot *phot = ms_photHood->m_listChildren.GetHead();
-        while (phot != NULL)
+        while (phot != nullptr)
         {
             phot->SetPriority(FRONTMOST_HOT_PRIORITY);
 
@@ -5648,7 +5648,7 @@ static void UpdateNetLines(CNavigationNet *pNavNet)
 {
 
     CNavigationNet::nodeMap::iterator ibouy;
-    CBouy *pLinkedBouy = NULL;
+    CBouy *pLinkedBouy = nullptr;
 
     if (pNavNet)
     {
@@ -5731,7 +5731,7 @@ static short AddView( // Returns 0 on success.
     static short sNum = 0;
     short sRes = 0; // Assume success.
     RListBox *plb = (RListBox *)ms_pguiCameras->GetItemFromId(GUI_ID_CAMERA_LIST);
-    if (plb != NULL)
+    if (plb != nullptr)
     {
         View *pview;
         if (CreateView(&pview, prealm) == 0)
@@ -5766,10 +5766,10 @@ static void RemoveView( // Returns nothing.
                         // selected view.
 {
     RListBox *plb = (RListBox *)ms_pguiCameras->GetItemFromId(GUI_ID_CAMERA_LIST);
-    if (plb != NULL)
+    if (plb != nullptr)
     {
         RGuiItem *pguiRemove;
-        if (pview != NULL)
+        if (pview != nullptr)
         {
             pguiRemove = plb->GetItemFromId((long)pview);
         }
@@ -5778,7 +5778,7 @@ static void RemoveView( // Returns nothing.
             pguiRemove = plb->GetSel();
         }
 
-        if (pguiRemove != NULL)
+        if (pguiRemove != nullptr)
         {
             KillView((View *)(pguiRemove->m_lId));
             plb->RemoveItem(pguiRemove);
@@ -5790,10 +5790,10 @@ static void RemoveView( // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 // Removes all current views.
 ////////////////////////////////////////////////////////////////////////////////
-static void RemoveViews(void)
+static void RemoveViews()
 {
     View *pview = ms_listViews.GetHead();
-    while (pview != NULL)
+    while (pview != nullptr)
     {
         RemoveView(pview);
         pview = ms_listViews.GetNext();
@@ -5809,40 +5809,40 @@ static short CreateView( // Returns 0 on success.
 {
     short sRes = 0; // Assume success.
 
-    if (ppview != NULL)
+    if (ppview != nullptr)
     {
-        *ppview = NULL; // Safety.
+        *ppview = nullptr; // Safety.
     }
 
     // Create view . . .
     View *pview = new View;
-    if (pview != NULL)
+    if (pview != nullptr)
     {
         // Create and load GUI . . .
         pview->pgui = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, VIEW_GUI_FILE));
-        if (pview->pgui != NULL)
+        if (pview->pgui != nullptr)
         {
-            pview->pgui->GetClient(NULL, NULL, &(pview->sViewW), &(pview->sViewH));
+            pview->pgui->GetClient(nullptr, nullptr, &(pview->sViewW), &(pview->sViewH));
 
             // Get the scrollbars.
             pview->psbVert = (RScrollBar *)pview->pgui->GetItemFromId(3);
             pview->psbHorz = (RScrollBar *)pview->pgui->GetItemFromId(4);
             // Adjust dimensions to make scrollbars visible.
-            if (pview->psbVert != NULL)
+            if (pview->psbVert != nullptr)
             {
                 pview->sViewW -= pview->psbVert->m_im.m_sWidth;
             }
-            if (pview->psbHorz != NULL)
+            if (pview->psbHorz != nullptr)
             {
                 pview->sViewH -= pview->psbHorz->m_im.m_sHeight;
             }
 
             // Set scrollbar range based on view size and realm size.
-            if (pview->psbVert != NULL)
+            if (pview->psbVert != nullptr)
             {
                 pview->psbVert->SetRange(0, prealm->m_phood->GetHeight() - pview->sViewH);
             }
-            if (pview->psbHorz != NULL)
+            if (pview->psbHorz != nullptr)
             {
                 pview->psbHorz->SetRange(0, prealm->m_phood->GetWidth() - pview->sViewW);
             }
@@ -5854,7 +5854,7 @@ static short CreateView( // Returns 0 on success.
                 pview->pgui->SetVisible(TRUE);
 
                 // Succcess.
-                if (ppview != NULL)
+                if (ppview != nullptr)
                 {
                     *ppview = pview;
                 }
@@ -5913,7 +5913,7 @@ static void DrawView( // Returns nothing.
 {
     // Get client.
     short sClientPosX, sClientPosY;
-    pview->pgui->GetClient(&sClientPosX, &sClientPosY, NULL, NULL);
+    pview->pgui->GetClient(&sClientPosX, &sClientPosY, nullptr, nullptr);
 
     // Add in GUI's position.
     sClientPosX += pview->pgui->m_sX;
@@ -5922,12 +5922,12 @@ static void DrawView( // Returns nothing.
     // Use scrollbars for position.
     short sViewX = 0; // Safety.
     short sViewY = 0; // Safety.
-    if (pview->psbVert != NULL)
+    if (pview->psbVert != nullptr)
     {
         sViewY = pview->psbVert->GetPos();
     }
 
-    if (pview->psbHorz != NULL)
+    if (pview->psbHorz != nullptr)
     {
         sViewX = pview->psbHorz->GetPos();
     }
@@ -5955,7 +5955,7 @@ static void DrawViews( // Returns nothing.
   CRealm *prealm)      // Realm to draw.
 {
     View *pview = ms_listViews.GetHead();
-    while (pview != NULL)
+    while (pview != nullptr)
     {
         DrawView(pview, prealm);
         pview = ms_listViews.GetNext();
@@ -5976,10 +5976,10 @@ static void ClearGUI( // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 // Clear all views.
 ////////////////////////////////////////////////////////////////////////////////
-static void ClearViews(void) // Returns nothing.
+static void ClearViews() // Returns nothing.
 {
     View *pview = ms_listViews.GetHead();
-    while (pview != NULL)
+    while (pview != nullptr)
     {
         ClearGUI(pview->pgui);
 
@@ -6007,7 +6007,7 @@ static void DoViews(RInputEvent *pie) // Input event to process.
     ms_pguiCameras->m_hot.Do(pie);
 
     View *pview = ms_listViews.GetTail();
-    while (pview != NULL)
+    while (pview != nullptr)
     {
         DoView(pview, pie);
         pview = ms_listViews.GetPrev();
@@ -6020,9 +6020,9 @@ static void DoViews(RInputEvent *pie) // Input event to process.
 static void RefreshMap( // Returns nothing.
   CRealm *prealm)       // Realm to map.
 {
-    ASSERT(ms_pguiMap != NULL);
+    ASSERT(ms_pguiMap != nullptr);
     // Get area to draw in.
-    if (ms_pguiMapZone != NULL)
+    if (ms_pguiMapZone != nullptr)
     {
         // Clear.
         ms_pguiMapZone->Compose();
@@ -6094,13 +6094,13 @@ static void DragDrop( // Returns nothing.
     // If there is an item being moved . . .
     if (ms_sMoving != FALSE)
     {
-        ASSERT(ms_pthingSel != NULL);
-        ASSERT(ms_photSel != NULL);
+        ASSERT(ms_pthingSel != nullptr);
+        ASSERT(ms_photSel != nullptr);
 
         // Final position.
         MoveThing(ms_pthingSel, ms_photSel, sDropX, sDropY, sDropZ);
 
-        SetSel(NULL, NULL);
+        SetSel(nullptr, nullptr);
         ms_sMoving = FALSE;
 
         rspShowMouseCursor();
@@ -6111,7 +6111,7 @@ static void DragDrop( // Returns nothing.
 // Called by the menu callback when it wants to tell the editor to continue
 // editting (end the menu).
 ////////////////////////////////////////////////////////////////////////////////
-extern void Edit_Menu_Continue(void)
+extern void Edit_Menu_Continue()
 {
     StopMenu();
 
@@ -6123,7 +6123,7 @@ extern void Edit_Menu_Continue(void)
 // Called by the menu callback when it wants to tell the editor to quit the
 // editor.
 ////////////////////////////////////////////////////////////////////////////////
-extern void Edit_Menu_ExitEditor(void)
+extern void Edit_Menu_ExitEditor()
 {
     ms_lPressedId = GUI_ID_EXIT;
 
@@ -6171,15 +6171,15 @@ static void RlmNameToRgnName( // Returns nothing.
 static void NextItem( // Returns nothing.
   CRealm *prealm)     // In:  The realm we want the next thing in.
 {
-    if (ms_pthingSel != NULL)
+    if (ms_pthingSel != nullptr)
     {
         // This may make ms_pthingSel NULL.
-        SetSel(ms_pthingSel->m_everything.GetNext(), NULL);
+        SetSel(ms_pthingSel->m_everything.GetNext(), nullptr);
     }
 
-    if (ms_pthingSel == NULL)
+    if (ms_pthingSel == nullptr)
     {
-        SetSel(prealm->m_everythingHead.GetNext(), NULL);
+        SetSel(prealm->m_everythingHead.GetNext(), nullptr);
     }
 }
 
@@ -6189,15 +6189,15 @@ static void NextItem( // Returns nothing.
 static void PrevItem( // Returns nothing.
   CRealm *prealm)     // In:  The realm we want the next thing in.
 {
-    if (ms_pthingSel != NULL)
+    if (ms_pthingSel != nullptr)
     {
         // This may make ms_pthingSel NULL.
-        SetSel(ms_pthingSel->m_everything.GetPrev(), NULL);
+        SetSel(ms_pthingSel->m_everything.GetPrev(), nullptr);
     }
 
-    if (ms_pthingSel == NULL)
+    if (ms_pthingSel == nullptr)
     {
-        SetSel(prealm->m_everythingTail.GetPrev(), NULL);
+        SetSel(prealm->m_everythingTail.GetPrev(), nullptr);
     }
 }
 
@@ -6279,13 +6279,13 @@ static short CreateTriggerRegions( // Returns 0 on success.
 )
 {
     short sRes = 0; // Assume success.
-    if (prealm->m_pTriggerMapHolder == NULL)
+    if (prealm->m_pTriggerMapHolder == nullptr)
     {
         short sResult;
 
         TRACE("CreateTriggerRegions(): No default CThing to hold triggers!\n");
         TRACE("CreateTriggerRegions(): Adding one for your convenience!\n");
-        CThing *pThing = NULL;
+        CThing *pThing = nullptr;
         RHot *photdummy;
 
         sResult = CreateNewThing(prealm, CThing::CTriggerID, 0, 0, 0, &pThing, &photdummy);
@@ -6303,13 +6303,13 @@ static short CreateTriggerRegions( // Returns 0 on success.
     // REMOVE THE OLD TRIGGER MAP!
     if (prealm->m_pTriggerMap)
         delete prealm->m_pTriggerMap;
-    prealm->m_pTriggerMap = NULL;
+    prealm->m_pTriggerMap = nullptr;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Create, Compress, and Save the trigger attribute map for the specified realm.
     ////////////////////////////////////////////////////////////////////////////////
 
-    RMultiGridIndirect *pTriggers = NULL;
+    RMultiGridIndirect *pTriggers = nullptr;
     // Let's try going with a maximum of EIGHT overlapping regions for now.
     // And we'll try 32 x 32 tiles for now.  Assume tries largest to smallest.
     pTriggers = CreateRegionMap(prealm->m_phood->GetWidth(), prealm->m_phood->GetHeight(), 8, 32, 32);
@@ -6371,30 +6371,30 @@ static void EditPylonTriggerRegion( // Returns nothing.
   CThing *pthingPylon)              // In:  Pylon whose trigger area we want to
 {
     // If there's a current pylon being edited . . .
-    if (ms_pylonEdit != NULL)
+    if (ms_pylonEdit != nullptr)
     {
         // Remove sprite from scene.
         ms_pylonEdit->m_pRealm->m_scene.RemoveSprite(&ms_spriteTriggerRgn);
 
-        ms_spriteTriggerRgn.m_pImage = NULL;
+        ms_spriteTriggerRgn.m_pImage = nullptr;
 
         // Put it into storage mode.
         ms_argns[ms_pylonEdit->m_ucID].SetMode(TriggerRgn::Storage);
         // Clear.
-        ms_pylonEdit = NULL;
+        ms_pylonEdit = nullptr;
         // Show mouse.
         rspShowMouseCursor();
     }
 
     // If there's a new pylon . . .
-    if (pthingPylon != NULL)
+    if (pthingPylon != nullptr)
     {
         ASSERT(pthingPylon->GetClassID() == CThing::CPylonID);
 
         CPylon *pylon = (CPylon *)pthingPylon;
 
         // If the region did not previously exist . . .
-        if (ms_argns[pylon->m_ucID].pimRgn == NULL)
+        if (ms_argns[pylon->m_ucID].pimRgn == nullptr)
         {
             // Set location by mapping 3D pylon position to viewing surface
             // position.
@@ -6443,13 +6443,13 @@ static CThing *SetSel( // Returns CThing that previously was selected.
     ms_photSel = photSel;
 
     // If this is an actual CThing . . .
-    if (ms_pthingSel != NULL)
+    if (ms_pthingSel != nullptr)
     {
         // Don't allow GUI focus.
-        RGuiItem::SetFocus(NULL);
+        RGuiItem::SetFocus(nullptr);
 
         // If the corresponding hotbox was not specified . . .
-        if (photSel == NULL)
+        if (photSel == nullptr)
         {
             // Get it.
             ms_photSel = ms_pthingSel->m_phot;
@@ -6469,32 +6469,32 @@ static void DelThing( // Returns nothing.
   RHot *photDel,      // In:  Hotbox of CThing to be deleted.
   CRealm *prealm)     // In:  Current Realm
 {
-    if (pthingDel != NULL)
+    if (pthingDel != nullptr)
     {
         // If hot not specified . . .
-        if (photDel == NULL)
+        if (photDel == nullptr)
         {
             photDel = pthingDel->m_phot;
         }
 
-        CNavigationNet *pNavNet = NULL;
+        CNavigationNet *pNavNet = nullptr;
 
         switch (pthingDel->GetClassID())
         {
             case CThing::CHoodID:
                 // *** LOCALIZE ***
                 rspMsgBox(RSP_MB_ICN_STOP | RSP_MB_BUT_OK, "Delete Hood", "You may not delete the hood.");
-                SetSel(NULL, NULL);
-                pthingDel = NULL;
-                photDel = NULL;
+                SetSel(nullptr, nullptr);
+                pthingDel = nullptr;
+                photDel = nullptr;
                 break;
 
             case CThing::CGameEditThingID:
                 // *** LOCALIZE ***
                 rspMsgBox(RSP_MB_ICN_STOP | RSP_MB_BUT_OK, "Delete Hood", "You may not delete the CGameEditThing.");
-                SetSel(NULL, NULL);
-                pthingDel = NULL;
-                photDel = NULL;
+                SetSel(nullptr, nullptr);
+                pthingDel = nullptr;
+                photDel = nullptr;
                 break;
 
             case CThing::CPylonID:
@@ -6512,7 +6512,7 @@ static void DelThing( // Returns nothing.
                 // If you deleted one that the connection line was being
                 // drawn to, then clear the connection line.
                 if ((CBouy *)ms_pthingSel == m_pBouyLink0 || (CBouy *)ms_pthingSel == m_pBouyLink1)
-                    m_pBouyLink0 = m_pBouyLink1 = NULL;
+                    m_pBouyLink0 = m_pBouyLink1 = nullptr;
                 // If the network lines are being shown, update them, otherwise
                 // they will get updated when view lines is turned on.
                 if (ms_bDrawNetwork)
@@ -6537,8 +6537,8 @@ static void DelThing( // Returns nothing.
                     {
                         CListNode<CThing> *pNext = prealm->m_aclassHeads[CThing::CNavigationNetID].m_pnNext;
                         bool bSearching = true;
-                        CNavigationNet *pNet = NULL;
-                        while (bSearching && pNext->m_powner != NULL)
+                        CNavigationNet *pNet = nullptr;
+                        while (bSearching && pNext->m_powner != nullptr)
                         {
                             pNet = (CNavigationNet *)pNext->m_powner;
                             if (ms_pthingSel != pNet)
@@ -6561,9 +6561,9 @@ static void DelThing( // Returns nothing.
                     rspMsgBox(RSP_MB_ICN_STOP | RSP_MB_BUT_OK,
                               "Delete Navigation Net",
                               "You may not delete the last remaining Navigation Net.");
-                    SetSel(NULL, NULL);
-                    pthingDel = NULL;
-                    photDel = NULL;
+                    SetSel(nullptr, nullptr);
+                    pthingDel = nullptr;
+                    photDel = nullptr;
                 }
                 break;
         }
@@ -6572,7 +6572,7 @@ static void DelThing( // Returns nothing.
         if (pthingDel)
         {
             // If there is an editor thing . . .
-            if (ms_pgething != NULL)
+            if (ms_pgething != nullptr)
             {
                 // If this item was being tracked by camera . . .
                 if (pthingDel->GetInstanceID() == ms_pgething->m_u16CameraTrackId)
@@ -6585,7 +6585,7 @@ static void DelThing( // Returns nothing.
             // If this is the selection . . .
             if (pthingDel == ms_pthingSel)
             {
-                SetSel(NULL, NULL);
+                SetSel(nullptr, nullptr);
             }
         }
 
@@ -6593,7 +6593,7 @@ static void DelThing( // Returns nothing.
         if (ms_sMoving != FALSE)
         {
             // If nothing left to move . . .
-            if (ms_pthingSel == NULL)
+            if (ms_pthingSel == nullptr)
             {
                 // Stop moving.
                 ms_sMoving = FALSE;
@@ -6618,7 +6618,7 @@ static void DelClass( // Returns nothing.
     char szTitle[512];
     sprintf(szTitle,
             "Delete entire \"%s\" class",
-            (pthingDel != NULL) ? CThing::ms_aClassInfo[pthingDel->GetClassID()].pszClassName : "CThing");
+            (pthingDel != nullptr) ? CThing::ms_aClassInfo[pthingDel->GetClassID()].pszClassName : "CThing");
     // VERIFY . . .
     if (rspMsgBox(RSP_MB_ICN_QUERY | RSP_MB_BUT_YESNO,
                   szTitle,
@@ -6627,7 +6627,7 @@ static void DelClass( // Returns nothing.
         CListNode<CThing> *plnDel;
         CListNode<CThing> *plnTail;
         // If thing specified . . .
-        if (pthingDel != NULL)
+        if (pthingDel != nullptr)
         {
             // Use category of item.
             plnDel = prealm->m_aclassHeads[pthingDel->GetClassID()].m_pnNext;
@@ -6645,7 +6645,7 @@ static void DelClass( // Returns nothing.
         {
             plnNext = plnDel->m_pnNext;
 
-            DelThing(plnDel->m_powner, NULL, prealm);
+            DelThing(plnDel->m_powner, nullptr, prealm);
 
             plnDel = plnNext;
         }
@@ -6682,7 +6682,7 @@ static void DelMost( // Returns nothing.
             switch (classType)
             {
                 default:
-                    DelThing(plnDel->m_powner, NULL, prealm);
+                    DelThing(plnDel->m_powner, nullptr, prealm);
                     break;
 
                 case CThing::CHoodID:
@@ -6710,7 +6710,7 @@ static short CopyItem( // Returns 0 on success.
     short sRes = 0; // Assume success.
 
     // If anything to copy . . .
-    if (pthingCopy != NULL)
+    if (pthingCopy != nullptr)
     {
         // Switch for exceptions by type.
         switch (pthingCopy->GetClassID())
@@ -6847,7 +6847,7 @@ static void MapScreen2Realm( // Returns nothing.
     short sRealmY2 = sScreenY + pcamera->m_sScene2FilmY;
 
     // If there's a hood . . .
-    if (prealm->m_phood != NULL)
+    if (prealm->m_phood != nullptr)
     {
         // Map to realm's X/Z plane:
         // Z is stretched.
@@ -6856,7 +6856,7 @@ static void MapScreen2Realm( // Returns nothing.
         *psRealmX = sRealmX2;
 
         // If there is an attribute map . . .
-        if (prealm->m_pTerrainMap != NULL)
+        if (prealm->m_pTerrainMap != nullptr)
         {
             // The realm y is the height indicated by the attribute map
             // in the given location on the X/Z plane.
@@ -6979,7 +6979,7 @@ static void AttribMaskBtnPressed( // Returns nothing.
     if (*pu16AttribMask)
     {
         // If there's no image . . .
-        if (ms_spriteAttributes.m_pImage == NULL)
+        if (ms_spriteAttributes.m_pImage == nullptr)
         {
             short sErr = 0;
 
@@ -6993,7 +6993,7 @@ static void AttribMaskBtnPressed( // Returns nothing.
                 if (sErr)
                 {
                     delete ms_spriteAttributes.m_pImage;
-                    ms_spriteAttributes.m_pImage = NULL;
+                    ms_spriteAttributes.m_pImage = nullptr;
                 }
             }
             else
@@ -7017,7 +7017,7 @@ static void AttribMaskBtnPressed( // Returns nothing.
         {
             // If there is an image, delete it.  No longer needed.
             delete ms_spriteAttributes.m_pImage;
-            ms_spriteAttributes.m_pImage = NULL;
+            ms_spriteAttributes.m_pImage = nullptr;
         }
     }
 }
@@ -7025,7 +7025,7 @@ static void AttribMaskBtnPressed( // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 // Resizes the attribute sprite, if allocated.
 ////////////////////////////////////////////////////////////////////////////////
-static short SizeShowAttribsSprite(void) // Returns 0 on success.
+static short SizeShowAttribsSprite() // Returns 0 on success.
 {
     short sRes = 0; // Assume success.
 
@@ -7049,7 +7049,7 @@ static short SizeShowAttribsSprite(void) // Returns 0 on success.
         if (sRes)
         {
             delete ms_spriteAttributes.m_pImage;
-            ms_spriteAttributes.m_pImage = NULL;
+            ms_spriteAttributes.m_pImage = nullptr;
         }
     }
 
@@ -7137,7 +7137,7 @@ static void InitFileCounter( // Returns nothing.
     // Just use entire width for now.
     ms_sFileOpTextW = ms_printFile.GetWidth(szSample);
     // Get height.
-    ms_printFile.GetPos(NULL, NULL, NULL, &ms_sFileOpTextH);
+    ms_printFile.GetPos(nullptr, nullptr, nullptr, &ms_sFileOpTextH);
     ms_sFileOpTextX = PROGRESS_X;
     ms_sFileOpTextY = PROGRESS_Y - (ms_sFileOpTextH + 5);
 
@@ -7152,10 +7152,10 @@ static void InitFileCounter( // Returns nothing.
 // Kill load/save counter.  Can be called multiple times w/o corresponding
 // Init().
 ////////////////////////////////////////////////////////////////////////////////
-static void KillFileCounter(void) // Returns nothing.
+static void KillFileCounter() // Returns nothing.
 {
     // Unhook the RFile callback
-    RFile::ms_criticall = 0;
+    RFile::ms_criticall = nullptr;
     // Restore arrow cursor.
     rspSetCursor(RSP_CURSOR_ARROW);
     // Clear op descriptor.
@@ -7374,7 +7374,7 @@ static short ShowRealmStatistics( // Returns 0 on success.
                 }
                 else
                 {
-                    *ppthing = NULL;
+                    *ppthing = nullptr;
                 }
             }
         }
@@ -7385,7 +7385,7 @@ static short ShowRealmStatistics( // Returns 0 on success.
         }
 
         delete pguiRoot;
-        pguiRoot = NULL;
+        pguiRoot = nullptr;
     }
     else
     {

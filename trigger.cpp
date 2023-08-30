@@ -52,7 +52,7 @@ CTrigger::CTrigger(CRealm *pRealm)
   : CThing(pRealm, CTriggerID)
 {
     // Insert a default instance into the realm:
-    m_pmgi = NULL;
+    m_pmgi = nullptr;
     m_pRealm->m_pTriggerMapHolder = this;
     m_pRealm->m_pTriggerMap = m_pmgi;
 
@@ -71,11 +71,11 @@ CTrigger::~CTrigger()
 {
     if (m_pmgi)
         delete m_pmgi;
-    m_pmgi = NULL;
+    m_pmgi = nullptr;
 
     // Clear it from the realm:
-    m_pRealm->m_pTriggerMap = NULL;
-    m_pRealm->m_pTriggerMapHolder = NULL;
+    m_pRealm->m_pTriggerMap = nullptr;
+    m_pRealm->m_pTriggerMapHolder = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -94,14 +94,14 @@ short CTrigger::Load(  // Returns 0 if successfull, non-zero otherwise
     if (sResult == 0)
     {
         // Load object data
-        m_pRealm->m_pTriggerMap = NULL; // clear the shadow
+        m_pRealm->m_pTriggerMap = nullptr; // clear the shadow
         // ASSUME THERE WILL ALREADY BE AN EMPTY TRIGGER MAP HOLDER!
-        if (m_pRealm->m_pTriggerMapHolder == NULL)
+        if (m_pRealm->m_pTriggerMapHolder == nullptr)
             m_pRealm->m_pTriggerMapHolder = new CTrigger(m_pRealm);
 
         if (m_pmgi)
             delete m_pmgi;
-        m_pmgi = NULL;
+        m_pmgi = nullptr;
 
         short sData = 0;
         pFile->Read(&sData);
@@ -173,7 +173,7 @@ short CTrigger::Save( // Returns 0 if successfull, non-zero otherwise
         // Save object data
         short sData = 0; // NO DATA
 
-        if (m_pmgi == NULL)
+        if (m_pmgi == nullptr)
         {
             sData = 0;
             pFile->Write(sData);
@@ -219,7 +219,7 @@ short CTrigger::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CTrigger::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CTrigger::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -227,7 +227,7 @@ short CTrigger::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CTrigger::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CTrigger::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -235,22 +235,22 @@ short CTrigger::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CTrigger::Suspend(void) {}
+void CTrigger::Suspend() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CTrigger::Resume(void) {}
+void CTrigger::Resume() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CTrigger::Update(void) {}
+void CTrigger::Update() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CTrigger::Render(void) {}
+void CTrigger::Render() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to init new object at specified position
@@ -266,7 +266,7 @@ short CTrigger::EditNew( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CTrigger::EditModify(void)
+short CTrigger::EditModify()
 {
     return 0;
 }
@@ -285,12 +285,12 @@ short CTrigger::EditMove( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CTrigger::EditUpdate(void) {}
+void CTrigger::EditUpdate() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CTrigger::EditRender(void) {}
+void CTrigger::EditRender() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Add myself into the realm that created me.

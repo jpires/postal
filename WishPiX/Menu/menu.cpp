@@ -206,19 +206,19 @@
 // Module specific (static) variables / Instantiate class statics.
 //////////////////////////////////////////////////////////////////////////////
 
-static Menu *ms_pmenu = NULL; // Pointer to current menu.
+static Menu *ms_pmenu = nullptr; // Pointer to current menu.
 
 static RMsgBox ms_msgbox; // Menu container.
 
 static short ms_sNumMenuItems = 0; // Current number of menu items.
 
-static RFont *ms_pfontItems = NULL;  // Font for menu items.
-static RFont *ms_pfontHeader = NULL; // Font for menu header.
+static RFont *ms_pfontItems = nullptr;  // Font for menu items.
+static RFont *ms_pfontHeader = nullptr; // Font for menu header.
 
 static RPrint ms_printItems;  // Print used for guis.
 static RPrint ms_printHeader; // Print used for header.
 
-static RImage *ms_pimBackground = NULL; // Dlg's background image.
+static RImage *ms_pimBackground = nullptr; // Dlg's background image.
 
 static RGuiItem ms_guiIndicator; // Current menu item indicator.
 
@@ -242,7 +242,7 @@ static short ms_sCancel = FALSE; // TRUE to cancel current menu.
 static short ms_sItemsX = 0; // X position of menu items.
 static short ms_sItemsY = 0; // Y position of menu items.
 
-static RResMgr *ms_presmgr = NULL;
+static RResMgr *ms_presmgr = nullptr;
 
 static RImage ms_imPreMenu; // Contents of composite buffer
                             // before the menu was drawn.
@@ -250,7 +250,7 @@ static RImage ms_imPreMenu; // Contents of composite buffer
 static short ms_sPreMenuX; // Location of ms_imPreMenu on screen.
 static short ms_sPreMenuY; // Location of ms_imPreMenu on screen.
 
-static RImage *ms_pimComposite = NULL; // Composite buffer.
+static RImage *ms_pimComposite = nullptr; // Composite buffer.
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific (static) protos.
@@ -285,10 +285,10 @@ static void BackCall( // Returns nothing.
                       // prc please.
   RRect *prc)         // Where to in image.
 {
-    ASSERT(ms_pmenu != NULL);
-    ASSERT(pim != NULL);
-    ASSERT(prc != NULL);
-    ASSERT(pgui != NULL);
+    ASSERT(ms_pmenu != nullptr);
+    ASSERT(pim != nullptr);
+    ASSERT(prc != nullptr);
+    ASSERT(pgui != nullptr);
 
     // If this is our ms_msgbox . . .
     if (pgui == &ms_msgbox)
@@ -322,8 +322,8 @@ static void BackCall( // Returns nothing.
                             sY,
                             ms_pimBackground->m_sWidth,  // Width to blit.
                             ms_pimBackground->m_sHeight, // Height to blit.
-                            NULL,                        // Dest clip rect.
-                            NULL);                       // Source clip rect.
+                            nullptr,                        // Dest clip rect.
+                            nullptr);                       // Source clip rect.
                 }
             }
         }
@@ -338,8 +338,8 @@ static void BackCall( // Returns nothing.
                     prc->sY + prc->sH / 2 - ms_pimBackground->m_sHeight / 2,
                     ms_pimBackground->m_sWidth,  // Width to blit.
                     ms_pimBackground->m_sHeight, // Height to blit.
-                    NULL,                        // Dest clip rect.
-                    NULL);                       // Source clip rect.
+                    nullptr,                        // Dest clip rect.
+                    nullptr);                       // Source clip rect.
         }
     }
     else
@@ -385,7 +385,7 @@ inline bool NextItem( // Returns true, if new item selected.
 {
     bool bNewSelection = false; // Assume no new selection.
 
-    ASSERT(ms_pmenu != NULL);
+    ASSERT(ms_pmenu != nullptr);
 
     short sNumItemsTraversed = 0;
     short sOldItem = ms_sCurItem;
@@ -470,7 +470,7 @@ inline bool NextItem( // Returns true, if new item selected.
     else
     {
         // If there is a callback . . .
-        if (ms_pmenu->menucallbacks.fnChoice != NULL)
+        if (ms_pmenu->menucallbacks.fnChoice != nullptr)
         {
             // If there was a change in the selected item . . .
             if (ms_sCurItem != sOldItem)
@@ -538,7 +538,7 @@ extern short StartMenu( // Returns 0 on success.
     StopMenu();
 
     // If there is a new menu . . .
-    if (pmenu != NULL)
+    if (pmenu != nullptr)
     {
         rspKeyRepeat(true);
 
@@ -556,14 +556,14 @@ extern short StartMenu( // Returns 0 on success.
         ms_sCancel = FALSE;
 
         // Get info on composite buffer.
-        RImage *pimComposite = NULL;
+        RImage *pimComposite = nullptr;
 
         rspNameBuffers(&pimComposite);
 
-        ASSERT(pimComposite != NULL);
+        ASSERT(pimComposite != nullptr);
 
         // If there is a callback . . .
-        if (ms_pmenu->menucallbacks.fnInit != NULL)
+        if (ms_pmenu->menucallbacks.fnInit != nullptr)
         {
             if ((*(ms_pmenu->menucallbacks.fnInit))(ms_pmenu, TRUE) == 0)
             {
@@ -576,13 +576,13 @@ extern short StartMenu( // Returns 0 on success.
             }
         }
 
-        ASSERT(presmgr != NULL);
+        ASSERT(presmgr != nullptr);
         // Store pointer to desired res mgr.
         ms_presmgr = presmgr;
 
         // Determine number of menu items.
         ms_sNumMenuItems = 0;
-        while (pmenu->ami[ms_sNumMenuItems].pszText != NULL)
+        while (pmenu->ami[ms_sNumMenuItems].pszText != nullptr)
         {
             ms_sNumMenuItems++;
         }
@@ -593,7 +593,7 @@ extern short StartMenu( // Returns 0 on success.
         ms_msgbox.m_sTransparent = ms_pmenu->menugui.sTransparent;
 
         // If there is a desired font for menu header . . .
-        if (ms_pmenu->menuheader.pszFontFile != NULL)
+        if (ms_pmenu->menuheader.pszFontFile != nullptr)
         {
             // Attempt to allocate get font resource . . .
             if (rspGetResource(ms_presmgr, ms_pmenu->menuheader.pszFontFile, &ms_pfontHeader) == 0)
@@ -617,7 +617,7 @@ extern short StartMenu( // Returns 0 on success.
 
             // In order to use the default font, one must exist!
             // If no font has been set in RGuiItem::ms_printItems, we're done.
-            if (RGuiItem::ms_print.GetFont() != NULL)
+            if (RGuiItem::ms_print.GetFont() != nullptr)
             {
                 // Use current font from default RPrint used by all GUI items.
                 ms_printHeader.SetFont(ms_pmenu->menuheader.sHeight, RGuiItem::ms_print.GetFont());
@@ -644,7 +644,7 @@ extern short StartMenu( // Returns 0 on success.
         }
 
         // If there is a desired font for menu items . . .
-        if (ms_pmenu->menuitemsfont.pszFile != NULL)
+        if (ms_pmenu->menuitemsfont.pszFile != nullptr)
         {
             // Attempt to allocate get font resource . . .
             if (rspGetResource(ms_presmgr, ms_pmenu->menuitemsfont.pszFile, &ms_pfontItems) == 0)
@@ -668,7 +668,7 @@ extern short StartMenu( // Returns 0 on success.
 
             // In order to use the default font, one must exist!
             // If no font has been set in RGuiItem::ms_printItems, we're done.
-            if (RGuiItem::ms_print.GetFont() != NULL)
+            if (RGuiItem::ms_print.GetFont() != nullptr)
             {
                 // Use current font from default RPrint used by all GUI items.
                 ms_printItems.SetFont(ms_pmenu->menuitemsfont.sHeight, RGuiItem::ms_print.GetFont());
@@ -731,14 +731,14 @@ extern short StartMenu( // Returns 0 on success.
         }
 
         // If there is a background . . .
-        if (ms_pmenu->menuback.pszFile != NULL)
+        if (ms_pmenu->menuback.pszFile != nullptr)
         {
             // Load background . . .
             if (rspGetResource(ms_presmgr, ms_pmenu->menuback.pszFile, &ms_pimBackground) == 0)
             {
                 // Successfully loaded dlg background.
                 // If paletted . . .
-                if (ms_pimBackground->m_pPalette != NULL)
+                if (ms_pimBackground->m_pPalette != nullptr)
                 {
                     short sEntrySize = ms_pimBackground->m_pPalette->m_sPalEntrySize;
                     short sStartIndex = ms_pmenu->menuback.sSetStartIndex;
@@ -984,7 +984,7 @@ extern short StartMenu( // Returns 0 on success.
                                              SHADOW_X_PIXELS,
                                              SHADOW_Y_PIXELS);
 
-                    if (ptxt != NULL)
+                    if (ptxt != nullptr)
                     {
                         // If shadow specified . . .
                         if (ms_pmenu->menuflags & MenuItemTextShadow)
@@ -1005,7 +1005,7 @@ extern short StartMenu( // Returns 0 on success.
                         ms_asMenuItemMouseHeight[sIndex] = ptxt->m_im.m_sHeight + ms_pmenu->menupos.sItemSpacingY;
 #endif
                         // If there is a gui . . .
-                        if (ms_pmenu->ami[sIndex].pgui != NULL)
+                        if (ms_pmenu->ami[sIndex].pgui != nullptr)
                         {
                             // Put gui item just to right of text and
                             // centered vertically with text.
@@ -1067,7 +1067,7 @@ extern short StartMenu( // Returns 0 on success.
                     for (sIndex = sStartIndex; sIndex < sEndIndex; sIndex++)
                     {
                         // If there is a gui . . .
-                        if (ms_pmenu->ami[sIndex].pgui != NULL)
+                        if (ms_pmenu->ami[sIndex].pgui != nullptr)
                         {
                             // Shift GUI over to furthest GUI position.
                             ms_pmenu->ami[sIndex].pgui->Move(sMaxGuiPosX, ms_pmenu->ami[sIndex].pgui->m_sY);
@@ -1100,7 +1100,7 @@ extern short StartMenu( // Returns 0 on success.
         }
 
         // If there is a menu indicator . . .
-        if (ms_pmenu->menuindicator.pszFile != NULL)
+        if (ms_pmenu->menuindicator.pszFile != nullptr)
         {
             // Here we would like to load the resource right into ms_guiIndicator.m_im, but
             // cannot since that is already instantiated and the res manager takes care of
@@ -1176,7 +1176,7 @@ extern short StartMenu( // Returns 0 on success.
         {
             // Make indicator top level (so it won't show up when ms_msgbox is drawn).
             // Note we could make the indicator not visible, instead.
-            ms_guiIndicator.SetParent(NULL);
+            ms_guiIndicator.SetParent(nullptr);
         }
 
         // If successful . . .
@@ -1200,8 +1200,8 @@ extern short StartMenu( // Returns 0 on success.
                         0,                        // Dst y.
                         ms_msgbox.m_im.m_sWidth,  // Both.
                         ms_msgbox.m_im.m_sHeight, // Both.
-                        NULL,                     // Dst clip.
-                        NULL);                    // Src clip.
+                        nullptr,                     // Dst clip.
+                        nullptr);                    // Src clip.
 
                 // Unlock, we're done.
                 rspUnlockBuffer();
@@ -1245,7 +1245,7 @@ extern void DoMenuInput( // Returns nothing.
 // Out: pie->sUsed = TRUE, if used.
 {
     // If there is a current menu . . .
-    if (ms_pmenu != NULL)
+    if (ms_pmenu != nullptr)
     {
         short sChooseCurrent = FALSE;
 
@@ -1401,7 +1401,7 @@ extern void DoMenuInput( // Returns nothing.
             bool bAcceptChoice = true;
 
             // If there is a callback . . .
-            if (ms_pmenu->menucallbacks.fnChoice != NULL)
+            if (ms_pmenu->menucallbacks.fnChoice != nullptr)
             {
                 // See if callback will allow this choice . . .
                 bAcceptChoice = (*(ms_pmenu->menucallbacks.fnChoice))(ms_pmenu, ms_sCurItem);
@@ -1411,14 +1411,14 @@ extern void DoMenuInput( // Returns nothing.
             if (bAcceptChoice == true)
             {
                 // If there is still a current menu . . .
-                if (ms_pmenu != NULL)
+                if (ms_pmenu != nullptr)
                 {
                     Menu *pmenuNext = ms_pmenu->ami[ms_sCurItem].pmenu;
                     // If this is the cancel item . . .
                     if (ms_sCurItem == ITEMINDEX(ms_pmenu->menuautoitems.sCancelItem))
                     {
                         // If there is a go back menu . . .
-                        if (ms_pmenu->menuautoitems.pmenuBack != NULL)
+                        if (ms_pmenu->menuautoitems.pmenuBack != nullptr)
                         {
                             // Start menu to go back to.
                             pmenuNext = ms_pmenu->menuautoitems.pmenuBack;
@@ -1430,7 +1430,7 @@ extern void DoMenuInput( // Returns nothing.
                     }
                     else
                     {
-                        if (pmenuNext != NULL)
+                        if (pmenuNext != nullptr)
                         {
                             // Store menu to go back to.
                             pmenuNext->menuautoitems.pmenuBack = ms_pmenu;
@@ -1440,7 +1440,7 @@ extern void DoMenuInput( // Returns nothing.
                     }
 
                     // If there is a menu . . .
-                    if (pmenuNext != NULL)
+                    if (pmenuNext != nullptr)
                     {
                         // Start the new menu.
                         StartMenu(pmenuNext, ms_presmgr, ms_pimComposite);
@@ -1450,7 +1450,7 @@ extern void DoMenuInput( // Returns nothing.
         }
 
         // Make sure menu is still active (even after callbacks) . . .
-        if (ms_pmenu != NULL)
+        if (ms_pmenu != nullptr)
         {
             // Call msgbox.
             ms_msgbox.DoModeless(pie);
@@ -1468,7 +1468,7 @@ extern void DoMenuOutput( // Returns nothing.
   RImage *pimDst)         // In:  Destination image for menu BLiTs.
 {
     // If there is a current menu . . .
-    if (ms_pmenu != NULL)
+    if (ms_pmenu != nullptr)
     {
         // Draw msgbox.
         ms_msgbox.Draw(pimDst);
@@ -1480,7 +1480,7 @@ extern void DoMenuOutput( // Returns nothing.
 // Get the current menu.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern Menu *GetCurrentMenu(void) // Returns the a pointer to the current
+extern Menu *GetCurrentMenu() // Returns the a pointer to the current
                                   // menu or NULL if there is none.
 {
     return ms_pmenu;
@@ -1494,12 +1494,12 @@ extern Menu *GetCurrentMenu(void) // Returns the a pointer to the current
 // both cases, it shouldn't do anything.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern short StopMenu(void) // Returns 0 on success.
+extern short StopMenu() // Returns 0 on success.
 {
     short sRes = 0; // Assume success.
 
     // If we have a current menu . . .
-    if (ms_pmenu != NULL)
+    if (ms_pmenu != nullptr)
     {
         // Clean up.
 
@@ -1516,48 +1516,48 @@ extern short StopMenu(void) // Returns 0 on success.
         for (sIndex = 0; sIndex < ms_sNumMenuItems; sIndex++)
         {
             // If there is a gui . . .
-            if (ms_pmenu->ami[sIndex].pgui != NULL)
+            if (ms_pmenu->ami[sIndex].pgui != nullptr)
             {
-                ms_pmenu->ami[sIndex].pgui->SetParent(NULL);
+                ms_pmenu->ami[sIndex].pgui->SetParent(nullptr);
             }
         }
 
         // Destroy background data.
-        if (ms_pimBackground != NULL)
+        if (ms_pimBackground != nullptr)
         {
             ms_presmgr->Release(ms_pimBackground);
-            ms_pimBackground = NULL;
+            ms_pimBackground = nullptr;
         }
 
         // Destroy indicator data.
         ms_guiIndicator.Destroy();
 
         // Delete fonts.
-        if (ms_pfontItems != NULL)
+        if (ms_pfontItems != nullptr)
         {
             ms_presmgr->Release(ms_pfontItems);
-            ms_pfontItems = NULL;
+            ms_pfontItems = nullptr;
         }
 
-        if (ms_pfontHeader != NULL)
+        if (ms_pfontHeader != nullptr)
         {
             ms_presmgr->Release(ms_pfontHeader);
-            ms_pfontHeader = NULL;
+            ms_pfontHeader = nullptr;
         }
 
         ms_sNumMenuItems = 0;
 
         // If there's a callback . . .
-        if (ms_pmenu->menucallbacks.fnInit != NULL)
+        if (ms_pmenu->menucallbacks.fnInit != nullptr)
         {
             // Let the callback know we're cleaning up.
             (*ms_pmenu->menucallbacks.fnInit)(ms_pmenu, FALSE);
         }
 
         // Clear current menu pointer.
-        ms_pmenu = NULL;
+        ms_pmenu = nullptr;
 
-        if (ms_pimComposite != NULL)
+        if (ms_pimComposite != nullptr)
         {
             // We must lock the composite buffer before writing to it.
             rspLockBuffer();
@@ -1571,8 +1571,8 @@ extern short StopMenu(void) // Returns 0 on success.
                     ms_msgbox.m_sY,           // Dst y.
                     ms_msgbox.m_im.m_sWidth,  // Both.
                     ms_msgbox.m_im.m_sHeight, // Both.
-                    NULL,                     // Dst clip.
-                    NULL);                    // Src clip.
+                    nullptr,                     // Dst clip.
+                    nullptr);                    // Src clip.
 
             // Unlock, we're done.
             rspUnlockBuffer();
@@ -1581,7 +1581,7 @@ extern short StopMenu(void) // Returns 0 on success.
             ms_imPreMenu.DestroyData();
 
             // Clear pointer.
-            ms_pimComposite = NULL;
+            ms_pimComposite = nullptr;
         }
 
         rspKeyRepeat(false);
@@ -1595,7 +1595,7 @@ extern short StopMenu(void) // Returns 0 on success.
 // Get the Menu's background image.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern RImage *GetCurrentMenuBackground(void) // Returns a pointer to the
+extern RImage *GetCurrentMenuBackground() // Returns a pointer to the
                                               // current background image
                                               // or NULL, if none.
 {
@@ -1607,7 +1607,7 @@ extern RImage *GetCurrentMenuBackground(void) // Returns a pointer to the
 // Get the Menu's GUI.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern RGuiItem *GetCurrentMenuBox(void) // Returns a pointer to the current
+extern RGuiItem *GetCurrentMenuBox() // Returns a pointer to the current
                                          // menu GUI or NULL, if none.
 {
     return (RGuiItem *)&ms_msgbox;

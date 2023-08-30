@@ -22,9 +22,9 @@
 // contain a text buffer.  The entire reason for the buffer was to
 // enable multi-column printing, but now I have an easier way.
 
-#include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdarg>
+#include <cstring>
 
 #include "System.h"
 
@@ -124,7 +124,7 @@ char *RPrint::ScanLine(char *pszInput)
 
     // You'll have to augment this to catch the case of TAB stops!
     // (But put that into the \t interpreter!)
-    while (1)
+    while (true)
     {
         if ((*pLast == 0) || *pLast == '\r' || *pLast == '\n')
         {
@@ -225,7 +225,7 @@ char *RPrint::ScanLine(char *pszInput)
 
     // Store the final width based on the last characters full extent:
     short sExt = 0;
-    GetPropCellX(ms_szLineText[i - 1], NULL, &m_sExtX);
+    GetPropCellX(ms_szLineText[i - 1], nullptr, &m_sExtX);
     m_sExtX += ms_sCharPosX[i - 1];
 
     return pLast;
@@ -247,7 +247,7 @@ short RPrint::GetWidth(char *pszInput)
 
     // You'll have to augment this to catch the case of TAB stops!
     // (But put that into the \t interpreter!)
-    while (1)
+    while (true)
     {
         if ((*pLast == 0) || *pLast == '\r' || *pLast == '\n')
         {
@@ -493,16 +493,16 @@ char *RPrint::printInt(char *pszInput)
 {
 
 #ifdef _DEBUG
-    if ((m_pCurFontSet == NULL) || (m_sCellH == 0))
+    if ((m_pCurFontSet == nullptr) || (m_sCellH == 0))
     {
         TRACE("RPrint::print: No font installed yet.\n");
-        return NULL;
+        return nullptr;
     }
 
-    if (m_pimDst == NULL)
+    if (m_pimDst == nullptr)
     {
         TRACE("RPrint::print: No destination image specified.\n");
-        return NULL;
+        return nullptr;
     }
 #endif
 
@@ -510,7 +510,7 @@ char *RPrint::printInt(char *pszInput)
     short sRet = 0;
     if ((sRet = FrameIt()) == -1)
     {
-        return NULL; // of the bottom of the screen
+        return nullptr; // of the bottom of the screen
     }
 
     // OffsetShadow();
@@ -577,7 +577,7 @@ char *RPrint::printInt(char *pszInput)
     } while ((sStopped == FALSE) && (m_sCurY + m_sCellH <= m_rClip.sY + m_rClip.sH));
 
     if (*pTest == '\0')
-        return NULL;
+        return nullptr;
     else
         return pTest;
 }
@@ -590,7 +590,7 @@ char *RPrint::printInt(char *pszInput)
 //
 short RPrint::GetPropCellX(short sChar, short *psX, short *psE, short *psNext, short sFirst)
 {
-    RImage *pimLetter = NULL;
+    RImage *pimLetter = nullptr;
     short a = 0, b = 0, c = 0; // LKERN, true Width, RKERN
     short sSpecial = FALSE;
 
@@ -759,13 +759,13 @@ void RPrint::SetMode(Mode eMode, short sVal)
 
 short RPrint::SetCellW()
 {
-    if (m_pCurFontSet == NULL)
+    if (m_pCurFontSet == nullptr)
         return -1;
     // before effects:
     m_sCellW = short(long(m_sCellH) * m_pCurFontSet->m_sMaxWidth / m_pCurFontSet->m_sCellHeight);
     // add effects:
     // MAKE SURE THIS WORKS INSPITE OF NO LEADER!
-    GetPropEffX(0, m_sCellW, m_sCellW, NULL, NULL, &m_sCellW);
+    GetPropEffX(0, m_sCellW, m_sCellW, nullptr, nullptr, &m_sCellW);
     return 0;
 }
 
@@ -817,7 +817,7 @@ short RPrint::SetColumn(short sX, short sY, short sW, short sH)
 {
     // Clip the column to the current pimDst:
 #ifdef _DEBUG
-    if (m_pimDst == NULL)
+    if (m_pimDst == nullptr)
     {
         TRACE("RPrint::SetColumn: NULL image!\n");
         return -1;
@@ -855,7 +855,7 @@ short RPrint::SetColumn(short sX, short sY, short sW, short sH)
 
 short RPrint::SetDestination(RImage *pimDst, RRect *prColumn)
 {
-    if (pimDst == NULL)
+    if (pimDst == nullptr)
     {
         TRACE("RPrint::SetDestination: NULL image!\n");
         return -1;
@@ -870,7 +870,7 @@ short RPrint::SetDestination(RImage *pimDst, RRect *prColumn)
 
     m_pimDst = pimDst;
 
-    if (prColumn == NULL)
+    if (prColumn == nullptr)
     {
         m_rClip.sX = m_rClip.sY = 0;
         m_rClip.sW = pimDst->m_sWidth;
@@ -895,12 +895,12 @@ RPrint::RPrint()
     m_sCellH = m_sCellW = 0;
     m_sNumTabStops = m_sNumDecStops = 0;
     m_sCurX = m_sCurY = 0;
-    m_pfnCurFont = NULL;
-    m_pCurFontSet = NULL;
+    m_pfnCurFont = nullptr;
+    m_pCurFontSet = nullptr;
     m_BackgroundColor = 0;
     m_ShadowColor = 2;
     m_ForegroundColor = 1;
-    m_pimDst = NULL;
+    m_pimDst = nullptr;
     m_rClip.sX = m_rClip.sY = m_rClip.sW = m_rClip.sH = 0;
     m_sUP_W = m_sUP_H = 0;
 }
@@ -913,19 +913,19 @@ RPrint::~RPrint()
 // Must find a large enough size...
 short RPrint::SetFont(short sCellH, RFont *pFont)
 {
-    RFont::RFontSet *pFontSet = NULL;
+    RFont::RFontSet *pFontSet = nullptr;
     double dScale = 0.0;
 
-    if (pFont == NULL)
+    if (pFont == nullptr)
         pFont = m_pfnCurFont;
 
-    if (pFont == NULL)
+    if (pFont == nullptr)
     {
         TRACE("RPrint::SetFont: NULL FONT PASSED!\n");
         return -1;
     }
 
-    if ((pFontSet = pFont->FindSize(sCellH, &dScale)) == NULL)
+    if ((pFontSet = pFont->FindSize(sCellH, &dScale)) == nullptr)
     {
         TRACE("RPrint::SetFont:  Font does not have this size.\n");
         return -1;

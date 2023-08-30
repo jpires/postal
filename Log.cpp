@@ -111,7 +111,7 @@ extern short WriteTimeStamp(char *pszCaller,         // Name of calling routine
     RFile::Endian endian = RFile::LittleEndian;
 #endif
 
-    szCallerMsg = 0;
+    szCallerMsg = nullptr;
 
     // For convenience
     RFile *prfLog = &(g_GameSettings.m_rfNetSyncLog);
@@ -136,7 +136,7 @@ extern short WriteTimeStamp(char *pszCaller,         // Name of calling routine
         prfLog->Write(" Sent     ");
 
     // Write name of person who will be receiving or has sent the message
-    if (pszCalleeName != NULL)
+    if (pszCalleeName != nullptr)
         prfLog->Write(pszCalleeName);
     else
         prfLog->Write("Server");

@@ -131,7 +131,7 @@
 #define EXPLODE_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "explode.h"
 #include "dude.h"
@@ -248,7 +248,7 @@ short CExplode::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CExplode::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CExplode::Startup() // Returns 0 if successfull, non-zero otherwise
 {
 
     return 0;
@@ -257,7 +257,7 @@ short CExplode::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CExplode::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CExplode::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -265,7 +265,7 @@ short CExplode::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CExplode::Suspend(void)
+void CExplode::Suspend()
 {
     m_sSuspend++;
 }
@@ -273,7 +273,7 @@ void CExplode::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CExplode::Resume(void)
+void CExplode::Resume()
 {
     m_sSuspend--;
 
@@ -287,7 +287,7 @@ void CExplode::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CExplode::Update(void)
+void CExplode::Update()
 {
     if (!m_sSuspend)
     {
@@ -326,7 +326,7 @@ void CExplode::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CExplode::Render(void)
+void CExplode::Render()
 {
     CAlphaAnim *pAnim = (CAlphaAnim *)m_pAnimChannel->GetAtTime(m_lTimer);
 
@@ -394,14 +394,14 @@ short CExplode::Setup( // Returns 0 if successfull, non-zero otherwise
     m_smash.m_sphere.sphere.lRadius = ms_sBlastRadius;
 
     // Update the smash.
-    ASSERT(m_pRealm != NULL);
+    ASSERT(m_pRealm != nullptr);
     //	m_pRealm->m_smashatorium.Update(&m_smash);
 
     m_smash.m_bits = 0;
     m_smash.m_pThing = this;
 
     // See who we blew up and send them a message
-    CSmash *pSmashed = NULL;
+    CSmash *pSmashed = nullptr;
     GameMessage msg;
     msg.msg_Explosion.eType = typeExplosion;
     msg.msg_Explosion.sPriority = 0;
@@ -455,7 +455,7 @@ short CExplode::EditNew( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CExplode::EditModify(void)
+short CExplode::EditModify()
 {
     return 0;
 }
@@ -478,12 +478,12 @@ short CExplode::EditMove( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CExplode::EditUpdate(void) {}
+void CExplode::EditUpdate() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CExplode::EditRender(void)
+void CExplode::EditRender()
 {
     // In some cases, object's might need to do a special-case render in edit
     // mode because Startup() isn't called.  In this case it doesn't matter, so
@@ -512,7 +512,7 @@ short CExplode::GetResources(short sAnim) // Returns 0 if successfull, non-zero 
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CExplode::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CExplode::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     rspReleaseResource(&g_resmgrGame, &m_pAnimChannel);
     return 0;

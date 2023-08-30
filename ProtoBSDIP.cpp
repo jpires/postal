@@ -175,7 +175,7 @@ RSocket::BLOCK_CALLBACK RProtocolBSDIP::ms_callback;
 //////////////////////////////////////////////////////////////////////////////
 // Constructor
 //////////////////////////////////////////////////////////////////////////////
-RProtocolBSDIP::RProtocolBSDIP(void)
+RProtocolBSDIP::RProtocolBSDIP()
 {
     Init();
 }
@@ -183,7 +183,7 @@ RProtocolBSDIP::RProtocolBSDIP(void)
 //////////////////////////////////////////////////////////////////////////////
 // Destructor
 //////////////////////////////////////////////////////////////////////////////
-RProtocolBSDIP::~RProtocolBSDIP(void)
+RProtocolBSDIP::~RProtocolBSDIP()
 {
     if (m_sock != INVALID_SOCKET)
     {
@@ -196,7 +196,7 @@ RProtocolBSDIP::~RProtocolBSDIP(void)
 //////////////////////////////////////////////////////////////////////////////
 // Reset
 //////////////////////////////////////////////////////////////////////////////
-void RProtocolBSDIP::Reset(void)
+void RProtocolBSDIP::Reset()
 {
     Close();
     Init();
@@ -206,7 +206,7 @@ void RProtocolBSDIP::Reset(void)
 //////////////////////////////////////////////////////////////////////////////
 // Init
 //////////////////////////////////////////////////////////////////////////////
-void RProtocolBSDIP::Init(void)
+void RProtocolBSDIP::Init()
 {
     m_sock = INVALID_SOCKET;
     RProtocol::Init();
@@ -218,7 +218,7 @@ void RProtocolBSDIP::Init(void)
 // code, the Startup and Shutdown will have to be called after creating
 //	an RSocket and before calling Open()
 //////////////////////////////////////////////////////////////////////////////
-short RProtocolBSDIP::Startup(void)
+short RProtocolBSDIP::Startup()
 {
     short sResult = 0;
 
@@ -284,7 +284,7 @@ short RProtocolBSDIP::Startup(void)
 // code, the Startup and Shutdown will have to be called after creating
 //	an RSocket and before calling Open()
 //////////////////////////////////////////////////////////////////////////////
-void RProtocolBSDIP::Shutdown(void)
+void RProtocolBSDIP::Shutdown()
 {
 #ifdef WIN32
     if (ms_bWSASetBlockingHook)
@@ -555,7 +555,7 @@ short RProtocolBSDIP::Close(  // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Set socket to broadcast mode
 ////////////////////////////////////////////////////////////////////////////////
-short RProtocolBSDIP::Broadcast(void) // Returns 0 if successfull, non-zero otherwise
+short RProtocolBSDIP::Broadcast() // Returns 0 if successfull, non-zero otherwise
 {
 #if PLATFORM_UNIX
     return (-1); // !!! FIXME
@@ -1127,7 +1127,7 @@ short RProtocolBSDIP::ReceiveFrom( // Returns 0 on success, non-zero otherwise
 //////////////////////////////////////////////////////////////////////////////
 // Check if connection can be accepted without blocking
 //////////////////////////////////////////////////////////////////////////////
-bool RProtocolBSDIP::CanAcceptWithoutBlocking(void)
+bool RProtocolBSDIP::CanAcceptWithoutBlocking()
 {
 #if PLATFORM_UNIX
     return (false);
@@ -1175,7 +1175,7 @@ bool RProtocolBSDIP::CanAcceptWithoutBlocking(void)
 // Check if socket can send without blocking.  There is no way of knowing
 // how long this will be true, especially in a multi-threading environment
 //////////////////////////////////////////////////////////////////////////////
-bool RProtocolBSDIP::CanSendWithoutBlocking(void)
+bool RProtocolBSDIP::CanSendWithoutBlocking()
 {
 #if PLATFORM_UNIX
     return (-1); // !!! FIXME
@@ -1225,7 +1225,7 @@ bool RProtocolBSDIP::CanSendWithoutBlocking(void)
 // closed.  If it was grecefully closed, the next read will return 0 bytes read.
 // If it was aborted, the next read will return with an error.
 //////////////////////////////////////////////////////////////////////////////
-bool RProtocolBSDIP::CanReceiveWithoutBlocking(void)
+bool RProtocolBSDIP::CanReceiveWithoutBlocking()
 {
 #if PLATFORM_UNIX
     return (-1); // !!! FIXME
@@ -1275,7 +1275,7 @@ bool RProtocolBSDIP::CanReceiveWithoutBlocking(void)
 // this returns the total amount of data that can be read with a single
 // Receive() which is normally equal to the total amount of queued data.
 //////////////////////////////////////////////////////////////////////////////
-long RProtocolBSDIP::CheckReceivableBytes(void)
+long RProtocolBSDIP::CheckReceivableBytes()
 {
 #if PLATFORM_UNIX
     return (0); // !!! FIXME
@@ -1317,7 +1317,7 @@ long RProtocolBSDIP::CheckReceivableBytes(void)
 //////////////////////////////////////////////////////////////////////////////
 // check status of protocol and this socket.
 //////////////////////////////////////////////////////////////////////////////
-bool RProtocolBSDIP::IsError(void)
+bool RProtocolBSDIP::IsError()
 {
 #if PLATFORM_UNIX
     return (true); // !!! FIXME
@@ -1359,7 +1359,7 @@ void RProtocolBSDIP::SetCallback(RSocket::BLOCK_CALLBACK callback)
 //////////////////////////////////////////////////////////////////////////////
 // GetCallback
 //////////////////////////////////////////////////////////////////////////////
-RSocket::BLOCK_CALLBACK RProtocolBSDIP::GetCallback(void)
+RSocket::BLOCK_CALLBACK RProtocolBSDIP::GetCallback()
 {
     return m_callback;
 }

@@ -68,7 +68,7 @@ RList<RTask> RTask::ms_listActive; // List of tasks to be called.
 // Default constructor.
 //
 //////////////////////////////////////////////////////////////////////////////
-RTask::RTask(void)
+RTask::RTask()
 {
     Reset();
 }
@@ -90,7 +90,7 @@ RTask::RTask(TaskFunc tf, ULONG ulUser)
 // Destructor.
 //
 //////////////////////////////////////////////////////////////////////////////
-RTask::~RTask(void)
+RTask::~RTask()
 {
     Kill();
 }
@@ -112,7 +112,7 @@ RTask::~RTask(void)
 //////////////////////////////////////////////////////////////////////////////
 void RTask::Init(TaskFunc tf, ULONG ulUser)
 {
-    ASSERT(tf != NULL);
+    ASSERT(tf != nullptr);
 
     m_fnTask = tf;
     m_ulUser = ulUser;
@@ -125,7 +125,7 @@ void RTask::Init(TaskFunc tf, ULONG ulUser)
 // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RTask::Kill(void)
+short RTask::Kill()
 {
     short sRes = 0; // Assume success.
 
@@ -151,7 +151,7 @@ short RTask::Kill(void)
 // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RTask::Start(void)
+short RTask::Start()
 {
     short sRes = 0; // Assume success.
 
@@ -190,7 +190,7 @@ short RTask::Start(void)
 // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RTask::Suspend(void)
+short RTask::Suspend()
 {
     short sRes = 0; // Assume success.
 
@@ -223,15 +223,15 @@ short RTask::Suspend(void)
 // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RTask::Reset(void)
+void RTask::Reset()
 {
     // Clear instantiable members.
-    m_fnTask = NULL;
+    m_fnTask = nullptr;
     m_ulUser = 0L;
 
     m_sActive = FALSE;
 
-    m_fnTime = NULL;
+    m_fnTime = nullptr;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -247,7 +247,7 @@ void RTask::Reset(void)
 // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RTask::Do(void)
+void RTask::Do()
 {
     long lCurTime;
 
@@ -255,7 +255,7 @@ void RTask::Do(void)
     // against the current.
     PTASK ptask = ms_listActive.GetHead();
 
-    while (ptask != NULL)
+    while (ptask != nullptr)
     {
         // Get time for ptask.
         lCurTime = ptask->GetTime();
@@ -263,7 +263,7 @@ void RTask::Do(void)
         // If time has expired  . . .
         if (lCurTime >= ptask->m_lNextExpiration)
         {
-            ASSERT(ptask->m_fnTask != NULL);
+            ASSERT(ptask->m_fnTask != nullptr);
 
             // Call task.
             (*(ptask->m_fnTask))(ptask->m_ulUser);

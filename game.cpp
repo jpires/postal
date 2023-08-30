@@ -553,7 +553,7 @@
 
 #include "RSPiX.h"
 
-#include <time.h>
+#include <ctime>
 #ifdef WIN32
 #include <direct.h>
 #else
@@ -761,7 +761,7 @@ static short ms_sForegroundCursorShowLevel = INVALID_CURSOR_SHOW_LEVEL;
 
 // Used by random number stuff
 static long m_lRandom = 1;
-static RFile *m_pfileRandom = 0;
+static RFile *m_pfileRandom = nullptr;
 
 // Used by if-logging schtuff.
 static long ms_lSynchLogSeq = 0;
@@ -779,38 +779,38 @@ static SampleMaster::SoundInstance ms_siMusak = 0;
 // Function prototypes
 ////////////////////////////////////////////////////////////////////////////////
 
-static short GameCore(void); // Returns 0 on success.
+static short GameCore(); // Returns 0 on success.
 
-static void ResetDemoTimer(void);
+static void ResetDemoTimer();
 
-static short OpenSaks(void); // Returns 0 on success.
+static short OpenSaks(); // Returns 0 on success.
 
-static void CloseSaks(void);
+static void CloseSaks();
 
-static short LoadAssets(void);
+static short LoadAssets();
 
-static short UnloadAssets(void);
+static short UnloadAssets();
 
-static void GameSetRegistry(void);
+static void GameSetRegistry();
 
-static void GameGetRegistry(void);
+static void GameGetRegistry();
 
-static void GameEndingSequence(void);
+static void GameEndingSequence();
 
 static short GetRealmToRecord(char *pszRealmFile, short sMaxFileLen);
 
 static short GetDemoFile(char *pszDemoFile, short sMaxFileLen);
 
 // Callback gets called when OS is about to switch app into the background
-static void BackgroundCall(void);
+static void BackgroundCall();
 
 // Callback gets called when OS is about to switch app into the foreground
-static void ForegroundCall(void);
+static void ForegroundCall();
 
 // Returns difficulty for games.
 // Note that this function is only valid once after a difficulty adjustment
 // and then it goes back to the default (g_GameSettings value).
-static short GetGameDifficulty(void); // Returns cached game difficulty.
+static short GetGameDifficulty(); // Returns cached game difficulty.
 
 // Opens the synchronization log with the specified access flags if in a
 // TRACENASSERT mode and synchronization logging is enabled.
@@ -820,7 +820,7 @@ static void OpenSynchLogs( // Returns nothing.
   bool bWriteLogs);        // In:  true to create log, false to compare.
 
 // Closes the synchronization logs, if open.
-static void CloseSynchLogs(void); // Returns nothing.
+static void CloseSynchLogs(); // Returns nothing.
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -925,7 +925,7 @@ static void EnumExistingSaveGames(Menu *menu)
         if (menu->ami[i].sEnabled)
         {
             struct tm *tm;
-            if ((tm = localtime(&statbuf.st_mtime)) == NULL)
+            if ((tm = localtime(&statbuf.st_mtime)) == nullptr)
                 str = "unknown";
             else
             {
@@ -950,7 +950,7 @@ static void EnumExistingSaveGames(Menu *menu)
 // this function is called.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void TheGame(void)
+extern void TheGame()
 {
     short sResult = 0;
 
@@ -1302,8 +1302,8 @@ extern void TheGame(void)
     }
 
     // Remove the callbacks
-    rspSetBackgroundCallback(NULL);
-    rspSetForegroundCallback(NULL);
+    rspSetBackgroundCallback(nullptr);
+    rspSetForegroundCallback(nullptr);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1311,7 +1311,7 @@ extern void TheGame(void)
 // Do the core game stuff (display menu, play a game, run the demo, etc.)
 //
 ////////////////////////////////////////////////////////////////////////////////
-static short GameCore(void) // Returns 0 on success.
+static short GameCore() // Returns 0 on success.
 {
     short sResult = 0;
     USHORT usDemoCount = 0;
@@ -1388,7 +1388,7 @@ static short GameCore(void) // Returns 0 on success.
     bool bMenuActive = false;
     ACTION actionNext = ACTION_NOTHING; // Initialized for safety.
 
-    Menu *pmenuStart = NULL; // Next menu to start if not NULL.
+    Menu *pmenuStart = nullptr; // Next menu to start if not NULL.
     bool bPalTran = true;    // true to PalTranOn() before next
                              // menu.
     bool bTitleImage = true; // true to display title image before
@@ -1438,7 +1438,7 @@ static short GameCore(void) // Returns 0 on success.
             {
                 bMenuActive = true;
                 // Restore defaults.
-                pmenuStart = NULL;
+                pmenuStart = nullptr;
                 bPalTran = true;
                 bTitleImage = true;
                 bTitleMusak = true;
@@ -1500,8 +1500,8 @@ static short GameCore(void) // Returns 0 on success.
                     // if the player has won the game
                     g_bLastLevelDemo = false;
 
-                    Play(NULL,                // No client (not network game)
-                         NULL,                // No server (not network game)
+                    Play(nullptr,                // No client (not network game)
+                         nullptr,                // No server (not network game)
                          INPUT_MODE_LIVE,     // Input mode
                          m_sRealmNum,         // Realm number OR -1 to use realm file
                          m_szRealmFile,       // Realm file
@@ -1515,7 +1515,7 @@ static short GameCore(void) // Returns 0 on success.
                          0,                   // Use cooperative levels (MP only)
                          0,                   // Use cooperative mode (MP only)
                          0,                   // Frame time (MP only)
-                         NULL);               // Demo mode file
+                         nullptr);               // Demo mode file
 
 #ifdef MOBILE
                     AndroidSetScreenMode(TOUCH_SCREEN_MENU);
@@ -1559,7 +1559,7 @@ static short GameCore(void) // Returns 0 on success.
                         // Use the net game dialog to join a multiplayer game
                         CNetClient *pnetclient = new CNetClient;
                         NetMsg msg;
-                        if (DoNetGameDialog(pnetclient, bBrowse, NULL, &msg) == 0)
+                        if (DoNetGameDialog(pnetclient, bBrowse, nullptr, &msg) == 0)
                         {
                             // If the game was actually started...
                             if (msg.msg.nothing.ucType == NetMsg::START_GAME)
@@ -1567,7 +1567,7 @@ static short GameCore(void) // Returns 0 on success.
                                 PalTranOff();
                                 // Go back to the main menu when done and do
                                 // all the deluxe stuff.
-                                pmenuStart = NULL;
+                                pmenuStart = nullptr;
                                 bPalTran = true;
                                 bTitleImage = true;
                                 bTitleMusak = true;
@@ -1578,7 +1578,7 @@ static short GameCore(void) // Returns 0 on success.
                                 OpenSynchLogs(true);
 
                                 Play(pnetclient,                    // Client
-                                     NULL,                          // No server (not hosting game)
+                                     nullptr,                          // No server (not hosting game)
                                      INPUT_MODE_LIVE,               // Input mode
                                      msg.msg.startGame.sRealmNum,   // Realm number OR -1 to use realm file
                                      msg.msg.startGame.acRealmFile, // Realm file
@@ -1593,7 +1593,7 @@ static short GameCore(void) // Returns 0 on success.
                                      msg.msg.startGame.sCoopLevels, // Cooperative or Deathmatch levels (MP only)
                                      msg.msg.startGame.sCoopMode,   // Cooperative or Deathmatch mode (MP only)
                                      msg.msg.startGame.sFrameTime,  // Frame time (MP only)
-                                     NULL);                         // Demo mode file
+                                     nullptr);                         // Demo mode file
 
 #ifdef MOBILE
                                 AndroidSetScreenMode(TOUCH_SCREEN_MENU);
@@ -1652,7 +1652,7 @@ static short GameCore(void) // Returns 0 on success.
                                 PalTranOff();
                                 // Go back to the main menu when done and do
                                 // all the deluxe stuff.
-                                pmenuStart = NULL;
+                                pmenuStart = nullptr;
                                 bPalTran = true;
                                 bTitleImage = true;
                                 bTitleMusak = true;
@@ -1678,7 +1678,7 @@ static short GameCore(void) // Returns 0 on success.
                                      msg.msg.startGame.sCoopLevels, // Cooperative or Deathmatch levels (MP only)
                                      msg.msg.startGame.sCoopMode,   // Cooperative or Deathmatch mode (MP only)
                                      msg.msg.startGame.sFrameTime,  // Frame time (MP only)
-                                     NULL);                         // Demo mode file
+                                     nullptr);                         // Demo mode file
 
 #ifdef MOBILE
                                 AndroidSetScreenMode(TOUCH_SCREEN_MENU);
@@ -1723,8 +1723,8 @@ static short GameCore(void) // Returns 0 on success.
                     // Note that m_sRealmNum, m_szRealmFile, and m_bJustOneRealm are
                     // set via the callback, Game_StartChallengeGame().
                     // ***ADD FLAG(S) TO THIS CALL INDICATING THIS IS A CHALLENGE GAME***
-                    Play(NULL,                // No client (not network game)
-                         NULL,                // No server (not network game)
+                    Play(nullptr,                // No client (not network game)
+                         nullptr,                // No server (not network game)
                          INPUT_MODE_LIVE,     // Input mode
                          m_sRealmNum,         // Realm number OR -1 to use realm file
                          m_szRealmFile,       // Realm file
@@ -1738,7 +1738,7 @@ static short GameCore(void) // Returns 0 on success.
                          0,                   // Cooperative (MP only)
                          0,                   // Use cooperative mode (MP only)
                          0,                   // Frame time (MP only)
-                         NULL);               // Demo mode file
+                         nullptr);               // Demo mode file
 
 #ifdef MOBILE
                     AndroidSetScreenMode(TOUCH_SCREEN_MENU);
@@ -1765,8 +1765,8 @@ static short GameCore(void) // Returns 0 on success.
                     // Note that m_sRealmNum, m_szRealmFile, and m_bJustOneRealm are
                     // set via the callback, Game_StartChallengeGame().
                     // ***ADD FLAG(S) TO THIS CALL INDICATING THIS IS A CHALLENGE GAME***
-                    Play(NULL,                // No client (not network game)
-                         NULL,                // No server (not network game)
+                    Play(nullptr,                // No client (not network game)
+                         nullptr,                // No server (not network game)
                          INPUT_MODE_LIVE,     // Input mode
                          m_sRealmNum,         // Realm number OR -1 to use realm file
                          m_szRealmFile,       // Realm file
@@ -1780,7 +1780,7 @@ static short GameCore(void) // Returns 0 on success.
                          0,                   // Cooperative (MP only)
                          0,                   // Use cooperative mode (MP only)
                          0,                   // Frame time (MP only)
-                         NULL);               // Demo mode file
+                         nullptr);               // Demo mode file
 #ifdef MOBILE
                     AndroidSetScreenMode(TOUCH_SCREEN_MENU);
 #endif
@@ -1797,7 +1797,7 @@ static short GameCore(void) // Returns 0 on success.
 
                     // If demo debug movie file is specified in prefs, open it now.  The RFile*
                     // is does double-duty as a flag, where non-zero means movie mode is enabled.
-                    RFile *pfileDemoDebugMovie = 0;
+                    RFile *pfileDemoDebugMovie = nullptr;
 #if 0
 					if (strlen(g_GameSettings.m_szDemoDebugMovie) > 0)
 						{
@@ -1853,8 +1853,8 @@ static short GameCore(void) // Returns 0 on success.
                                         PalTranOff();
                                         bMenuActive = false;
 
-                                        Play(NULL,                 // No client (not network game)
-                                             NULL,                 // No server (not network game)
+                                        Play(nullptr,                 // No client (not network game)
+                                             nullptr,                 // No server (not network game)
                                              INPUT_MODE_PLAYBACK,  // Input mode
                                              -1,                   // Always use specific realm file
                                              szRealmFile,          // Realm file to be played
@@ -1939,7 +1939,7 @@ static short GameCore(void) // Returns 0 on success.
 
                     // If demo debug movie file is specified in prefs, open it now.  The RFile*
                     // is does double-duty as a flag, where non-zero means movie mode is enabled.
-                    RFile *pfileDemoDebugMovie = 0;
+                    RFile *pfileDemoDebugMovie = nullptr;
 #if 0
 					if (strlen(g_GameSettings.m_szDemoDebugMovie) > 0)
 						{
@@ -1991,8 +1991,8 @@ static short GameCore(void) // Returns 0 on success.
                                     PalTranOff();
                                     bMenuActive = false;
 
-                                    Play(NULL,                 // No client (not network game)
-                                         NULL,                 // No server (not network game)
+                                    Play(nullptr,                 // No client (not network game)
+                                         nullptr,                 // No server (not network game)
                                          INPUT_MODE_RECORD,    // Input mode
                                          -1,                   // Always use specific realm file
                                          szRealmFile,          // Realm file to be played
@@ -2203,7 +2203,7 @@ static short GameCore(void) // Returns 0 on success.
 // Reset temo timer
 //
 ////////////////////////////////////////////////////////////////////////////////
-static void ResetDemoTimer(void)
+static void ResetDemoTimer()
 {
     // Reset base time
     m_lDemoBaseTime = rspGetMilliseconds();
@@ -2408,7 +2408,7 @@ inline void GetSoundPaths( // Returns nothing.
 // Open SAKs or set equivalent base paths.
 //
 ////////////////////////////////////////////////////////////////////////////////
-static short OpenSaks(void)
+static short OpenSaks()
 {
     short sResult = 0; // Assume success.
 
@@ -2445,16 +2445,16 @@ static short OpenSaks(void)
                               // returned here, if not NULL.
           &lDevBitsPerSample, // Bits per sample of device,
                               // returned here, if not NULL.
-          NULL,               // Number of channels (1 == mono,
+          nullptr,               // Number of channels (1 == mono,
                               // 2 == stereo) returned here,
                               // if not NULL.
-          NULL,               // Amount of time in ms to lead the
+          nullptr,               // Amount of time in ms to lead the
                               // current play cursor returned here,
                               // if not NULL.  This could also be
                               // described as the maximum amount of
                               // time in ms that can occur between
                               // calls to rspDoSound.
-          NULL,               // Maximum buffer time.  This is the amt
+          nullptr,               // Maximum buffer time.  This is the amt
                               // that *plBufferTime can be increased to.
                               // This is indicative of how much space
                               // was/will-be allocated for the sound
@@ -2610,7 +2610,7 @@ static short OpenSaks(void)
 // Close SAKs and/or Purge() them.
 //
 ////////////////////////////////////////////////////////////////////////////////
-static void CloseSaks(void)
+static void CloseSaks()
 {
     g_resmgrShell.Purge();
     g_resmgrShell.CloseSak();
@@ -2639,7 +2639,7 @@ static void CloseSaks(void)
 // the app.
 //
 ////////////////////////////////////////////////////////////////////////////////
-static short LoadAssets(void)
+static short LoadAssets()
 {
     // Load font.
     if (g_fontBig.Load(FullPath(GAME_PATH_VD, BIG_FONT_FILE)) != 0)
@@ -2685,7 +2685,7 @@ static short LoadAssets(void)
 // Unload game data that was loaded by GameLoadAssets().
 //
 ////////////////////////////////////////////////////////////////////////////////
-static short UnloadAssets(void)
+static short UnloadAssets()
 {
     return 0;
 }
@@ -2875,7 +2875,7 @@ extern void Game_HostMultiPlayerGame(short sMenuItem)
 ////////////////////////////////////////////////////////////////////////////////
 extern void Game_StartDemoGame(short sMenuItem)
 {
-    char *pszDemoFile = NULL;
+    char *pszDemoFile = nullptr;
     char szLevelDir[RSP_MAX_PATH] = "";
     char szTitle[256] = "";
 
@@ -2929,7 +2929,7 @@ extern void Game_StartDemoGame(short sMenuItem)
 // Callback for the "Buy" option on the Main Menu
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void Game_Buy(void)
+extern void Game_Buy()
 {
     rspMsgBox(RSP_MB_ICN_INFO | RSP_MB_BUT_OK, APP_NAME, g_pszBuy);
 
@@ -2947,7 +2947,7 @@ extern void Game_Buy(void)
 // Callback for the "Editor" option on the Main Menu
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void Game_StartEditor(void)
+extern void Game_StartEditor()
 {
 #if defined(EDITOR_DISABLED)
     rspMsgBox(RSP_MB_ICN_INFO | RSP_MB_BUT_OK, APP_NAME, g_pszEditorDisabled);
@@ -3028,7 +3028,7 @@ extern void Game_AudioOptionsChoice( // Returns nothing.
 extern void Game_StartChallengeGame( // Returns nothing.
   short sMenuItem)                   // In:  Chosen menu item.
 {
-    char *pszRealmFile = NULL;
+    char *pszRealmFile = nullptr;
     char szLevelDir[RSP_MAX_PATH] = "";
     char szTitle[256] = "";
 
@@ -3260,7 +3260,7 @@ extern short Game_LoadPlayersGame(char *pszSaveName,   // In:  Name of the saved
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-void GameEndingSequence(void)
+void GameEndingSequence()
 {
     // Prepare all settings for demo mode
     CSettings::PreDemo();
@@ -3269,15 +3269,15 @@ void GameEndingSequence(void)
 
     // If demo debug movie file is specified in prefs, open it now.  The RFile*
     // is does double-duty as a flag, where non-zero means movie mode is enabled.
-    RFile *pfileDemoDebugMovie = 0;
-    m_pfileRandom = 0;
+    RFile *pfileDemoDebugMovie = nullptr;
+    m_pfileRandom = nullptr;
     if (strlen(g_GameSettings.m_szDemoDebugMovie) > 0)
     {
         m_pfileRandom = new RFile;
         if (m_pfileRandom->Open(g_GameSettings.m_szDemoDebugMovie, "rb", RFile::LittleEndian) != 0)
         {
             delete m_pfileRandom;
-            m_pfileRandom = 0;
+            m_pfileRandom = nullptr;
         }
     }
 
@@ -3305,8 +3305,8 @@ void GameEndingSequence(void)
                     //					PalTranOff();
                     //					bMenuActive = false;
 
-                    Play(NULL,                 // No client (not network game)
-                         NULL,                 // No server (not network game)
+                    Play(nullptr,                 // No client (not network game)
+                         nullptr,                 // No server (not network game)
                          INPUT_MODE_PLAYBACK,  // Input mode
                          -1,                   // Always use specific realm file
                          szRealmFile,          // Realm file to be played
@@ -3354,7 +3354,7 @@ void GameEndingSequence(void)
         if (m_pfileRandom->IsOpen())
             m_pfileRandom->Close();
         delete m_pfileRandom;
-        m_pfileRandom = 0;
+        m_pfileRandom = nullptr;
     }
 
 #endif // VIOLENT_LOCALE
@@ -3411,14 +3411,14 @@ static char *GetFileNameFromPath( // Returns file name.
 static void OpenSynchLogs( // Returns nothing.
   bool bWriteLogs)         // In:  true to create log, false to compare.
 {
-    m_pfileRandom = 0;
+    m_pfileRandom = nullptr;
     if (strlen(g_GameSettings.m_szDemoDebugMovie) > 0)
     {
         m_pfileRandom = new RFile;
         if (m_pfileRandom->Open(g_GameSettings.m_szDemoDebugMovie, bWriteLogs ? "wb" : "rb", RFile::LittleEndian) != 0)
         {
             delete m_pfileRandom;
-            m_pfileRandom = 0;
+            m_pfileRandom = nullptr;
         }
     }
 
@@ -3443,7 +3443,7 @@ static void OpenSynchLogs( // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 // Closes the synchronization logs, if open.
 ////////////////////////////////////////////////////////////////////////////////
-static void CloseSynchLogs(void) // Returns nothing.
+static void CloseSynchLogs() // Returns nothing.
 {
     if (m_pfileRandom)
     {
@@ -3451,7 +3451,7 @@ static void CloseSynchLogs(void) // Returns nothing.
         if (m_pfileRandom->IsOpen())
             m_pfileRandom->Close();
         delete m_pfileRandom;
-        m_pfileRandom = 0;
+        m_pfileRandom = nullptr;
     }
 
 #if defined(_DEBUG) || defined(TRACENASSERT)
@@ -3560,7 +3560,7 @@ extern int SynchLog( // Result of expr.
 // GameGetRegistry
 ////////////////////////////////////////////////////////////////////////////////
 
-static void GameGetRegistry(void)
+static void GameGetRegistry()
 {
 #ifdef CHECK_EXPIRATION_DATE
     char szTime[40];
@@ -3780,7 +3780,7 @@ static void GameGetRegistry(void)
 // GameSetRegistry
 ////////////////////////////////////////////////////////////////////////////////
 
-static void GameSetRegistry(void)
+static void GameSetRegistry()
 {
 #ifdef CHECK_EXPIRATION_DATE
     char szTimeEncrypt[40];
@@ -4039,7 +4039,7 @@ extern void PalTranOn(long lTime /* = -1 */) // In:  How long transition should 
 // Undo the palette transition to restore the original background colors.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void PalTranOff(void)
+extern void PalTranOff()
 {
     // Do until done
     while (DoPostMenuTrans() == false)
@@ -4155,7 +4155,7 @@ extern void SetBrightnessContrast(double dBrightness, // -1.0 = dim, 0.0 = norma
 // Get gamma/brighten-effect value from palette map (not from settings).
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern short GetGammaLevel(void) // Returns current brighten value.
+extern short GetGammaLevel() // Returns current brighten value.
 {
     return g_GameSettings.m_sGammaVal;
 }
@@ -4428,7 +4428,7 @@ short CorrectifyBasePath( // Returns 0 if successfull, non-zero otherwise
             // on the PC version.
             // char* pszOrigDir = getcwd(NULL, RSP_MAX_PATH);
             char *pszOrigDir = (char *)malloc(RSP_MAX_PATH);
-            if (pszOrigDir != NULL)
+            if (pszOrigDir != nullptr)
             {
                 // Let's go ahead and get the current working directory here, once we're sure that
                 // the string to store it has been properly allocated.
@@ -4438,7 +4438,7 @@ short CorrectifyBasePath( // Returns 0 if successfull, non-zero otherwise
                 if (chdir(pszBasePath) == 0)
                 {
                     // Get directory, which is always returned as absolute
-                    if (getcwd(pszBasePath, sMaxPathLen) == NULL)
+                    if (getcwd(pszBasePath, sMaxPathLen) == nullptr)
                     {
                         sResult = -1;
                         TRACE("CorrectifyBasePath(): Couldn't get current directory (was set to '%s')!\n", pszBasePath);
@@ -4459,7 +4459,7 @@ short CorrectifyBasePath( // Returns 0 if successfull, non-zero otherwise
 
                 // Free buffer that was allocated by getcwd()
                 free(pszOrigDir);
-                pszOrigDir = 0;
+                pszOrigDir = nullptr;
             }
 
             //------------------------------------------------------------------------------
@@ -4510,7 +4510,7 @@ short CorrectifyBasePath( // Returns 0 if successfull, non-zero otherwise
 // Notification that we are about to be in the background.
 //
 ////////////////////////////////////////////////////////////////////////////////
-static void BackgroundCall(void)
+static void BackgroundCall()
 {
     // TRACE("Background\n");
 
@@ -4531,7 +4531,7 @@ static void BackgroundCall(void)
 // Notification that we are about to be in the foreground.
 //
 ////////////////////////////////////////////////////////////////////////////////
-static void ForegroundCall(void)
+static void ForegroundCall()
 {
     // TRACE("Foreground\n");
 
@@ -4563,7 +4563,7 @@ static void ForegroundCall(void)
 // Note that this function is only valid once after a difficulty adjustment
 // and then it goes back to the default (g_GameSettings value).
 ////////////////////////////////////////////////////////////////////////////////
-static short GetGameDifficulty(void) // Returns cached game difficulty.
+static short GetGameDifficulty() // Returns cached game difficulty.
 {
     short sDifficulty = g_GameSettings.m_sDifficulty;
 

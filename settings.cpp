@@ -82,7 +82,7 @@ void *CSettings::ms_pMem;
 // Default (and only) constructor
 //
 ////////////////////////////////////////////////////////////////////////////////
-CSettings::CSettings(void)
+CSettings::CSettings()
 {
     // If the container itself doesn't exist yet, create it now.  This sucks
     // because we can't inform the caller if an error occurs.  However, there
@@ -91,9 +91,9 @@ CSettings::CSettings(void)
     // which would be initialized first -- the container or an object that wants
     // to use it.  This way, the first object that tries to use the container
     // will create the container, so that problem goes away.
-    if (ms_pSettings == 0)
+    if (ms_pSettings == nullptr)
         ms_pSettings = new SETTINGS;
-    if (ms_pSettings != 0)
+    if (ms_pSettings != nullptr)
     {
 
         // Add this object to container
@@ -111,24 +111,24 @@ CSettings::CSettings(void)
 CSettings::~CSettings()
 {
     // Make sure container exists
-    if (ms_pSettings != 0)
+    if (ms_pSettings != nullptr)
     {
 
         // Remove this object from container
         ms_pSettings->Remove(m_pointer);
 
         // If there are no more objects, then delete the container itself
-        if (ms_pSettings->GetHead() == 0)
+        if (ms_pSettings->GetHead() == nullptr)
         {
             delete ms_pSettings;
-            ms_pSettings = 0;
+            ms_pSettings = nullptr;
         }
 
         // Make sure to delete memory if it wasn't already deleted
         if (ms_pMem)
         {
             free(ms_pMem);
-            ms_pMem = 0;
+            ms_pMem = nullptr;
         }
     }
 }
@@ -144,7 +144,7 @@ short CSettings::LoadPrefs( // Returns 0 if successfull, non-zero otherwise
     short sResult = 0;
 
     // Make sure container exists
-    if (ms_pSettings != 0)
+    if (ms_pSettings != nullptr)
     {
 
         // Open file for read access (text mode is default)
@@ -154,7 +154,7 @@ short CSettings::LoadPrefs( // Returns 0 if successfull, non-zero otherwise
         {
 
             // Do this for all CSettings objects
-            for (SETTINGS::Pointer i = ms_pSettings->GetHead(); i != 0; i = ms_pSettings->GetNext(i))
+            for (SETTINGS::Pointer i = ms_pSettings->GetHead(); i != nullptr; i = ms_pSettings->GetNext(i))
             {
                 sResult = ms_pSettings->GetData(i)->LoadPrefs(&prefs);
                 if (sResult)
@@ -201,7 +201,7 @@ short CSettings::SavePrefs( // Returns 0 if successfull, non-zero otherwise
     short sResult = 0;
 
     // Make sure container exists
-    if (ms_pSettings != 0)
+    if (ms_pSettings != nullptr)
     {
 
         // First open file for read-only access.  If this works, then at least
@@ -219,7 +219,7 @@ short CSettings::SavePrefs( // Returns 0 if successfull, non-zero otherwise
             {
 
                 // Do this for all CSettings objects
-                for (SETTINGS::Pointer i = ms_pSettings->GetHead(); i != 0; i = ms_pSettings->GetNext(i))
+                for (SETTINGS::Pointer i = ms_pSettings->GetHead(); i != nullptr; i = ms_pSettings->GetNext(i))
                 {
                     sResult = ms_pSettings->GetData(i)->SavePrefs(&prefs);
                     if (sResult)
@@ -267,7 +267,7 @@ short CSettings::LoadGame( // Returns 0 if successfull, non-zero otherwise
     short sResult = 0;
 
     // Make sure container exists
-    if (ms_pSettings != 0)
+    if (ms_pSettings != nullptr)
     {
 
         // Open file for read access in binary mode
@@ -277,7 +277,7 @@ short CSettings::LoadGame( // Returns 0 if successfull, non-zero otherwise
         {
 
             // Do this for all CSettings objects
-            for (SETTINGS::Pointer i = ms_pSettings->GetHead(); i != 0; i = ms_pSettings->GetNext(i))
+            for (SETTINGS::Pointer i = ms_pSettings->GetHead(); i != nullptr; i = ms_pSettings->GetNext(i))
             {
                 sResult = ms_pSettings->GetData(i)->LoadGame(&fileGame);
                 if (sResult)
@@ -319,7 +319,7 @@ short CSettings::SaveGame( // Returns 0 if successfull, non-zero otherwise
     short sResult = 0;
 
     // Make sure container exists
-    if (ms_pSettings != 0)
+    if (ms_pSettings != nullptr)
     {
 
         // Open file for write access in binary mode
@@ -330,7 +330,7 @@ short CSettings::SaveGame( // Returns 0 if successfull, non-zero otherwise
         {
 
             // Do this for all CSettings objects
-            for (SETTINGS::Pointer i = ms_pSettings->GetHead(); i != 0; i = ms_pSettings->GetNext(i))
+            for (SETTINGS::Pointer i = ms_pSettings->GetHead(); i != nullptr; i = ms_pSettings->GetNext(i))
             {
                 sResult = ms_pSettings->GetData(i)->SaveGame(&fileGame);
                 if (sResult)
@@ -367,17 +367,17 @@ short CSettings::SaveGame( // Returns 0 if successfull, non-zero otherwise
 //
 ////////////////////////////////////////////////////////////////////////////////
 short CSettings::PreDemo( // Returns 0 if successfull, non-zero otherwise
-  void)
+  )
 {
     short sResult = 0;
 
     // Make sure container exists
-    if (ms_pSettings != 0)
+    if (ms_pSettings != nullptr)
     {
 
         // Allocate a chunk of memory for settings to be saved to
         ms_pMem = malloc(CSettings::MemFileSize);
-        if (ms_pMem != 0)
+        if (ms_pMem != nullptr)
         {
 
             // Open memory file
@@ -387,7 +387,7 @@ short CSettings::PreDemo( // Returns 0 if successfull, non-zero otherwise
             {
 
                 // Do this for all CSettings objects
-                for (SETTINGS::Pointer i = ms_pSettings->GetHead(); i != 0; i = ms_pSettings->GetNext(i))
+                for (SETTINGS::Pointer i = ms_pSettings->GetHead(); i != nullptr; i = ms_pSettings->GetNext(i))
                 {
                     sResult = ms_pSettings->GetData(i)->PreDemo(&fileMem);
                     if (sResult)
@@ -430,16 +430,16 @@ short CSettings::PreDemo( // Returns 0 if successfull, non-zero otherwise
 //
 ////////////////////////////////////////////////////////////////////////////////
 short CSettings::PostDemo( // Returns 0 if successfull, non-zero otherwise
-  void)
+  )
 {
     short sResult = 0;
 
     // Make sure container exists
-    if (ms_pSettings != 0)
+    if (ms_pSettings != nullptr)
     {
 
         // Make sure memory was allocated by PreDemo()
-        if (ms_pMem != 0)
+        if (ms_pMem != nullptr)
         {
 
             // Open previously allocated memory file
@@ -449,7 +449,7 @@ short CSettings::PostDemo( // Returns 0 if successfull, non-zero otherwise
             {
 
                 // Do this for all CSettings objects
-                for (SETTINGS::Pointer i = ms_pSettings->GetHead(); i != 0; i = ms_pSettings->GetNext(i))
+                for (SETTINGS::Pointer i = ms_pSettings->GetHead(); i != nullptr; i = ms_pSettings->GetNext(i))
                 {
                     sResult = ms_pSettings->GetData(i)->PostDemo(&fileMem);
                     if (sResult)
@@ -473,7 +473,7 @@ short CSettings::PostDemo( // Returns 0 if successfull, non-zero otherwise
 
             // Free memory
             free(ms_pMem);
-            ms_pMem = 0;
+            ms_pMem = nullptr;
         }
         else
         {

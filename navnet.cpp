@@ -140,7 +140,7 @@
 #define NAVIGATIONNET_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "navnet.h"
 #include "bouy.h"
@@ -265,7 +265,7 @@ short CNavigationNet::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CNavigationNet::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CNavigationNet::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     short sReturn = 0;
     // At this point we can assume the CHood was loaded, so we init our height
@@ -288,7 +288,7 @@ short CNavigationNet::Startup(void) // Returns 0 if successfull, non-zero otherw
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CNavigationNet::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CNavigationNet::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -296,7 +296,7 @@ short CNavigationNet::Shutdown(void) // Returns 0 if successfull, non-zero other
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CNavigationNet::Suspend(void)
+void CNavigationNet::Suspend()
 {
     m_sSuspend++;
 }
@@ -304,7 +304,7 @@ void CNavigationNet::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CNavigationNet::Resume(void)
+void CNavigationNet::Resume()
 {
     m_sSuspend--;
 
@@ -316,26 +316,26 @@ void CNavigationNet::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CNavigationNet::Update(void) {}
+void CNavigationNet::Update() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CNavigationNet::Render(void) {}
+void CNavigationNet::Render() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor after load to set up the nav net list box in the editor
 // similar to EditNew but without the positioning.
 ////////////////////////////////////////////////////////////////////////////////
 
-short CNavigationNet::EditPostLoad(void)
+short CNavigationNet::EditPostLoad()
 {
     short sResult = 0;
 
     CListNode<CThing> *pEditorList = m_pRealm->m_aclassHeads[CThing::CGameEditThingID].m_pnNext;
     CGameEditThing *peditor = (CGameEditThing *)pEditorList->m_powner;
     RListBox *plb = peditor->m_plbNavNetList;
-    if (plb != NULL)
+    if (plb != nullptr)
     {
         RGuiItem *pgui = plb->AddString((char *)m_rstrNetName);
         pgui->m_lId = GetInstanceID();
@@ -376,7 +376,7 @@ short CNavigationNet::EditNew( // Returns 0 if successfull, non-zero otherwise
         CListNode<CThing> *pEditorList = m_pRealm->m_aclassHeads[CThing::CGameEditThingID].m_pnNext;
         CGameEditThing *peditor = (CGameEditThing *)pEditorList->m_powner;
         RListBox *plb = peditor->m_plbNavNetList;
-        if (plb != NULL)
+        if (plb != nullptr)
         {
             RGuiItem *pgui = plb->AddString((char *)m_rstrNetName);
             pgui->m_lId = GetInstanceID();
@@ -399,7 +399,7 @@ inline void SetText(  // Returns nothing.
   char *str)          // In:  Value to set text to.
 {
     RGuiItem *pgui = pguiRoot->GetItemFromId(lId);
-    if (pgui != NULL)
+    if (pgui != nullptr)
     {
         pgui->SetText(str);
         pgui->Compose();
@@ -410,7 +410,7 @@ inline void SetText(  // Returns nothing.
 // Edit Modify
 ////////////////////////////////////////////////////////////////////////////////
 
-short CNavigationNet::EditModify(void)
+short CNavigationNet::EditModify()
 {
     short sResult = 0;
     RGuiItem *pGui = RGuiItem::LoadInstantiate(FullPathVD("res/editor/network.gui"));
@@ -474,12 +474,12 @@ short CNavigationNet::EditMove( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CNavigationNet::EditUpdate(void) {}
+void CNavigationNet::EditUpdate() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CNavigationNet::EditRender(void)
+void CNavigationNet::EditRender()
 {
     // No special flags
     m_sprite.m_sInFlags = 0;
@@ -514,7 +514,7 @@ void CNavigationNet::EditRect(RRect *pRect)
     pRect->sW = 10; // Safety.
     pRect->sH = 10; // Safety.
 
-    if (m_pImage != NULL)
+    if (m_pImage != nullptr)
     {
         pRect->sW = m_pImage->m_sWidth;
         pRect->sH = m_pImage->m_sHeight;
@@ -541,11 +541,11 @@ void CNavigationNet::EditHotSpot( // Returns nothiing.
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CNavigationNet::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CNavigationNet::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
-    if (m_pImage == 0)
+    if (m_pImage == nullptr)
     {
         sResult = rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(IMAGE_FILE), &m_pImage);
         if (sResult == 0)
@@ -566,11 +566,11 @@ short CNavigationNet::GetResources(void) // Returns 0 if successfull, non-zero o
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CNavigationNet::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CNavigationNet::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
-    if (m_pImage != 0)
+    if (m_pImage != nullptr)
     {
         rspReleaseResource(&g_resmgrGame, &m_pImage);
     }
@@ -614,7 +614,7 @@ void CNavigationNet::RemoveBouy(UCHAR ucBouyID)
 
 CBouy *CNavigationNet::GetBouy(UCHAR ucBouyID)
 {
-    CBouy *pBouy = NULL;
+    CBouy *pBouy = nullptr;
     nodeMap::iterator i;
 
     i = m_NodeMap.find(ucBouyID);
@@ -639,8 +639,8 @@ UCHAR CNavigationNet::FindNearestBouy(short sX, short sZ)
     double dX;
     double dZ;
     CBouy *pBouy;
-    TreeListNode *pRoot = NULL;
-    TreeListNode *pCurrent = NULL;
+    TreeListNode *pRoot = nullptr;
+    TreeListNode *pCurrent = nullptr;
     UCHAR ucNode = 0;
 
     // Build the sorted list of bouys
@@ -652,7 +652,7 @@ UCHAR CNavigationNet::FindNearestBouy(short sX, short sZ)
         dSqDist = (dX * dX) + (dZ * dZ);
         pBouy->m_TreeNode.m_sortkey = dSqDist;
         pBouy->m_TreeNode.m_powner = pBouy;
-        if (pRoot == NULL)
+        if (pRoot == nullptr)
         {
             pRoot = &pBouy->m_TreeNode;
             // m_BouyTreeListHead.AddAfter(&pBouy->m_TreeNode);
@@ -731,7 +731,7 @@ UCHAR CNavigationNet::FindNearestBouy(short sX, short sZ)
 //								 routing tables
 ////////////////////////////////////////////////////////////////////////////////
 
-void CNavigationNet::UpdateRoutingTables(void)
+void CNavigationNet::UpdateRoutingTables()
 {
     nodeMap::iterator i;
     // orig
@@ -762,13 +762,13 @@ void CNavigationNet::UpdateRoutingTables(void)
     //	PrintRoutingTables();
 }
 
-void CNavigationNet::PrintRoutingTables(void)
+void CNavigationNet::PrintRoutingTables()
 {
     nodeMap::iterator i;
     char szLine[256];
     FILE *fp;
     fp = fopen("c:\\temp\\links.txt", "wt");
-    if (fp != NULL)
+    if (fp != nullptr)
     {
         for (i = m_NodeMap.begin(); i != m_NodeMap.end(); i++)
         {
@@ -789,7 +789,7 @@ void CNavigationNet::PrintRoutingTables(void)
 // DeleteNetwork - Delte all bouys from this network
 ////////////////////////////////////////////////////////////////////////////////
 
-short CNavigationNet::DeleteNetwork(void)
+short CNavigationNet::DeleteNetwork()
 {
     short sReturn = SUCCESS;
 

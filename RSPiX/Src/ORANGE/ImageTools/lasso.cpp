@@ -56,7 +56,7 @@
 // Includes.
 //////////////////////////////////////////////////////////////////////////////
 
-#include <string.h>
+#include <cstring>
 
 #include "System.h"
 
@@ -520,7 +520,7 @@ inline short EvalPixel(      // Returns TRUE if pixel is not clrDisjoin.
     if (sX >= sMinX && sY >= sMinY && sX <= sMaxX && sY <= sMaxY)
     {
         // If no callback . . .
-        if (fnEval == NULL)
+        if (fnEval == nullptr)
         {
             // Note that sY * lPitch is added in U8 sized elements and
             // sX is added in COLOR sized elements.
@@ -556,7 +556,7 @@ inline short Add(     // Returns 0 on success.
 
     // Allocate item . . .
     short *psX = new short;
-    if (psX != NULL)
+    if (psX != nullptr)
     {
         // Copy.
         *psX = sX;
@@ -680,7 +680,7 @@ extern
     if (pimSrc->m_sDepth == sizeof(COLOR) * 8)
     {
         // If destination was preallocated . . .
-        if (pimDst->m_pData != NULL)
+        if (pimDst->m_pData != nullptr)
         {
             // Make sure bit depth matches . . .
             if (pimDst->m_sDepth == sizeof(COLOR) * 8)
@@ -791,7 +791,7 @@ extern
                 // Pointer to array of row lists of x coordinates.
                 SLIST_SHORTS *plistRows = new SLIST_SHORTS[sMaxRows];
 
-                if (plistRows != NULL)
+                if (plistRows != nullptr)
                 {
                     // Store bounding rectangle.
                     EXTENTS extents = { 0x7FFF, 0x7FFF, 0, 0 };
@@ -945,7 +945,7 @@ extern
                         // Allocation destination if necessary.
                         /////////////////////////////////////////////////////////////
                         // If image not already allocated . . .
-                        if (pimDst->m_pData == NULL)
+                        if (pimDst->m_pData == nullptr)
                         {
                             if (pimDst->CreateImage(
                                   extents.sMaxX - extents.sMinX + 1, // Width: Use largest width of shape.
@@ -996,10 +996,10 @@ extern
                             {
                                 psX1 = plistRows[sRow].GetHead();
                                 psX2 = plistRows[sRow].GetNext();
-                                while (psX1 != NULL)
+                                while (psX1 != nullptr)
                                 {
                                     // For every start there must be an end.
-                                    ASSERT(psX2 != NULL);
+                                    ASSERT(psX2 != nullptr);
 
                                     // Copy.
                                     rspBlit(pimSrc,
@@ -1078,8 +1078,8 @@ extern
     return sRes;
 }
 
-void InstantiateLasso(void);
-void InstantiateLasso(void)
+void InstantiateLasso();
+void InstantiateLasso()
 {
     RImage im;
     // Instantiate U8 version.
@@ -1091,11 +1091,11 @@ void InstantiateLasso(void)
                  0,
                  (U8)0,
                  (U8)0,
-                 (short *)NULL,
-                 (short *)NULL,
-                 (short *)NULL,
-                 (short *)NULL,
-                 (RLassoNextEvalCall)NULL);
+                 (short *)nullptr,
+                 (short *)nullptr,
+                 (short *)nullptr,
+                 (short *)nullptr,
+                 (RLassoNextEvalCall)nullptr);
     // Instantiate U16 version.
     rspLassoNext(&im,
                  &im,
@@ -1105,11 +1105,11 @@ void InstantiateLasso(void)
                  0,
                  (U16)0,
                  (U16)0,
-                 (short *)NULL,
-                 (short *)NULL,
-                 (short *)NULL,
-                 (short *)NULL,
-                 (RLassoNextEvalCall)NULL);
+                 (short *)nullptr,
+                 (short *)nullptr,
+                 (short *)nullptr,
+                 (short *)nullptr,
+                 (RLassoNextEvalCall)nullptr);
     // Instantiate U32 version.
     rspLassoNext(&im,
                  &im,
@@ -1119,11 +1119,11 @@ void InstantiateLasso(void)
                  0,
                  (U32)0,
                  (U32)0,
-                 (short *)NULL,
-                 (short *)NULL,
-                 (short *)NULL,
-                 (short *)NULL,
-                 (RLassoNextEvalCall)NULL);
+                 (short *)nullptr,
+                 (short *)nullptr,
+                 (short *)nullptr,
+                 (short *)nullptr,
+                 (RLassoNextEvalCall)nullptr);
 }
 
 //////////////////////////////////////////////////////////////////////////////

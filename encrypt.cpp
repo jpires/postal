@@ -43,8 +43,8 @@
 //////////////////////////////////////////////////////////////////////////////////////
 // C Headers.
 //////////////////////////////////////////////////////////////////////////////////////
-#include <stdlib.h>
-#include <limits.h>
+#include <cstdlib>
+#include <climits>
 #include "RSPiX.h"
 #include "game.h"
 //////////////////////////////////////////////////////////////////////////////////////
@@ -132,7 +132,7 @@ short Encrypt(char *szInputString, char *szOutputString, short sSourceLength)
     szOutputString[1] = (char)sStartIndex;
 
     // pass one xor against the seed
-    while (1)
+    while (true)
     {
         // base case time to break
         if (sIndex == sSourceLength)
@@ -153,7 +153,7 @@ short Encrypt(char *szInputString, char *szOutputString, short sSourceLength)
     sIndex = 2;
 
     // pass two xor against previous char
-    while (1)
+    while (true)
     {
         // base case time to break
         if (sIndex == sSourceLength + 1)
@@ -194,7 +194,7 @@ short Decrypt(char *szInputString, char *szOutputString, short sSourceLength)
         if ((sCurrentKey < NUM_KEYS) && (sCurrentKey >= 0))
         {
             // pass one xor against previous char
-            while (1)
+            while (true)
             {
                 // base case time to break
                 if (sIndex == 1)
@@ -210,7 +210,7 @@ short Decrypt(char *szInputString, char *szOutputString, short sSourceLength)
             sIndex = 2;
 
             // pass two xor against the seed
-            while (1)
+            while (true)
             {
                 // base case time to break
                 if (sIndex == sSourceLength + 2)

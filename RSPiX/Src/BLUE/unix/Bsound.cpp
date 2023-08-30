@@ -117,7 +117,7 @@ extern short rspSetSoundOutMode( // Returns 0 if successfull, non-zero otherwise
             return BLU_ERR_NO_DEVICE;
     }
 
-    if (SDL_OpenAudio(&desired, NULL) == -1)
+    if (SDL_OpenAudio(&desired, nullptr) == -1)
     {
         TRACE("rspSetSoundOutMode(): SDL_OpenAudio failed: %s.\n", SDL_GetError());
         SDL_QuitSubSystem(SDL_INIT_AUDIO);
@@ -150,7 +150,7 @@ extern void rspSetSoundOutBufferTime(long lCurBufferTime) // In:  New buffer tim
     cur_buf_time = lCurBufferTime;
 }
 
-extern void rspKillSoundOutMode(void) // Returns 0 if successfull, non-zero otherwise
+extern void rspKillSoundOutMode() // Returns 0 if successfull, non-zero otherwise
 {
     if (audio_opened)
     {
@@ -160,13 +160,13 @@ extern void rspKillSoundOutMode(void) // Returns 0 if successfull, non-zero othe
     }
 }
 
-extern short rspClearSoundOut(void) // Returns 0 on success, non-zero otherwise
+extern short rspClearSoundOut() // Returns 0 on success, non-zero otherwise
 {
     // no-op?
     return 0;
 }
 
-extern short rspPauseSoundOut(void) // Returns 0 on success, non-zero otherwise
+extern short rspPauseSoundOut() // Returns 0 on success, non-zero otherwise
 {
     if (!audio_opened)
         return 0;
@@ -175,7 +175,7 @@ extern short rspPauseSoundOut(void) // Returns 0 on success, non-zero otherwise
     return 0;
 }
 
-extern short rspResumeSoundOut(void) // Returns 0 on success, non-zero otherwise
+extern short rspResumeSoundOut() // Returns 0 on success, non-zero otherwise
 {
     if (!audio_opened)
         return 0;
@@ -184,7 +184,7 @@ extern short rspResumeSoundOut(void) // Returns 0 on success, non-zero otherwise
     return 0;
 }
 
-extern short rspIsSoundOutPaused(void) // Returns TRUE if paused, FALSE otherwise
+extern short rspIsSoundOutPaused() // Returns TRUE if paused, FALSE otherwise
 {
     if (!audio_opened)
         return TRUE;
@@ -192,30 +192,30 @@ extern short rspIsSoundOutPaused(void) // Returns TRUE if paused, FALSE otherwis
     return ((SDL_GetAudioStatus() == SDL_AUDIO_PAUSED) ? TRUE : FALSE);
 }
 
-extern long rspGetSoundOutPos(void) // Returns sound output position in bytes
+extern long rspGetSoundOutPos() // Returns sound output position in bytes
 {
     return 0;
 }
 
-extern long rspGetSoundOutTime(void) // Returns sound output position in time
+extern long rspGetSoundOutTime() // Returns sound output position in time
 {
     return 0;
 }
 
-extern long rspDoSound(void)
+extern long rspDoSound()
 {
     // no-op; in Soviet Russia, audio callback pumps YOU.
     //  seriously, the SDL audio callback runs in a seperate thread.
     return 0;
 }
 
-extern void rspLockSound(void)
+extern void rspLockSound()
 {
     if (audio_opened)
         SDL_LockAudio();
 }
 
-extern void rspUnlockSound(void)
+extern void rspUnlockSound()
 {
     if (audio_opened)
         SDL_UnlockAudio();

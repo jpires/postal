@@ -319,7 +319,7 @@ void CNetClient::Startup(RSocket::BLOCK_CALLBACK callback) // In:  Blocking call
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown
 ////////////////////////////////////////////////////////////////////////////////
-void CNetClient::Shutdown(void)
+void CNetClient::Shutdown()
 {
     Reset();
 }
@@ -373,7 +373,7 @@ short CNetClient::StartJoinProcess( // Returns 0 if successfull, non-zero otherw
 ////////////////////////////////////////////////////////////////////////////////
 // Update (must be called regularly)
 ////////////////////////////////////////////////////////////////////////////////
-void CNetClient::Update(void)
+void CNetClient::Update()
 {
     NetMsg msg;
 
@@ -1083,7 +1083,7 @@ void CNetClient::SendRealmStatus(bool bReady)
 ////////////////////////////////////////////////////////////////////////////////
 // Drop self
 ////////////////////////////////////////////////////////////////////////////////
-void CNetClient::Drop(void)
+void CNetClient::Drop()
 {
     NetMsg msg;
 
@@ -1135,7 +1135,7 @@ void CNetClient::Drop(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Receive messages from peers
 ////////////////////////////////////////////////////////////////////////////////
-void CNetClient::ReceiveFromPeers(void)
+void CNetClient::ReceiveFromPeers()
 {
 
     /*** 12/10/97 AJC ***/
@@ -1159,7 +1159,7 @@ void CNetClient::ReceiveFromPeers(void)
         // could come from a foreign app that is using the same port as us.
         U8 msg[PEER_MSG_MAX_SIZE];
         long lReceived;
-        short serr = m_socketPeers.ReceiveFrom(msg, sizeof(msg), &lReceived, NULL);
+        short serr = m_socketPeers.ReceiveFrom(msg, sizeof(msg), &lReceived, nullptr);
         if (serr == 0)
         {
             // Make sure size is within proper range
@@ -1285,7 +1285,7 @@ void CNetClient::ReceiveFromPeers(void)
 ////////////////////////////////////////////////////////////////////////////////
 // 12/30/97 *SPA Pulled center loop out to seperate routine (SendToPeer) and
 //				simplified to send only one packet per frame
-void CNetClient::SendToPeers(void)
+void CNetClient::SendToPeers()
 {
     // Are we ready to send the next frame
     if (m_bSendNextFrame)
@@ -1596,7 +1596,7 @@ bool CNetClient::CanDoFrame( // Returns true if frame can be done, false otherwi
 ////////////////////////////////////////////////////////////////////////////////
 // Check whether local input is required
 ////////////////////////////////////////////////////////////////////////////////
-bool CNetClient::IsLocalInputNeeded(void)
+bool CNetClient::IsLocalInputNeeded()
 {
     bool bResult = false;
 
@@ -1716,7 +1716,7 @@ void CNetClient::SetHaltFrame(Net::SEQ seqHalt)
 // have been marked as dropped.
 // Returns Net::MaxNumIDs if no peer has exceeded time limit 1/13/98 *SPA
 ////////////////////////////////////////////////////////////////////////////////
-Net::ID CNetClient::CheckForLostPeer(void)
+Net::ID CNetClient::CheckForLostPeer()
 {
     if (m_bPlaying)
     {

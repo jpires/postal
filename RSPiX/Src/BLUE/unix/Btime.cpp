@@ -42,7 +42,7 @@ static Uint32 MicrosecondsBase = 0;
 // Initializes the time module.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern void Time_Init(void)
+extern void Time_Init()
 {
     MicrosecondsBase = SDL_GetTicks();
 }
@@ -53,7 +53,7 @@ extern void Time_Init(void)
 // Returns the time in a long.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern long rspGetMilliseconds(void)
+extern long rspGetMilliseconds()
 {
     return (long)(SDL_GetTicks());
 }

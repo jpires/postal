@@ -194,7 +194,7 @@ const short CGameSettings::ms_sNumPlayerColorDescriptions = NUM_ELEMENTS(ms_apsz
 //////////////////////////////////////////////////////////////////////////////
 // Set settings to default values
 //////////////////////////////////////////////////////////////////////////////
-CGameSettings::CGameSettings(void)
+CGameSettings::CGameSettings()
 {
     m_pszCDPath[0] = 0;
     m_pszHDPath[0] = 0;

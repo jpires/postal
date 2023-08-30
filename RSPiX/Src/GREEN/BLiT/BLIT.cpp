@@ -33,7 +33,7 @@ void rspClipPlot(PIXSIZE color, RImage *pimDst, short sX, short sY, const RRect 
 
 #ifdef _DEBUG
 
-    if (pimDst == NULL)
+    if (pimDst == nullptr)
     {
         TRACE("rspPlot: NULL Image passed.\n");
         return;
@@ -157,10 +157,10 @@ template void rspClipPlot<UCHAR>(UCHAR color, RImage *pimDst, short sX, short sY
 template void rspClipPlot<USHORT>(USHORT color, RImage *pimDst, short sX, short sY, const RRect *prClip);
 template void rspClipPlot<ULONG>(ULONG color, RImage *pimDst, short sX, short sY, const RRect *prClip);
 
-void instantiatePlot(void);
+void instantiatePlot();
 void instantiatePlot()
 {
-    RImage *pim = NULL;
+    RImage *pim = nullptr;
 
     rspPlot((UCHAR)0, pim, (short)0, (short)0);
     rspPlot((USHORT)0, pim, (short)0, (short)0);
@@ -216,8 +216,8 @@ short rspLasso(PIXSIZE ignoreColor,
 #endif
 
     short btos[] = { -1, 0, 1, -1, 2 };
-    PIXSIZE *pCursor = NULL;
-    PIXSIZE *pCursorLine = NULL;
+    PIXSIZE *pCursor = nullptr;
+    PIXSIZE *pCursorLine = nullptr;
     long lSkipV;
     short i, j;
 
@@ -349,10 +349,10 @@ template short rspLasso<ULONG>(ULONG ignoreColor,
                                int bFlag);
 
 // attempt to create the templated version in the lib:
-void instantiateLasso(void);
+void instantiateLasso();
 void instantiateLasso()
 {
-    RImage *pim = NULL;
+    RImage *pim = nullptr;
     short i = 0;
 
     rspLasso((UCHAR)i, pim, i, i, i, i, 1, 1, 1, 1);
@@ -660,7 +660,7 @@ short rspBlit(RImage *pimSrc,
     // 1) preliminary parameter validation:
 #ifdef _DEBUG
 
-    if ((pimSrc == NULL) || (pimDst == NULL))
+    if ((pimSrc == nullptr) || (pimDst == nullptr))
     {
         TRACE("BLiT: null RImage* passed\n");
         return -1;
@@ -1062,7 +1062,7 @@ short rspRect(U32 color, RImage *pimDst, short sX, short sY, short sW, short sH,
     // 1) preliminary parameter validation:
 #ifdef _DEBUG
 
-    if (pimDst == NULL)
+    if (pimDst == nullptr)
     {
         TRACE("rspRect: null RImage* passed\n");
         return -1;
@@ -1327,7 +1327,7 @@ short rspRect(short sThickness, U32 color, RImage *pimDst, short sX, short sY, s
     // 1) preliminary parameter validation:
 #ifdef _DEBUG
 
-    if (pimDst == NULL)
+    if (pimDst == nullptr)
     {
         TRACE("rspRect: null RImage* passed\n");
         return -1;
@@ -1391,7 +1391,7 @@ short rspCrop(RImage *pimSrc, short sX, short sY, short sW, short sH,
 {
 #ifdef _DEBUG
 
-    if (pimSrc == NULL)
+    if (pimSrc == nullptr)
     {
         TRACE("rspCrop: NULL image passed\n");
         return -1;
@@ -1473,7 +1473,7 @@ short rspPad(RImage *pimSrc,
 {
 #ifdef _DEBUG
 
-    if (pimSrc == NULL)
+    if (pimSrc == nullptr)
     {
         TRACE("rspPad: NULL image passed\n");
         return -1;

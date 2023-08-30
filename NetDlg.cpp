@@ -527,28 +527,28 @@ typedef struct
 //////////////////////////////////////////////////////////////////////////////
 
 // Common.
-static RGuiItem *ms_pguiRoot = NULL;   // Root of GUI tree for network interface.
-static RGuiItem *ms_pguiOk = NULL;     // GUI that, once 'clicked', indicates acceptance.
-static RGuiItem *ms_pguiCancel = NULL; // GUI that, once 'clicked', indicates rejection.
+static RGuiItem *ms_pguiRoot = nullptr;   // Root of GUI tree for network interface.
+static RGuiItem *ms_pguiOk = nullptr;     // GUI that, once 'clicked', indicates acceptance.
+static RGuiItem *ms_pguiCancel = nullptr; // GUI that, once 'clicked', indicates rejection.
 
 // Client/Server common.
-static RListBox *ms_plbPlayers = NULL;    // Listbox used by both types of net dialogs.
-static RListBox *ms_plbNetConsole = NULL; // List of net console (chat and status) strings.
-static RGuiItem *ms_pguiChatText = NULL;  // Chat text.
-static RGuiItem *ms_pguiChatSend = NULL;  // Chat send button.
+static RListBox *ms_plbPlayers = nullptr;    // Listbox used by both types of net dialogs.
+static RListBox *ms_plbNetConsole = nullptr; // List of net console (chat and status) strings.
+static RGuiItem *ms_pguiChatText = nullptr;  // Chat text.
+static RGuiItem *ms_pguiChatSend = nullptr;  // Chat send button.
 
 // Server.
-static RListBox *ms_plbLevelBrowse = NULL;       // Level browse listbox.
-static RGuiItem *ms_pguiDisconnectPlayer = NULL; // Disconnect a player button.
-static RMultiBtn *ms_pmbCoopLevels = NULL;       // Coop levels checkbox.
-static RMultiBtn *ms_pmbCoopMode = NULL;         // Coop mode checkbox.
+static RListBox *ms_plbLevelBrowse = nullptr;       // Level browse listbox.
+static RGuiItem *ms_pguiDisconnectPlayer = nullptr; // Disconnect a player button.
+static RMultiBtn *ms_pmbCoopLevels = nullptr;       // Coop levels checkbox.
+static RMultiBtn *ms_pmbCoopMode = nullptr;         // Coop mode checkbox.
 
 // Client.
-static RGuiItem *ms_pguiOptions = NULL; // Options shown on client dialog.
-static RGuiItem *ms_pguiRetry = NULL;   // Retry button on client dialog shown when needed.
+static RGuiItem *ms_pguiOptions = nullptr; // Options shown on client dialog.
+static RGuiItem *ms_pguiRetry = nullptr;   // Retry button on client dialog shown when needed.
 
 // Browser.
-static RListBox *ms_plbHostBrowse = NULL; // Browse for host listbox.
+static RListBox *ms_plbHostBrowse = nullptr; // Browse for host listbox.
 
 // Other static vars.
 
@@ -564,7 +564,7 @@ static long ms_lSetupLastChatComplaint = 0;
 
 static long ms_lNextOptionsUpdateTime; // Next time to send an options update.
 
-static RTxt *ms_ptxtNetProb = NULL;        // Net problem GUI.
+static RTxt *ms_ptxtNetProb = nullptr;        // Net problem GUI.
 static bool m_bNetWatchdogExpired = false; // Whether net blocking expired
 static bool ms_bCoopLevels = false;        // true, to use cooperative levels.
 
@@ -723,7 +723,7 @@ void DlgReleaseRes( // Returns 0 if successfull, non-zero otherwise
   RGuiItem *pgui);  // I/O: Pointer to gui item
 
 // Net blocking callback
-static short NetBlockingCallback(void); // Returns 0 to continue normally, 1 to abort
+static short NetBlockingCallback(); // Returns 0 to continue normally, 1 to abort
 
 static short BrowseForHost(CNetServer *pserver,         // I/O: Server interface or NULL if none
                            RSocket::Address *paddress); // Out: Address returned here (if successfull)
@@ -1009,7 +1009,7 @@ inline void MakeMoreReadable( // Returns nothing.
 // [Re]compose Options GUI with word wrap preserving original word wrap status.
 //
 //////////////////////////////////////////////////////////////////////////////
-inline void ComposeOptions(void)
+inline void ComposeOptions()
 {
     // Most likely someone has already checked this before calling this but
     // it doesn't hurt to be safe.
@@ -1072,11 +1072,11 @@ static void CleanClientDlg(CNetClient *pnet, bool bRetryButton)
 // Show the selectable network levels in the hood to play listbox.
 //
 //////////////////////////////////////////////////////////////////////////////
-static short ShowLevels(void) // Returns 0 on success.
+static short ShowLevels() // Returns 0 on success.
 {
     short sRes = 0; // Assume success.
 
-    if (ms_plbLevelBrowse != NULL)
+    if (ms_plbLevelBrowse != nullptr)
     {
         // Must be listbox.
         ASSERT(ms_plbLevelBrowse->m_type == RGuiItem::ListBox);
@@ -1111,7 +1111,7 @@ static short ShowLevels(void) // Returns 0 on success.
             {
                 // Add to listbox.
                 RGuiItem *pguiLevel = ms_plbLevelBrowse->AddString(szTitle);
-                if (pguiLevel != NULL)
+                if (pguiLevel != nullptr)
                 {
                     // Activate shadow parameters.
                     MakeMoreReadable(pguiLevel);
@@ -1162,30 +1162,30 @@ static short ShowLevels(void) // Returns 0 on success.
 // Be done with the current dialog and related settings.
 //
 //////////////////////////////////////////////////////////////////////////////
-static void DlgBeGone(void)
+static void DlgBeGone()
 {
     // Clean up processor.
     ms_pgDoGui.Unprepare();
 
-    if (ms_pguiRoot != NULL)
+    if (ms_pguiRoot != nullptr)
     {
         delete ms_pguiRoot;
     }
 
-    ms_pguiRoot = NULL;
-    ms_pguiOk = NULL;
-    ms_pguiCancel = NULL;
-    ms_plbPlayers = NULL;
-    ms_plbNetConsole = NULL;
-    ms_pguiChatText = NULL;
-    ms_pguiChatSend = NULL;
-    ms_plbLevelBrowse = NULL;
-    ms_pguiOptions = NULL;
-    ms_pguiDisconnectPlayer = NULL;
-    ms_pmbCoopLevels = NULL;
-    ms_pmbCoopMode = NULL;
-    ms_plbHostBrowse = NULL;
-    ms_pguiRetry = NULL;
+    ms_pguiRoot = nullptr;
+    ms_pguiOk = nullptr;
+    ms_pguiCancel = nullptr;
+    ms_plbPlayers = nullptr;
+    ms_plbNetConsole = nullptr;
+    ms_pguiChatText = nullptr;
+    ms_pguiChatSend = nullptr;
+    ms_plbLevelBrowse = nullptr;
+    ms_pguiOptions = nullptr;
+    ms_pguiDisconnectPlayer = nullptr;
+    ms_pmbCoopLevels = nullptr;
+    ms_pmbCoopMode = nullptr;
+    ms_plbHostBrowse = nullptr;
+    ms_pguiRetry = nullptr;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1214,7 +1214,7 @@ static short SetupDlg( // Returns 0 on success.
     // has already been loaded (or failed to load in this case because the
     // gui stuff can't possibly know the correct path for loading it).
     ms_pguiRoot = new RDlg;
-    if (ms_pguiRoot != NULL)
+    if (ms_pguiRoot != nullptr)
     {
         // Setup callbacks for getting and releasing resources
         ms_pguiRoot->m_fnGetRes = DlgGetRes;
@@ -1244,7 +1244,7 @@ static short SetupDlg( // Returns 0 on success.
                     UploadLinks(ms_aglClientServerLinkage, ms_pguiRoot);
 
                     // If exists . . .
-                    if (ms_plbPlayers != NULL)
+                    if (ms_plbPlayers != nullptr)
                     {
                         // Must be listbox.
                         ASSERT(ms_plbPlayers->m_type == RGuiItem::ListBox);
@@ -1253,7 +1253,7 @@ static short SetupDlg( // Returns 0 on success.
                     }
 
                     // If exists . . .
-                    if (ms_pguiChatText != NULL)
+                    if (ms_pguiChatText != nullptr)
                     {
                         // Must be edit.
                         ASSERT(ms_pguiChatText->m_type == RGuiItem::Edit);
@@ -1272,7 +1272,7 @@ static short SetupDlg( // Returns 0 on success.
                     ms_pguiRoot->Compose();
 
                     // Start with a clean slate.
-                    CleanClientDlg(0, false);
+                    CleanClientDlg(nullptr, false);
 
                     break;
                 }
@@ -1285,7 +1285,7 @@ static short SetupDlg( // Returns 0 on success.
                     UploadLinks(ms_aglClientServerLinkage, ms_pguiRoot);
 
                     // If exists . . .
-                    if (ms_plbPlayers != NULL)
+                    if (ms_plbPlayers != nullptr)
                     {
                         // Must be listbox.
                         ASSERT(ms_plbPlayers->m_type == RGuiItem::ListBox);
@@ -1294,7 +1294,7 @@ static short SetupDlg( // Returns 0 on success.
                     }
 
                     // If exists . . .
-                    if (ms_pguiChatText != NULL)
+                    if (ms_pguiChatText != nullptr)
                     {
                         // Must be edit.
                         ASSERT(ms_pguiChatText->m_type == RGuiItem::Edit);
@@ -1404,7 +1404,7 @@ short DlgGetRes(  // Returns 0 if successfull, non-zero otherwise
     if (rspGetResource(&g_resmgrShell, szFile, &pgui->m_pimBkdRes) == 0)
     {
         // Set palette
-        ASSERT(pgui->m_pimBkdRes->m_pPalette != NULL);
+        ASSERT(pgui->m_pimBkdRes->m_pPalette != nullptr);
         ASSERT(pgui->m_pimBkdRes->m_pPalette->m_type == RPal::PDIB);
         rspSetPaletteEntries(0,
                              230,
@@ -1726,7 +1726,7 @@ static void AddConsoleMsg( // Returns nothing.
   const char *pszFrmt,     // In:  sprintf style formatting.
   ...)                     // In:  Optional arguments based on context of pszFrmt.
 {
-    if (ms_plbNetConsole != NULL)
+    if (ms_plbNetConsole != nullptr)
     {
         char szOutput[MAX_STATUS_STR];
 
@@ -1805,7 +1805,7 @@ static void AddConsoleMsg( // Returns nothing.
             {
                 // This is useless then.
                 delete pguiConsoleMsg;
-                pguiConsoleMsg = NULL;
+                pguiConsoleMsg = nullptr;
             }
         }
         else
@@ -1999,7 +1999,7 @@ static void OnDroppedMsg(CNetClient *pnet, // In:  Network interface.
 
     // Get client's GUI . . .
     RGuiItem *pguiClient = ms_plbPlayers->GetItemFromId(long(pmsg->msg.dropped.id));
-    if (pguiClient != NULL)
+    if (pguiClient != nullptr)
     {
         // Remove the item.
         ms_plbPlayers->RemoveItem(pguiClient);
@@ -2045,7 +2045,7 @@ static short OnJoinedMsg( // Returns 0 on success.
     RSP_SAFE_GUI_REF_VOID(pguiConnected, Compose());
 
     RGuiItem *pguiClient = ms_plbPlayers->AddString(szPlayer);
-    if (pguiClient != NULL)
+    if (pguiClient != nullptr)
     {
         // Let's be able to identify this client by its net ID.
         pguiClient->m_lId = (long)pmsg->msg.joined.id;
@@ -2293,7 +2293,7 @@ static void OnSetupGameMsg(CNetClient *pnet, // In:  Network interface.
 // Explain the fact that the procol the user chose is not supported
 //
 //////////////////////////////////////////////////////////////////////////////
-void ProtoNotSupported(void)
+void ProtoNotSupported()
 {
     // Check if there's only one protocol or more than one
     if (RSocket::FirstProtocol + 1 == RSocket::NumProtocols)
@@ -2325,7 +2325,7 @@ extern short DoNetGameDialog( // Returns 0 if successfull, non-zero otherwise.
   CNetServer *pserver,        // I/O: Server interface or NULL if not server
   NetMsg *pmsgOut)            // Out: NetMsg::NOTHING or NetMsg::START_GAME
 {
-    ASSERT(pclient != NULL);
+    ASSERT(pclient != nullptr);
 
     short sResult = 0; // Assume success.
 
@@ -2338,17 +2338,17 @@ extern short DoNetGameDialog( // Returns 0 if successfull, non-zero otherwise.
     rspSetDoSystemMode(RSP_DOSYSTEM_TOLERATEOS);
 
     // Init globals
-    ms_pguiRoot = NULL;
-    ms_pguiOk = NULL;
-    ms_pguiCancel = NULL;
-    ms_plbPlayers = NULL;
-    ms_plbNetConsole = NULL;
-    ms_pguiChatText = NULL;
-    ms_pguiChatSend = NULL;
-    ms_plbLevelBrowse = NULL;
-    ms_pmbCoopLevels = NULL;
-    ms_pmbCoopMode = NULL;
-    ms_pguiRetry = NULL;
+    ms_pguiRoot = nullptr;
+    ms_pguiOk = nullptr;
+    ms_pguiCancel = nullptr;
+    ms_plbPlayers = nullptr;
+    ms_plbNetConsole = nullptr;
+    ms_pguiChatText = nullptr;
+    ms_pguiChatSend = nullptr;
+    ms_plbLevelBrowse = nullptr;
+    ms_pmbCoopLevels = nullptr;
+    ms_pmbCoopMode = nullptr;
+    ms_pguiRetry = nullptr;
     ms_lWatchdogTime = 0;
     ms_bNetBlockingAbort = false;
 
@@ -2646,7 +2646,7 @@ extern short DoNetGameDialog( // Returns 0 if successfull, non-zero otherwise.
                                             if (!bStart && !bAbort)
                                             {
                                                 // Make sure text field exists
-                                                if (ms_pguiChatText != NULL)
+                                                if (ms_pguiChatText != nullptr)
                                                 {
                                                     // See if there's any text
                                                     if (ms_pguiChatText->m_szText[0] != '\0')
@@ -3133,7 +3133,7 @@ static short BrowseForHost(CNetServer *pserver,        // I/O: Server interface 
                         // Get selection . . .
                         RGuiItem *pguiSel = ms_plbHostBrowse->GetSel();
                         // If there's no selection . . .
-                        if (pguiSel == NULL)
+                        if (pguiSel == nullptr)
                         {
                             // Take the first.
                             pguiSel = ms_plbHostBrowse->GetFirst();
@@ -3303,7 +3303,7 @@ static short BrowseForSelf(CNetServer *pserver,        // I/O: Server interface
 // that the program hasn't locked up.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern void NetBlockingWatchdog(void)
+extern void NetBlockingWatchdog()
 {
     // Reset timer to current time
     ms_lWatchdogTime = rspGetMilliseconds();
@@ -3332,7 +3332,7 @@ extern void NetBlockingWatchdog(void)
 // Check if a blocked network operation was aborted.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern bool NetBlockingWasAborted(void)
+extern bool NetBlockingWasAborted()
 {
     return ms_bNetBlockingAbort;
 }
@@ -3342,7 +3342,7 @@ extern bool NetBlockingWasAborted(void)
 // Net blocking callback
 //
 //////////////////////////////////////////////////////////////////////////////
-static short NetBlockingCallback(void) // Returns 0 to continue normally, 1 to abort
+static short NetBlockingCallback() // Returns 0 to continue normally, 1 to abort
 {
     // We only need to grab this ptr once (it is guaranteed not to move).
     // Once we have this pointer to the Key status array, we can use it to
@@ -3441,7 +3441,7 @@ static short NetBlockingCallback(void) // Returns 0 to continue normally, 1 to a
 // essential).
 //
 //////////////////////////////////////////////////////////////////////////////
-extern short InitNetProbGUI(void)
+extern short InitNetProbGUI()
 {
     short sRes = 0; // Assume success.
 
@@ -3473,7 +3473,7 @@ extern short InitNetProbGUI(void)
 // Kill the net problems GUI.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern void KillNetProbGUI(void)
+extern void KillNetProbGUI()
 {
     if (ms_ptxtNetProb)
     {
@@ -3491,7 +3491,7 @@ extern void KillNetProbGUI(void)
 // callback.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern RTxt *GetNetProbGUI(void)
+extern RTxt *GetNetProbGUI()
 {
     return ms_ptxtNetProb;
 }
@@ -3502,12 +3502,12 @@ extern RTxt *GetNetProbGUI(void)
 // Cleared by you when you call ClearNetProb().
 //
 //////////////////////////////////////////////////////////////////////////////
-extern bool IsNetProb(void) // Returns true, if net problem; false otherwise.
+extern bool IsNetProb() // Returns true, if net problem; false otherwise.
 {
     return m_bNetWatchdogExpired;
 }
 
-extern void ClearNetProb(void)
+extern void ClearNetProb()
 {
     m_bNetWatchdogExpired = false;
 }

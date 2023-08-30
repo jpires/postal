@@ -202,7 +202,7 @@ static short SetupVideo(             // Returns 0 on success.
     // If "use current settings" is specified, we get the current device settings
     // instead of using those specified in the prefs file.
     if (sUseCurrentDeviceDimensions != FALSE)
-        rspGetVideoMode(NULL, &sDeviceWidth, &sDeviceHeight);
+        rspGetVideoMode(nullptr, &sDeviceWidth, &sDeviceHeight);
 
     // Try setting video mode using device size specified in prefs file
     sResult = rspSetVideoMode(MAIN_SCREEN_DEPTH,
@@ -243,7 +243,7 @@ static short SetupVideo(             // Returns 0 on success.
                                       MAIN_SCREEN_SCALING,
                                       &sDeviceWidth,
                                       &sDeviceHeight,
-                                      NULL);
+                                      nullptr);
         if (sResult == 0)
         {
 
@@ -370,7 +370,7 @@ static char *CreateChunk( // Returns the memory ptr that will hold the chunk
     }
 }
 
-static void assert_types_are_sane(void)
+static void assert_types_are_sane()
 {
     ASSERT(sizeof(S8) == 1);
     ASSERT(sizeof(U8) == 1);
@@ -397,7 +397,7 @@ static void assert_types_are_sane(void)
 
 // Global versions of argc/argv...
 int _argc = 0;
-char **_argv = NULL;
+char **_argv = nullptr;
 
 long playthroughMS = 0;
 

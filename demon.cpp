@@ -527,7 +527,7 @@ short CDemon::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CDemon::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CDemon::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -535,7 +535,7 @@ short CDemon::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CDemon::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CDemon::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -543,7 +543,7 @@ short CDemon::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CDemon::Suspend(void)
+void CDemon::Suspend()
 {
     m_sSuspend++;
 }
@@ -551,7 +551,7 @@ void CDemon::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CDemon::Resume(void)
+void CDemon::Resume()
 {
     m_sSuspend--;
 
@@ -564,7 +564,7 @@ void CDemon::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CDemon::Update(void)
+void CDemon::Update()
 {
     if (!m_sSuspend)
     {
@@ -583,7 +583,7 @@ void CDemon::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CDemon::Render(void) {}
+void CDemon::Render() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to init new object at specified position
@@ -610,17 +610,17 @@ short CDemon::EditNew( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CDemon::EditModify(void)
+short CDemon::EditModify()
 {
     short sResult = 0;
 
     // Load gui dialog
     RGuiItem *pgui = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_HD, GUI_FILE_NAME));
-    if (pgui != NULL)
+    if (pgui != nullptr)
     {
         // Init "bank" field.
         RGuiItem *pguiBankName = pgui->GetItemFromId(GUI_ID_BANK);
-        ASSERT(pguiBankName != NULL);
+        ASSERT(pguiBankName != nullptr);
         pguiBankName->SetText("%hd", m_sSoundBank);
         pguiBankName->Compose();
 
@@ -721,12 +721,12 @@ void CDemon::EditHotSpot( // Returns nothiing.
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CDemon::EditUpdate(void) {}
+void CDemon::EditUpdate() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CDemon::EditRender(void)
+void CDemon::EditRender()
 {
     // Setup simple, non-animating sprite
     m_sprite.m_sInFlags = 0;
@@ -751,13 +751,13 @@ void CDemon::EditRender(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Init object
 ////////////////////////////////////////////////////////////////////////////////
-short CDemon::Init(void) // Returns 0 if successfull, non-zero otherwise
+short CDemon::Init() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
     Kill();
 
-    if (m_pImage == 0)
+    if (m_pImage == nullptr)
     {
         sResult = rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(IMAGE_FILE), &m_pImage);
         if (sResult == 0)
@@ -778,9 +778,9 @@ short CDemon::Init(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Kill object
 ////////////////////////////////////////////////////////////////////////////////
-short CDemon::Kill(void) // Returns 0 if successfull, non-zero otherwise
+short CDemon::Kill() // Returns 0 if successfull, non-zero otherwise
 {
-    if (m_pImage != 0)
+    if (m_pImage != nullptr)
         rspReleaseResource(&g_resmgrGame, &m_pImage);
 
     m_pRealm->m_scene.RemoveSprite(&m_sprite);
@@ -791,7 +791,7 @@ short CDemon::Kill(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Process our message queue.
 ////////////////////////////////////////////////////////////////////////////////
-void CDemon::ProcessMessages(void)
+void CDemon::ProcessMessages()
 {
     SampleMasterID *psmid = &g_smidNil;
     bool bFoundSample = false;

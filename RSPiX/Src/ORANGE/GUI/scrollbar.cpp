@@ -245,7 +245,7 @@ RScrollBar::RScrollBar()
 
     m_type = ScrollBar; // Indicates type of GUI item.
 
-    m_upcUser = NULL;
+    m_upcUser = nullptr;
 
     m_scrollage = Instant;
     m_lScrollToPos = m_lCurPos;
@@ -272,7 +272,7 @@ RScrollBar::~RScrollBar() {}
 void RScrollBar::Compose( // Returns nothing.
   RImage *pim /*= NULL*/) // Dest image, uses m_im if NULL.
 {
-    if (pim == NULL)
+    if (pim == nullptr)
     {
         pim = &m_im;
     }
@@ -367,7 +367,7 @@ void RScrollBar::CursorEvent( // Returns nothing.
                 pie->sPosY < m_btnThumb.m_sY || pie->sPosY >= m_btnThumb.m_sY + m_btnThumb.m_im.m_sHeight)
             {
                 short sTrayPosX, sTrayPosY, sTrayRelPosX, sTrayRelPosY;
-                GetTray(&sTrayPosX, &sTrayPosY, NULL, NULL);
+                GetTray(&sTrayPosX, &sTrayPosY, nullptr, nullptr);
                 sTrayRelPosX = pie->sPosX - sTrayPosX;
                 sTrayRelPosY = pie->sPosY - sTrayPosY;
 
@@ -407,7 +407,7 @@ void RScrollBar::CursorEvent( // Returns nothing.
 // Called when up/left button pressed.
 //
 ////////////////////////////////////////////////////////////////////////
-void RScrollBar::UpBtnPressed(void)
+void RScrollBar::UpBtnPressed()
 {
     UserSetPos(m_lCurPos - m_lButtonIncDec);
 }
@@ -417,7 +417,7 @@ void RScrollBar::UpBtnPressed(void)
 // Called when down/right button pressed.
 //
 ////////////////////////////////////////////////////////////////////////
-void RScrollBar::DownBtnPressed(void)
+void RScrollBar::DownBtnPressed()
 {
     UserSetPos(m_lCurPos + m_lButtonIncDec);
 }
@@ -713,9 +713,9 @@ void RScrollBar::Do( // Returns nothing.
     if (m_btnThumb.m_sPressed != FALSE)
     {
         short sX, sY, sTrayX, sTrayY;
-        rspGetMouse(&sX, &sY, NULL);
+        rspGetMouse(&sX, &sY, nullptr);
         TopPosToChild(&sX, &sY);
-        GetTray(&sTrayX, &sTrayY, NULL, NULL);
+        GetTray(&sTrayX, &sTrayY, nullptr, nullptr);
         sX -= m_sClickOffsetX + sTrayX;
         sY -= m_sClickOffsetY + sTrayY;
 
@@ -785,7 +785,7 @@ void RScrollBar::Do( // Returns nothing.
             }
         }
 
-        RGuiItem *pguiPressed = NULL;
+        RGuiItem *pguiPressed = nullptr;
         // If tray currently pressed . . .
         if (m_sPressed != FALSE)
         {
@@ -809,14 +809,14 @@ void RScrollBar::Do( // Returns nothing.
         }
 
         // If we found a pressed repeatable GUI . . .
-        if (pguiPressed != NULL)
+        if (pguiPressed != nullptr)
         {
             long lCurTime = rspGetMilliseconds();
             if (lCurTime > ms_lNextEventTime)
             {
                 // Get current mouse cursor position.
                 short sPosX, sPosY;
-                rspGetMouse(&sPosX, &sPosY, NULL);
+                rspGetMouse(&sPosX, &sPosY, nullptr);
                 // Convert to our coordinate system.
                 pguiPressed->TopPosToChild(&sPosX, &sPosY);
 
@@ -1103,7 +1103,7 @@ short RScrollBar::LoadChildren( // Returns 0 on success.
     for (sCurChild = 0; sCurChild < sNum && sRes == 0 && pfile->Error() == FALSE; sCurChild++)
     {
         pgui = LoadInstantiate(pfile);
-        if (pgui != NULL)
+        if (pgui != nullptr)
         {
             pgui->SetParent(this);
         }
@@ -1134,7 +1134,7 @@ short RScrollBar::SaveChildren( // Returns 0 on success.
     // Determine number of child items.
     short sNum = 0;
     RGuiItem *pgui = m_listguiChildren.GetHead();
-    while (pgui != NULL)
+    while (pgui != nullptr)
     {
         sNum++;
 
@@ -1184,7 +1184,7 @@ short RScrollBar::SaveChildren( // Returns 0 on success.
     // order so they, on load, get added back to their parent in the
     // order they were originally added to this parent.
     pgui = m_listguiChildren.GetTail();
-    while (pgui != NULL && sRes == 0 && pfile->Error() == FALSE)
+    while (pgui != nullptr && sRes == 0 && pfile->Error() == FALSE)
     {
         // Don't write these 3 again . . .
         if (pgui != &m_btnThumb && pgui != &m_btnUp && pgui != &m_btnDown)
@@ -1221,7 +1221,7 @@ short RScrollBar::ReadMembers( // Returns 0 on success.
     // If okay so far . . .
     if (sRes == 0)
     {
-        ASSERT(pfile != NULL);
+        ASSERT(pfile != nullptr);
         ASSERT(pfile->IsOpen() != FALSE);
 
         U32 u32Temp;
@@ -1290,7 +1290,7 @@ short RScrollBar::WriteMembers( // Returns 0 on success.
     // If okay so far . . .
     if (sRes == 0)
     {
-        ASSERT(pfile != NULL);
+        ASSERT(pfile != nullptr);
         ASSERT(pfile->IsOpen() != FALSE);
 
         // Write this class's members.

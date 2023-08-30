@@ -68,7 +68,7 @@
 #define ANIMTHING_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "AnimThing.h"
 #include "dude.h"
@@ -155,7 +155,7 @@ short CAnimThing::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CAnimThing::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CAnimThing::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     m_lAnimPrevTime = m_pRealm->m_time.GetGameTime();
     m_lAnimTime = 0;
@@ -166,7 +166,7 @@ short CAnimThing::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CAnimThing::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CAnimThing::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -174,7 +174,7 @@ short CAnimThing::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CAnimThing::Suspend(void)
+void CAnimThing::Suspend()
 {
     m_sSuspend++;
 }
@@ -182,7 +182,7 @@ void CAnimThing::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CAnimThing::Resume(void)
+void CAnimThing::Resume()
 {
     m_sSuspend--;
 
@@ -198,7 +198,7 @@ void CAnimThing::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CAnimThing::Update(void)
+void CAnimThing::Update()
 {
     if (!m_sSuspend)
     {
@@ -225,7 +225,7 @@ short sEdit;
 double dScale = 1.0;
 double dScaleInc = 0.025;
 
-void CAnimThing::Render(void)
+void CAnimThing::Render()
 {
     // Get current time diff.
     long lCurTime = m_pRealm->m_time.GetGameTime();
@@ -233,7 +233,7 @@ void CAnimThing::Render(void)
     m_lAnimPrevTime = lCurTime;
 
     CAlphaAnim *paa = (CAlphaAnim *)m_paachannel->GetAtTime(m_lAnimTime);
-    if (paa != NULL)
+    if (paa != nullptr)
     {
         // No special flags
         m_sprite.m_sInFlags = 0;
@@ -348,22 +348,22 @@ short CAnimThing::EditNew( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CAnimThing::EditModify(void)
+short CAnimThing::EditModify()
 {
     short sResult = 0;
 
     RGuiItem *pgui = RGuiItem::LoadInstantiate(FullPathVD(GUI_FILE_NAME));
-    if (pgui != NULL)
+    if (pgui != nullptr)
     {
         RListBox *plb = (RListBox *)pgui->GetItemFromId(GUI_ID_OPTIONS);
-        if (plb != NULL)
+        if (plb != nullptr)
         {
             ASSERT(plb->m_type == RGuiItem::ListBox);
             // Select current setting.
             plb->SetSel(pgui->GetItemFromId((m_sLoop == FALSE) ? GUI_ID_DONTLOOP : GUI_ID_DOLOOP));
 
             REdit *pedit = (REdit *)pgui->GetItemFromId(GUI_ID_RESOURCE);
-            if (pedit != NULL)
+            if (pedit != nullptr)
             {
                 ASSERT(pedit->m_type == RGuiItem::Edit);
 
@@ -458,10 +458,10 @@ void CAnimThing::EditRect( // Returns nothiing.
     prc->sW = 10; // Safety.
     prc->sH = 10; // Safety.
 
-    if (m_paachannel != NULL)
+    if (m_paachannel != nullptr)
     {
         CAlphaAnim *paa = (CAlphaAnim *)m_paachannel->GetAtTime(m_lAnimTime);
-        if (paa != NULL)
+        if (paa != nullptr)
         {
             // Offset by hotspot.
             prc->sX += paa->m_sX;
@@ -485,10 +485,10 @@ void CAnimThing::EditHotSpot( // Returns nothiing.
     *psX = 0; // Safety.
     *psY = 0; // Safety.
 
-    if (m_paachannel != NULL)
+    if (m_paachannel != nullptr)
     {
         CAlphaAnim *paa = (CAlphaAnim *)m_paachannel->GetAtTime(m_lAnimTime);
-        if (paa != NULL)
+        if (paa != nullptr)
         {
             *psX = -paa->m_sX;
             *psY = -paa->m_sY;
@@ -499,12 +499,12 @@ void CAnimThing::EditHotSpot( // Returns nothiing.
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CAnimThing::EditUpdate(void) {}
+void CAnimThing::EditUpdate() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CAnimThing::EditRender(void)
+void CAnimThing::EditRender()
 {
     // In some cases, object's might need to do a special-case render in edit
     // mode because Startup() isn't called.  In this case it doesn't matter, so
@@ -515,7 +515,7 @@ void CAnimThing::EditRender(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CAnimThing::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CAnimThing::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -549,11 +549,11 @@ short CAnimThing::GetResources(void) // Returns 0 if successfull, non-zero other
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CAnimThing::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CAnimThing::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
-    if (m_paachannel != NULL)
+    if (m_paachannel != nullptr)
     {
         rspReleaseResource(&g_resmgrGame, &m_paachannel);
     }

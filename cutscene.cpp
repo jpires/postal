@@ -224,7 +224,7 @@ inline void MySeedRandom(long seed)
     ms_lRandom = seed;
 }
 
-inline long MyRandom(void)
+inline long MyRandom()
 {
     return (((ms_lRandom = ms_lRandom * 214013L + 2531011L) >> 16) & 0x7fff);
 }
@@ -260,16 +260,16 @@ class CCutSceneInfo
 
     void Clear()
     {
-        m_pFont = NULL;
+        m_pFont = nullptr;
         m_szTitle[0] = 0;
         m_szText[0] = 0;
         m_szMusic[0] = 0;
         m_ucForeText = 0;
         m_ucShadowText = 0;
-        m_pimBGLayer = NULL;
-        m_pimTextLayer = NULL;
-        m_pimDst = NULL;
-        m_pmaAlpha = NULL;
+        m_pimBGLayer = nullptr;
+        m_pimTextLayer = nullptr;
+        m_pimDst = nullptr;
+        m_pmaAlpha = nullptr;
         m_bDeleteFont = true;
         m_sDelW = 0;
         m_sDelH = 0;
@@ -480,7 +480,7 @@ class CSwirlMe
               SampleMaster::Unspecified, // In:  Sound Volume Category for user adjustment
               255,                       // In:  Initial Sound Volume (0 - 255)
               &m_siSound,                // Out: Handle for adjusting sound volume
-              NULL,                      // Out: Sample duration in ms, if not NULL.
+              nullptr,                      // Out: Sample duration in ms, if not NULL.
               0,                         // In:  Where to loop back to in milliseconds.
                                          //	-1 indicates no looping (unless m_sLoop is
                                          // explicitly set).
@@ -554,7 +554,7 @@ class CSwirlMe
                     &rSafeClip);
 
             // 2) Alpha Blit Upon it:
-            if (m_pCut->m_pmaAlpha != NULL)
+            if (m_pCut->m_pmaAlpha != nullptr)
             {
                 rspAlphaBlitT(short(255.9 * dAlpha),
                               m_pCut->m_pmaAlpha,
@@ -673,7 +673,7 @@ class CSwirlMe
         if (m_siSound != 0)
             AbortSample(m_siSound);
         m_siSound = 0;
-        m_pCut = NULL; // we don't free this - you do!
+        m_pCut = nullptr; // we don't free this - you do!
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -695,8 +695,8 @@ class CSwirlMe
 // Variables/data
 ////////////////////////////////////////////////////////////////////////////////
 
-static CCutSceneInfo *ms_pCut = NULL;
-static CSwirlMe *pSwirl = NULL;
+static CCutSceneInfo *ms_pCut = nullptr;
+static CSwirlMe *pSwirl = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Function prototypes
@@ -775,7 +775,7 @@ extern void CutSceneStart(bool bSimple,               // In:  Set to 'true' for 
         (ms_pCut->m_pimBGLayer->Load(FullPathVD(szText)) == 0))
     {
         // Set palette
-        ASSERT(ms_pCut->m_pimBGLayer->m_pPalette != NULL);
+        ASSERT(ms_pCut->m_pimBGLayer->m_pPalette != nullptr);
         ASSERT(ms_pCut->m_pimBGLayer->m_pPalette->m_type == RPal::PDIB);
         rspSetPaletteEntries(0,
                              256,
@@ -790,7 +790,7 @@ extern void CutSceneStart(bool bSimple,               // In:  Set to 'true' for 
     {
         TRACE("CutScene(): Error loading bg image: '%s'\n", FullPathVD(szText));
         delete ms_pCut->m_pimBGLayer;
-        ms_pCut->m_pimBGLayer = NULL;
+        ms_pCut->m_pimBGLayer = nullptr;
     }
 
     //------------------------------------------------------------------------------
@@ -816,7 +816,7 @@ extern void CutSceneStart(bool bSimple,               // In:  Set to 'true' for 
     {
         TRACE("CutScene(): Error loading multialpha: '%s'\n", FullPathVD(szText));
         delete ms_pCut->m_pmaAlpha;
-        ms_pCut->m_pmaAlpha = NULL;
+        ms_pCut->m_pmaAlpha = nullptr;
     }
 
     //------------------------------------------------------------------------------
@@ -982,7 +982,7 @@ extern void CutSceneStart(bool bSimple,               // In:  Set to 'true' for 
                 PROGRESS_BOX_Y, // Dst.
                 PROGRESS_BOX_WIDTH,
                 PROGRESS_BOX_HEIGHT, // Both.
-                NULL,                // Dst.
+                nullptr,                // Dst.
                 &rcBGClipper);       // Src.
     }
 
@@ -1070,7 +1070,7 @@ extern short CutSceneConfig(long lTimeSpin,
                 PROGRESS_BOX_Y, // Dst.
                 PROGRESS_BOX_WIDTH,
                 PROGRESS_BOX_HEIGHT, // Both.
-                NULL,                // Dst.
+                nullptr,                // Dst.
                 &rcBGClipper);       // Src.
 
         rspUnlockBuffer();
@@ -1079,7 +1079,7 @@ extern short CutSceneConfig(long lTimeSpin,
     }
 
     // Clear RFile hook so nothing gets drawn after this
-    RFile::ms_criticall = 0;
+    RFile::ms_criticall = nullptr;
 
     return pSwirl
       ->Configure(lTimeSpin, sMinX, sMaxX, lTimeX, sMinY, sMaxY, lTimeY, dMinA, dMaxA, lTimeA, sX, sY, sW, sH);
@@ -1090,7 +1090,7 @@ extern short CutSceneConfig(long lTimeSpin,
 // Update cutscene effect
 //
 ////////////////////////////////////////////////////////////////////////////
-extern void CutSceneUpdate(void)
+extern void CutSceneUpdate()
 {
     ASSERT(ms_pCut);
     ASSERT(pSwirl);
@@ -1104,16 +1104,16 @@ extern void CutSceneUpdate(void)
 // Clean up after the cutscene.  It is safe to call this multiple times.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void CutSceneEnd(void)
+extern void CutSceneEnd()
 {
     delete ms_pCut;
-    ms_pCut = 0;
+    ms_pCut = nullptr;
 
     delete pSwirl;
-    pSwirl = 0;
+    pSwirl = nullptr;
 
     // Clear RFile hook
-    RFile::ms_criticall = 0;
+    RFile::ms_criticall = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1185,7 +1185,7 @@ static void CutScene_RFileCallback(long lBytes)
                             PROGRESS_BOX_Y, // Dst.
                             PROGRESS_BOX_WIDTH,
                             PROGRESS_BOX_HEIGHT, // Both.
-                            NULL,                // Dst.
+                            nullptr,                // Dst.
                             &rcBGClipper);       // Src.
 
                     rspUnlockBuffer();

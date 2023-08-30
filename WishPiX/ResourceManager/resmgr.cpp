@@ -197,7 +197,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-RResMgr::RResMgr(void)
+RResMgr::RResMgr()
 {
     m_bTraceUncachedLoads = false;
 }
@@ -208,7 +208,7 @@ RResMgr::RResMgr(void)
 //
 //////////////////////////////////////////////////////////////////////
 
-RResMgr::~RResMgr(void)
+RResMgr::~RResMgr()
 {
     // Closes the SAK file if one was open.
     CloseSak();
@@ -262,7 +262,7 @@ short RResMgr::Get(                  // Returns 0 on success.
     p = m_map.insert(resclassMap::value_type(strFilename, resBlock));
 
     // If the requested resource does not already exist, create the resource now and load it
-    if ((*(p.first)).second.m_vpRes == NULL)
+    if ((*(p.first)).second.m_vpRes == nullptr)
     {
         sReturn = GetInstance( // Returns 0 on success.
           strFilename,         // In:  Resource name
@@ -279,7 +279,7 @@ short RResMgr::Get(                  // Returns 0 on success.
 
             // Clear pointer so that the object won't be deleted on exit from this function.
             // The responsibility for deleting the object now lies with the resource block.
-            pfnDestroy = 0;
+            pfnDestroy = nullptr;
 
             // Add to the access order list
             m_accessList.push_back(strFilename);
@@ -307,7 +307,7 @@ short RResMgr::Get(                  // Returns 0 on success.
     }
     else
     {
-        *hRes = NULL;
+        *hRes = nullptr;
         // In this case, m_vpRes is also NULL, so we don't have to worry about a
         // double delete.
         m_map.erase(strFilename);
@@ -353,16 +353,16 @@ short RResMgr::GetInstance(          // Returns 0 on success.
 {
     short sReturn = SUCCESS; // Assume success for return.
     // Assume failure for safety.
-    *hRes = NULL;
+    *hRes = nullptr;
 
     NormalizeResName(&strFilename);
 
     // Create resource using the specified "create" function
-    void *pvInstance = NULL;
+    void *pvInstance = nullptr;
     if ((*pfnCreate)(&pvInstance) == 0)
     {
         RFile fileNoSak;
-        RFile *pfileSrc = NULL;
+        RFile *pfileSrc = nullptr;
         // If a SAK file is in use, load it from that, otherwise
         // load it from the disk file.
         if (m_rfSak.IsOpen())
@@ -381,7 +381,7 @@ short RResMgr::GetInstance(          // Returns 0 on success.
             }
         }
 
-        if (pfileSrc != NULL)
+        if (pfileSrc != nullptr)
         {
             // Set endian for this file.
             pfileSrc->SetEndian(endian);
@@ -495,7 +495,7 @@ bool RResMgr::ReleaseAndPurge(void *pVoid)
 //
 //////////////////////////////////////////////////////////////////////
 
-void RResMgr::Purge(void)
+void RResMgr::Purge()
 {
     resclassMap::iterator i;
     resclassMap::iterator del;
@@ -538,7 +538,7 @@ void RResMgr::Purge(void)
 //
 //////////////////////////////////////////////////////////////////////
 
-void RResMgr::FreeAllResources(void)
+void RResMgr::FreeAllResources()
 {
     resclassMap::iterator i;
 

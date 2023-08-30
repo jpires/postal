@@ -16,7 +16,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
 // This function should draw 2d and 3d lines, and just keep getting better.
-#include <stdlib.h>
+#include <cstdlib>
 #include "System.h"
 #ifdef PATHS_IN_INCLUDES
 #include "GREEN/BLiT/BLIT.H"

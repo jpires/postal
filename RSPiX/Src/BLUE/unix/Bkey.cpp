@@ -164,7 +164,7 @@ extern void Key_Event(SDL_Event *event)
         keystates[key] = pushed;
 }
 
-extern void rspClearKeyEvents(void)
+extern void rspClearKeyEvents()
 {
     // Dequeue all events in the queue
     while (!ms_qkeEvents.IsEmpty())
@@ -194,7 +194,7 @@ extern short rspGetKey(    // Returns 1 if a key was available; 0 if not.
     short sRes = 0; // Assume no key.
 
     PRSP_SK_EVENT pkeEvent = ms_qkeEvents.DeQ();
-    if (pkeEvent != NULL)
+    if (pkeEvent != nullptr)
     {
         SET(plKey, pkeEvent->lKey);
         SET(plTime, pkeEvent->lTime);
@@ -215,7 +215,7 @@ extern short rspGetKey(    // Returns 1 if a key was available; 0 if not.
 // Check if a key is available in the keyboard queue via rspGetKey.
 //
 //////////////////////////////////////////////////////////////////////////////
-extern short rspIsKey(void) // Returns 1 if a key is available; 0 if not.
+extern short rspIsKey() // Returns 1 if a key is available; 0 if not.
 {
     return (ms_qkeEvents.IsEmpty() == FALSE) ? 1 : 0;
 }
@@ -232,7 +232,7 @@ extern short rspIsKey(void) // Returns 1 if a key is available; 0 if not.
 #define SET_SDL_TO_RWS_KEYMAP(x) SET_SDL_TO_RWS_KEYMAP2(x, x)
 #define SET_SDL_TO_RWS_GKEYMAP2(x, y) sdl_to_rws_gkeymap[SDLK_##x] = RSP_GK_##y
 #define SET_SDL_TO_RWS_GKEYMAP(x) SET_SDL_TO_RWS_GKEYMAP2(x, x)
-extern void Key_Init(void)
+extern void Key_Init()
 {
     memset(ms_au8KeyStatus, '\0', sizeof(ms_au8KeyStatus));
 
@@ -421,7 +421,7 @@ extern void Key_Init(void)
 // to call this function once for an entire program's execution of scans and
 // clears of the array.
 //////////////////////////////////////////////////////////////////////////////
-U8 *rspGetKeyStatusArray(void) // Returns a ptr to the key status array.
+U8 *rspGetKeyStatusArray() // Returns a ptr to the key status array.
 {
     return ms_au8KeyStatus;
 }
@@ -449,7 +449,7 @@ extern void rspSetQuitStatusFlags( // Returns nothing.
 #define RSP_NUM_LOCK_ON 0x00000002
 #define RSP_SCROLL_LOCK_ON 0x00000004
 
-extern long rspGetToggleKeyStates(void) // Returns toggle key state flags.
+extern long rspGetToggleKeyStates() // Returns toggle key state flags.
 {
     long lKeyStates = 0;
 #if 0 // !!! FIXME

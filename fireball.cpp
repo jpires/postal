@@ -121,7 +121,7 @@
 #define FIREBALL_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "fireball.h"
 #include "game.h"
@@ -233,7 +233,7 @@ short CFirestream::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CFirestream::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CFirestream::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     return Init();
 }
@@ -241,7 +241,7 @@ short CFirestream::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CFirestream::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CFirestream::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -249,7 +249,7 @@ short CFirestream::Shutdown(void) // Returns 0 if successfull, non-zero otherwis
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CFirestream::Suspend(void)
+void CFirestream::Suspend()
 {
     m_sSuspend++;
 }
@@ -257,7 +257,7 @@ void CFirestream::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CFirestream::Resume(void)
+void CFirestream::Resume()
 {
     m_sSuspend--;
 
@@ -271,7 +271,7 @@ void CFirestream::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CFirestream::Update(void)
+void CFirestream::Update()
 {
     long lThisTime;
 
@@ -286,9 +286,9 @@ void CFirestream::Update(void)
             return;
         }
 
-        CFireball *pfireball1 = NULL;
-        CFireball *pfireball2 = NULL;
-        CFireball *pfireball3 = NULL;
+        CFireball *pfireball1 = nullptr;
+        CFireball *pfireball2 = nullptr;
+        CFireball *pfireball3 = nullptr;
 
         // Update the other fireballs
         if (m_pRealm->m_idbank.GetThingByID((CThing **)&pfireball1, m_idFireball1) == 0)
@@ -344,7 +344,7 @@ void CFirestream::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CFirestream::Render(void)
+void CFirestream::Render()
 {
     // If we have a parent . . .
     if (m_sprite.m_psprParent)
@@ -354,7 +354,7 @@ void CFirestream::Render(void)
     }
 
     // This should never ever be rendered.
-    ASSERT(m_sprite.m_psprParent == NULL);
+    ASSERT(m_sprite.m_psprParent == nullptr);
     ASSERT((m_sprite.m_sInFlags & CSprite::PrivInserted) == 0);
 }
 
@@ -402,9 +402,9 @@ short CFirestream::Setup( // Returns 0 if successfull, non-zero otherwise
           (short)dX,           // In:  Destination X.
           (short)dZ,           // In:  Destination Z.
           0,                   // In:  Max traverser can step up.
-          NULL,                // Out: If not NULL, last clear point on path.
-          NULL,                // Out: If not NULL, last clear point on path.
-          NULL,                // Out: If not NULL, last clear point on path.
+          nullptr,                // Out: If not NULL, last clear point on path.
+          nullptr,                // Out: If not NULL, last clear point on path.
+          nullptr,                // Out: If not NULL, last clear point on path.
           false))              // In:  If true, will consider the edge of the realm a path
                                // inhibitor.  If false, reaching the edge of the realm
                                // indicates a clear path.
@@ -445,7 +445,7 @@ short CFirestream::Setup( // Returns 0 if successfull, non-zero otherwise
 // Init
 ////////////////////////////////////////////////////////////////////////////////
 
-short CFirestream::Init(void)
+short CFirestream::Init()
 {
     short sResult = SUCCESS;
 
@@ -475,7 +475,7 @@ short CFirestream::EditNew( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CFirestream::EditModify(void)
+short CFirestream::EditModify()
 {
     return 0;
 }
@@ -498,12 +498,12 @@ short CFirestream::EditMove( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CFirestream::EditUpdate(void) {}
+void CFirestream::EditUpdate() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CFirestream::EditRender(void)
+void CFirestream::EditRender()
 {
     // In some cases, object's might need to do a special-case render in edit
     // mode because Startup() isn't called.  In this case it doesn't matter, so
@@ -526,7 +526,7 @@ short CFirestream::Preload(CRealm * /*prealm*/) // In:  Calling realm.
 // ProcessFireballMessages
 ////////////////////////////////////////////////////////////////////////////////
 
-CFirestream::CFirestreamState CFirestream::ProcessFireballMessages(void)
+CFirestream::CFirestreamState CFirestream::ProcessFireballMessages()
 {
     CFirestreamState eNewState = State_Idle;
 
@@ -657,7 +657,7 @@ short CFireball::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CFireball::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CFireball::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     return Init();
 }
@@ -665,7 +665,7 @@ short CFireball::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CFireball::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CFireball::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -673,7 +673,7 @@ short CFireball::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CFireball::Suspend(void)
+void CFireball::Suspend()
 {
     m_sSuspend++;
 }
@@ -681,7 +681,7 @@ void CFireball::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CFireball::Resume(void)
+void CFireball::Resume()
 {
     m_sSuspend--;
 
@@ -695,7 +695,7 @@ void CFireball::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CFireball::Update(void)
+void CFireball::Update()
 {
     long lThisTime;
     double dSeconds;
@@ -751,9 +751,9 @@ void CFireball::Update(void)
                               (short)dNewX,         // In:  Destination X.
                               (short)dNewZ,         // In:  Destination Z.
                               0,                    // In:  Max traverser can step up.
-                              NULL,                 // Out: If not NULL, last clear point on path.
-                              NULL,                 // Out: If not NULL, last clear point on path.
-                              NULL,                 // Out: If not NULL, last clear point on path.
+                              nullptr,                 // Out: If not NULL, last clear point on path.
+                              nullptr,                 // Out: If not NULL, last clear point on path.
+                              nullptr,                 // Out: If not NULL, last clear point on path.
                               false)                // In:  If true, will consider the edge of the realm a path
                                                     // inhibitor.  If false, reaching the edge of the realm
                                                     // indicates a clear path.
@@ -781,7 +781,7 @@ void CFireball::Update(void)
                             m_smash.m_sphere.sphere.Z = m_dZ;
 
                             // Check for collisions
-                            CSmash *pSmashed = NULL;
+                            CSmash *pSmashed = nullptr;
                             GameMessage msg;
                             msg.msg_Burn.eType = typeBurn;
                             msg.msg_Burn.sPriority = 0;
@@ -814,7 +814,7 @@ void CFireball::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CFireball::Render(void)
+void CFireball::Render()
 {
 
     CAlphaAnim *pAnim;
@@ -910,10 +910,10 @@ short CFireball::Setup( // Returns 0 if successfull, non-zero otherwise
 // Init
 ////////////////////////////////////////////////////////////////////////////////
 
-short CFireball::Init(void)
+short CFireball::Init()
 {
     short sResult = SUCCESS;
-    CAlphaAnim *pAnim = NULL;
+    CAlphaAnim *pAnim = nullptr;
 
     // Update sphere
     m_smash.m_sphere.sphere.X = m_dX;
@@ -960,7 +960,7 @@ short CFireball::EditNew( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CFireball::EditModify(void)
+short CFireball::EditModify()
 {
     return 0;
 }
@@ -983,12 +983,12 @@ short CFireball::EditMove( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CFireball::EditUpdate(void) {}
+void CFireball::EditUpdate() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CFireball::EditRender(void)
+void CFireball::EditRender()
 {
     // In some cases, object's might need to do a special-case render in edit
     // mode because Startup() isn't called.  In this case it doesn't matter, so
@@ -999,7 +999,7 @@ void CFireball::EditRender(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CFireball::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CFireball::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = SUCCESS;
 
@@ -1014,7 +1014,7 @@ short CFireball::GetResources(void) // Returns 0 if successfull, non-zero otherw
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CFireball::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CFireball::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -1042,7 +1042,7 @@ short CFireball::Preload(CRealm *prealm) // In:  Calling realm.
 // ProcessFireballMessages
 ////////////////////////////////////////////////////////////////////////////////
 
-CFireball::CFireballState CFireball::ProcessFireballMessages(void)
+CFireball::CFireballState CFireball::ProcessFireballMessages()
 {
     CFireballState eNewState = State_Idle;
 

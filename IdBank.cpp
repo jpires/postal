@@ -192,7 +192,7 @@ void CIdBank::Remove( // Returns nothing.
 // any of the rest of these functions.
 //
 //////////////////////////////////////////////////////////////////////////////
-void CIdBank::Reset(void)
+void CIdBank::Reset()
 {
     // Reset all IDs.
     // Initialize all IDs regardless of current contents.
@@ -202,7 +202,7 @@ void CIdBank::Reset(void)
     {
         m_aids[u16Cur].u16IdPrev = u16Prev;
         m_aids[u16Cur].u16IdNext = u16Cur + 1;
-        m_aids[u16Cur].pthing = NULL;
+        m_aids[u16Cur].pthing = nullptr;
     }
 
     // Last item's next should indicate end.
@@ -264,7 +264,7 @@ short CIdBank::Take( // Returns 0 on success.
     ASSERT(u16ID < NumIds);
 
     // Make sure the ID is available . . .
-    if (m_aids[u16ID].pthing == NULL)
+    if (m_aids[u16ID].pthing == nullptr)
     {
         // Set IDs value.
         m_aids[u16ID].pthing = pthing;
@@ -295,10 +295,10 @@ void CIdBank::Release( // Returns nothing.
         // Range check.
         ASSERT(u16ID < NumIds);
         // The ID should be in use.  If not, something has hosened.
-        ASSERT(m_aids[u16ID].pthing != NULL);
+        ASSERT(m_aids[u16ID].pthing != nullptr);
 
         // Clear ID.
-        m_aids[u16ID].pthing = NULL;
+        m_aids[u16ID].pthing = nullptr;
 
         // Add to free list.
         Add(u16ID, &m_u16TailFreeId);
@@ -325,7 +325,7 @@ short CIdBank::GetThingByID( // Returns 0 on success.
         *ppthing = m_aids[u16ID].pthing;
 
         // This ID should be used.
-        if (*ppthing != NULL)
+        if (*ppthing != nullptr)
         {
             // Success.
         }
@@ -337,7 +337,7 @@ short CIdBank::GetThingByID( // Returns 0 on success.
     }
     else
     {
-        *ppthing = NULL;
+        *ppthing = nullptr;
         sRes = -1;
     }
 

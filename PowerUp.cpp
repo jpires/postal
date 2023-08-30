@@ -147,7 +147,7 @@
 #define POWERUP_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "PowerUp.h"
 #include "dude.h"
@@ -348,7 +348,7 @@ short CPowerUp::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CPowerUp::Update(void)
+void CPowerUp::Update()
 {
     if (!m_sSuspend)
     {
@@ -408,7 +408,7 @@ void CPowerUp::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CPowerUp::Render(void)
+void CPowerUp::Render()
 {
     CItem3d::Render();
 
@@ -465,7 +465,7 @@ short CPowerUp::EditNew( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CPowerUp::EditModify(void)
+short CPowerUp::EditModify()
 {
     short sResult = m_stockpile.UserEdit();
 
@@ -482,7 +482,7 @@ short CPowerUp::EditModify(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Initialize object.
 ////////////////////////////////////////////////////////////////////////////////
-short CPowerUp::Init(void) // Returns 0 on success.
+short CPowerUp::Init() // Returns 0 on success.
 {
     short sRes = GetResources();
 
@@ -530,7 +530,7 @@ void CPowerUp::GetResName( // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CPowerUp::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CPowerUp::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -540,7 +540,7 @@ short CPowerUp::GetResources(void) // Returns 0 if successfull, non-zero otherwi
     char szResName[RSP_MAX_PATH];
     GetResName(szResName);
 
-    sResult = m_anim.Get(szResName, NULL, NULL, NULL, RChannel_LoopAtStart | RChannel_LoopAtEnd);
+    sResult = m_anim.Get(szResName, nullptr, nullptr, nullptr, RChannel_LoopAtStart | RChannel_LoopAtEnd);
 
     return sResult;
 }
@@ -548,11 +548,11 @@ short CPowerUp::GetResources(void) // Returns 0 if successfull, non-zero otherwi
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CPowerUp::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CPowerUp::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
-    if (m_anim.m_psops != NULL)
+    if (m_anim.m_psops != nullptr)
     {
         m_anim.Release();
     }
@@ -573,7 +573,7 @@ short CPowerUp::Preload(CRealm * /*prealm*/)
 
     for (i = 0; i < CStockPile::NumStockPileItems + 2; i++)
     {
-        sResult |= anim.Get(ms_apszPowerUpResNames[i], NULL, NULL, NULL, 0);
+        sResult |= anim.Get(ms_apszPowerUpResNames[i], nullptr, nullptr, nullptr, 0);
         anim.Release();
     }
 
@@ -589,7 +589,7 @@ short CPowerUp::Grab(  // Returns 0 on success..
     short sRes = 0; // Assume success.
 
     // If we are not already grabbed . . .
-    if (m_sprite.m_psprParent == NULL)
+    if (m_sprite.m_psprParent == nullptr)
     {
         m_dX = 0.0;
         m_dY = 0.0;
@@ -627,7 +627,7 @@ void CPowerUp::Drop( // Returns nothing.
     m_dZ = sZ;
 
     // If we have a parent . . .
-    if (m_sprite.m_psprParent != NULL)
+    if (m_sprite.m_psprParent != nullptr)
     {
         // Remove from parent.
         m_sprite.m_psprParent->RemoveChild(&m_sprite);
@@ -638,7 +638,7 @@ void CPowerUp::Drop( // Returns nothing.
 // Plays a sample corresponding to the type of powerup indicating it
 // was picked up.
 ////////////////////////////////////////////////////////////////////////////////
-void CPowerUp::PickUpFeedback(void) // Returns nothing.
+void CPowerUp::PickUpFeedback() // Returns nothing.
 {
     PlaySample(g_smidPickedUpWeapon, SampleMaster::UserFeedBack);
 }
@@ -649,7 +649,7 @@ void CPowerUp::PickUpFeedback(void) // Returns nothing.
 // NOTE:  This function can cause this item to be destroyed.  Don't use
 // a ptr to this object after calling this function.
 ////////////////////////////////////////////////////////////////////////////////
-void CPowerUp::RepaginateNow(void)
+void CPowerUp::RepaginateNow()
 {
     // If not empty . . .
     if (IsEmpty() == false)

@@ -52,23 +52,23 @@ void RTexture::Alloc(short sNum)
 }
 
 // Allocate same number of indices as current number of colors
-void RTexture::AllocIndices(void)
+void RTexture::AllocIndices()
 {
     FreeIndices();
     m_pIndices = (UCHAR *)calloc(m_sNum, 1);
-    ASSERT(m_pIndices != 0);
+    ASSERT(m_pIndices != nullptr);
 }
 
 // Allocate same number of colors as current number of indices
-void RTexture::AllocColors(void)
+void RTexture::AllocColors()
 {
     FreeColors();
     m_pColors = (RPixel32 *)calloc(m_sNum, sizeof(RPixel32));
-    ASSERT(m_pColors != 0);
+    ASSERT(m_pColors != nullptr);
 }
 
 // Free indices and colors
-void RTexture::Free(void)
+void RTexture::Free()
 {
     FreeIndices();
     FreeColors();
@@ -76,22 +76,22 @@ void RTexture::Free(void)
 }
 
 // Free indices only
-void RTexture::FreeIndices(void)
+void RTexture::FreeIndices()
 {
     if (m_pIndices)
     {
         free(m_pIndices);
-        m_pIndices = 0;
+        m_pIndices = nullptr;
     }
 }
 
 // Free colors only
-void RTexture::FreeColors(void)
+void RTexture::FreeColors()
 {
     if (m_pColors)
     {
         free(m_pColors);
-        m_pColors = 0;
+        m_pColors = nullptr;
     }
 }
 
@@ -160,7 +160,7 @@ void RTexture::Remap(short sStartIndex, short sNumIndex, UCHAR *pr, UCHAR *pg, U
 {
     ASSERT(m_pColors);
 
-    if (m_pIndices == 0)
+    if (m_pIndices == nullptr)
         AllocIndices();
 
     for (short i = 0; i < m_sNum; i++)
@@ -185,7 +185,7 @@ void RTexture::Unmap(UCHAR *pr, UCHAR *pg, UCHAR *pb, long lInc)
 {
     ASSERT(m_pIndices);
 
-    if (m_pColors == 0)
+    if (m_pColors == nullptr)
         AllocColors();
 
     U8 *pu8 = m_pIndices;
@@ -240,10 +240,10 @@ void RMesh::Alloc(short sNum)
     Free();
     m_sNum = sNum;
     m_pArray = (USHORT *)calloc((long)m_sNum * 3, sizeof(USHORT));
-    ASSERT(m_pArray != 0);
+    ASSERT(m_pArray != nullptr);
 }
 
-void RMesh::Free(void)
+void RMesh::Free()
 {
     if (m_pArray)
         free(m_pArray);
@@ -289,10 +289,10 @@ void RSop::Alloc(long lNum)
     Free();
     m_lNum = lNum;
     m_pArray = (RP3d *)calloc(m_lNum, sizeof(RP3d));
-    ASSERT(m_pArray != 0);
+    ASSERT(m_pArray != nullptr);
 }
 
-void RSop::Free(void)
+void RSop::Free()
 {
     if (m_pArray)
         free(m_pArray);

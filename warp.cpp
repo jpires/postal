@@ -263,7 +263,7 @@ short CWarp::Save(  // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CWarp::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CWarp::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -271,7 +271,7 @@ short CWarp::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CWarp::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CWarp::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -279,7 +279,7 @@ short CWarp::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CWarp::Suspend(void)
+void CWarp::Suspend()
 {
     m_sSuspend++;
 }
@@ -287,7 +287,7 @@ void CWarp::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CWarp::Resume(void)
+void CWarp::Resume()
 {
     m_sSuspend--;
 }
@@ -295,7 +295,7 @@ void CWarp::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CWarp::Update(void)
+void CWarp::Update()
 {
     // Do schtuff.
 }
@@ -303,7 +303,7 @@ void CWarp::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CWarp::Render(void)
+void CWarp::Render()
 {
     // Doesn't normally draw anything (see EditRender() for render during
     // edit mode).
@@ -332,7 +332,7 @@ short CWarp::EditNew( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CWarp::EditModify(void)
+short CWarp::EditModify()
 {
     short sResult = 0;
     // Load our GUI.
@@ -393,7 +393,7 @@ void CWarp::EditRect( // Returns nothiing.
     prc->sW = 10; // Safety.
     prc->sH = 10; // Safety.
 
-    if (m_sprite.m_pImage != NULL)
+    if (m_sprite.m_pImage != nullptr)
     {
         prc->sW = m_sprite.m_pImage->m_sWidth;
         prc->sH = m_sprite.m_pImage->m_sHeight;
@@ -416,7 +416,7 @@ void CWarp::EditHotSpot( // Returns nothiing.
     *psX = 0; // Safety.
     *psY = 0; // Safety.
 
-    if (m_sprite.m_pImage != NULL)
+    if (m_sprite.m_pImage != nullptr)
     {
         *psX = m_sprite.m_pImage->m_sWidth / 2;
         *psY = m_sprite.m_pImage->m_sHeight;
@@ -426,7 +426,7 @@ void CWarp::EditHotSpot( // Returns nothiing.
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CWarp::EditUpdate(void)
+void CWarp::EditUpdate()
 {
     // The editor schtuff.
 }
@@ -434,7 +434,7 @@ void CWarp::EditUpdate(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CWarp::EditRender(void)
+void CWarp::EditRender()
 {
     // Map from 3d to 2d coords
     Map3Dto2D((short)m_dX, (short)m_dY, (short)m_dZ, &m_sprite.m_sX2, &m_sprite.m_sY2);
@@ -456,7 +456,7 @@ void CWarp::EditRender(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Initialize object.
 ////////////////////////////////////////////////////////////////////////////////
-short CWarp::Init(void) // Returns 0 on success.
+short CWarp::Init() // Returns 0 on success.
 {
     short sRes = GetResources();
 
@@ -466,7 +466,7 @@ short CWarp::Init(void) // Returns 0 on success.
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CWarp::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CWarp::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -481,11 +481,11 @@ short CWarp::GetResources(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CWarp::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CWarp::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
-    if (m_sprite.m_pImage != NULL)
+    if (m_sprite.m_pImage != nullptr)
     {
         rspReleaseResource(&g_resmgrGame, &m_sprite.m_pImage);
     }
@@ -522,7 +522,7 @@ short CWarp::WarpIn( // Returns 0 on success.
     }
 
     // If no dude passed . . .
-    if (*ppdude == NULL)
+    if (*ppdude == nullptr)
     {
         sRes = ConstructWithID(CDudeID, m_pRealm, (CThing **)ppdude);
         if (sRes == 0)
@@ -624,7 +624,7 @@ short CWarp::WarpInAnywhere( // Returns 0 on success.
         // If we found one . . .
         if (pln != plnTail)
         {
-            ASSERT(pln->m_powner != NULL);
+            ASSERT(pln->m_powner != nullptr);
 
             // Do it.
             sRes = ((CWarp *)(pln->m_powner))->WarpIn(ppdude, sOptions);

@@ -35,7 +35,7 @@
 #include "specialtyp.h"
 #endif
 
-#include <string.h>
+#include <cstring>
 
 //***************************************************************************
 // Mimicking the success of FSPR8, the newest FSPR1 is GREATLY simplified.
@@ -82,7 +82,7 @@ typedef struct
     S16 sOverRun;            // Statistical info!
 } ConversionInfoFSPR1;
 
-ConversionInfoFSPR1 gFSPR1 = { (U32)0,          (S16)-1,  (S16)-1, (S16)-1, (S16)-1, (RImage **)NULL,
+ConversionInfoFSPR1 gFSPR1 = { (U32)0,          (S16)-1,  (S16)-1, (S16)-1, (S16)-1, (RImage **)nullptr,
                                (U32)0xffffff01,              // And the color to the correct depth
                                (U32)0,          (S16)TRUE }; // Defaults...
 
@@ -93,7 +93,7 @@ void ResetFSPR1() // only traits DESIRABLE to reset between Converts
     gFSPR1.sY = -1;
     gFSPR1.sW = -1;
     gFSPR1.sH = -1;
-    gFSPR1.ppimNew = NULL;
+    gFSPR1.ppimNew = nullptr;
 }
 
 short GetOverRuns();
@@ -198,7 +198,7 @@ short ConvertToFSPR1(RImage *pImage)
     lMaxSize = (lMaxSize + 15) & ~15; // 128 bit alignment
 
     UCHAR *pCodeBuf = (UCHAR *)calloc(1, lMaxSize);
-    if (pCodeBuf == NULL)
+    if (pCodeBuf == nullptr)
     {
         TRACE("ConvertToFSPR1: Out of memory ERROR!");
         ResetFSPR1();
@@ -316,7 +316,7 @@ short ConvertToFSPR1(RImage *pImage)
     long lCompressedSize = pCode - pCodeBuf + 1;
     long lAlignSize = (lCompressedSize + 15) & ~15;
     UCHAR *pNewCodeBuf = (UCHAR *)calloc(1, lAlignSize); //+ Free problem
-    if (pNewCodeBuf == NULL)
+    if (pNewCodeBuf == nullptr)
     {
         TRACE("ConvertToFSPR1: Out of memory ERROR!");
         free(pCodeBuf);
@@ -351,7 +351,7 @@ short ConvertToFSPR1(RImage *pImage)
     pimNew->m_lPitch = (long)pimNew->m_sWidth; // Pitch is meaningless here!
 
     //*********************  should we transfer it over?  **************
-    if (gFSPR1.ppimNew != NULL) // make a copy:
+    if (gFSPR1.ppimNew != nullptr) // make a copy:
     {
         *(gFSPR1.ppimNew) = pimNew;
         ResetFSPR1();
@@ -368,7 +368,7 @@ short ConvertToFSPR1(RImage *pImage)
     pImage->m_ulSize = 0;     // BLiT needs to deal with copying, etc....
     pImage->m_type = RImage::FSPR1;
     // free the copy header:
-    pimNew->m_pSpecialMem = NULL;
+    pimNew->m_pSpecialMem = nullptr;
     delete pimNew; // it's gone!
 
     return RImage::FSPR1;
@@ -385,7 +385,7 @@ void _rspBLiT(UCHAR ucColor, RImage *pimSrc, RImage *pimDst, short sDstX, short 
 
 #ifdef _DEBUG
 
-    if (pimSrc->m_pSpecialMem == NULL)
+    if (pimSrc->m_pSpecialMem == nullptr)
     {
         TRACE("_rspBLiT (FSPR1): corrupted source image!\n");
         return;
@@ -457,7 +457,7 @@ short ConvertFromFSPR1(RImage *pImage)
 
     // Now jettison the FSPR1 data:
     delete pHead;
-    pImage->m_pSpecial = pImage->m_pSpecialMem = NULL;
+    pImage->m_pSpecial = pImage->m_pSpecialMem = nullptr;
 
     return (short)pImage->m_type;
 }
@@ -596,7 +596,7 @@ short rspBlit(ULONG ulForeColor, RImage *pimSrc, RImage *pimDst, short sDstX, sh
 {
 #ifdef _DEBUG
 
-    if ((pimSrc == NULL) || (pimDst == NULL))
+    if ((pimSrc == nullptr) || (pimDst == nullptr))
     {
         TRACE("BLiT: null CImage* passed\n");
         return -1;
@@ -903,7 +903,7 @@ short rspBlit(ULONG ulForeColor, // will draw color 0
 {
 #ifdef _DEBUG
 
-    if ((pimSrc == NULL) || (pimDst == NULL))
+    if ((pimSrc == nullptr) || (pimDst == nullptr))
     {
         TRACE("BLiT: null CImage* passed\n");
         return -1;
@@ -1111,7 +1111,7 @@ short rspBlit(ULONG ulForeColor, // will draw color 0
     RFracU16 frOldX = { 0 };
     RFracU16 frOldY = { 0 }, frY = { 0 };
 
-    RFracU16 *afrSkipX = NULL, *afrSkipY = NULL;
+    RFracU16 *afrSkipX = nullptr, *afrSkipY = nullptr;
     afrSkipX = rspfrU16Strafe256(sDstW, sDenX);
     afrSkipY = rspfrU16Strafe256(sDstH, sDenY);
     // Make magnification possible:
@@ -1251,7 +1251,7 @@ short rspBlit(ULONG ulForeColor,
 {
 #ifdef _DEBUG
 
-    if ((pimSrc == NULL) || (pimDst == NULL))
+    if ((pimSrc == nullptr) || (pimDst == nullptr))
     {
         TRACE("BLiT: null CImage* passed\n");
         return -1;
@@ -1461,7 +1461,7 @@ short rspBlit(ULONG ulForeColor, // will draw color 0
 {
 #ifdef _DEBUG
 
-    if ((pimSrc == NULL) || (pimDst == NULL))
+    if ((pimSrc == nullptr) || (pimDst == nullptr))
     {
         TRACE("BLiT: null CImage* passed\n");
         return -1;
@@ -1584,7 +1584,7 @@ short rspBlit(ULONG ulForeColor, // will draw color 0
     RFracU16 frOldX = { 0 };
     RFracU16 frOldY = { 0 }, frY = { 0 };
 
-    RFracU16 *afrSkipX = NULL, *afrSkipY = NULL;
+    RFracU16 *afrSkipX = nullptr, *afrSkipY = nullptr;
     afrSkipX = rspfrU16Strafe256(sDstW, sDenX);
     afrSkipY = rspfrU16Strafe256(sDstH, sDenY);
     // Make magnification possible:

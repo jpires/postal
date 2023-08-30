@@ -147,7 +147,7 @@
 #define HEATSEEKER_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "heatseeker.h"
 #include "dude.h"
@@ -196,8 +196,8 @@ static char *ms_apszResNames[] = { "3d/Gmissile.sop",
                                    "3d/Gmissile.hot",
                                    "3d/Gmissile.bounds",
                                    "3d/Gmissile.floor",
-                                   NULL,
-                                   NULL };
+                                   nullptr,
+                                   nullptr };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load object (should call base class version!)
@@ -284,7 +284,7 @@ short CHeatseeker::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CHeatseeker::Update(void)
+void CHeatseeker::Update()
 {
     USHORT usAttrib;
     short sHeight;
@@ -315,7 +315,7 @@ void CHeatseeker::Update(void)
                            SampleMaster::Weapon, // In:  User volume adjustment category
                            DistanceToVolume(m_dX, m_dY, m_dZ, LaunchSndHalfLife), // In:  distance to dude
                            &m_siThrust, // Out: Handle for adjusting sound volume
-                           NULL,        // Out: Sample duration
+                           nullptr,        // Out: Sample duration
                            2841,        // In:  Where to loop back to in ms
                            3090,        // In:  Where to loop fro in ms
                            false);      // In:  Initial Sound Volume (0 - 255)
@@ -383,9 +383,9 @@ void CHeatseeker::Update(void)
                                         (short)dNewX, // In:  Destination X.
                                         (short)dNewZ, // In:  Destination Z.
                                         0,            // In:  Max traverser can step up.
-                                        NULL,         // Out: If not NULL, last clear point on path.
-                                        NULL,         // Out: If not NULL, last clear point on path.
-                                        NULL,         // Out: If not NULL, last clear point on path.
+                                        nullptr,         // Out: If not NULL, last clear point on path.
+                                        nullptr,         // Out: If not NULL, last clear point on path.
+                                        nullptr,         // Out: If not NULL, last clear point on path.
                                         false))       // In:  If true, will consider the edge of the realm a path
                                                       // inhibitor.  If false, reaching the edge of the realm
                                                       // indicates a clear path.
@@ -411,7 +411,7 @@ void CHeatseeker::Update(void)
                 // the weapon yet.
                 if (m_bArmed)
                 {
-                    CSmash *pSmashed = NULL;
+                    CSmash *pSmashed = nullptr;
 
                     // Change this to quick check closest
                     if (m_pRealm->m_smashatorium.QuickCheckClosest(&m_smashSeeker,
@@ -490,7 +490,7 @@ void CHeatseeker::Update(void)
                 else
                 {
                     // Check for collision with self and if no collision, then arm
-                    CThing *pShooter = NULL;
+                    CThing *pShooter = nullptr;
                     m_pRealm->m_idbank.GetThingByID(&pShooter, m_u16ShooterID);
                     // If the shooter is valid, then arm when it clears the shooter
                     if (pShooter)
@@ -520,7 +520,7 @@ void CHeatseeker::Update(void)
                 if (lThisTime > m_lSmokeTimer)
                 {
                     m_lSmokeTimer = lThisTime + ms_lSmokeTrailInterval;
-                    CFire *pSmoke = NULL;
+                    CFire *pSmoke = nullptr;
                     if (CThing::Construct(CThing::CFireID, m_pRealm, (CThing **)&pSmoke) == 0)
                     {
                         // This needs to be fixed by calculating the position of the back end of
@@ -601,7 +601,7 @@ void CHeatseeker::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CHeatseeker::Render(void)
+void CHeatseeker::Render()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
 
@@ -732,7 +732,7 @@ short CHeatseeker::Setup( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CHeatseeker::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CHeatseeker::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -763,7 +763,7 @@ short CHeatseeker::GetResources(void) // Returns 0 if successfull, non-zero othe
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CHeatseeker::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CHeatseeker::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     m_anim.Release();
 
@@ -793,7 +793,7 @@ short CHeatseeker::Preload(CRealm *prealm) // In:  Calling realm.
 // ProcessMessages
 ////////////////////////////////////////////////////////////////////////////////
 
-void CHeatseeker::ProcessMessages(void)
+void CHeatseeker::ProcessMessages()
 {
     GameMessage msg;
 

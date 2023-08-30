@@ -341,7 +341,7 @@
 #include "game.h"
 #include "reality.h"
 #include "score.h"
-#include <time.h>
+#include <ctime>
 #include "MemFileFest.h"
 
 // #define RSP_PROFILE_ON
@@ -564,13 +564,13 @@ CRealm::CRealm()
     m_scene.SetLayers(TotalLayers);
 
     // Set attribute map to a safe (but invalid) value
-    m_pTerrainMap = 0;
-    m_pLayerMap = 0;
-    m_pTriggerMap = 0;
-    m_pTriggerMapHolder = 0;
+    m_pTerrainMap = nullptr;
+    m_pLayerMap = nullptr;
+    m_pTriggerMap = nullptr;
+    m_pTriggerMapHolder = nullptr;
 
     // Set Hood ptr to a safe (but invalid) value.
-    m_phood = NULL;
+    m_phood = nullptr;
 
     /*
         // Create a container of things for each element in the array
@@ -580,28 +580,28 @@ CRealm::CRealm()
     */
 
     // Initialize current Navigation Net pointer
-    m_pCurrentNavNet = NULL;
+    m_pCurrentNavNet = nullptr;
 
     // Not currently updating.
     m_bUpdating = false;
 
     // Initialize dummy nodes for linked lists of CThings
     m_everythingHead.m_pnNext = &m_everythingTail;
-    m_everythingHead.m_pnPrev = NULL;
-    m_everythingHead.m_powner = NULL;
-    m_everythingTail.m_pnNext = NULL;
+    m_everythingHead.m_pnPrev = nullptr;
+    m_everythingHead.m_powner = nullptr;
+    m_everythingTail.m_pnNext = nullptr;
     m_everythingTail.m_pnPrev = &m_everythingHead;
-    m_everythingTail.m_powner = NULL;
+    m_everythingTail.m_powner = nullptr;
 
     short i;
     for (i = 0; i < CThing::TotalIDs; i++)
     {
         m_aclassHeads[i].m_pnNext = &(m_aclassTails[i]);
-        m_aclassHeads[i].m_pnPrev = NULL;
-        m_aclassHeads[i].m_powner = NULL;
-        m_aclassTails[i].m_pnNext = NULL;
+        m_aclassHeads[i].m_pnPrev = nullptr;
+        m_aclassHeads[i].m_powner = nullptr;
+        m_aclassTails[i].m_pnNext = nullptr;
         m_aclassTails[i].m_pnPrev = &(m_aclassHeads[i]);
-        m_aclassTails[i].m_powner = NULL;
+        m_aclassTails[i].m_powner = nullptr;
         m_asClassNumThings[i] = 0;
     }
 
@@ -622,7 +622,7 @@ CRealm::CRealm()
     m_flags.bEditPlay = false;
     m_flags.sDifficulty = 5;
 
-    m_fnProgress = NULL;
+    m_fnProgress = nullptr;
 
     m_bPressedEndLevelKey = false;
 
@@ -648,7 +648,7 @@ CRealm::~CRealm()
 // a Clear().  This is called by CRealm() and Clear().  This gives us one
 // spot to implement these, rather than having to do it twice.
 ////////////////////////////////////////////////////////////////////////////////
-void CRealm::Init(void) // Returns nothing.  Cannot fail.
+void CRealm::Init() // Returns nothing.  Cannot fail.
 {
     m_dKillsPercentGoal = 80.0;
     m_sKillsGoal = 0;
@@ -693,7 +693,7 @@ void CRealm::Clear()
     // stuck with an invalid iterator once the object is gone.
     CListNode<CThing> *pCur;
     CListNode<CThing> *pNext = m_everythingHead.m_pnNext;
-    while (pNext->m_powner != NULL)
+    while (pNext->m_powner != nullptr)
     {
         pCur = pNext;
         pNext = pNext->m_pnNext;
@@ -901,7 +901,7 @@ short CRealm::Load( // Returns 0 if successfull, non-zero otherwise
                     for (short sPre = 0; sPre < CThing::TotalIDs; sPre++)
                     {
                         CThing::FuncPreload func = CThing::ms_aClassInfo[sPre].funcPreload;
-                        if (func != 0)
+                        if (func != nullptr)
                         {
                             sResult = (*func)(this);
                             if (sResult != 0)
@@ -1151,7 +1151,7 @@ short CRealm::Save( // Returns 0 if successfull, non-zero otherwise
     CListNode<CThing> *pCur;
     CListNode<CThing> *pNext = m_everythingHead.m_pnNext;
     short sCurItemNum = 0;
-    while (pNext->m_powner != NULL && !sResult)
+    while (pNext->m_powner != nullptr && !sResult)
     {
         pCur = pNext;
         pNext = pNext->m_pnNext;
@@ -1197,7 +1197,7 @@ short CRealm::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup the realm
 ////////////////////////////////////////////////////////////////////////////////
-short CRealm::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CRealm::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -1238,7 +1238,7 @@ short CRealm::Startup(void) // Returns 0 if successfull, non-zero otherwise
         CListNode<CThing> *pCur;
         CListNode<CThing> *pNext = m_everythingHead.m_pnNext;
         // Go through all objects, calling Startup() for those that have the flag set
-        while (pNext->m_powner != NULL && !sResult)
+        while (pNext->m_powner != nullptr && !sResult)
         {
             pCur = pNext;
             pNext = pNext->m_pnNext;
@@ -1265,7 +1265,7 @@ short CRealm::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown the realm
 ////////////////////////////////////////////////////////////////////////////////
-short CRealm::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CRealm::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -1286,7 +1286,7 @@ short CRealm::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
         // stuck with an invalid iterator once the object is gone.
         CListNode<CThing> *pCur;
         CListNode<CThing> *pNext = m_everythingHead.m_pnNext;
-        while (pNext->m_powner != NULL && !sResult)
+        while (pNext->m_powner != nullptr && !sResult)
         {
             pCur = pNext;
             pNext = pNext->m_pnNext;
@@ -1313,7 +1313,7 @@ short CRealm::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend the realm
 ////////////////////////////////////////////////////////////////////////////////
-void CRealm::Suspend(void)
+void CRealm::Suspend()
 {
     m_sNumSuspends++;
 
@@ -1321,7 +1321,7 @@ void CRealm::Suspend(void)
     // stuck with an invalid iterator once the object is gone.
     CListNode<CThing> *pCur;
     CListNode<CThing> *pNext = m_everythingHead.m_pnNext;
-    while (pNext->m_powner != NULL)
+    while (pNext->m_powner != nullptr)
     {
         pCur = pNext;
         pNext = pNext->m_pnNext;
@@ -1341,7 +1341,7 @@ void CRealm::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume the realm
 ////////////////////////////////////////////////////////////////////////////////
-void CRealm::Resume(void)
+void CRealm::Resume()
 {
     if (m_sNumSuspends > 0)
     {
@@ -1349,7 +1349,7 @@ void CRealm::Resume(void)
         // stuck with an invalid iterator once the object is gone.
         CListNode<CThing> *pCur;
         CListNode<CThing> *pNext = m_everythingHead.m_pnNext;
-        while (pNext->m_powner != NULL)
+        while (pNext->m_powner != nullptr)
         {
             pCur = pNext;
             pNext = pNext->m_pnNext;
@@ -1374,7 +1374,7 @@ void CRealm::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update the realm
 ////////////////////////////////////////////////////////////////////////////////
-void CRealm::Update(void)
+void CRealm::Update()
 {
     // We want to do this for every CThing in the realm.  We use iNext to get
     // the next iterator before calling the current item to avoid
@@ -1397,7 +1397,7 @@ void CRealm::Update(void)
     // Do this for everything.
     CThing *pthing;
     m_pNext = m_everythingHead.m_pnNext;
-    while (m_pNext->m_powner != NULL)
+    while (m_pNext->m_powner != nullptr)
     {
         pthing = m_pNext->m_powner;
         m_pNext = m_pNext->m_pnNext;
@@ -1422,7 +1422,7 @@ void CRealm::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render the realm
 ////////////////////////////////////////////////////////////////////////////////
-void CRealm::Render(void)
+void CRealm::Render()
 {
     // Entering update loop.
     m_bUpdating = true;
@@ -1430,7 +1430,7 @@ void CRealm::Render(void)
     // Do this for everything.
     CThing *pthing;
     m_pNext = m_everythingHead.m_pnNext;
-    while (m_pNext->m_powner != NULL)
+    while (m_pNext->m_powner != nullptr)
     {
         pthing = m_pNext->m_powner;
         m_pNext = m_pNext->m_pnNext;
@@ -1484,13 +1484,13 @@ void CRealm::Render(
 ////////////////////////////////////////////////////////////////////////////////
 // Edit mode: Update the realm
 ////////////////////////////////////////////////////////////////////////////////
-void CRealm::EditUpdate(void)
+void CRealm::EditUpdate()
 {
     // Do this for all the objects.  We use a copy of the iterator to avoid being
     // stuck with an invalid iterator once the object is gone.
     CListNode<CThing> *pCur;
     CListNode<CThing> *pNext = m_everythingHead.m_pnNext;
-    while (pNext->m_powner != NULL)
+    while (pNext->m_powner != nullptr)
     {
         pCur = pNext;
         pNext = pNext->m_pnNext;
@@ -1502,13 +1502,13 @@ void CRealm::EditUpdate(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Edit mode: Render the realm
 ////////////////////////////////////////////////////////////////////////////////
-void CRealm::EditRender(void)
+void CRealm::EditRender()
 {
     // Do this for all the objects.  We use a copy of the iterator to avoid being
     // stuck with an invalid iterator once the object is gone.
     CListNode<CThing> *pCur;
     CListNode<CThing> *pNext = m_everythingHead.m_pnNext;
-    while (pNext->m_powner != NULL)
+    while (pNext->m_powner != nullptr)
     {
         pCur = pNext;
         pNext = pNext->m_pnNext;
@@ -1560,12 +1560,12 @@ void CRealm::EditRender(
 ////////////////////////////////////////////////////////////////////////////////
 // EditModify - Run dialog for realm scoring and play options
 ////////////////////////////////////////////////////////////////////////////////
-void CRealm::EditModify(void)
+void CRealm::EditModify()
 {
     RGuiItem *pguiRoot = RGuiItem::LoadInstantiate(FullPathVD(REALM_DIALOG_FILE));
     RProcessGui guiDialog;
 
-    if (pguiRoot != NULL)
+    if (pguiRoot != nullptr)
     {
         RGuiItem *pguiOk = pguiRoot->GetItemFromId(1);
         RGuiItem *pguiCancel = pguiRoot->GetItemFromId(2);
@@ -1576,12 +1576,12 @@ void CRealm::EditModify(void)
         REdit *peditKillsPct = (REdit *)pguiRoot->GetItemFromId(KILLS_PCT_EDIT_ID);
         REdit *peditFlagsNum = (REdit *)pguiRoot->GetItemFromId(FLAGS_NUM_EDIT_ID);
         RListBox *plbScoreModes = (RListBox *)pguiRoot->GetItemFromId(SCORE_MODE_LB_ID);
-        RGuiItem *pguiItem = NULL;
+        RGuiItem *pguiItem = nullptr;
         long lMinutes;
         long lSeconds;
 
-        if (peditMinutes != NULL && peditSeconds != NULL && peditKillsNum != NULL && peditKillsPct != NULL &&
-            peditFlagsNum != NULL && plbScoreModes != NULL)
+        if (peditMinutes != nullptr && peditSeconds != nullptr && peditKillsNum != nullptr && peditKillsPct != nullptr &&
+            peditFlagsNum != nullptr && plbScoreModes != nullptr)
         {
             ASSERT(peditMinutes->m_type == RGuiItem::Edit);
             ASSERT(peditSeconds->m_type == RGuiItem::Edit);
@@ -1605,7 +1605,7 @@ void CRealm::EditModify(void)
             peditFlagsNum->Compose();
 
             pguiItem = plbScoreModes->GetItemFromId(SCORE_MODE_LIST_BASE + m_ScoringMode);
-            if (pguiItem != NULL)
+            if (pguiItem != nullptr)
             {
                 plbScoreModes->SetSel(pguiItem);
                 plbScoreModes->AdjustContents();
@@ -1626,7 +1626,7 @@ void CRealm::EditModify(void)
                 m_dKillsPercentGoal = (double)peditKillsPct->GetVal();
 
                 pguiItem = plbScoreModes->GetSel();
-                if (pguiItem != NULL)
+                if (pguiItem != nullptr)
                     m_ScoringMode = pguiItem->m_lId - SCORE_MODE_LIST_BASE;
             }
         }
@@ -2275,7 +2275,7 @@ const char *CRealm::Make2dResPath( // Returns a ptr to an internal static buffer
 // at run time.
 // (static)
 ////////////////////////////////////////////////////////////////////////////////
-void CRealm::CreateLayerMap(void)
+void CRealm::CreateLayerMap()
 {
     // If table needs to be built . . .
     if (ms_asAttribToLayer[0] != LayerSprite16)

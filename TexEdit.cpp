@@ -454,7 +454,7 @@ void CreatePalette(RGuiItem *pgui) // In:  GUI to contain palette.
     {
         for (sCol = 0, sX = rcClient.sX; sCol < sCols; sCol++, sX += sCellW)
         {
-            rspRect(sColor, &pgui->m_im, sX, sY, sCellW, sCellH, NULL);
+            rspRect(sColor, &pgui->m_im, sX, sY, sCellW, sCellH, nullptr);
 
             sColor += c_sPalColorsPerSwatch;
         }
@@ -537,7 +537,7 @@ void ValidateTextures(RTexture *ptex, // In:  Texture to validate.
                 }
 
                 delete pau8;
-                pau8 = 0;
+                pau8 = nullptr;
 
                 break;
             }
@@ -554,14 +554,14 @@ void ValidateTextures(RTexture *ptex, // In:  Texture to validate.
 ////////////////////////////////////////////////////////////////////////////////
 // Default constructor.
 ////////////////////////////////////////////////////////////////////////////////
-CTexEdit::CTexEdit(void)
+CTexEdit::CTexEdit()
 {
-    m_pguiRoot = NULL;
-    m_pguiAnim = NULL;
-    m_pguiCurColor = NULL;
-    m_pguiPal = NULL;
+    m_pguiRoot = nullptr;
+    m_pguiAnim = nullptr;
+    m_pguiCurColor = nullptr;
+    m_pguiPal = nullptr;
 
-    m_scene.SetupPipeline(NULL, NULL, c_dScale);
+    m_scene.SetupPipeline(nullptr, nullptr, c_dScale);
 
     m_manip = Trans;
 
@@ -578,8 +578,8 @@ CTexEdit::CTexEdit(void)
 
     m_lTriIndex = -1;
 
-    m_ptexSrc = NULL;
-    m_ptexchanSrc = NULL;
+    m_ptexSrc = nullptr;
+    m_ptexchanSrc = nullptr;
 
     m_bModified = false;
 
@@ -590,7 +590,7 @@ CTexEdit::CTexEdit(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Destructor.
 ////////////////////////////////////////////////////////////////////////////////
-CTexEdit::~CTexEdit(void) {}
+CTexEdit::~CTexEdit() {}
 
 //------------------------------------------------------------------------------
 // Methods.
@@ -691,7 +691,7 @@ void CTexEdit::DoModal(CAnim3D *panim,         // In:  3D animation to paint on.
         // Get up to two controls that can end the processing that can be
         // passed on the DoModal() line.  More buttons can be set though.
         // Set up ptrs and erase buffer.
-        gm.Prepare(m_pguiRoot, NULL, NULL);
+        gm.Prepare(m_pguiRoot, nullptr, nullptr);
 
         RInputEvent ie;
 
@@ -783,15 +783,15 @@ void CTexEdit::DoModal(CAnim3D *panim,         // In:  3D animation to paint on.
         // Clean up ptrs, erase buffer, and dirty rect list.
         gm.Unprepare();
 
-        m_ptexSrc = NULL;
-        m_ptexchanSrc = NULL;
+        m_ptexSrc = nullptr;
+        m_ptexchanSrc = nullptr;
         m_texWork.FreeIndices();
 
         delete m_pguiRoot;
-        m_pguiRoot = NULL;
-        m_pguiAnim = NULL;
-        m_pguiCurColor = NULL;
-        m_pguiPal = NULL;
+        m_pguiRoot = nullptr;
+        m_pguiAnim = nullptr;
+        m_pguiCurColor = nullptr;
+        m_pguiPal = nullptr;
     }
     else
     {
@@ -876,7 +876,7 @@ void CTexEdit::ProcessManip(bool bButtonDown,  // In:  true if mouse button down
         }
 
         short sCursorX, sCursorY;
-        rspGetMouse(&sCursorX, &sCursorY, NULL);
+        rspGetMouse(&sCursorX, &sCursorY, nullptr);
         rspSetMouse(m_sCursorResetX, m_sCursorResetY);
 
         short sDeltaX = sCursorX - m_sCursorResetX;
@@ -928,7 +928,7 @@ void CTexEdit::ProcessManip(bool bButtonDown,  // In:  true if mouse button down
         RP3d linept1, linept2;
 
         short sMouseX, sMouseY;
-        rspGetMouse(&sMouseX, &sMouseY, NULL);
+        rspGetMouse(&sMouseX, &sMouseY, nullptr);
         m_pguiAnim->TopPosToChild(&sMouseX, &sMouseY);
 
         linept1.x = sMouseX;
@@ -991,7 +991,7 @@ void CTexEdit::ProcessManip(bool bButtonDown,  // In:  true if mouse button down
     if (m_pguiPal->m_sPressed)
     {
         short sMouseX, sMouseY;
-        rspGetMouse(&sMouseX, &sMouseY, NULL);
+        rspGetMouse(&sMouseX, &sMouseY, nullptr);
         m_pguiPal->TopPosToChild(&sMouseX, &sMouseY);
 
         // Get color directly out of GUI.
@@ -1060,7 +1060,7 @@ void CTexEdit::ProcessManip(bool bButtonDown,  // In:  true if mouse button down
 //////////////////////////////////////////////////////////////////////////////
 // Apply work colors to real thing.
 //////////////////////////////////////////////////////////////////////////////
-void CTexEdit::Apply(void)
+void CTexEdit::Apply()
 {
     if (m_ptexSrc)
     {
@@ -1073,7 +1073,7 @@ void CTexEdit::Apply(void)
 //////////////////////////////////////////////////////////////////////////////
 // Revert work colors to real thing.
 //////////////////////////////////////////////////////////////////////////////
-void CTexEdit::Revert(void)
+void CTexEdit::Revert()
 {
     if (m_ptexSrc)
     {
@@ -1087,7 +1087,7 @@ void CTexEdit::Revert(void)
 //////////////////////////////////////////////////////////////////////////////
 // Save work colors to real thing.
 //////////////////////////////////////////////////////////////////////////////
-void CTexEdit::Save(void)
+void CTexEdit::Save()
 {
     Apply();
 
@@ -1134,7 +1134,7 @@ void CTexEdit::SetColor(U8 u8Color) // In:  New color index.
             // Show current color in this item.
             short sX, sY, sW, sH;
             m_pguiCurColor->GetClient(&sX, &sY, &sW, &sH);
-            rspRect(u8Color, &m_pguiCurColor->m_im, sX, sY, sW, sH, NULL);
+            rspRect(u8Color, &m_pguiCurColor->m_im, sX, sY, sW, sH, nullptr);
         }
     }
 }
@@ -1319,7 +1319,7 @@ void CTexEdit::AdjustCall(RGuiItem *pgui)
     char szText[GUI_MAX_STR];
     m_pguiRoot->GetText(c_lIdAmount, szText, sizeof(szText));
 
-    float fAdjust = strtod(szText, NULL);
+    float fAdjust = strtod(szText, nullptr);
 
     // Get palette to work with.
     U8 au8Red[256];

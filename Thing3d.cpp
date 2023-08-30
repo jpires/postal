@@ -206,7 +206,7 @@
 #define THING3D_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "Thing3d.h"
 #include "reality.h"
@@ -623,7 +623,7 @@ short CThing3d::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CThing3d::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CThing3d::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     // Init other stuff
     m_lPrevTime = m_pRealm->m_time.GetGameTime();
@@ -638,7 +638,7 @@ short CThing3d::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CThing3d::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CThing3d::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -646,7 +646,7 @@ short CThing3d::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CThing3d::Suspend(void)
+void CThing3d::Suspend()
 {
     if (m_sSuspend == 0)
     {
@@ -662,7 +662,7 @@ void CThing3d::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CThing3d::Resume(void)
+void CThing3d::Resume()
 {
     m_sSuspend--;
 
@@ -680,7 +680,7 @@ void CThing3d::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CThing3d::Render(void)
+void CThing3d::Render()
 {
     U16 u16CombinedAttributes;
     short sLightTally;
@@ -730,7 +730,7 @@ void CThing3d::Render(void)
             m_spriteShadow.m_sInFlags |= CSprite::InHidden;
 
         // If the shadow is enabled
-        if (!(m_spriteShadow.m_sInFlags & CSprite::InHidden) && m_spriteShadow.m_pImage != NULL)
+        if (!(m_spriteShadow.m_sInFlags & CSprite::InHidden) && m_spriteShadow.m_pImage != nullptr)
         {
             // Get the height of the terrain from the attribute map
             short sY = m_pRealm->GetHeight((short)m_dX, (short)m_dZ);
@@ -764,7 +764,7 @@ void CThing3d::Render(void)
         }
     }
 
-    ASSERT(m_panimCur != NULL);
+    ASSERT(m_panimCur != nullptr);
 
     m_sprite.m_pmesh = (RMesh *)m_panimCur->m_pmeshes->GetAtTime(m_lAnimTime);
     m_sprite.m_psop = (RSop *)m_panimCur->m_psops->GetAtTime(m_lAnimTime);
@@ -775,7 +775,7 @@ void CThing3d::Render(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CThing3d::EditRender(void)
+void CThing3d::EditRender()
 {
     // In some cases, object's might need to do a special-case render in edit
     // mode because Startup() isn't called.  In this case it doesn't matter, so
@@ -804,7 +804,7 @@ short CThing3d::EditNew( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CThing3d::EditModify(void)
+short CThing3d::EditModify()
 {
     return 0;
 }
@@ -829,7 +829,7 @@ short CThing3d::EditMove( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 void CThing3d::EditRect(RRect *pRect)
 {
-    if (m_panimCur != NULL)
+    if (m_panimCur != nullptr)
     {
         if (m_panimCur->m_psops)
         {
@@ -899,13 +899,13 @@ void CThing3d::EditHotSpot( // Returns nothiing.
 // Implements basic one-time functionality for each time State_Shot is
 // entered.
 ////////////////////////////////////////////////////////////////////////////////
-void CThing3d::OnShot(void) {}
+void CThing3d::OnShot() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implements basic functionality while shot and returns true
 // until the state is completed.
 ////////////////////////////////////////////////////////////////////////////////
-bool CThing3d::WhileShot(void) // Returns true until state is complete
+bool CThing3d::WhileShot() // Returns true until state is complete
 {
     bool bStatePersists = true;
 
@@ -919,7 +919,7 @@ bool CThing3d::WhileShot(void) // Returns true until state is complete
 // Implements basic functionality while being blown up and returns true
 // until the state is completed.
 ////////////////////////////////////////////////////////////////////////////////
-bool CThing3d::WhileBlownUp(void) // Returns true until state is complete.
+bool CThing3d::WhileBlownUp() // Returns true until state is complete.
 {
     bool bStatePersists = true; // Assume not done.
     double dNewX, dNewY, dNewZ;
@@ -998,7 +998,7 @@ bool CThing3d::WhileBlownUp(void) // Returns true until state is complete.
 // Implements basic functionality while being on fire and returns true
 // until the state is completed.
 ////////////////////////////////////////////////////////////////////////////////
-bool CThing3d::WhileBurning(void) // Returns true until state is complete.
+bool CThing3d::WhileBurning() // Returns true until state is complete.
 {
     bool bStatePersists = true; // Assume not done.
 
@@ -1013,7 +1013,7 @@ bool CThing3d::WhileBurning(void) // Returns true until state is complete.
 // Implements basic functionality while being run over and returns true
 // until the state is completed.
 ////////////////////////////////////////////////////////////////////////////////
-bool CThing3d::WhileRunOver(void) // Returns true until state is complete.
+bool CThing3d::WhileRunOver() // Returns true until state is complete.
 {
     bool bStatePersists = true; // Assume not done.
 
@@ -1358,7 +1358,7 @@ void CThing3d::DeluxeUpdatePosVel( // Returns nothing.
 // ProcessMessage().
 // (virtual).
 ////////////////////////////////////////////////////////////////////////////////
-void CThing3d::ProcessMessages(void)
+void CThing3d::ProcessMessages()
 {
     // Check queue of messages.
     GameMessage msg;
@@ -1534,7 +1534,7 @@ void CThing3d::OnPutMeDownMsg( // Returns nothing
 ////////////////////////////////////////////////////////////////////////////////
 // Update fire animation's position.
 ////////////////////////////////////////////////////////////////////////////////
-void CThing3d::UpdateFirePosition(void)
+void CThing3d::UpdateFirePosition()
 {
     CFire *pfire;
     // If there is a fire . . .
@@ -1707,7 +1707,7 @@ CThing3d *CThing3d::DetachChild( // Returns ptr to the child or NULL, if none.
     {
         // No longer exists.
         *pu16InstanceId = CIdBank::IdNil;
-        pthing3d = NULL;
+        pthing3d = nullptr;
     }
 
     return pthing3d;
@@ -1843,12 +1843,12 @@ void CThing3d::AddForceVector( // Returns nothing.
 // PrepareShadow
 ////////////////////////////////////////////////////////////////////////////////
 
-short CThing3d::PrepareShadow(void)
+short CThing3d::PrepareShadow()
 {
     short sResult = SUCCESS;
 
     // If the shadow doesn't have resource loaded yet, load the default
-    if (m_spriteShadow.m_pImage == NULL)
+    if (m_spriteShadow.m_pImage == nullptr)
     {
         sResult = rspGetResource(&g_resmgrGame,
                                  m_pRealm->Make2dResPath(SHADOW_FILE),
@@ -1920,7 +1920,7 @@ CAnimThing *CThing3d::StartAnim( // Returns ptr to CAnimThing on success; NULL o
   bool bLoop)                    // In:  true to loop animation.
 {
     // Create the animator . . .
-    CAnimThing *pat = NULL;
+    CAnimThing *pat = nullptr;
     if (ConstructWithID(CAnimThingID, m_pRealm, (CThing **)&pat) == 0)
     {
         strcpy(pat->m_szResName, pszAnimResName);

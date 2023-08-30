@@ -187,7 +187,7 @@ extern void StartMenuTrans(long lTotalTime) // In:  Effect time (in ms) must be 
 //
 // The return value is true when the effect has completed, false otherwise.
 ////////////////////////////////////////////////////////////////////////////////
-extern bool DoPreMenuTrans(void)
+extern bool DoPreMenuTrans()
 {
     //---------------------------------------------------------------------------
     // Step 1: Start
@@ -439,7 +439,7 @@ extern bool DoPreMenuTrans(void)
 //
 // The return value is true when the effect has completed, false otherwise.
 ////////////////////////////////////////////////////////////////////////////////
-extern bool DoPostMenuTrans(void)
+extern bool DoPostMenuTrans()
 {
     //---------------------------------------------------------------------------
     // Step 6: Undo Step 5

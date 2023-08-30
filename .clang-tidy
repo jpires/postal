@@ -1,0 +1,12 @@
+Checks: >
+  -*,
+  modernize-concat-nested-namespaces,
+  modernize-deprecated-headers,
+  modernize-pass-by-value,
+  modernize-raw-string-literal,
+  modernize-redundant-void-arg,
+  modernize-replace-auto-ptr,
+  modernize-return-braced-init-list,
+  modernize-use-bool-literals,
+  modernize-use-nullptr,
+  modernize-use-override

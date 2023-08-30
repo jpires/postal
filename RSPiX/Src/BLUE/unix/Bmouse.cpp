@@ -97,7 +97,7 @@ extern void rspGetMouse(short *psX,      // Current x position is returned here 
     SET(psX, x);
     SET(psY, y);
 
-    if (psButton != NULL)
+    if (psButton != nullptr)
     {
         *psButton = (buttons & SDL_BUTTON_LMASK) ? 0x0001 : 0;
         *psButton |= (buttons & SDL_BUTTON_RMASK) ? 0x0002 : 0;
@@ -257,7 +257,7 @@ extern short rspGetLastMouseEvent( // Returns 0 if no event was available, non-z
             peEvent = ms_qmeEvents.DeQ();
         }
 
-        if (peEvent != NULL)
+        if (peEvent != nullptr)
         {
             SET(psX, peEvent->sX);
             SET(psY, peEvent->sY);
@@ -295,7 +295,7 @@ extern short rspGetMouseEvent( // Returns 0 if no event was available, non-zero 
     short sRes = TRUE; // Assume success.
 
     PRSP_MOUSE_EVENT peEvent = ms_qmeEvents.DeQ();
-    if (peEvent != NULL)
+    if (peEvent != nullptr)
     {
         SET(psX, peEvent->sX);
         SET(psY, peEvent->sY);
@@ -317,9 +317,9 @@ extern short rspGetMouseEvent( // Returns 0 if no event was available, non-zero 
 // Returns nothing.
 //
 ///////////////////////////////////////////////////////////////////////////////
-extern void rspClearMouseEvents(void)
+extern void rspClearMouseEvents()
 {
-    while (ms_qmeEvents.DeQ() != NULL)
+    while (ms_qmeEvents.DeQ() != nullptr)
         ;
 }
 
@@ -329,7 +329,7 @@ extern void rspClearMouseEvents(void)
 // Returns nothing.
 //
 ///////////////////////////////////////////////////////////////////////////////
-extern void rspHideMouseCursor(void)
+extern void rspHideMouseCursor()
 {
     // Decrement show cursor count.
     if (--ms_sCursorShowLevel < 0)
@@ -342,7 +342,7 @@ extern void rspHideMouseCursor(void)
 // Returns nothing.
 //
 ///////////////////////////////////////////////////////////////////////////////
-extern void rspShowMouseCursor(void)
+extern void rspShowMouseCursor()
 {
     // Increment show cursor count.
     if (++ms_sCursorShowLevel >= 0)
@@ -362,7 +362,7 @@ extern void rspShowMouseCursor(void)
 // This is NOT synonymous to rspHideMouseCursor().
 //
 ///////////////////////////////////////////////////////////////////////////////
-extern void rspShieldMouseCursor(void) {}
+extern void rspShieldMouseCursor() {}
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -372,14 +372,14 @@ extern void rspShieldMouseCursor(void) {}
 // This is NOT synonymous to rspShowMouseCursor().
 //
 ///////////////////////////////////////////////////////////////////////////////
-extern void rspUnshieldMouseCursor(void) {}
+extern void rspUnshieldMouseCursor() {}
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Reports current mouse cursor show level.
 //
 ///////////////////////////////////////////////////////////////////////////////
-short rspGetMouseCursorShowLevel(void) // Returns current mouse cursor show level:
+short rspGetMouseCursorShowLevel() // Returns current mouse cursor show level:
                                        // Positive indicates cursor is shown.
                                        // Non-positive indicates cursor is hidden.
 {

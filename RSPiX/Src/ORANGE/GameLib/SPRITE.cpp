@@ -185,9 +185,9 @@ RSprite::RSprite(short sX, short sY, short sZ, short sAngle, long lWidth, long l
 //
 //*****************************************************************************
 
-void RSprite::Init(void)
+void RSprite::Init()
 {
-    m_pImage = NULL;
+    m_pImage = nullptr;
     m_sOwnImage = FALSE;
     m_ulFlags = 0;
     m_sX = m_sY = m_sZ = m_sAngle = 0;
@@ -252,12 +252,12 @@ RSprite::~RSprite()
 //
 //*****************************************************************************
 
-short RSprite::CreateImage(void) // Returns 0 on success.
+short RSprite::CreateImage() // Returns 0 on success.
 {
     short sRes = 0; // Assume success.
 
     m_pImage = new RImage;
-    if (m_pImage != NULL)
+    if (m_pImage != nullptr)
     {
         // Succesfully allocated an image.
         // Remember we allocated it.
@@ -291,12 +291,12 @@ short RSprite::CreateImage(void) // Returns 0 on success.
 //
 //*****************************************************************************
 
-void RSprite::DestroyImage(void) // Returns nothing.
+void RSprite::DestroyImage() // Returns nothing.
 {
-    if (m_pImage != NULL && m_sOwnImage != FALSE)
+    if (m_pImage != nullptr && m_sOwnImage != FALSE)
     {
         delete m_pImage;
-        m_pImage = NULL;
+        m_pImage = nullptr;
         m_sOwnImage = FALSE;
     }
 }

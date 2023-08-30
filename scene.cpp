@@ -371,7 +371,7 @@ RPrint CScene::ms_print;
 CScene::CScene()
 {
     // No array of layers yet
-    m_pLayers = 0;
+    m_pLayers = nullptr;
     m_sNumLayers = 0;
 
     // This can fail, so I had wanted to put it in SetupPipeline(), but there's
@@ -383,7 +383,7 @@ CScene::CScene()
     SetupPipeline();
 
     // If the static print has no font . . .
-    if (ms_print.GetFont() == NULL)
+    if (ms_print.GetFont() == nullptr)
     {
         ms_print.SetFont(FONT_CELL_HEIGHT, &g_fontBig);
         ms_print.SetColor(FONT_FORE_COLOR, FONT_BACK_COLOR, FONT_SHADOW_COLOR);
@@ -405,21 +405,21 @@ CScene::~CScene()
 ////////////////////////////////////////////////////////////////////////////////
 // Clear the scene (clears out all layers and sprites)
 ////////////////////////////////////////////////////////////////////////////////
-void CScene::Clear(void)
+void CScene::Clear()
 {
     // Clear all sprites from all layers
     RemoveAllSprites();
 
     // Delete the layers
     delete[] m_pLayers;
-    m_pLayers = 0;
+    m_pLayers = nullptr;
     m_sNumLayers = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Remove all sprites (from all layers)
 ///////////////////////////////////////////////////////////////////////////////
-void CScene::RemoveAllSprites(void)
+void CScene::RemoveAllSprites()
 {
     // Clear sprites from each layer
     for (short s = 0; s < m_sNumLayers; s++)
@@ -477,7 +477,7 @@ void CScene::SetLayers(short sNumLayers) // In:  Number of layers
 ////////////////////////////////////////////////////////////////////////////////
 void CScene::UpdateSprite(CSprite *pSprite) // In:  Sprite to add
 {
-    ASSERT(pSprite != NULL);
+    ASSERT(pSprite != nullptr);
 
     // Check if it's already in the scene
     if (pSprite->m_sPrivFlags & CSprite::PrivInserted)
@@ -527,7 +527,7 @@ void CScene::UpdateSprite(CSprite *pSprite) // In:  Sprite to add
 ////////////////////////////////////////////////////////////////////////////////
 void CScene::RemoveSprite(CSprite *pSprite) // In:  Sprite to remove
 {
-    ASSERT(pSprite != NULL);
+    ASSERT(pSprite != nullptr);
 
     // Make sure sprite is currently inserted -- if not, skip it.  This is
     // not treated as an error because there may be situations where the
@@ -644,14 +644,14 @@ CScene::Render3D(RImage *pimDst,    // Destination image.
     short sRenderOffX;                 // Offset to Render().
     short sRenderOffY;                 // Offset to Render().
 
-    ASSERT(ps3Cur->m_psop != NULL);
-    ASSERT(ps3Cur->m_ptex != NULL);
-    ASSERT(ps3Cur->m_pmesh != NULL);
-    ASSERT(ps3Cur->m_ptrans != NULL);
-    ASSERT(ps3Cur->m_psphere != NULL);
+    ASSERT(ps3Cur->m_psop != nullptr);
+    ASSERT(ps3Cur->m_ptex != nullptr);
+    ASSERT(ps3Cur->m_pmesh != nullptr);
+    ASSERT(ps3Cur->m_ptrans != nullptr);
+    ASSERT(ps3Cur->m_psphere != nullptr);
 
     // If there's a parent . . .
-    if (ps3Cur->m_psprParent != NULL)
+    if (ps3Cur->m_psprParent != nullptr)
     {
         // NOTE: This does NOT work for more than 1 level of child depth.
         // To make that work, we must put a transform in the CSprite3.
@@ -743,7 +743,7 @@ CScene::Render3D(RImage *pimDst,    // Destination image.
                                  *ptransRender); // The transformation.
 
             // If there's no parent . . .
-            if (ps3Cur->m_psprParent == NULL)
+            if (ps3Cur->m_psprParent == nullptr)
             {
                 // Clear Z buffer for new 3D tree.
                 m_pipeline.m_pZB->Clear();
@@ -765,7 +765,7 @@ CScene::Render3D(RImage *pimDst,    // Destination image.
             //	- (m_pipeline.m_sCenZ + m_pipeline.m_sZ);
 
             // If no parent . . .
-            if (ps3Cur->m_psprParent == NULL)
+            if (ps3Cur->m_psprParent == nullptr)
             {
                 // For indirect Render:
                 // Render so center of sphere is at center of clip image.
@@ -805,7 +805,7 @@ CScene::Render3D(RImage *pimDst,    // Destination image.
             }
 
             // If this sprite has children . . .
-            if (ps3Cur->m_psprHeadChild != NULL)
+            if (ps3Cur->m_psprHeadChild != nullptr)
             {
                 // Store Render() positions for children to use.
                 ps3Cur->m_sDirectRenderX = sDirectRenderX;
@@ -821,7 +821,7 @@ CScene::Render3D(RImage *pimDst,    // Destination image.
             // If only partially on screen . . .
             if (sClipLeft > 0 || sClipTop > 0 || sClipRight > 0 || sClipBottom > 0)
             {
-                ASSERT(m_pipeline.m_pimClipBuf != NULL);
+                ASSERT(m_pipeline.m_pimClipBuf != nullptr);
                 // Use clip image.
                 pimRender = m_pipeline.m_pimClipBuf;
                 // Remember to blit to composite.
@@ -897,7 +897,7 @@ CScene::Render3D(RImage *pimDst,    // Destination image.
                              m_pipeline.m_sW,                            // Both.
                              m_pipeline.m_sH,                            // Both.
                              prcDstClip,                                 // Dst.
-                             NULL);                                      // Src.
+                             nullptr);                                      // Src.
 
                     m_pipeline.ClearClipBuffer();
                 }
@@ -987,7 +987,7 @@ CScene::Render3D(RImage *pimDst,    // Destination image.
 
                 // If there's a parent . . .
                 CSprite *psprParent = ps3Cur->m_psprParent;
-                if (psprParent != NULL)
+                if (psprParent != nullptr)
                 {
                     if (psprParent->m_pthing)
                     {
@@ -1155,12 +1155,12 @@ void CScene::Render2D( // Returns nothing.
   CSprite *psprXRayee) // XRayee, if not NULL.
 {
     // Make sure the stuff we need is there.
-    ASSERT(ps2Cur->m_pImage != NULL);
+    ASSERT(ps2Cur->m_pImage != nullptr);
 
     ASSERT(ps2Cur->m_sAlphaLevel >= 0);
     ASSERT(ps2Cur->m_sAlphaLevel <= 255);
 
-    if (ps2Cur->m_pimAlpha != NULL && g_GameSettings.m_sAlphaBlend != FALSE)
+    if (ps2Cur->m_pimAlpha != nullptr && g_GameSettings.m_sAlphaBlend != FALSE)
     {
         // If the alpha level is not opaque . . .
         if (ps2Cur->m_sAlphaLevel < 255)
@@ -1303,7 +1303,7 @@ void CScene::Render2D( // Returns nothing.
                          ps2Cur->m_pImage->m_sWidth,  // width
                          ps2Cur->m_pImage->m_sHeight, // height
                          prcDstClip,                  // dst clip
-                         NULL);                       // Src clip.
+                         nullptr);                       // Src clip.
             }
         }
     }
@@ -1321,7 +1321,7 @@ void CScene::Render(   // Returns nothing.
   RRect *prcDstClip,   // Dst clip rect.
   CSprite *psprXRayee) // XRayee, if not NULL.
 {
-    while (pSprite != NULL)
+    while (pSprite != nullptr)
     {
         // Make sure sprite isn't hidden (if it is, skip it)
         if (!(pSprite->m_sInFlags & CSprite::InHidden))
@@ -1413,7 +1413,7 @@ void CScene::Render(   // Returns nothing.
             {
                 // ****END TEMP****
                 // If there's some text . . .
-                if (pSprite->m_pszText != NULL)
+                if (pSprite->m_pszText != nullptr)
                 {
 
                     // Bind it.
@@ -1435,7 +1435,7 @@ void CScene::Render(   // Returns nothing.
             // ****END TEMP****
 
             // If this sprite has any children . . .
-            if (pSprite->m_psprHeadChild != NULL)
+            if (pSprite->m_psprHeadChild != nullptr)
             {
                 Render(                     // Returns nothing.
                   pimDst,                   // Destination image.
@@ -1478,7 +1478,7 @@ void CScene::Render(short sSrcX,    // In:  Source (scene) x coord
     short sMapX = sSrcX - sDstX;
     short sMapY = sSrcY - sDstY;
 
-    CSprite *psprXRayee = NULL; // XRayee when not NULL.
+    CSprite *psprXRayee = nullptr; // XRayee when not NULL.
 
     // Go through all the layers, back to front
     for (short sLayer = 0; sLayer < m_sNumLayers; sLayer++)
@@ -1577,14 +1577,14 @@ void CScene::SetupPipeline(                 // Returns nothing.
     m_transNoZScreen.Make1();     // Identity.
 
     // If there is a user transform . . .
-    if (ptrans != NULL)
+    if (ptrans != nullptr)
     {
         // Apply now. Ok. Close.
         m_pipeline.m_tView.PreMulBy(ptrans->T);
     }
 
     // If there is a conversion transform . . .
-    if (ptransScene2Realm != NULL)
+    if (ptransScene2Realm != nullptr)
     {
         m_transScene2Realm = *ptransScene2Realm;
     }
@@ -1665,7 +1665,7 @@ void CScene::TransformPts( // Returns nothing.
         RTransform transApplied; // Auto-identitied.
 
         // If there is a user transformation . . .
-        if (ptrans != NULL)
+        if (ptrans != nullptr)
         {
             // Create scene-user transform:
             // Apply user to view.
@@ -1750,13 +1750,13 @@ void CScene::DeadRender3D(      // Returns nothing.
     // Make sure sprite isn't hidden (if it is, skip it)
     if (!(ps3->m_sInFlags & CSprite::InHidden))
     {
-        ASSERT(pimDst != NULL);
-        ASSERT(ps3 != NULL);
-        ASSERT(phood != NULL);
+        ASSERT(pimDst != nullptr);
+        ASSERT(ps3 != nullptr);
+        ASSERT(phood != nullptr);
 
         RRect rcClip;
         // If no clipping rect specified . . .
-        if (prcDstClip == NULL)
+        if (prcDstClip == nullptr)
         {
             prcDstClip = &rcClip;
 

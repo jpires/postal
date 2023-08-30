@@ -29,8 +29,8 @@
 //		06/28/97 MJR	Minor changes to get it working on the mac.
 //
 //////////////////////////////////////////////////////////////////////
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include "System.h"
 
 #ifdef PATHS_IN_INCLUDES
@@ -194,7 +194,7 @@ short RMultiGridIndirect::AddFSPR1(RImage *pimSrc, short sLogX, short sLogY, UCH
         if ((m_pimBuffer->m_sWidth != sMaxW) || (m_pimBuffer->m_sHeight != sMaxH))
         {
             delete m_pimBuffer;
-            m_pimBuffer = NULL;
+            m_pimBuffer = nullptr;
         }
     }
 

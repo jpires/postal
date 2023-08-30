@@ -280,7 +280,7 @@ short CSoundThing::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CSoundThing::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CSoundThing::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     // Set the collective volume to zero to start.
     m_lCollectiveVolume = 0;
@@ -291,7 +291,7 @@ short CSoundThing::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CSoundThing::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CSoundThing::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -299,7 +299,7 @@ short CSoundThing::Shutdown(void) // Returns 0 if successfull, non-zero otherwis
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CSoundThing::Suspend(void)
+void CSoundThing::Suspend()
 {
     m_sSuspend++;
 }
@@ -307,7 +307,7 @@ void CSoundThing::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CSoundThing::Resume(void)
+void CSoundThing::Resume()
 {
     m_sSuspend--;
 
@@ -322,7 +322,7 @@ void CSoundThing::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CSoundThing::Update(void)
+void CSoundThing::Update()
 {
     if (!m_sSuspend)
     {
@@ -480,7 +480,7 @@ void CSoundThing::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CSoundThing::Render(void)
+void CSoundThing::Render()
 {
     // Render our sound.  What a cheezy way of trying to justify putting this
     //	here.
@@ -614,17 +614,17 @@ static void BrowseCall( // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CSoundThing::EditModify(void)
+short CSoundThing::EditModify()
 {
     short sResult = 0;
 
     // Load gui dialog
     RGuiItem *pgui = RGuiItem::LoadInstantiate(FullPathVD(GUI_FILE_NAME));
-    if (pgui != NULL)
+    if (pgui != nullptr)
     {
         // Init "name" edit
         REdit *pResName = (REdit *)pgui->GetItemFromId(3);
-        ASSERT(pResName != NULL);
+        ASSERT(pResName != nullptr);
         ASSERT(pResName->m_type == RGuiItem::Edit);
         pResName->SetText("%s", m_szResName);
         pResName->Compose();
@@ -639,47 +639,47 @@ short CSoundThing::EditModify(void)
 
         // Init "first time" edit
         REdit *pFirstTime = (REdit *)pgui->GetItemFromId(100);
-        ASSERT(pFirstTime != NULL);
+        ASSERT(pFirstTime != nullptr);
         ASSERT(pFirstTime->m_type == RGuiItem::Edit);
         pFirstTime->SetText("%ld", m_lMinTime[0]);
         pFirstTime->Compose();
 
         // Init "first random time" edit
         REdit *pFirstRndTime = (REdit *)pgui->GetItemFromId(101);
-        ASSERT(pFirstRndTime != NULL);
+        ASSERT(pFirstRndTime != nullptr);
         ASSERT(pFirstRndTime->m_type == RGuiItem::Edit);
         pFirstRndTime->SetText("%ld", m_lRndTime[0]);
         pFirstRndTime->Compose();
 
         // Init "repeat time" edit
         REdit *pRepeatTime = (REdit *)pgui->GetItemFromId(102);
-        ASSERT(pRepeatTime != NULL);
+        ASSERT(pRepeatTime != nullptr);
         ASSERT(pRepeatTime->m_type == RGuiItem::Edit);
         pRepeatTime->SetText("%ld", m_lMinTime[1]);
         pRepeatTime->Compose();
 
         // Init "repeat random time" edit
         REdit *pRepeatRndTime = (REdit *)pgui->GetItemFromId(103);
-        ASSERT(pRepeatRndTime != NULL);
+        ASSERT(pRepeatRndTime != nullptr);
         ASSERT(pRepeatRndTime->m_type == RGuiItem::Edit);
         pRepeatRndTime->SetText("%ld", m_lRndTime[1]);
         pRepeatRndTime->Compose();
 
         // Init "enable" push button
         RPushBtn *pEnable = (RPushBtn *)pgui->GetItemFromId(200);
-        ASSERT(pEnable != NULL);
+        ASSERT(pEnable != nullptr);
         pEnable->m_state = m_bInitiallyEnabled ? RPushBtn::On : RPushBtn::Off;
         pEnable->Compose();
 
         // Init "repeat" push button
         RPushBtn *pRepeat = (RPushBtn *)pgui->GetItemFromId(201);
-        ASSERT(pRepeat != NULL);
+        ASSERT(pRepeat != nullptr);
         pRepeat->m_state = m_bInitiallyRepeats ? RPushBtn::On : RPushBtn::Off;
         pRepeat->Compose();
 
         // Init "volume half life" edit.
         REdit *peditHalfLife = (REdit *)pgui->GetItemFromId(301);
-        ASSERT(peditHalfLife != NULL);
+        ASSERT(peditHalfLife != nullptr);
         ASSERT(peditHalfLife->m_type == RGuiItem::Edit);
         peditHalfLife->SetText("%ld", m_lVolumeHalfLife);
         peditHalfLife->Compose();
@@ -846,12 +846,12 @@ void CSoundThing::EditHotSpot( // Returns nothiing.
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CSoundThing::EditUpdate(void) {}
+void CSoundThing::EditUpdate() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CSoundThing::EditRender(void)
+void CSoundThing::EditRender()
 {
     // Setup simple, non-animating sprite
     m_sprite.m_sInFlags = 0;
@@ -876,7 +876,7 @@ void CSoundThing::EditRender(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Init object
 ////////////////////////////////////////////////////////////////////////////////
-short CSoundThing::Init(void) // Returns 0 if successfull, non-zero otherwise
+short CSoundThing::Init() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -891,7 +891,7 @@ short CSoundThing::Init(void) // Returns 0 if successfull, non-zero otherwise
     // Tell samplemaster to cache (preload) this sample
     CacheSample(m_id);
 
-    if (m_pImage == 0)
+    if (m_pImage == nullptr)
     {
         sResult = rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(IMAGE_FILE), &m_pImage);
         if (sResult == 0)
@@ -912,9 +912,9 @@ short CSoundThing::Init(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Kill object
 ////////////////////////////////////////////////////////////////////////////////
-short CSoundThing::Kill(void) // Returns 0 if successfull, non-zero otherwise
+short CSoundThing::Kill() // Returns 0 if successfull, non-zero otherwise
 {
-    if (m_pImage != 0)
+    if (m_pImage != nullptr)
         rspReleaseResource(&g_resmgrGame, &m_pImage);
 
     m_pRealm->m_scene.RemoveSprite(&m_sprite);
@@ -934,7 +934,7 @@ short CSoundThing::Kill(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Process our message queue.
 ////////////////////////////////////////////////////////////////////////////////
-void CSoundThing::ProcessMessages(void)
+void CSoundThing::ProcessMessages()
 {
     // Check queue of messages.
     GameMessage msg;

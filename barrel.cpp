@@ -109,7 +109,7 @@
 #define BARREL_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "barrel.h"
 #include "dude.h"
@@ -147,8 +147,8 @@ static char *ms_apszStillResNames[] = { "3d/barrel_still.sop",
                                         "3d/barrel_still.hot",
                                         "3d/barrel_still.bounds",
                                         "3d/barrel_still.floor",
-                                        NULL,
-                                        NULL };
+                                        nullptr,
+                                        nullptr };
 
 /// Spinning Animation Files ///////////////////////////////////////////////////
 // An array of pointers to resource names (one for each channel of the animation)
@@ -158,8 +158,8 @@ static char *ms_apszSpinResNames[] = { "3d/barrel_spin.sop",
                                        "3d/barrel_spin.hot",
                                        "3d/barrel_spin.bounds",
                                        "3d/barrel_spin.floor",
-                                       NULL,
-                                       NULL };
+                                       nullptr,
+                                       nullptr };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load object (should call base class version!)
@@ -325,7 +325,7 @@ short CBarrel::Save( // Returns 0 if successfull, non-zero otherwise
 // Init - Call this after the resources are in place
 ////////////////////////////////////////////////////////////////////////////////
 
-short CBarrel::Init(void)
+short CBarrel::Init()
 {
     short sResult = 0;
 
@@ -358,7 +358,7 @@ short CBarrel::Init(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CBarrel::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CBarrel::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -374,7 +374,7 @@ short CBarrel::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CBarrel::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CBarrel::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     // Call base class.
     short sResult = CThing3d::Shutdown();
@@ -387,7 +387,7 @@ short CBarrel::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CBarrel::Suspend(void)
+void CBarrel::Suspend()
 {
     // Call base class suspend, and add anything else here if necessary
     CThing3d::Suspend();
@@ -396,7 +396,7 @@ void CBarrel::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CBarrel::Resume(void)
+void CBarrel::Resume()
 {
     // Call the base class resume and add anything else you suspended
     CThing3d::Resume();
@@ -405,7 +405,7 @@ void CBarrel::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CBarrel::Update(void)
+void CBarrel::Update()
 {
     long lThisTime;
     long lTimeDifference;
@@ -555,10 +555,10 @@ short CBarrel::EditNew( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CBarrel::EditModify(void)
+short CBarrel::EditModify()
 {
     short sResult = 0;
-    RGuiItem *pGuiItem = NULL;
+    RGuiItem *pGuiItem = nullptr;
     RGuiItem *pGui = RGuiItem::LoadInstantiate(FullPathVD("res/editor/barrel.gui"));
     if (pGui)
     {
@@ -594,7 +594,7 @@ short CBarrel::EditModify(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CBarrel::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CBarrel::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -615,7 +615,7 @@ short CBarrel::GetResources(void) // Returns 0 if successfull, non-zero otherwis
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CBarrel::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CBarrel::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     m_animStill.Release();
     m_animSpin.Release();

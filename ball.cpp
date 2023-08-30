@@ -84,7 +84,7 @@
 #define BALL_CPP
 
 #include "RSPiX.h"
-#include <string.h>
+#include <cstring>
 
 #include "ball.h"
 #include "hood.h"
@@ -125,8 +125,8 @@ static char *ms_apszAnimNames[] = {
     "3d/main_bobbing.hot",
     "3d/main_bobbing.bounds",
     "3d/main_bobbing.floor",
-    NULL, // No rigid body for this anim.
-    NULL  // For safety, this should ensure a crash if referenced
+    nullptr, // No rigid body for this anim.
+    nullptr  // For safety, this should ensure a crash if referenced
           // beyond useful portion of array.
 };
 
@@ -236,7 +236,7 @@ short CBall::Save(  // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CBall::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CBall::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0; // Assume success.
 
@@ -255,7 +255,7 @@ short CBall::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CBall::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CBall::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -267,7 +267,7 @@ short CBall::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CBall::Suspend(void)
+void CBall::Suspend()
 {
     m_sSuspend++;
 }
@@ -275,7 +275,7 @@ void CBall::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CBall::Resume(void)
+void CBall::Resume()
 {
     m_sSuspend--;
 }
@@ -283,7 +283,7 @@ void CBall::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CBall::Update(void)
+void CBall::Update()
 {
     if (!m_sSuspend)
     {
@@ -351,7 +351,7 @@ void CBall::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CBall::Render(void)
+void CBall::Render()
 {
     // No special flags
     m_sprite.m_sInFlags = 0;
@@ -416,13 +416,13 @@ short CBall::EditNew( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CBall::EditModify(void)
+short CBall::EditModify()
 {
     short sResult = 0;
 
     // Load GUI . . .
     RGuiItem *pguiRoot = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, BALL_GUI_FILE));
-    if (pguiRoot != NULL)
+    if (pguiRoot != nullptr)
     {
         // Modal loop.
         rspClearAllInputEvents();
@@ -431,13 +431,13 @@ short CBall::EditModify(void)
         RGuiItem *pguiOk = pguiRoot->GetItemFromId(GUI_ID_OK);
         RGuiItem *pguiCancel = pguiRoot->GetItemFromId(GUI_ID_CANCEL);
 
-        if (pguiOk != NULL && pguiCancel != NULL)
+        if (pguiOk != nullptr && pguiCancel != nullptr)
         {
             // Prepare values.
             // These should definitely check to make sure they exist.
             // A nice inline helper function that takes varargs would do.
             RGuiItem *pguiEditX = pguiRoot->GetItemFromId(GUI_ID_X_OFFSET);
-            if (pguiEditX != NULL)
+            if (pguiEditX != nullptr)
             {
                 pguiEditX->SetText("%g", m_dDX);
                 // Compose with new text.
@@ -445,7 +445,7 @@ short CBall::EditModify(void)
             }
 
             RGuiItem *pguiEditY = pguiRoot->GetItemFromId(GUI_ID_Y_OFFSET);
-            if (pguiEditY != NULL)
+            if (pguiEditY != nullptr)
             {
                 pguiEditY->SetText("%g", m_dDY);
                 // Compose with new text.
@@ -453,7 +453,7 @@ short CBall::EditModify(void)
             }
 
             RGuiItem *pguiEditZ = pguiRoot->GetItemFromId(GUI_ID_Z_OFFSET);
-            if (pguiEditZ != NULL)
+            if (pguiEditZ != nullptr)
             {
                 pguiEditZ->SetText("%g", m_dDZ);
                 // Compose with new text.
@@ -466,17 +466,17 @@ short CBall::EditModify(void)
                 FreeResources();
 
                 // Set values.
-                if (pguiEditX != NULL)
+                if (pguiEditX != nullptr)
                 {
-                    m_dDX = strtod(pguiEditX->m_szText, NULL);
+                    m_dDX = strtod(pguiEditX->m_szText, nullptr);
                 }
-                if (pguiEditY != NULL)
+                if (pguiEditY != nullptr)
                 {
-                    m_dDY = strtod(pguiEditY->m_szText, NULL);
+                    m_dDY = strtod(pguiEditY->m_szText, nullptr);
                 }
-                if (pguiEditZ != NULL)
+                if (pguiEditZ != nullptr)
                 {
-                    m_dDZ = strtod(pguiEditZ->m_szText, NULL);
+                    m_dDZ = strtod(pguiEditZ->m_szText, nullptr);
                 }
 
                 // Load resources.
@@ -535,12 +535,12 @@ short CBall::EditMove( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CBall::EditUpdate(void) {}
+void CBall::EditUpdate() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CBall::EditRender(void)
+void CBall::EditRender()
 {
     // In some cases, object's might need to do a special-case render in edit
     // mode because Startup() isn't called.  In this case it doesn't matter, so
@@ -580,7 +580,7 @@ void CBall::EditHotSpot( // Returns nothiing.
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CBall::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CBall::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -592,7 +592,7 @@ short CBall::GetResources(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CBall::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CBall::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 

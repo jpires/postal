@@ -138,7 +138,7 @@
 #define DISPENSER_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "dispenser.h"
 #include "reality.h"
@@ -186,7 +186,7 @@ CDispenser::LogicInfo CDispenser::ms_aliLogics[NumLogicTypes] = {
         "Min delay (ms):",
         "Max delay (ms):",
         "Initial delay (ms):",
-        NULL,
+        nullptr,
       },
 // Description of logic.
 #if 1
@@ -207,7 +207,7 @@ CDispenser::LogicInfo CDispenser::ms_aliLogics[NumLogicTypes] = {
         "Min delay (ms):",
         "Max delay (ms):",
         "Initial delay (ms):",
-        NULL,
+        nullptr,
       },
 // Description of logic.
 #if 1
@@ -478,7 +478,7 @@ short CDispenser::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CDispenser::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CDispenser::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     switch (m_logictype)
     {
@@ -500,7 +500,7 @@ short CDispenser::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CDispenser::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CDispenser::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -508,7 +508,7 @@ short CDispenser::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CDispenser::Suspend(void)
+void CDispenser::Suspend()
 {
     if (m_sSuspend == 0)
     {
@@ -523,7 +523,7 @@ void CDispenser::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CDispenser::Resume(void)
+void CDispenser::Resume()
 {
     m_sSuspend--;
 
@@ -540,7 +540,7 @@ void CDispenser::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CDispenser::Update(void)
+void CDispenser::Update()
 {
     if (!m_sSuspend)
     {
@@ -678,7 +678,7 @@ inline void SetLogicText( // Returns nothing.
 {
     RGuiItem *pguiEdit = pguiRoot->GetItemFromId(lIdEdit);
     RGuiItem *pguiText = pguiRoot->GetItemFromId(lId);
-    if (pszText != NULL)
+    if (pszText != nullptr)
     {
         RSP_SAFE_GUI_REF_VOID(pguiText, SetText("%s", pszText));
         RSP_SAFE_GUI_REF_VOID(pguiText, Compose());
@@ -782,7 +782,7 @@ static void UpdateMaxDispensees(RGuiItem *pgui_pmb) // In:  Multibtn that was pr
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CDispenser::EditModify(void) // Returns 0 if successfull, non-zero otherwise
+short CDispenser::EditModify() // Returns 0 if successfull, non-zero otherwise
 {
     // Get key status array.
     U8 *pau8KeyStatus = rspGetKeyStatusArray();
@@ -799,7 +799,7 @@ short CDispenser::EditModify(void) // Returns 0 if successfull, non-zero otherwi
         idNewThingType = TotalIDs;
 
         RGuiItem *pguiRoot = RGuiItem::LoadInstantiate(FullPathVD(EDIT_GUI_FILE));
-        if (pguiRoot != NULL)
+        if (pguiRoot != nullptr)
         {
             // Get items.
             RListBox *plbThings = (RListBox *)pguiRoot->GetItemFromId(THINGS_LIST_BOX_ID);
@@ -841,11 +841,11 @@ short CDispenser::EditModify(void) // Returns 0 if successfull, non-zero otherwi
                 SetGuiToNotify(pbtnModify);
 
                 RGuiItem *pguiItem;
-                RGuiItem *pguiSel = NULL;
+                RGuiItem *pguiSel = nullptr;
                 for (i = 0; i < NumLogicTypes; i++)
                 {
                     pguiItem = plbLogics->AddString(ms_aliLogics[i].pszName);
-                    if (pguiItem != NULL)
+                    if (pguiItem != nullptr)
                     {
                         // Set item number.
                         pguiItem->m_ulUserData = i;
@@ -867,12 +867,12 @@ short CDispenser::EditModify(void) // Returns 0 if successfull, non-zero otherwi
 
                 plbLogics->AdjustContents();
                 // If there's a selected item (there should be) . . .
-                if (pguiSel != NULL)
+                if (pguiSel != nullptr)
                 {
                     plbLogics->EnsureVisible(pguiSel);
                 }
 
-                pguiSel = NULL;
+                pguiSel = nullptr;
 
                 // Add available objects to listbox.
                 CThing::ClassIDType idCur;
@@ -883,7 +883,7 @@ short CDispenser::EditModify(void) // Returns 0 if successfull, non-zero otherwi
                     {
                         // Add string for each item to listbox.
                         pguiItem = plbThings->AddString((char *)CThing::ms_aClassInfo[idCur].pszClassName);
-                        if (pguiItem != NULL)
+                        if (pguiItem != nullptr)
                         {
                             pguiItem->m_ulUserData = (ULONG)idCur;
 
@@ -901,7 +901,7 @@ short CDispenser::EditModify(void) // Returns 0 if successfull, non-zero otherwi
                 // Format list items.
                 plbThings->AdjustContents();
                 // If there's a selected item (there may not be) . . .
-                if (pguiSel != NULL)
+                if (pguiSel != nullptr)
                 {
                     plbThings->EnsureVisible(pguiSel);
                 }
@@ -919,7 +919,7 @@ short CDispenser::EditModify(void) // Returns 0 if successfull, non-zero otherwi
                         {
                             // Get logic selection.  Required.
                             RGuiItem *pguiSel = plbLogics->GetSel();
-                            if (pguiSel != NULL)
+                            if (pguiSel != nullptr)
                             {
                                 m_logictype = (LogicType)pguiSel->m_ulUserData;
                             }
@@ -930,7 +930,7 @@ short CDispenser::EditModify(void) // Returns 0 if successfull, non-zero otherwi
 
                             // Get dispensee type selection.  Required.
                             pguiSel = plbThings->GetSel();
-                            if (pguiSel != NULL)
+                            if (pguiSel != nullptr)
                             {
                                 idNewThingType = (ClassIDType)pguiSel->m_ulUserData;
                             }
@@ -974,7 +974,7 @@ short CDispenser::EditModify(void) // Returns 0 if successfull, non-zero otherwi
 
             // Done with GUI.
             delete pguiRoot;
-            pguiRoot = NULL;
+            pguiRoot = nullptr;
         }
         else
         {
@@ -994,7 +994,7 @@ short CDispenser::EditModify(void) // Returns 0 if successfull, non-zero otherwi
     if (sResult == 0)
     {
         // If we have a dispensee . . .
-        CThing *pthing = NULL;
+        CThing *pthing = nullptr;
         // Instantiate it so we get its current settings . . .
         if (InstantiateDispensee(&pthing, true) == 0)
         {
@@ -1010,7 +1010,7 @@ short CDispenser::EditModify(void) // Returns 0 if successfull, non-zero otherwi
         m_idDispenseeType = idNewThingType;
 
         // If no current thing . . .
-        if (pthing == NULL)
+        if (pthing == nullptr)
         {
             // Allocate the desired thing . . .
             sResult = ConstructWithID(m_idDispenseeType, m_pRealm, &pthing);
@@ -1040,7 +1040,7 @@ short CDispenser::EditModify(void) // Returns 0 if successfull, non-zero otherwi
             }
         }
 
-        if (pthing != NULL)
+        if (pthing != nullptr)
         {
             // If editing was specified . . .
             if (bModifyDispensee == true)
@@ -1085,7 +1085,7 @@ short CDispenser::EditMove( // Returns 0 if successfull, non-zero otherwise
 // Called by editor to render object
 // (virtual (Overridden here)).
 ////////////////////////////////////////////////////////////////////////////////
-void CDispenser::EditRender(void)
+void CDispenser::EditRender()
 {
     // Map from 3d to 2d coords
     Map3Dto2D((short)m_sX, (short)m_sY, (short)m_sZ, &m_sprite.m_sX2, &m_sprite.m_sY2);
@@ -1170,7 +1170,7 @@ short CDispenser::Init( // Returns 0 if successfull, non-zero otherwise
         // NOTE:  We MUST do this in both edit mode and non-edit mode
         // b/c it affects the dispensee's ms_sFileCount which can affect
         // the load process; therefore, we must be consistent.
-        CThing *pthing = NULL;
+        CThing *pthing = nullptr;
         InstantiateDispensee(&pthing, false);
 
         // If in edit mode . . .
@@ -1192,7 +1192,7 @@ short CDispenser::Init( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Kill dispenser
 ////////////////////////////////////////////////////////////////////////////////
-void CDispenser::Kill(void)
+void CDispenser::Kill()
 {
     // Remove sprite from scene (this is safe even if it was already removed!)
     m_pRealm->m_scene.RemoveSprite(&m_sprite);
@@ -1209,11 +1209,11 @@ void CDispenser::Kill(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CDispenser::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CDispenser::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
-    if (m_pim == NULL)
+    if (m_pim == nullptr)
     {
         sResult = rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(RES_FILE), &m_pim, RFile::LittleEndian);
         if (sResult == 0)
@@ -1234,9 +1234,9 @@ short CDispenser::GetResources(void) // Returns 0 if successfull, non-zero other
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-void CDispenser::FreeResources(void)
+void CDispenser::FreeResources()
 {
-    if (m_pim != NULL)
+    if (m_pim != nullptr)
     {
         // Release resources for animations.
         rspReleaseResource(&g_resmgrGame, &m_pim);
@@ -1379,7 +1379,7 @@ short CDispenser::RenderDispensee( // Returns 0 on success.
 
         m_imRender.DestroyData();
 
-        CSprite *psprite = NULL;
+        CSprite *psprite = nullptr;
 
         // If there is an instance . . .
         if (pthing)
@@ -1420,10 +1420,10 @@ short CDispenser::RenderDispensee( // Returns 0 on success.
                     0,
                     m_imRender.m_sWidth,
                     m_imRender.m_sHeight,
-                    NULL);
+                    nullptr);
 
             // If we could get the thing's sprite . . .
-            if (psprite != NULL)
+            if (psprite != nullptr)
             {
                 // Determine offset that would put the dispensee's hotspot in the center
                 // of our image.
@@ -1440,7 +1440,7 @@ short CDispenser::RenderDispensee( // Returns 0 on success.
                   psprite,                // Tree of sprites to render.
                   m_pRealm->m_phood,      // Da hood, homey.
                   &rcClip,                // Dst clip rect.
-                  NULL);                  // XRayee, if not NULL.
+                  nullptr);                  // XRayee, if not NULL.
             }
             else
             {
@@ -1456,7 +1456,7 @@ short CDispenser::RenderDispensee( // Returns 0 on success.
                     &m_imRender,                                     // Dst image.
                     m_imRender.m_sWidth / 2 - m_pim->m_sWidth / 2,   // Dst x.
                     m_imRender.m_sHeight / 2 - m_pim->m_sHeight / 2, // Dst y.
-                    NULL);                                           // Dst clip.
+                    nullptr);                                           // Dst clip.
 #endif
         }
         else
@@ -1547,7 +1547,7 @@ void CDispenser::DestroyDispensee( // Returns nothing.
         delete *ppthing;
 
         // Clear user's pointer.
-        *ppthing = NULL;
+        *ppthing = nullptr;
     }
 }
 

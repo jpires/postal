@@ -68,7 +68,7 @@ RSpry::~RSpry()
 ////////////////////////////////////////////////////////////////////////////////
 // Clear
 ////////////////////////////////////////////////////////////////////////////////
-short RSpry::Clear(void)
+short RSpry::Clear()
 {
     short sResult = 0;
 
@@ -144,7 +144,7 @@ short RSpry::Load(RFile *pFile)
                     for (short i = 0; (i < sCount) && !sResult; i++)
                     {
                         RSprite *pSprite = new RSprite;
-                        if (pSprite != 0)
+                        if (pSprite != nullptr)
                         {
                             sResult = pSprite->Load(pFile);
                             if (sResult == 0)

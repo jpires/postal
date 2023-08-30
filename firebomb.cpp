@@ -146,7 +146,7 @@
 #define FIREBOMB_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "firebomb.h"
 #include "dude.h"
@@ -184,8 +184,8 @@ static char *ms_apszResNames[] = { "3d/grenade.sop",
                                    "3d/grenade.hot",
                                    "3d/grenade.bounds",
                                    "3d/grenade.floor",
-                                   NULL,
-                                   NULL };
+                                   nullptr,
+                                   nullptr };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load object (should call base class version!)
@@ -264,7 +264,7 @@ short CFirebomb::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CFirebomb::Update(void)
+void CFirebomb::Update()
 {
     USHORT usAttrib;
     short sHeight = m_sPrevHeight;
@@ -406,7 +406,7 @@ void CFirebomb::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CFirebomb::Render(void)
+void CFirebomb::Render()
 {
     // Animate
 
@@ -490,7 +490,7 @@ short CFirebomb::Setup( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CFirebomb::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CFirebomb::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -520,7 +520,7 @@ short CFirebomb::GetResources(void) // Returns 0 if successfull, non-zero otherw
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CFirebomb::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CFirebomb::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     m_anim.Release();
 
@@ -550,7 +550,7 @@ short CFirebomb::Preload(CRealm *prealm) // In:  Calling realm.
 // ProcessMessages
 ////////////////////////////////////////////////////////////////////////////////
 
-void CFirebomb::ProcessMessages(void)
+void CFirebomb::ProcessMessages()
 {
     GameMessage msg;
 
@@ -682,7 +682,7 @@ short CFirefrag::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CFirefrag::Update(void)
+void CFirefrag::Update()
 {
     short sHeight = m_sPrevHeight;
     double dPrevVertVel;
@@ -815,7 +815,7 @@ void CFirefrag::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CFirefrag::Render(void)
+void CFirefrag::Render()
 {
     /*
         // This is a standard 2d sprite
@@ -880,11 +880,11 @@ short CFirefrag::Setup( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CFirefrag::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CFirefrag::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
-    if (m_pImage == 0)
+    if (m_pImage == nullptr)
     {
         m_pImage = new RImage;
         if (m_pImage)
@@ -912,14 +912,14 @@ short CFirefrag::GetResources(void) // Returns 0 if successfull, non-zero otherw
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CFirefrag::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CFirefrag::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
-    if (m_pImage != 0)
+    if (m_pImage != nullptr)
     {
         delete m_pImage;
-        m_pImage = 0;
+        m_pImage = nullptr;
     }
 
     return sResult;

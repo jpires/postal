@@ -94,7 +94,7 @@ RMultiBtn::RMultiBtn()
     // Initialize RMultiBtn members.
     m_sState = 0;         // The button's current state, 0..m_sNumStates - 1.
     m_sNumStates = 0;     // Number of button states.
-    m_papimStates = NULL; // Ptr to array of m_sNumStates ptrs to button
+    m_papimStates = nullptr; // Ptr to array of m_sNumStates ptrs to button
                           // state images.
 }
 
@@ -184,7 +184,7 @@ void RMultiBtn::DrawBackgroundRes( // Returns nothing.
     RImage *pimBkdRes = m_pimBkdRes;
 
     // If we have any states . . .
-    if (m_papimStates != NULL)
+    if (m_papimStates != nullptr)
     {
         // Choose proper image.
         if (m_sPressed == FALSE)
@@ -221,13 +221,13 @@ short RMultiBtn::SetNumStates( // Returns 0 on success.
 
     // Allocate an array of image ptrs and clear them all . . .
     RImage **papimNewStates = new RImage *[sNumStates + 1];
-    if (papimNewStates != NULL)
+    if (papimNewStates != nullptr)
     {
         // Clear all the ptrs to NULL.
         memset(papimNewStates, 0, sizeof(RImage *) * (sNumStates + 1));
 
         // If there was an old array . . .
-        if (m_papimStates != NULL)
+        if (m_papimStates != nullptr)
         {
             // Copy any currently valid ptrs within new range.
             short i;
@@ -236,7 +236,7 @@ short RMultiBtn::SetNumStates( // Returns 0 on success.
                 // Copy entry.
                 papimNewStates[i] = m_papimStates[i];
                 // Clear entry so it is not deleted.
-                m_papimStates[i] = NULL;
+                m_papimStates[i] = nullptr;
             }
 
             // Destroy any current states plus array.
@@ -267,7 +267,7 @@ short RMultiBtn::SetState( // Returns 0 on success.
 {
     short sRes = 0; // Assume success.
 
-    if (m_papimStates == NULL || sState >= m_sNumStates)
+    if (m_papimStates == nullptr || sState >= m_sNumStates)
     {
         sRes = SetNumStates(sState);
     }
@@ -280,7 +280,7 @@ short RMultiBtn::SetState( // Returns 0 on success.
 
         // Allocate new one . . .
         m_papimStates[sState] = new RImage;
-        if (m_papimStates[sState] != NULL)
+        if (m_papimStates[sState] != nullptr)
         {
             // Copy specified image.
             *(m_papimStates[sState]) = *pim;
@@ -330,12 +330,12 @@ void RMultiBtn::ClearState( // Returns nothing.
 {
     if (sState >= 0 && sState <= m_sNumStates)
     {
-        if (m_papimStates != NULL)
+        if (m_papimStates != nullptr)
         {
             // State be gone.  Safe for already deallocated states as long as
             // they're NULL.
             delete m_papimStates[sState];
-            m_papimStates[sState] = NULL;
+            m_papimStates[sState] = nullptr;
         }
     }
 }
@@ -343,7 +343,7 @@ void RMultiBtn::ClearState( // Returns nothing.
 //////////////////////////////////////////////////////////////////////////////
 // Go to the next logical state.
 //////////////////////////////////////////////////////////////////////////////
-short RMultiBtn::NextState(void) // Returns new state.
+short RMultiBtn::NextState() // Returns new state.
 {
     if (m_sNumStates > 0)
     {
@@ -368,11 +368,11 @@ RImage *RMultiBtn::GetState( // Returns image, if available; NULL, otherwise.
   short sState)              // In:  State to get (0 == feedback state,
                              // 1..n == state number).
 {
-    RImage *pimRes = NULL; // Assume not available.
+    RImage *pimRes = nullptr; // Assume not available.
 
     if (sState >= 0 && sState <= m_sNumStates)
     {
-        if (m_papimStates != NULL)
+        if (m_papimStates != nullptr)
         {
             pimRes = m_papimStates[sState];
         }
@@ -388,9 +388,9 @@ RImage *RMultiBtn::GetState( // Returns image, if available; NULL, otherwise.
 //////////////////////////////////////////////////////////////////////////////
 // Destroys current state bitmaps.
 //////////////////////////////////////////////////////////////////////////////
-void RMultiBtn::DestroyStates(void) // Returns nothing.
+void RMultiBtn::DestroyStates() // Returns nothing.
 {
-    if (m_papimStates != NULL)
+    if (m_papimStates != nullptr)
     {
         short i;
         for (i = 0; i <= m_sNumStates; i++)
@@ -420,7 +420,7 @@ short RMultiBtn::ReadMembers( // Returns 0 on success.
     // If okay so far . . .
     if (sRes == 0)
     {
-        ASSERT(pfile != NULL);
+        ASSERT(pfile != nullptr);
         ASSERT(pfile->IsOpen() != FALSE);
 
         // Switch on version.
@@ -520,7 +520,7 @@ short RMultiBtn::WriteMembers( // Returns 0 on success.
     // If okay so far . . .
     if (sRes == 0)
     {
-        ASSERT(pfile != NULL);
+        ASSERT(pfile != nullptr);
         ASSERT(pfile->IsOpen() != FALSE);
 
         // Write this class's members.
@@ -532,7 +532,7 @@ short RMultiBtn::WriteMembers( // Returns 0 on success.
         {
             // If there is a bitmap for this state . . .
             RImage *pimState = GetState(sCurState);
-            if (pimState != NULL)
+            if (pimState != nullptr)
             {
                 // There is an image.  Write flag indicating such.
                 pfile->Write((short)TRUE);

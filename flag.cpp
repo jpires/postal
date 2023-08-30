@@ -112,10 +112,10 @@ short CFlag::ms_sFileCount;
 /// Throwing Animation Files ////////////////////////////////////////////////////
 // An array of pointers to resource names (one for each channel of the animation)
 static char *ms_apszRedResNames[] = { "3d/rflag.sop",    "3d/rflag.mesh",  "3d/rflag.tex", "3d/rflag.hot",
-                                      "3d/rflag.bounds", "3d/rflag.floor", NULL,           NULL };
+                                      "3d/rflag.bounds", "3d/rflag.floor", nullptr,           nullptr };
 
 static char *ms_apszBlueResNames[] = { "3d/bflag.sop",    "3d/bflag.mesh",  "3d/bflag.tex", "3d/bflag.hot",
-                                       "3d/bflag.bounds", "3d/bflag.floor", NULL,           NULL };
+                                       "3d/bflag.bounds", "3d/bflag.floor", nullptr,           nullptr };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load object (should call base class version!)
@@ -268,7 +268,7 @@ short CFlag::Save(  // Returns 0 if successfull, non-zero otherwise
 // Init - Call this after the resources are in place
 ////////////////////////////////////////////////////////////////////////////////
 
-short CFlag::Init(void)
+short CFlag::Init()
 {
     short sResult = 0;
 
@@ -300,7 +300,7 @@ short CFlag::Init(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CFlag::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CFlag::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -316,7 +316,7 @@ short CFlag::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CFlag::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CFlag::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -328,12 +328,12 @@ short CFlag::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CFlag::Update(void)
+void CFlag::Update()
 {
     short sHeight = m_sPrevHeight;
     long lThisTime;
     long lTimeDifference;
-    CSmash *pSmashed = NULL;
+    CSmash *pSmashed = nullptr;
 
     if (!m_sSuspend)
     {
@@ -406,7 +406,7 @@ void CFlag::Update(void)
 
                             m_pRealm->m_sFlagbaseCaptured++;
 
-                            CThing3d *pParent = NULL;
+                            CThing3d *pParent = nullptr;
                             GameMessage msg;
                             msg.msg_PutMeDown.eType = typePutMeDown;
                             msg.msg_PutMeDown.sPriority = 0;
@@ -587,14 +587,14 @@ void CFlag::EditHotSpot( // Returns nothiing.
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CFlag::EditModify(void)
+short CFlag::EditModify()
 {
     short sResult = 0;
     U16 u16OrigColor = m_u16FlagColor;
 
-    RGuiItem *pGuiItem = NULL;
+    RGuiItem *pGuiItem = nullptr;
     RGuiItem *pguiRoot = RGuiItem::LoadInstantiate(FullPathVD("res/editor/flag.gui"));
-    if (pguiRoot != NULL)
+    if (pguiRoot != nullptr)
     {
         REdit *peditMinutes = (REdit *)pguiRoot->GetItemFromId(GUI_MINUTES_EDIT_ID);
         REdit *peditSeconds = (REdit *)pguiRoot->GetItemFromId(GUI_SECONDS_EDIT_ID);
@@ -603,7 +603,7 @@ short CFlag::EditModify(void)
         long lMinutes;
         long lSeconds;
 
-        if (peditMinutes != NULL && peditSeconds != NULL && peditFlagID != NULL && peditColor != NULL)
+        if (peditMinutes != nullptr && peditSeconds != nullptr && peditFlagID != nullptr && peditColor != nullptr)
         {
             ASSERT(peditMinutes->m_type == RGuiItem::Edit);
             ASSERT(peditSeconds->m_type == RGuiItem::Edit);
@@ -648,7 +648,7 @@ short CFlag::EditModify(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CFlag::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CFlag::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -678,7 +678,7 @@ short CFlag::GetResources(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CFlag::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CFlag::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     m_animFlagWave.Release();
 

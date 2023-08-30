@@ -95,7 +95,7 @@ static Menu *ms_apmenus[] = {
 //////////////////////////////////////////////////////////////////////////////
 // Set settings to default values
 //////////////////////////////////////////////////////////////////////////////
-CMenuSettings::CMenuSettings(void) {}
+CMenuSettings::CMenuSettings() {}
 
 //////////////////////////////////////////////////////////////////////////////
 // Destructor
@@ -118,7 +118,7 @@ short CMenuSettings::LoadPrefs(RPrefs *pPrefs)
         // Create section name.
         sprintf(szSection, "Menu %s", ms_apmenus[sMenu]->menuheader.pszHeaderText);
 
-        for (sMenuItem = 0; ms_apmenus[sMenu]->ami[sMenuItem].pszText != NULL; sMenuItem++)
+        for (sMenuItem = 0; ms_apmenus[sMenu]->ami[sMenuItem].pszText != nullptr; sMenuItem++)
         {
             // Check for var name.
             pPrefs->GetVal(szSection,                                      // In:  Section.

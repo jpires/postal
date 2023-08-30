@@ -141,7 +141,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // C Headers.
 //////////////////////////////////////////////////////////////////////////////
-#include <string.h>
+#include <cstring>
 
 //////////////////////////////////////////////////////////////////////////////
 // RSPiX Headers.
@@ -185,7 +185,7 @@
 RMsgBox::RMsgBox()
 {
     // Assume no button up callback.
-    m_mbcUser = NULL;
+    m_mbcUser = nullptr;
     // Active when visible.
     m_sActive = TRUE;
 
@@ -229,7 +229,7 @@ RBtn *RMsgBox::AddButton( // Returns allocated GUI item on success.
 
     // Attempt to allocate new btn.
     RBtn *pbtn = new RBtn;
-    if (pbtn != NULL)
+    if (pbtn != nullptr)
     {
         if (AddItem(pbtn, pszText, sX, sY, ulId, sAddW, sAddH) == 0)
         {
@@ -245,7 +245,7 @@ RBtn *RMsgBox::AddButton( // Returns allocated GUI item on success.
         if (sError != 0)
         {
             delete pbtn;
-            pbtn = NULL;
+            pbtn = nullptr;
         }
     }
     else
@@ -278,7 +278,7 @@ RTxt *RMsgBox::AddText( // Returns allocated GUI item on success.
 
     // Attempt to allocate new btn.
     RTxt *ptxt = new RTxt;
-    if (ptxt != NULL)
+    if (ptxt != nullptr)
     {
         if (AddItem(ptxt, pszText, sX, sY, ulId, sAddW, sAddH) == 0)
         {
@@ -294,7 +294,7 @@ RTxt *RMsgBox::AddText( // Returns allocated GUI item on success.
         if (sError != 0)
         {
             delete ptxt;
-            ptxt = NULL;
+            ptxt = nullptr;
         }
     }
     else
@@ -327,7 +327,7 @@ REdit *RMsgBox::AddEdit( // Returns allocated GUI item on success.
 
     // Attempt to allocate new btn.
     REdit *pedit = new REdit;
-    if (pedit != NULL)
+    if (pedit != nullptr)
     {
         // Need to create string so we can determine size of caret.
         char szCaret[] = { pedit->m_cCaretChar, '\0' };
@@ -351,7 +351,7 @@ REdit *RMsgBox::AddEdit( // Returns allocated GUI item on success.
         if (sError != 0)
         {
             delete pedit;
-            pedit = NULL;
+            pedit = nullptr;
         }
     }
     else
@@ -402,7 +402,7 @@ inline void DrawDirty( // Returns nothing.
         rspShieldMouseCursor();
 
         pdr = pdrl->GetHead();
-        while (pdr != NULL)
+        while (pdr != nullptr)
         {
             // Update screen.
             rspBlit(pimComp, pimScr, pdr->sX, pdr->sY, pdr->sX, pdr->sY, pdr->sW, pdr->sH);
@@ -429,7 +429,7 @@ ULONG RMsgBox::DoModeless( // Returns item clicked or 0, if none.
                            // Out: pie->sUsed = TRUE, if used.
 {
     // If there is a user callback . . .
-    if (m_mbcUser != NULL)
+    if (m_mbcUser != nullptr)
     {
         // Allow the user to call stuff.
         ULONG ulRes = (*m_mbcUser)(this);
@@ -483,13 +483,13 @@ ULONG RMsgBox::DoModal(      // Returns chosen ID on success,
 
     RImage *pimScr;
     // If composition buffer provided . . .
-    if (pimDst != NULL)
+    if (pimDst != nullptr)
     {
-        rspNameBuffers(NULL, &pimScr, NULL);
+        rspNameBuffers(nullptr, &pimScr, nullptr);
     }
     else // No composition buffer provided.
     {
-        rspNameBuffers(&pimDst, &pimScr, NULL);
+        rspNameBuffers(&pimDst, &pimScr, nullptr);
     }
 
     // Allocate eraser . . .
@@ -530,7 +530,7 @@ ULONG RMsgBox::DoModal(      // Returns chosen ID on success,
                 0,
                 dr.sW,
                 dr.sH,
-                NULL,              // Destination clippage.
+                nullptr,              // Destination clippage.
                 &rcCompositeClip); // Source clippage.
 
         // Draw new dlg data.
@@ -576,10 +576,10 @@ ULONG RMsgBox::DoModal(      // Returns chosen ID on success,
 // AddItem(...) (i.e., items allocated by RMsgBox)).
 //
 ////////////////////////////////////////////////////////////////////////
-void RMsgBox::RemoveAll(void) // Returns nothing.
+void RMsgBox::RemoveAll() // Returns nothing.
 {
     RGuiItem *pgui = m_listGuis.GetHead();
-    while (pgui != NULL)
+    while (pgui != nullptr)
     {
         m_listGuis.Remove();
 
@@ -670,7 +670,7 @@ short RMsgBox::AddItem( // Returns 0 on success.
                      m_im.m_sDepth) == 0)
     {
         // Add item (i.e., set parent to us) . . .
-        if (AddItem(pgui) != NULL)
+        if (AddItem(pgui) != nullptr)
         {
             // Add to our list of items to be deallocated later . . .
             if (m_listGuis.Add(pgui) == 0)

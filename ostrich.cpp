@@ -89,7 +89,7 @@
 #define OSTRICH_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "ostrich.h"
 #include "SampleMaster.h"
@@ -134,8 +134,8 @@ static char *ms_apszStandResNames[] = { "3d/ostrich_stand.sop",
                                         "3d/ostrich_stand.hot",
                                         "3d/ostrich_stand.bounds",
                                         "3d/ostrich_stand.floor",
-                                        NULL,
-                                        NULL };
+                                        nullptr,
+                                        nullptr };
 
 /// Running Animation Files
 // An array of pointers to resource names (one for each channel of the animation)
@@ -145,8 +145,8 @@ static char *ms_apszRunResNames[] = { "3d/ostrich_run.sop",
                                       "3d/ostrich_run.hot",
                                       "3d/ostrich_run.bounds",
                                       "3d/ostrich_run.floor",
-                                      NULL,
-                                      NULL };
+                                      nullptr,
+                                      nullptr };
 
 /// Throwing Animation Files
 // An array of pointers to resource names (one for each channel of the animation)
@@ -156,8 +156,8 @@ static char *ms_apszWalkResNames[] = { "3d/ostrich_walk.sop",
                                        "3d/ostrich_walk.hot",
                                        "3d/ostrich_walk.bounds",
                                        "3d/ostrich_walk.floor",
-                                       NULL,
-                                       NULL };
+                                       nullptr,
+                                       nullptr };
 
 // Shot Animation Files
 // An array of pointers to resource names (one for each channel of the animation)
@@ -167,8 +167,8 @@ static char *ms_apszShotResNames[] = { "3d/ostrich_shot.sop",
                                        "3d/ostrich_shot.hot",
                                        "3d/ostrich_shot.bounds",
                                        "3d/ostrich_shot.floor",
-                                       NULL,
-                                       NULL };
+                                       nullptr,
+                                       nullptr };
 
 /// Blown up Animation Files
 // An array of pointers to resource names (one for each channel of the animation)
@@ -178,8 +178,8 @@ static char *ms_apszBlownupResNames[] = { "3d/ostrich_blownup.sop",
                                           "3d/ostrich_blownup.hot",
                                           "3d/ostrich_blownup.bounds",
                                           "3d/ostrich_blownup.floor",
-                                          NULL,
-                                          NULL };
+                                          nullptr,
+                                          nullptr };
 
 /// Hide Animation Files
 // An array of pointers to resource names (one for each channel of the animation)
@@ -189,8 +189,8 @@ static char *ms_apszHideResNames[] = { "3d/ostrich_hide.sop",
                                        "3d/ostrich_hide.hot",
                                        "3d/ostrich_hide.bounds",
                                        "3d/ostrich_hide.floor",
-                                       NULL,
-                                       NULL };
+                                       nullptr,
+                                       nullptr };
 
 /// Die Animation files
 // An array of pointers to resource names (one for each channel of the animation)
@@ -200,8 +200,8 @@ static char *ms_apszDieResNames[] = { "3d/ostrich_die.sop",
                                       "3d/ostrich_die.hot",
                                       "3d/ostrich_die.bounds",
                                       "3d/ostrich_die.floor",
-                                      NULL,
-                                      NULL };
+                                      nullptr,
+                                      nullptr };
 
 // These are the points that are checked on the attribute map relative to his origin
 static RP3d ms_apt3dAttribCheck[] = {
@@ -309,7 +309,7 @@ short COstrich::Save( // Returns 0 if successfull, non-zero otherwise
 // Init - Call this after the resources are in place
 ////////////////////////////////////////////////////////////////////////////////
 
-short COstrich::Init(void)
+short COstrich::Init()
 {
     short sResult = 0;
 
@@ -341,7 +341,7 @@ short COstrich::Init(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short COstrich::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short COstrich::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     // Register this as a victim rather than a hostile.
     m_bCivilian = true;
@@ -357,7 +357,7 @@ short COstrich::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void COstrich::Update(void)
+void COstrich::Update()
 {
     short sHeight = m_sPrevHeight;
     double dNewX;
@@ -605,7 +605,7 @@ void COstrich::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void COstrich::Render(void)
+void COstrich::Render()
 {
     // Call base class.
     CCharacter::Render();
@@ -641,7 +641,7 @@ short COstrich::EditNew( // Returns 0 if successfull, non-zero otherwise
 // EditModify - Show dialog box for selecting starting bouy
 ////////////////////////////////////////////////////////////////////////////////
 
-short COstrich::EditModify(void)
+short COstrich::EditModify()
 {
     return 0;
 }
@@ -649,7 +649,7 @@ short COstrich::EditModify(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short COstrich::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short COstrich::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -717,7 +717,7 @@ short COstrich::GetResources(void) // Returns 0 if successfull, non-zero otherwi
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short COstrich::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short COstrich::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     m_animRun.Release();
     m_animStand.Release();
@@ -734,7 +734,7 @@ short COstrich::FreeResources(void) // Returns 0 if successfull, non-zero otherw
 // ProcessMessages - Similar to the base class version but handles a few more
 ////////////////////////////////////////////////////////////////////////////////
 
-void COstrich::ProcessMessages(void)
+void COstrich::ProcessMessages()
 {
     // Check queue of messages.
     GameMessage msg;
@@ -847,7 +847,7 @@ void COstrich::OnPanicMsg(Panic_Message *pMessage)
 // AlertFlock
 ////////////////////////////////////////////////////////////////////////////////
 
-void COstrich::AlertFlock(void)
+void COstrich::AlertFlock()
 {
     //	CThing::Things::iterator iNext;
     CThing *pThing;
@@ -864,7 +864,7 @@ void COstrich::AlertFlock(void)
     msg.msg_Panic.sZ = (short)m_dZ;
 
     CListNode<CThing> *pNext = m_pRealm->m_everythingHead.m_pnNext;
-    while (pNext->m_powner != NULL)
+    while (pNext->m_powner != nullptr)
     {
         pThing = pNext->m_powner;
         if (pThing->GetClassID() == COstrichID && pThing != this)
@@ -879,7 +879,7 @@ void COstrich::AlertFlock(void)
 // Implements basic one-time functionality for each time State_Dead is
 // entered.
 ////////////////////////////////////////////////////////////////////////////////
-void COstrich::OnDead(void)
+void COstrich::OnDead()
 {
     // Call base class.
     CDoofus::OnDead();
@@ -889,7 +889,7 @@ void COstrich::OnDead(void)
 // ChangeRandomState - Choose among the 3 normal states, stand, hide or walk
 ////////////////////////////////////////////////////////////////////////////////
 
-void COstrich::ChangeRandomState(void)
+void COstrich::ChangeRandomState()
 {
     short sMod;
     m_lTimer = m_pRealm->m_time.GetGameTime() + ms_lStateChangeTime + GetRandom() % 5000;

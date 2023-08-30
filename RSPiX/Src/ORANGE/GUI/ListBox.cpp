@@ -182,7 +182,7 @@ RListBox::RListBox()
 
     m_sLargestWidth = 0;
 
-    m_pguiSel = NULL;
+    m_pguiSel = nullptr;
 
     m_typeEncapsulator = Txt;
 }
@@ -265,7 +265,7 @@ short RListBox::Create( // Returns 0 on success.
     {
         TRACE("Create(): m_sbVert.Create() failed.\n");
         // Don't use this.
-        m_sbVert.SetParent(NULL);
+        m_sbVert.SetParent(nullptr);
     }
 
     CopyParms(&m_sbHorz);
@@ -282,7 +282,7 @@ short RListBox::Create( // Returns 0 on success.
     {
         TRACE("Create(): m_sbHorz.Create() failed.\n");
         // Don't use this.
-        m_sbHorz.SetParent(NULL);
+        m_sbHorz.SetParent(nullptr);
     }
 
     // Compose this item.
@@ -299,7 +299,7 @@ short RListBox::Create( // Returns 0 on success.
 void RListBox::Compose(   // Returns nothing.
   RImage *pim /*= NULL*/) // Dest image, uses m_im if NULL.
 {
-    if (pim == NULL)
+    if (pim == nullptr)
     {
         pim = &m_im;
     }
@@ -325,7 +325,7 @@ RGuiItem *RListBox::AddString(    // Returns new GUI item on success.
 {
     // Create a new string item . . .
     RGuiItem *pguiRes = CreateStringItem(pszString);
-    if (pguiRes != NULL)
+    if (pguiRes != nullptr)
     {
         // Reposition item.
         AddAfter(pguiRes, pguiAfter);
@@ -350,7 +350,7 @@ RGuiItem *RListBox::InsertString(  // Returns new GUI item on success.
 {
     // Create a new string item . . .
     RGuiItem *pguiRes = CreateStringItem(pszString);
-    if (pguiRes != NULL)
+    if (pguiRes != nullptr)
     {
         // Reposition item.
         InsertBefore(pguiRes, pguiBefore);
@@ -380,7 +380,7 @@ RGuiItem *RListBox::AddItem(      // Returns new GUI item or pgui on
   RGuiItem *pguiAfter /*= NULL*/) // Gui to add after or NULL to add at
                                   // end.
 {
-    RGuiItem *pguiRes = NULL; // Assume nothing.
+    RGuiItem *pguiRes = nullptr; // Assume nothing.
 
     // If encapsulation requested . . .
     if (sEncapsulate != FALSE)
@@ -395,7 +395,7 @@ RGuiItem *RListBox::AddItem(      // Returns new GUI item or pgui on
     }
 
     // If we have the item to be added . . .
-    if (pguiRes != NULL)
+    if (pguiRes != nullptr)
     {
         // Make child of list area.
         pguiRes->SetParent(&m_lcContents);
@@ -427,7 +427,7 @@ RGuiItem *RListBox::InsertItem(    // Returns new GUI item or pgui on
   RGuiItem *pguiBefore /*= NULL*/) // Gui to insert before or NULL to
                                    // insert at beginning.
 {
-    RGuiItem *pguiRes = NULL; // Assume nothing.
+    RGuiItem *pguiRes = nullptr; // Assume nothing.
 
     // If encapsulation requested . . .
     if (sEncapsulate != FALSE)
@@ -442,7 +442,7 @@ RGuiItem *RListBox::InsertItem(    // Returns new GUI item or pgui on
     }
 
     // If we have the item to be added . . .
-    if (pguiRes != NULL)
+    if (pguiRes != nullptr)
     {
         // Make child of list area.
         pguiRes->SetParent(&m_lcContents);
@@ -470,8 +470,8 @@ void RListBox::RemoveItem( // Returns nothing.
 {
     // Verify item is a list item and get encapsulator, if any:
     RGuiItem *pguiParent = pgui->GetParent();
-    RGuiItem *pguiRemove = NULL;
-    if (pguiParent != NULL)
+    RGuiItem *pguiRemove = nullptr;
+    if (pguiParent != nullptr)
     {
         // If parent is the list container . . .
         if (pguiParent == &m_lcContents)
@@ -485,7 +485,7 @@ void RListBox::RemoveItem( // Returns nothing.
             if (pguiParent->GetParent() == &m_lcContents)
             {
                 // Free from encapsulator.
-                pgui->SetParent(NULL);
+                pgui->SetParent(nullptr);
                 // Set item to remove.
                 pguiRemove = pguiParent;
             }
@@ -493,7 +493,7 @@ void RListBox::RemoveItem( // Returns nothing.
     }
 
     // If there is an item to remove . . .
-    if (pguiRemove != NULL)
+    if (pguiRemove != nullptr)
     {
         // If this item is an encapsulator . . .
         if (IsEncapsulator(pguiRemove) != FALSE)
@@ -502,7 +502,7 @@ void RListBox::RemoveItem( // Returns nothing.
             if (pguiRemove == m_pguiSel)
             {
                 // Clear selection.
-                SetSel(NULL);
+                SetSel(nullptr);
             }
 
             // Remove encapsulator prop.
@@ -531,10 +531,10 @@ void RListBox::RemoveItem( // Returns nothing.
 // Calls RemoveItem() for each item.
 //
 ////////////////////////////////////////////////////////////////////////
-void RListBox::RemoveAll(void) // Returns nothing.
+void RListBox::RemoveAll() // Returns nothing.
 {
     RGuiItem *pgui = m_lcContents.m_listguiChildren.GetHead();
-    while (pgui != NULL)
+    while (pgui != nullptr)
     {
         RemoveItem(pgui);
 
@@ -556,7 +556,7 @@ void RListBox::EnsureVisible(       // Returns nothing.
 
     // Take position of item to list contents level.
     RGuiItem *pguiParent = pgui->GetParent();
-    while (pguiParent != NULL && pguiParent != &m_lcContents)
+    while (pguiParent != nullptr && pguiParent != &m_lcContents)
     {
         sX += pguiParent->m_sX;
         sY += pguiParent->m_sY;
@@ -565,12 +565,12 @@ void RListBox::EnsureVisible(       // Returns nothing.
     }
 
     // If we got to the list contents . . .
-    if (pguiParent != NULL)
+    if (pguiParent != nullptr)
     {
         // Set new position for list contents such that item
         // is in upper left corner of client.
         short sClientX, sClientY, sClientH;
-        GetClient(&sClientX, &sClientY, NULL, &sClientH);
+        GetClient(&sClientX, &sClientY, nullptr, &sClientH);
 
         switch (posPreference)
         {
@@ -623,7 +623,7 @@ void RListBox::SetSel( // Returns nothing.
 // their visibility.
 //
 ////////////////////////////////////////////////////////////////////////
-void RListBox::UpdateScrollBarVisibility(void) // Returns nothing.
+void RListBox::UpdateScrollBarVisibility() // Returns nothing.
 {
     // Get client.
     short sClientX, sClientY, sClientW, sClientH;
@@ -679,7 +679,7 @@ void RListBox::UpdateScrollBarVisibility(void) // Returns nothing.
 // ranges accordingly.
 //
 ////////////////////////////////////////////////////////////////////////
-void RListBox::AdjustContents(void) // Returns nothing.
+void RListBox::AdjustContents() // Returns nothing.
 {
     // Get client.
     short sClientX, sClientY, sClientW, sClientH;
@@ -693,7 +693,7 @@ void RListBox::AdjustContents(void) // Returns nothing.
 
     // Get largest width.
     RGuiItem *pguiItem = m_lcContents.m_listguiChildren.GetHead();
-    while (pguiItem != NULL)
+    while (pguiItem != nullptr)
     {
         // If width is larger than largest . . .
         if (pguiItem->m_im.m_sWidth > m_sLargestWidth)
@@ -709,7 +709,7 @@ void RListBox::AdjustContents(void) // Returns nothing.
     // repositioning items as we go.
     short sY = 0;
     pguiItem = m_lcContents.m_listguiChildren.GetHead();
-    while (pguiItem != NULL)
+    while (pguiItem != nullptr)
     {
         // Reposition.
         pguiItem->Move(pguiItem->m_sX, sY);
@@ -838,7 +838,7 @@ void RListBox::AdjustContents(void) // Returns nothing.
 // after calling one of those functions.
 //
 ////////////////////////////////////////////////////////////////////////
-void RListBox::UpdateScrollBars(void)
+void RListBox::UpdateScrollBars()
 {
     m_sbVert.SetPos(-m_lcContents.m_sY);
     m_sbHorz.SetPos(-m_lcContents.m_sX);
@@ -851,12 +851,12 @@ void RListBox::UpdateScrollBars(void)
 ////////////////////////////////////////////////////////////////////////
 // Get the first child item.
 ////////////////////////////////////////////////////////////////////////
-RGuiItem *RListBox::GetFirst(void) // Returns the first child item or
+RGuiItem *RListBox::GetFirst() // Returns the first child item or
                                    // NULL.
 {
     // Find first encapsulator.
     RGuiItem *pguiFirst = m_lcContents.m_listguiChildren.GetHead();
-    while (pguiFirst != NULL)
+    while (pguiFirst != nullptr)
     {
         if (IsEncapsulator(pguiFirst) != FALSE)
         {
@@ -876,7 +876,7 @@ RGuiItem *RListBox::GetNext( // Returns the next child item.
   RGuiItem *pgui)            // In:  Child item that precedes the next.
 {
     RGuiItem *pguiNext = m_lcContents.m_listguiChildren.GetNext(pgui);
-    while (pguiNext != NULL)
+    while (pguiNext != nullptr)
     {
         if (IsEncapsulator(pguiNext) != FALSE)
         {
@@ -896,7 +896,7 @@ RGuiItem *RListBox::GetPrev( // Returns the previous child item or NULL.
   RGuiItem *pgui)            // In:  Child item that follows the prev.
 {
     RGuiItem *pguiPrev = m_lcContents.m_listguiChildren.GetPrev(pgui);
-    while (pguiPrev != NULL)
+    while (pguiPrev != nullptr)
     {
         if (IsEncapsulator(pguiPrev) != FALSE)
         {
@@ -923,16 +923,16 @@ RGuiItem *RListBox::CreateStringItem( // Returns new item on success;
                                       // NULL, otherwise.
   char *pszString)                    // Text for new item.
 {
-    RGuiItem *pgui = NULL; // Assume nothing.
+    RGuiItem *pgui = nullptr; // Assume nothing.
     short sError = 0;
 
     // We'll need a font and a print for this.
-    ASSERT(m_pprint != NULL);
-    ASSERT(m_pprint->GetFont() != NULL);
+    ASSERT(m_pprint != nullptr);
+    ASSERT(m_pprint->GetFont() != nullptr);
 
     // Allocate a new item . . .
     pgui = CreateGuiItem(m_typeEncapsulator);
-    if (pgui != NULL)
+    if (pgui != nullptr)
     {
         // Copy parms to new item.
         CopyParms(pgui);
@@ -974,7 +974,7 @@ RGuiItem *RListBox::CreateStringItem( // Returns new item on success;
         if (sError != 0)
         {
             delete pgui;
-            pgui = NULL;
+            pgui = nullptr;
         }
     }
     else
@@ -995,12 +995,12 @@ RGuiItem *RListBox::CreateEncapsulator( // Returns new item on success; NULL,
                                         // otherwise.
   RGuiItem *pgui)                       // Item to encapsulate.
 {
-    RGuiItem *pguiRes = NULL; // Assume nothing.
+    RGuiItem *pguiRes = nullptr; // Assume nothing.
     short sError = 0;
 
     // Allocate a new item . . .
     pguiRes = new RGuiItem;
-    if (pguiRes != NULL)
+    if (pguiRes != nullptr)
     {
         // Copy parms to new item.
         CopyParms(pguiRes);
@@ -1039,7 +1039,7 @@ RGuiItem *RListBox::CreateEncapsulator( // Returns new item on success; NULL,
         if (sError != 0)
         {
             delete pguiRes;
-            pguiRes = NULL;
+            pguiRes = nullptr;
         }
     }
     else
@@ -1066,7 +1066,7 @@ void RListBox::AddAfter( // Returns nothing.
     m_lcContents.m_listguiChildren.Remove(pgui);
 
     // If none specified . . .
-    if (pguiAfter == NULL)
+    if (pguiAfter == nullptr)
     {
         // Insert new item.  Under new pretenses, this SHOULD not fail.
         m_lcContents.m_listguiChildren.AddTail(pgui);
@@ -1093,7 +1093,7 @@ void RListBox::InsertBefore( // Returns nothing.
     m_lcContents.m_listguiChildren.Remove(pgui);
 
     // If none specified . . .
-    if (pguiBefore == NULL)
+    if (pguiBefore == nullptr)
     {
         // Insert new item.  Under new pretenses, this SHOULD not fail.
         m_lcContents.m_listguiChildren.InsertHead(pgui);
@@ -1116,7 +1116,7 @@ void RListBox::SelectItem( // Returns nothing.
                            // item is unselected.
 {
     // If there was previously a selection . . .
-    if (pguiSel != NULL)
+    if (pguiSel != nullptr)
     {
         // If this is an encapsulation . . .
         if (IsEncapsulator(pguiSel) != FALSE)
@@ -1188,7 +1188,7 @@ short RListBox::LoadChildren( // Returns 0 on success.
     for (sCurChild = 0; sCurChild < sNum && sRes == 0 && pfile->Error() == FALSE; sCurChild++)
     {
         pgui = LoadInstantiate(pfile);
-        if (pgui != NULL)
+        if (pgui != nullptr)
         {
             pgui->SetParent(this);
         }
@@ -1219,7 +1219,7 @@ short RListBox::SaveChildren( // Returns 0 on success.
     // Determine number of child items.
     short sNum = 0;
     RGuiItem *pgui = m_listguiChildren.GetHead();
-    while (pgui != NULL)
+    while (pgui != nullptr)
     {
         sNum++;
 
@@ -1269,7 +1269,7 @@ short RListBox::SaveChildren( // Returns 0 on success.
     // order so they, on load, get added back to their parent in the
     // order they were originally added to this parent.
     pgui = m_listguiChildren.GetTail();
-    while (pgui != NULL && sRes == 0 && pfile->Error() == FALSE)
+    while (pgui != nullptr && sRes == 0 && pfile->Error() == FALSE)
     {
         // Don't write these 3 again . . .
         if (pgui != &m_sbVert && pgui != &m_sbHorz && pgui != &m_lcContents)
@@ -1302,7 +1302,7 @@ short RListBox::ReadMembers( // Returns 0 on success.
     // If okay so far . . .
     if (sRes == 0)
     {
-        ASSERT(pfile != NULL);
+        ASSERT(pfile != nullptr);
         ASSERT(pfile->IsOpen() != FALSE);
 
         U32 u32Temp;
@@ -1361,7 +1361,7 @@ short RListBox::WriteMembers( // Returns 0 on success.
     // If okay so far . . .
     if (sRes == 0)
     {
-        ASSERT(pfile != NULL);
+        ASSERT(pfile != nullptr);
         ASSERT(pfile->IsOpen() != FALSE);
 
         // Write this class's members.

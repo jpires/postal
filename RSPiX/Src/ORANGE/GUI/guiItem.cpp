@@ -367,10 +367,10 @@
 //////////////////////////////////////////////////////////////////////////////
 // C Headers.
 //////////////////////////////////////////////////////////////////////////////
-#include <stdarg.h>
-#include <string.h>
-#include <stdlib.h>
-#include <limits.h>
+#include <cstdarg>
+#include <cstring>
+#include <cstdlib>
+#include <climits>
 
 //////////////////////////////////////////////////////////////////////////////
 // RSPiX Headers.
@@ -446,7 +446,7 @@
 //////////////////////////////////////////////////////////////////////////////
 RPrint RGuiItem::ms_print;                  // This is the main RPrint that all
                                             // GUI items default to.
-RGuiItem *RGuiItem::ms_pguiFocus = NULL;    // Higher level APIs can use this
+RGuiItem *RGuiItem::ms_pguiFocus = nullptr; // Higher level APIs can use this
                                             // as their current point of
                                             // input focus.
 char *RGuiItem::ms_apszTypes[NumGuiTypes] = // Array of strings
@@ -483,13 +483,13 @@ RGuiItem::RGuiItem()
 
     m_sPressed = FALSE;
 
-    m_pguiParent = NULL;
+    m_pguiParent = nullptr;
 
-    m_drawcall = NULL;
-    m_backcall = NULL;
-    m_bcUser = NULL;
+    m_drawcall = nullptr;
+    m_backcall = nullptr;
+    m_bcUser = nullptr;
 
-    m_fnInputEvent = NULL;
+    m_fnInputEvent = nullptr;
 
     m_ulUserInstance = NULL;
     m_ulUserData = 0;
@@ -565,11 +565,11 @@ RGuiItem::RGuiItem()
                                      // BLiT'ed transparently.
     m_sBkdResPlacement = 0;          // Combination of |'ed
                                      // Placement enum values.
-    m_pimBkdRes = NULL;              // Background resource image.
+    m_pimBkdRes = nullptr;              // Background resource image.
 
-    m_fnGetRes = NULL;     // User callback to get background res
+    m_fnGetRes = nullptr;     // User callback to get background res
                            // (m_pimBkdRes).
-    m_fnReleaseRes = NULL; // User callback to release background
+    m_fnReleaseRes = nullptr; // User callback to release background
                            // res (m_pimBkdRes).
 
     m_sVisible = TRUE; // TRUE if Draw() is to draw this item
@@ -593,9 +593,9 @@ RGuiItem::~RGuiItem()
 {
     // Release all children.
     RGuiItem *pgui = m_listguiChildren.GetHead();
-    while (pgui != NULL)
+    while (pgui != nullptr)
     {
-        pgui->SetParent(NULL);
+        pgui->SetParent(nullptr);
 
         // If the item has the dynamic prop set . . .
         if (pgui->IsDynamic() != FALSE)
@@ -608,13 +608,13 @@ RGuiItem::~RGuiItem()
     }
 
     // Release parent.
-    SetParent(NULL);
+    SetParent(nullptr);
 
     // If we were the item in focus . . .
     if (ms_pguiFocus == this)
     {
         // Kill focus.
-        SetFocus(NULL);
+        SetFocus(nullptr);
     }
 
     // Destroy dynamic data.
@@ -677,16 +677,16 @@ short RGuiItem::Create( // Returns 0 on success.
 // Destroys dynamic display data.
 // (virtual)
 ////////////////////////////////////////////////////////////////////////
-void RGuiItem::Destroy(void) // Returns nothing.
+void RGuiItem::Destroy() // Returns nothing.
 {
     m_im.DestroyData();
     m_im.DestroyPalette();
 
-    if (m_pimBkdRes != NULL)
+    if (m_pimBkdRes != nullptr)
     {
         ReleaseRes();
 
-        ASSERT(m_pimBkdRes == NULL);
+        ASSERT(m_pimBkdRes == nullptr);
     }
 }
 
@@ -707,7 +707,7 @@ short RGuiItem::Blit(    // Returns 0 on success.
 {
     short sRes = 0; // Assume success.
 
-    ASSERT(pimDst != NULL);
+    ASSERT(pimDst != nullptr);
 
     // If this is a sprite . . .
     if (ImageIsCompressed(m_im.m_type) != 0)
@@ -761,7 +761,7 @@ short RGuiItem::Blit(    // Returns 0 on success.
                      sW,
                      sH,
                      prc,   // Dst clip.
-                     NULL); // Src clip.
+                     nullptr); // Src clip.
         }
     }
 
@@ -817,7 +817,7 @@ short RGuiItem::Draw(    // Returns 0 on success.
             RRect rcDst;
 
             // If no rect . . .
-            if (prc == NULL)
+            if (prc == nullptr)
             {
                 // Provide one using destination image.
                 rcDst.sX = 0;
@@ -835,7 +835,7 @@ short RGuiItem::Draw(    // Returns 0 on success.
 
             RGuiItem *pgui = m_listguiChildren.GetTail();
 
-            while (sRes == 0 && pgui != NULL)
+            while (sRes == 0 && pgui != nullptr)
             {
                 // Draw subitem and all its subitems.
                 sRes = pgui->Draw(pimDst, sDstX, sDstY, 0, 0, 0, 0, &rc);
@@ -877,7 +877,7 @@ short RGuiItem::Redraw( // Returns 0 on success.
     short sRes = 0; // Assume success.
 
     // If there is a user callback . . .
-    if (m_drawcall != NULL)
+    if (m_drawcall != nullptr)
     {
         if (sW == 0)
         {
@@ -890,7 +890,7 @@ short RGuiItem::Redraw( // Returns 0 on success.
         }
 
         // If we have a parent . . .
-        if (m_pguiParent != NULL)
+        if (m_pguiParent != nullptr)
         {
             sRes = m_pguiParent->Redraw(m_sX + sSrcX, m_sY + sSrcY, sW, sH);
         }
@@ -939,7 +939,7 @@ void RGuiItem::Erase( // Returns nothing.
   short sH /*= 0*/)   // Height to erase.
 {
     // If there is a callback . . .
-    if (m_drawcall != NULL)
+    if (m_drawcall != nullptr)
     {
         if (sW == 0)
         {
@@ -954,7 +954,7 @@ void RGuiItem::Erase( // Returns nothing.
         RRect rc(m_sX + sX, m_sY + sY, sW, sH);
 
         // Ask user.
-        (*m_drawcall)(this, NULL, &rc);
+        (*m_drawcall)(this, nullptr, &rc);
     }
 }
 
@@ -983,7 +983,7 @@ short RGuiItem::SetText( // Returns 0 if item found, non-zero otherwise.
     short sRes = 0; // Assume success.
 
     RGuiItem *pgui = GetItemFromId(lId);
-    if (pgui != NULL)
+    if (pgui != nullptr)
     {
         va_list val;
         va_start(val, pszFrmt);
@@ -1003,7 +1003,7 @@ short RGuiItem::SetText( // Returns 0 if item found, non-zero otherwise.
 // Sets up the current text effects on m_pprint to match this
 // GUI's settings.
 ////////////////////////////////////////////////////////////////////////
-void RGuiItem::SetTextEffects(void) // Returns nothing.
+void RGuiItem::SetTextEffects() // Returns nothing.
 {
     // If shadow enabled . . .
     if (m_sTextEffects & Shadow)
@@ -1105,7 +1105,7 @@ void RGuiItem::CursorEvent( // Returns nothing.
                     pie->sPosY >= m_sEventAreaY && pie->sPosY < m_sEventAreaY + m_sEventAreaH)
                 {
                     // If there is a button up callback . . .
-                    if (m_bcUser != NULL)
+                    if (m_bcUser != nullptr)
                     {
                         (*m_bcUser)(this);
                     }
@@ -1205,7 +1205,7 @@ void RGuiItem::SetVisible( // Returns nothing.
 
     // Enum children.
     RGuiItem *pguiChild = m_listguiChildren.GetHead();
-    while (pguiChild != NULL)
+    while (pguiChild != nullptr)
     {
         pguiChild->SetVisible(m_sVisible && sVisible);
 
@@ -1228,7 +1228,7 @@ void RGuiItem::SetParent(RGuiItem *pguiParent)
     short sDifY = 0; // Difference in top level y positioning.
 
     // If there is an old . . .
-    if (m_pguiParent != NULL)
+    if (m_pguiParent != nullptr)
     {
         // Let it know it's about to lose it's child.
         m_pguiParent->OnLoseChild(this);
@@ -1246,7 +1246,7 @@ void RGuiItem::SetParent(RGuiItem *pguiParent)
     m_pguiParent = pguiParent;
 
     // If there is a new . . .
-    if (m_pguiParent != NULL)
+    if (m_pguiParent != nullptr)
     {
         // Let it know it's about to gain a child.
         m_pguiParent->OnGainChild(this);
@@ -1269,7 +1269,7 @@ void RGuiItem::SetParent(RGuiItem *pguiParent)
     else
     {
         // Set this item's as a global/top-level RHot.
-        m_hot.SetParent(NULL);
+        m_hot.SetParent(nullptr);
         // Item becomes inactive.  Or should it keep its current activation?
         SetActive(FALSE);
     }
@@ -1291,7 +1291,7 @@ void RGuiItem::DrawBorder(   // Returns nothing.
     short sVertEdgePos;
     short sHorzEdgePos;
 
-    if (pim == NULL)
+    if (pim == nullptr)
     {
         pim = &m_im;
     }
@@ -1349,14 +1349,14 @@ void RGuiItem::DrawBorder(   // Returns nothing.
 void RGuiItem::DrawBackground( // Returns nothing.
   RImage *pim /*= NULL*/)      // Dest image, uses m_im if NULL.
 {
-    if (pim == NULL)
+    if (pim == nullptr)
     {
         pim = &m_im;
     }
 
     RRect rc;
     GetClient(&rc.sX, &rc.sY, &rc.sW, &rc.sH);
-    if (m_backcall != NULL)
+    if (m_backcall != nullptr)
     {
         (*m_backcall)(this, pim, &rc);
     }
@@ -1377,13 +1377,13 @@ void RGuiItem::DrawBackground( // Returns nothing.
 void RGuiItem::DrawBackgroundRes( // Returns nothing.
   RImage *pim /*= NULL*/)         // Dest image, uses m_im, if NULL.
 {
-    if (pim == NULL)
+    if (pim == nullptr)
     {
         pim = &m_im;
     }
 
     // If resource not loaded . . .
-    if (m_pimBkdRes == NULL)
+    if (m_pimBkdRes == nullptr)
     {
         // If there's a background res . . .
         if (m_szBkdResName[0] != '\0')
@@ -1399,7 +1399,7 @@ void RGuiItem::DrawBackgroundRes( // Returns nothing.
     }
 
     // If resource now available . . .
-    if (m_pimBkdRes != NULL)
+    if (m_pimBkdRes != nullptr)
     {
         RRect rc;
         GetClient(&rc.sX, &rc.sY, &rc.sW, &rc.sH);
@@ -1475,7 +1475,7 @@ void RGuiItem::DrawBackgroundRes( // Returns nothing.
                              m_pimBkdRes->m_sWidth,       // Both.
                              m_pimBkdRes->m_sHeight,      // Both.
                              &rc,                         // Dst.
-                             NULL);                       // Src.
+                             nullptr);                       // Src.
                 }
             }
         }
@@ -1490,7 +1490,7 @@ void RGuiItem::DrawBackgroundRes( // Returns nothing.
 void RGuiItem::Compose(   // Returns nothing.
   RImage *pim /*= NULL*/) // Dest image, uses m_im if NULL.
 {
-    if (pim == NULL)
+    if (pim == nullptr)
     {
         pim = &m_im;
     }
@@ -1530,7 +1530,7 @@ void RGuiItem::Do(       // Returns nothing.
 // interesting to the item.
 ////////////////////////////////////////////////////////////////////////
 // virtual									// If you override this, call this base if possible.
-void RGuiItem::SetEventArea(void) // Returns nothing.
+void RGuiItem::SetEventArea() // Returns nothing.
 {
     m_sEventAreaX = 0;
     m_sEventAreaY = 0;
@@ -1543,7 +1543,7 @@ void RGuiItem::SetEventArea(void) // Returns nothing.
 // item.
 ////////////////////////////////////////////////////////////////////////
 // virtual								// If you override this, call this base if possible.
-void RGuiItem::SetHotArea(void) // Returns nothing.
+void RGuiItem::SetHotArea() // Returns nothing.
 {
     // Get the hot area relative to this item.
     GetHotArea(&(m_hot.m_sX), &(m_hot.m_sY), &(m_hot.m_sW), &(m_hot.m_sH));
@@ -1644,7 +1644,7 @@ void RGuiItem::DrawFocus( // Returns nothing.
 // It is okay to call SetFocus() from this function.
 ////////////////////////////////////////////////////////////////////////
 // virtual				// If you override this, call this base if possible.
-void RGuiItem::OnGainFocus(void)
+void RGuiItem::OnGainFocus()
 {
     // Does this item want the focus . . .
     switch (m_targetFocus)
@@ -1669,7 +1669,7 @@ void RGuiItem::OnGainFocus(void)
 // It is okay to call SetFocus() from this function.
 ////////////////////////////////////////////////////////////////////////
 // virtual				// If you override this, call this base if possible.
-void RGuiItem::OnLoseFocus(void)
+void RGuiItem::OnLoseFocus()
 {
     // Currently, this base does nothing.
 }
@@ -1677,7 +1677,7 @@ void RGuiItem::OnLoseFocus(void)
 ////////////////////////////////////////////////////////////////////////
 // Sets the current focus GUI pointer to this GUI.
 ////////////////////////////////////////////////////////////////////////
-RGuiItem *RGuiItem::SetFocus(void) // Returns pointer to GUI losing the focus.
+RGuiItem *RGuiItem::SetFocus() // Returns pointer to GUI losing the focus.
 {
     return SetFocus(this);
 }
@@ -1701,7 +1701,7 @@ short RGuiItem::DrawText( // Returns 0 on success.
     // Draw text.
     if (m_szText[0] != '\0')
     {
-        if (pim == NULL)
+        if (pim == nullptr)
         {
             // Use internal image.
             pim = &m_im;
@@ -1709,12 +1709,12 @@ short RGuiItem::DrawText( // Returns 0 on success.
 
         if (sW == 0)
         {
-            GetClient(NULL, NULL, &sW, NULL);
+            GetClient(nullptr, nullptr, &sW, nullptr);
         }
 
         if (sH == 0)
         {
-            GetClient(NULL, NULL, NULL, &sH);
+            GetClient(nullptr, nullptr, nullptr, &sH);
         }
 
         // Text support is currently 8 bit only.
@@ -1742,12 +1742,12 @@ short RGuiItem::DrawText( // Returns 0 on success.
 // This function can result in a callback.
 // (virtual).
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::GetRes(void)
+short RGuiItem::GetRes()
 {
     short sRes = 0; // Assume success.
 
     // If there's a callback . . .
-    if (m_fnGetRes != NULL)
+    if (m_fnGetRes != nullptr)
     {
         // Use it instead.
         sRes = m_fnGetRes(this);
@@ -1764,7 +1764,7 @@ short RGuiItem::GetRes(void)
         ReleaseRes();
 
         m_pimBkdRes = new RImage;
-        if (m_pimBkdRes != NULL)
+        if (m_pimBkdRes != nullptr)
         {
             if (RFileEZLoad(m_pimBkdRes, m_szBkdResName, "rb", RFile::LittleEndian) == 0)
             {
@@ -1780,7 +1780,7 @@ short RGuiItem::GetRes(void)
             if (sRes != 0)
             {
                 delete m_pimBkdRes;
-                m_pimBkdRes = NULL;
+                m_pimBkdRes = nullptr;
             }
         }
         else
@@ -1803,20 +1803,20 @@ short RGuiItem::GetRes(void)
 // This function can result in a callback.
 // (virtual).
 ////////////////////////////////////////////////////////////////////////
-void RGuiItem::ReleaseRes(void)
+void RGuiItem::ReleaseRes()
 {
     // If there's a callback . . .
-    if (m_fnReleaseRes != NULL)
+    if (m_fnReleaseRes != nullptr)
     {
         // Use it instead.
         m_fnReleaseRes(this);
     }
     else
     {
-        if (m_pimBkdRes != NULL)
+        if (m_pimBkdRes != nullptr)
         {
             delete m_pimBkdRes;
-            m_pimBkdRes = NULL;
+            m_pimBkdRes = nullptr;
         }
     }
 }
@@ -1938,7 +1938,7 @@ RGuiItem *RGuiItem::LoadInstantiate( // Returns newly allocated GUI item
                                      // on success or NULL on failure.
   char *pszFileName)                 // Name of file to instantiate from.
 {
-    RGuiItem *pgui = NULL; // Assume nothing.
+    RGuiItem *pgui = nullptr; // Assume nothing.
 
     // Attempt to open specified file . . .
     RFile file;
@@ -1971,7 +1971,7 @@ RGuiItem *RGuiItem::LoadInstantiate( // Returns newly allocated GUI item
   RFile *pfile)                      // Pointer to open GUI file.
 {
     short sError = 0;
-    RGuiItem *pgui = NULL; // Assume nothing.
+    RGuiItem *pgui = nullptr; // Assume nothing.
 
     ASSERT(pfile->IsOpen() != FALSE);
 
@@ -1982,7 +1982,7 @@ RGuiItem *RGuiItem::LoadInstantiate( // Returns newly allocated GUI item
     {
         // Allocate a GUI item of the appropriate type . . .
         pgui = CreateGuiItem(type);
-        if (pgui != NULL)
+        if (pgui != nullptr)
         {
             // Read members . . .
             if (pgui->ReadMembers(pfile, u32Version) == 0)
@@ -2020,7 +2020,7 @@ RGuiItem *RGuiItem::LoadInstantiate( // Returns newly allocated GUI item
             if (sError != 0)
             {
                 delete pgui;
-                pgui = NULL;
+                pgui = nullptr;
             }
         }
         else
@@ -2062,7 +2062,7 @@ short RGuiItem::LoadChildren( // Returns 0 on success.
     for (sCurChild = 0; sCurChild < sNum && sRes == 0 && pfile->Error() == FALSE; sCurChild++)
     {
         pgui = LoadInstantiate(pfile);
-        if (pgui != NULL)
+        if (pgui != nullptr)
         {
             pgui->SetParent(this);
         }
@@ -2315,7 +2315,7 @@ short RGuiItem::SaveChildren( // Returns 0 on success.
     // Determine number of child items.
     short sNum = 0;
     RGuiItem *pgui = m_listguiChildren.GetHead();
-    while (pgui != NULL)
+    while (pgui != nullptr)
     {
         sNum++;
 
@@ -2329,7 +2329,7 @@ short RGuiItem::SaveChildren( // Returns 0 on success.
     // order so they, on load, get added back to their parent in the
     // order they were originally added to this parent.
     pgui = m_listguiChildren.GetTail();
-    while (pgui != NULL && sRes == 0 && pfile->Error() == FALSE)
+    while (pgui != nullptr && sRes == 0 && pfile->Error() == FALSE)
     {
         sRes = pgui->Save(pfile);
 
@@ -2469,7 +2469,7 @@ RGuiItem *RGuiItem::GetItemFromPoint( // Returns item ptr, if item found;
   short sEventArea /*= TRUE*/)        // If TRUE, only checks items' event areas.
                                       // If FALSE, checks items' entire hot regions.
 {
-    RGuiItem *pguiRes = NULL; // Assume nothing.
+    RGuiItem *pguiRes = nullptr; // Assume nothing.
 
     // If inside this item . . .
     if (IsInside(this, sPosX, sPosY, sActive, sEventArea) != FALSE)
@@ -2485,7 +2485,7 @@ RGuiItem *RGuiItem::GetItemFromPoint( // Returns item ptr, if item found;
 
             // Check children.
             pguiCur = pguiRes->m_listguiChildren.GetHead();
-            while (pguiCur != NULL)
+            while (pguiCur != nullptr)
             {
                 if (IsInside(pguiCur, sPosX, sPosY, sActive, sEventArea) != FALSE)
                 {
@@ -2498,7 +2498,7 @@ RGuiItem *RGuiItem::GetItemFromPoint( // Returns item ptr, if item found;
             }
 
             // until we find no child item containing point.
-        } while (pguiCur != NULL);
+        } while (pguiCur != nullptr);
     }
 
     return pguiRes;
@@ -2509,7 +2509,7 @@ RGuiItem *RGuiItem::GetItemFromPoint( // Returns item ptr, if item found;
 // Returns TRUE if this item was allocated with CreateGuiItem().
 //
 ////////////////////////////////////////////////////////////////////////
-short RGuiItem::IsDynamic(void) // Returns TRUE if this item was allocated with
+short RGuiItem::IsDynamic() // Returns TRUE if this item was allocated with
                                 // CreateGuiItem().
 {
     return IsProp(DYNAMIC_PROP_KEY);
@@ -2555,7 +2555,7 @@ short RGuiItem::GetText( // Returns 0 on success.
     short sRes = 0; // Assume success.
 
     RGuiItem *pgui = GetItemFromId(lId);
-    if (pgui != NULL)
+    if (pgui != nullptr)
     {
         sRes = pgui->GetText(pszText, sMax);
     }
@@ -2573,7 +2573,7 @@ short RGuiItem::GetText( // Returns 0 on success.
 // Get the number represented by the text in this item.
 //
 //////////////////////////////////////////////////////////////////////////////
-long RGuiItem::GetVal(void) // Returns value.
+long RGuiItem::GetVal() // Returns value.
 {
     return atol(m_szText);
 }
@@ -2589,7 +2589,7 @@ long RGuiItem::GetVal( // Returns value.
     long lRes = 0; // Assume value.  Ayuh.
 
     RGuiItem *pgui = GetItemFromId(lId);
-    if (pgui != NULL)
+    if (pgui != nullptr)
     {
         lRes = pgui->GetVal();
     }
@@ -2606,7 +2606,7 @@ long RGuiItem::GetVal( // Returns value.
 // Gets the thickness of the top/left border (including border edge effect).
 //
 //////////////////////////////////////////////////////////////////////////////
-short RGuiItem::GetTopLeftBorderThickness(void) // Returns border thickness
+short RGuiItem::GetTopLeftBorderThickness() // Returns border thickness
                                                 // including edge effect.
 {
     if (m_sBorderThickness == 0)
@@ -2620,7 +2620,7 @@ short RGuiItem::GetTopLeftBorderThickness(void) // Returns border thickness
 // Gets the thickness of the bottom/right border (including border edge effect).
 //
 //////////////////////////////////////////////////////////////////////////////
-short RGuiItem::GetBottomRightBorderThickness(void) // Returns border thickness
+short RGuiItem::GetBottomRightBorderThickness() // Returns border thickness
                                                     // including edge effect.
 {
     if (m_sBorderThickness == 0)
@@ -2694,7 +2694,7 @@ void RGuiItem::ChildPosToTop( // Returns nothing.
     *psY += m_sY;
 
     // If not yet the top level . . .
-    if (m_pguiParent != NULL)
+    if (m_pguiParent != nullptr)
     {
         // Pass it on.
         m_pguiParent->ChildPosToTop(psX, psY);
@@ -2715,7 +2715,7 @@ void RGuiItem::TopPosToChild( // Returns nothing.
     *psY -= m_sY;
 
     // If not yet the top level . . .
-    if (m_pguiParent != NULL)
+    if (m_pguiParent != nullptr)
     {
         // Pass it on.
         m_pguiParent->TopPosToChild(psX, psY);
@@ -2729,7 +2729,7 @@ void RGuiItem::TopPosToChild( // Returns nothing.
 // (static).
 //
 //////////////////////////////////////////////////////////////////////////////
-U32 RGuiItem::GetCurrentFileVersion(void)
+U32 RGuiItem::GetCurrentFileVersion()
 {
     return GUI_FILE_VERSION;
 }
@@ -2757,14 +2757,14 @@ RGuiItem *RGuiItem::SetFocus( // Returns pointer to GUI losing the focus.
         ms_pguiFocus = pguiNewFocus;
 
         // If there is a loser . . .
-        if (pguiLoseFocus != NULL)
+        if (pguiLoseFocus != nullptr)
         {
             // Let the loser know.
             pguiLoseFocus->OnLoseFocus();
         }
 
         // If the focus has not already changed and is an item . . .
-        if (ms_pguiFocus == pguiNewFocus && pguiNewFocus != NULL)
+        if (ms_pguiFocus == pguiNewFocus && pguiNewFocus != nullptr)
         {
             // Let the gainer know.
             pguiNewFocus->OnGainFocus();
@@ -2780,22 +2780,22 @@ RGuiItem *RGuiItem::SetFocus( // Returns pointer to GUI losing the focus.
 // ms_pguiFocus.  Does not affect current focus for top-level guis.
 //////////////////////////////////////////////////////////////////////////////
 // static
-RGuiItem *RGuiItem::FocusNext(void) // Returns new item with focus or NULL,
+RGuiItem *RGuiItem::FocusNext() // Returns new item with focus or NULL,
                                     // if none.
 {
     // If there is a current . . .
-    if (ms_pguiFocus != NULL)
+    if (ms_pguiFocus != nullptr)
     {
         // If it has a parent . . .
         RGuiItem *pguiParent = ms_pguiFocus->GetParent();
-        if (pguiParent != NULL)
+        if (pguiParent != nullptr)
         {
             // Get next . . .
             RGuiItem *pguiFocus = pguiParent->m_listguiChildren.GetLogicalNext(ms_pguiFocus);
             // Remember where we started so we can detect complete circle.
             RGuiItem *pguiStart = pguiFocus;
 
-            while (pguiFocus != NULL)
+            while (pguiFocus != nullptr)
             {
                 // If visible, activated, and doesn't focus siblings . . .
                 if (pguiFocus->m_sVisible != FALSE && pguiFocus->IsActivated() != FALSE &&
@@ -2810,7 +2810,7 @@ RGuiItem *RGuiItem::FocusNext(void) // Returns new item with focus or NULL,
                 // If we wrapped . . .
                 if (pguiFocus == pguiStart)
                 {
-                    pguiFocus = NULL;
+                    pguiFocus = nullptr;
                 }
             }
 
@@ -2827,22 +2827,22 @@ RGuiItem *RGuiItem::FocusNext(void) // Returns new item with focus or NULL,
 // ms_pguiFocus.  Does not affect current focus for top-level guis.
 //////////////////////////////////////////////////////////////////////////////
 // static
-RGuiItem *RGuiItem::FocusPrev(void) // Returns new item with focus or NULL,
+RGuiItem *RGuiItem::FocusPrev() // Returns new item with focus or NULL,
                                     // if none.
 {
     // If there is a current . . .
-    if (ms_pguiFocus != NULL)
+    if (ms_pguiFocus != nullptr)
     {
         // If it has a parent . . .
         RGuiItem *pguiParent = ms_pguiFocus->GetParent();
-        if (pguiParent != NULL)
+        if (pguiParent != nullptr)
         {
             // Get previous . . .
             RGuiItem *pguiFocus = pguiParent->m_listguiChildren.GetLogicalPrev(ms_pguiFocus);
             // Remember where we started so we can detect complete circle.
             RGuiItem *pguiStart = pguiFocus;
 
-            while (pguiFocus != NULL)
+            while (pguiFocus != nullptr)
             {
                 // If visible, activated, and doesn't focus siblings . . .
                 if (pguiFocus->m_sVisible != FALSE && pguiFocus->IsActivated() != FALSE &&
@@ -2857,7 +2857,7 @@ RGuiItem *RGuiItem::FocusPrev(void) // Returns new item with focus or NULL,
                 // If we wrapped . . .
                 if (pguiFocus == pguiStart)
                 {
-                    pguiFocus = NULL;
+                    pguiFocus = nullptr;
                 }
             }
 
@@ -2881,7 +2881,7 @@ void RGuiItem::DoFocus( // Returns nothing.
                         // Out: pie->sUsed = TRUE, if used.
 {
     // If there is an item with the focus . . .
-    if (ms_pguiFocus != NULL)
+    if (ms_pguiFocus != nullptr)
     {
         // Pass event on.
         ms_pguiFocus->Do(pie);
@@ -2908,7 +2908,7 @@ void RGuiItem::DoFocus( // Returns nothing.
             // Control-Tab == Child.
             case (RSP_GKF_CONTROL | '\t'):
                 // If there's currently an item in focus . . .
-                if (ms_pguiFocus != NULL)
+                if (ms_pguiFocus != nullptr)
                 {
                     // Get first child in list of children.
                     SetFocus(ms_pguiFocus->m_listguiChildren.GetHead());
@@ -2918,7 +2918,7 @@ void RGuiItem::DoFocus( // Returns nothing.
             // Control-Shift-Tab == Parent.
             case (RSP_GKF_CONTROL | RSP_GKF_SHIFT | '\t'):
                 // If there's currently an item in focus . . .
-                if (ms_pguiFocus != NULL)
+                if (ms_pguiFocus != nullptr)
                 {
                     // Get parent.
                     SetFocus(ms_pguiFocus->GetParent());
@@ -2946,7 +2946,7 @@ RGuiItem *RGuiItem::CreateGuiItem( // Returns the allocated type on success.
                                    // of the enums that is a member of
                                    // RGuiItem::Type.
 {
-    RGuiItem *pgui = NULL; // Assume failure.
+    RGuiItem *pgui = nullptr; // Assume failure.
     switch (type)
     {
         case GuiItem: // Generic GuiItem.
@@ -2982,7 +2982,7 @@ RGuiItem *RGuiItem::CreateGuiItem( // Returns the allocated type on success.
     }
 
     // If successfully allocated . . .
-    if (pgui != NULL)
+    if (pgui != nullptr)
     {
         // Mark as dynamic.
         pgui->SetProp(DYNAMIC_PROP_KEY, TRUE);
@@ -3004,7 +3004,7 @@ RGuiItem *RGuiItem::CreateGuiItem( // Returns the allocated type on success.
 void RGuiItem::DestroyGuiItem( // Returns nothing.
   RGuiItem *pgui)              // Pointer to gui to deallocate.
 {
-    ASSERT(pgui != NULL);
+    ASSERT(pgui != nullptr);
 
     switch (pgui->m_type)
     {

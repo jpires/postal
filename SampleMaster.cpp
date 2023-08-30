@@ -230,7 +230,7 @@ RResMgr g_resmgrSamples;
 //------------ put in C file:
 short CSoundCatalogue::ms_sCurPos = 0;
 short CSoundCatalogue::ms_sRefCount = 0;
-SampleMasterID **CSoundCatalogue::ms_ppsmNameList = NULL;
+SampleMasterID **CSoundCatalogue::ms_ppsmNameList = nullptr;
 
 // Sound channels for playing samples.
 static RSnd ms_asndChannels[NUM_CHANNELS];
@@ -380,9 +380,9 @@ void SndDoneCall( // Returns nothing.
 void SndDoneCall( // Returns nothing.
   RSnd *psnd)     // This RSnd.
 {
-    ASSERT(psnd != NULL);
+    ASSERT(psnd != nullptr);
     RSample *psample = psnd->GetSample();
-    if (psample != NULL)
+    if (psample != nullptr)
     {
         // Reduce ResMgr ref count.
 
@@ -564,7 +564,7 @@ void SetSoundLocation(float fX, float fY, float fZ)
 void CacheSample(    // Returns nothing.
   SampleMasterID id) // Identifier of sample you want played.
 {
-    if (id.pszId != NULL && CAN_PLAY_SAMPLE(id))
+    if (id.pszId != nullptr && CAN_PLAY_SAMPLE(id))
     {
         RSample *psample;
         // Get it into memory.
@@ -607,7 +607,7 @@ void PlaySample(                                 // Returns nothing.
     if (psi)
         *psi = 0; // Default to failure case.
 
-    if (id.pszId != NULL && CAN_PLAY_SAMPLE(id))
+    if (id.pszId != nullptr && CAN_PLAY_SAMPLE(id))
     {
         RSample *psample;
         // Get the sample . . .
@@ -746,7 +746,7 @@ bool IsSamplePlaying( // Returns true, if the sample is playing,
 {
     bool bRes = false; // Assume not playing.
 
-    if (id.pszId != NULL && CAN_PLAY_SAMPLE(id))
+    if (id.pszId != nullptr && CAN_PLAY_SAMPLE(id))
     {
         RSample *psample;
         // Get it into memory.
@@ -812,7 +812,7 @@ bool IsSamplePlaying(             // Returns true, if the sample is playing,
 // Checks if any sample is playing.
 //
 //////////////////////////////////////////////////////////////////////////////
-bool IsSamplePlaying(void) // Returns true, if a sample is playing,
+bool IsSamplePlaying() // Returns true, if a sample is playing,
                            // false otherwise.
 {
     bool bRes = false; // Assume none playing.
@@ -879,7 +879,7 @@ short AbortSample(                // Returns 0 if sample aborted, 1 if not.
 // Purges all samples that are not in use.
 //
 //////////////////////////////////////////////////////////////////////////////
-void PurgeSamples(void) // Returns nothing.
+void PurgeSamples() // Returns nothing.
 {
     g_resmgrSamples.Purge();
 }
@@ -902,7 +902,7 @@ void PurgeSample(    // Returns nothing.
 ///////////////////////////////////////////////////////////////////////////////
 // Aborts all currently playing samples.
 ///////////////////////////////////////////////////////////////////////////////
-void AbortAllSamples(void) // Returns nothing.
+void AbortAllSamples() // Returns nothing.
 {
     // Check all channels.
     short i;
@@ -918,7 +918,7 @@ void AbortAllSamples(void) // Returns nothing.
 ///////////////////////////////////////////////////////////////////////////////
 // Pauses all active samples.
 ///////////////////////////////////////////////////////////////////////////////
-extern void PauseAllSamples(void)
+extern void PauseAllSamples()
 {
     // Pause all active channels.
     short i;
@@ -934,7 +934,7 @@ extern void PauseAllSamples(void)
 ///////////////////////////////////////////////////////////////////////////////
 // Resumes all paused samples.
 ///////////////////////////////////////////////////////////////////////////////
-extern void ResumeAllSamples(void)
+extern void ResumeAllSamples()
 {
     // Resume all active channels.
     short i;

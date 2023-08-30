@@ -195,7 +195,7 @@ ULONG RMix::ms_ulBufSize = 0xFFFFFFFF; // The size to use when al-
 short RMix::ms_sReset = FALSE; // If TRUE, current user
                                // buffers are returned.
 
-RSndFx *RMix::ms_psndfx = NULL; // Pointer to a global
+RSndFx *RMix::ms_psndfx = nullptr; // Pointer to a global
                                 // RSndFx.
 
 short RMix::ms_sKeepPumping = FALSE; // Keep Blue pumped with
@@ -213,7 +213,7 @@ RMixBuf RMix::ms_mixbuf; // One and only mix buffer.
 // Default Constructor.
 //
 //////////////////////////////////////////////////////////////////////////////
-RMix::RMix(void)
+RMix::RMix()
 {
     Init();
 }
@@ -223,7 +223,7 @@ RMix::RMix(void)
 // Destructor.
 //
 //////////////////////////////////////////////////////////////////////////////
-RMix::~RMix(void)
+RMix::~RMix()
 {
     ASSERT(m_sActive == FALSE);
     ASSERT(m_sOpen == FALSE);
@@ -249,7 +249,7 @@ RMix::~RMix(void)
 // Intialize members.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RMix::Init(void)
+void RMix::Init()
 {
     m_lSampleRate = 0L;
     m_lBitsPerSample = 0L;
@@ -261,15 +261,15 @@ void RMix::Init(void)
 
     m_lLastDataPos = 0L;
 
-    m_mcUser = NULL;
+    m_mcUser = nullptr;
     m_ulUser = 0L;
-    m_pucData = NULL;
+    m_pucData = nullptr;
     m_ulAmount = 0L;
 
     m_lStartTime = -1L;
     m_lStartPos = -1L;
 
-    m_psndfx = NULL;
+    m_psndfx = nullptr;
 
     if (ms_ulBufSize == 0xFFFFFFFF)
     {
@@ -329,20 +329,20 @@ short RMix::BlueCall( // Returns FALSE when done.
             }
 
             // If not done . . .
-            if (m_pucData != NULL)
+            if (m_pucData != nullptr)
             {
                 // Amount to mix in now.
                 ulCurMix = MIN(m_ulAmount, ulMixBufSize - ulTotalMixedIn);
 
                 // If an effect is defined . . .
-                if (m_psndfx != NULL)
+                if (m_psndfx != nullptr)
                 {
                     // If there is an active effect . . .
                     if (m_psndfx->GetCurrentFX() != 0)
                     {
                         // Attempt to allocate temp buffer . . .
                         U8 *pu8 = (U8 *)malloc(ulCurMix);
-                        if (pu8 != NULL)
+                        if (pu8 != nullptr)
                         {
                             // Perform effect into buffer.
                             m_psndfx->Do(m_pucData, ulCurMix, pu8);
@@ -396,7 +396,7 @@ short RMix::BlueCall( // Returns FALSE when done.
         } while (ulTotalMixedIn < ulMixBufSize);
 
         // If we've exhausted this stream . . .
-        if (m_pucData == NULL)
+        if (m_pucData == nullptr)
         {
             // Suspend this channel.  What we mixed in this iteration will still get
             // played, though.
@@ -435,11 +435,11 @@ short RMix::BlueCallStatic( // Returns TRUE to continue mixing in this
     RMix *pmix = ms_listActive.GetHead();
 
     // If there are any active channels or we are auto-pumping . . .
-    if (pmix != NULL || ms_sKeepPumping != FALSE)
+    if (pmix != nullptr || ms_sKeepPumping != FALSE)
     {
         ms_mixbuf.SetDest(pucData, lBufSize);
 
-        while (pmix != NULL)
+        while (pmix != nullptr)
         {
             // Call mix channel.  If data mixed into buffer . . .
             if (pmix->BlueCall(lDataPos, &ms_mixbuf) != FALSE)
@@ -456,7 +456,7 @@ short RMix::BlueCallStatic( // Returns TRUE to continue mixing in this
         ms_mixbuf.PrepareForDest();
 
         // Clear buffer from mixer.
-        ms_mixbuf.SetDest(NULL, 0);
+        ms_mixbuf.SetDest(nullptr, 0);
 
         // If we were reset recently, we are done processing the reset.
         ms_sReset = FALSE;
@@ -474,7 +474,7 @@ short RMix::BlueCallStatic( // Returns TRUE to continue mixing in this
             // Buffer is going back into queue.
 
             // If there are sound fx . . .
-            if (ms_psndfx != NULL)
+            if (ms_psndfx != nullptr)
             {
                 // Perform them on buffer.
                 ms_psndfx->Do(pucData, lBufSize);
@@ -566,7 +566,7 @@ short RMix::SetMode(      // Returns 0 on success.
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-void RMix::KillMode(void)
+void RMix::KillMode()
 {
     if (ms_sSetMode != FALSE)
     {
@@ -588,7 +588,7 @@ void RMix::KillMode(void)
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-short RMix::Pause(void) // Returns 0 on success.
+short RMix::Pause() // Returns 0 on success.
 {
     short sRes = 0; // Assume success.
 
@@ -619,7 +619,7 @@ short RMix::Pause(void) // Returns 0 on success.
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-short RMix::Resume(void) // Returns 0 on success.
+short RMix::Resume() // Returns 0 on success.
 {
     short sRes = 0; // Assume success.
 
@@ -649,7 +649,7 @@ short RMix::Resume(void) // Returns 0 on success.
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-short RMix::IsPaused(void) // Returns TRUE, if sound output is paused; FALSE otherwise.
+short RMix::IsPaused() // Returns TRUE, if sound output is paused; FALSE otherwise.
 {
     return rspIsSoundOutPaused();
 }
@@ -661,7 +661,7 @@ short RMix::IsPaused(void) // Returns TRUE, if sound output is paused; FALSE oth
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-long RMix::Do(void) // Returns value returned by rspDoSound() that
+long RMix::Do() // Returns value returned by rspDoSound() that
                     // indicates how much audio, in milliseconds,
                     // was required to be queued.
 {
@@ -685,7 +685,7 @@ long RMix::Do(void) // Returns value returned by rspDoSound() that
     }
 
     PMIX pmix = ms_listActive.GetHead();
-    while (pmix != NULL)
+    while (pmix != nullptr)
     {
         // If pmix is suspending . . .
         if (pmix->m_sSuspending != FALSE)
@@ -768,7 +768,7 @@ short RMix::OpenChannel(long lSampleRate, long lBitsPerSample, long lNumChannels
 // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RMix::CloseChannel(void)
+short RMix::CloseChannel()
 {
     short sRes = 0; // Assume success.
 
@@ -806,7 +806,7 @@ short RMix::Start(RMixCall mcUser, ULONG ulUser, UCHAR ucVolume /* = 255 */, UCH
     short sRes = 0; // Assume success.
 
     ASSERT(m_sOpen == TRUE);
-    ASSERT(mcUser != NULL);
+    ASSERT(mcUser != nullptr);
 
     // Add to active list . . .
     if (ms_listActive.Add(this) == 0)
@@ -816,7 +816,7 @@ short RMix::Start(RMixCall mcUser, ULONG ulUser, UCHAR ucVolume /* = 255 */, UCH
         m_ulUser = ulUser;
 
         // Init user data.
-        m_pucData = NULL;
+        m_pucData = nullptr;
         m_ulAmount = 0L;
 
         // Flag start time/pos to be set later.
@@ -865,7 +865,7 @@ short RMix::Start(RMixCall mcUser, ULONG ulUser, UCHAR ucVolume /* = 255 */, UCH
 // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RMix::Suspend(void)
+short RMix::Suspend()
 {
     short sRes = 0; // Assume success.
 
@@ -887,7 +887,7 @@ short RMix::Suspend(void)
 // Pause mix channel.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RMix::PauseChannel(void)
+void RMix::PauseChannel()
 {
     ASSERT(m_sPauseLevel < 32767);
     m_sPauseLevel++;
@@ -898,7 +898,7 @@ void RMix::PauseChannel(void)
 // Resume mix channel.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RMix::ResumeChannel(void)
+void RMix::ResumeChannel()
 {
     ASSERT(m_sPauseLevel > 0);
     m_sPauseLevel--;
@@ -909,7 +909,7 @@ void RMix::ResumeChannel(void)
 // Check mix channel's paused status.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RMix::IsChannelPaused(void) // Returns TRUE, if sound output is paused; FALSE otherwise.
+short RMix::IsChannelPaused() // Returns TRUE, if sound output is paused; FALSE otherwise.
 {
     return (m_sPauseLevel == 0) ? FALSE : TRUE;
 }
@@ -923,7 +923,7 @@ short RMix::IsChannelPaused(void) // Returns TRUE, if sound output is paused; FA
 //	Returns 0 on success.  (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-short RMix::Reset(void)
+short RMix::Reset()
 {
     short sRes = 0; // Assume success.
 
@@ -952,12 +952,12 @@ short RMix::Reset(void)
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-short RMix::SuspendAll(void) // Returns 0 on success.
+short RMix::SuspendAll() // Returns 0 on success.
 {
     short sRes = 0; // Assume success.
 
     RMix *pmix = ms_listActive.GetHead();
-    while (pmix != NULL)
+    while (pmix != nullptr)
     {
         // Finish this channel.  Note that this function removes pmix
         // from the list, but since it is pmix that gets removed, when
@@ -976,7 +976,7 @@ short RMix::SuspendAll(void) // Returns 0 on success.
 // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RMix::ChannelFinished(void)
+short RMix::ChannelFinished()
 {
     short sRes = 0; // Assume success.
 
@@ -987,7 +987,7 @@ short RMix::ChannelFinished(void)
         m_sActive = FALSE;
 
         // Call user callback to let it know we're suspended.
-        (*m_mcUser)(Suspended, NULL, NULL, m_ulUser, NULL, NULL);
+        (*m_mcUser)(Suspended, nullptr, nullptr, m_ulUser, nullptr, nullptr);
 
         // If there are no more buffers . .
         if (ms_listActive.IsEmpty() != FALSE)
@@ -1013,7 +1013,7 @@ short RMix::ChannelFinished(void)
 // Returns the time for this RMix (positive if successful).
 //
 //////////////////////////////////////////////////////////////////////////////
-long RMix::GetTime(void)
+long RMix::GetTime()
 {
     long lRes;
 
@@ -1043,7 +1043,7 @@ long RMix::GetTime(void)
 // Returns the position for this RMix (positive if successful).
 //
 //////////////////////////////////////////////////////////////////////////////
-long RMix::GetPos(void)
+long RMix::GetPos()
 {
     long lRes;
 

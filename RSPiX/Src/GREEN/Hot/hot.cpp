@@ -251,15 +251,15 @@ RHot::~RHot()
 
     // Release all children.
     RHot *phot = m_listChildren.GetHead();
-    while (phot != NULL)
+    while (phot != nullptr)
     {
-        phot->SetParent(NULL);
+        phot->SetParent(nullptr);
 
         phot = m_listChildren.GetNext();
     }
 
     // Release parent.
-    SetParent(NULL);
+    SetParent(nullptr);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -281,7 +281,7 @@ void RHot::SetActive( // Returns nothing.
         {
             // If this item has a parent . . .
             RHot *photParent = GetParent();
-            if (photParent != NULL)
+            if (photParent != nullptr)
             {
                 // Add us into its list.
                 if (photParent->m_slistActiveChildren.Insert(this, &m_sPriority) == 0)
@@ -303,7 +303,7 @@ void RHot::SetActive( // Returns nothing.
         {
             // If this item has a parent . . .
             RHot *photParent = GetParent();
-            if (photParent != NULL)
+            if (photParent != nullptr)
             {
                 // Remove us from list.
                 if (photParent->m_slistActiveChildren.Remove(this) == 0)
@@ -345,7 +345,7 @@ void RHot::SetPriority( // Returns 0 on success.
     {
         // If this item has a parent . . .
         RHot *photParent = GetParent();
-        if (photParent != NULL)
+        if (photParent != nullptr)
         {
             // Reposition with new priority.
             if (photParent->m_slistActiveChildren.Reposition(this) == 0)
@@ -393,7 +393,7 @@ void RHot::SetParent( // Returns nothing.
     }
 
     // If there's an existing parent . . .
-    if (m_photParent != NULL)
+    if (m_photParent != nullptr)
     {
         // Remove from its list of children.
         m_photParent->m_listChildren.Remove(this);
@@ -403,7 +403,7 @@ void RHot::SetParent( // Returns nothing.
     m_photParent = photParent;
 
     // If there's a new parent . . .
-    if (m_photParent != NULL)
+    if (m_photParent != nullptr)
     {
         // Remove from its list of children.
         m_photParent->m_listChildren.AddTail(this);
@@ -495,7 +495,7 @@ short RHot::Do(     // Returns priority of item called back or
     if (pie->type == RInputEvent::Mouse)
     {
         // If this item is top-level . . .
-        if (m_photParent == NULL)
+        if (m_photParent == nullptr)
         {
             // Process capture items.
             // Notify all hotboxes that are capturing.
@@ -503,15 +503,15 @@ short RHot::Do(     // Returns priority of item called back or
             short sChildPosX;
             short sChildPosY;
             RHot *phot = m_listCapturing.GetHead();
-            while (phot != NULL)
+            while (phot != nullptr)
             {
                 // Notify user via callback(s).
-                if (phot->m_ecUser != NULL)
+                if (phot->m_ecUser != nullptr)
                 {
                     (*phot->m_ecUser)(phot, pie->sEvent);
                 }
 
-                if (phot->m_epcUser != NULL)
+                if (phot->m_epcUser != nullptr)
                 {
                     sChildPosX = pie->sPosX;
                     sChildPosY = pie->sPosY;
@@ -522,7 +522,7 @@ short RHot::Do(     // Returns priority of item called back or
                     (*phot->m_epcUser)(phot, pie->sEvent, sChildPosX, sChildPosY);
                 }
 
-                if (phot->m_iecUser != NULL)
+                if (phot->m_iecUser != nullptr)
                 {
                     // Get the child position equivalent.
                     phot->GetChildPos(&pie->sPosX, &pie->sPosY);
@@ -553,7 +553,7 @@ short RHot::Do(     // Returns priority of item called back or
             // Get first child.
             RHot *photChild = m_slistActiveChildren.GetHead();
             // While there are more children and no prioritized callback has occurred.
-            while (photChild != NULL)
+            while (photChild != nullptr)
             {
                 ASSERT(photChild != this);
 
@@ -582,7 +582,7 @@ short RHot::Do(     // Returns priority of item called back or
             if ((sPriorityCalled == RHOT_NO_PRIORITY || m_sPriority == RHOT_NO_PRIORITY) && m_sCapture == FALSE)
             {
                 // Notify user via callback(s).
-                if (m_ecUser != NULL)
+                if (m_ecUser != nullptr)
                 {
                     (*m_ecUser)(this, pie->sEvent);
 
@@ -590,7 +590,7 @@ short RHot::Do(     // Returns priority of item called back or
                     sPriorityCalled = m_sPriority;
                 }
 
-                if (m_epcUser != NULL)
+                if (m_epcUser != nullptr)
                 {
                     (*m_epcUser)(this, pie->sEvent, pie->sPosX, pie->sPosY);
 
@@ -598,7 +598,7 @@ short RHot::Do(     // Returns priority of item called back or
                     sPriorityCalled = m_sPriority;
                 }
 
-                if (m_iecUser != NULL)
+                if (m_iecUser != nullptr)
                 {
                     (*m_iecUser)(this, pie);
 
@@ -628,7 +628,7 @@ void RHot::GetChildPos( // Returns nothing.
                         // Out: Child position.
 {
     RHot *photParent = m_photParent;
-    while (photParent != NULL)
+    while (photParent != nullptr)
     {
         // Move through parent's coordinate system.
         *psX -= photParent->m_sX;
@@ -651,7 +651,7 @@ void RHot::GetTopPos( // Returns nothing.
                       // Out: Top-level position.
 {
     RHot *photParent = m_photParent;
-    while (photParent != NULL)
+    while (photParent != nullptr)
     {
         // Move through parent's coordinate system.
         *psX += photParent->m_sX;
@@ -672,14 +672,14 @@ void RHot::GetTopPos( // Returns nothing.
 // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
-void RHot::Init(void)
+void RHot::Init()
 {
     // Initially not active.
     m_sActive = FALSE;
     // Clear callbacks.
-    m_ecUser = NULL;
-    m_epcUser = NULL;
-    m_iecUser = NULL;
+    m_ecUser = nullptr;
+    m_epcUser = nullptr;
+    m_iecUser = nullptr;
     // Clear user value.
     m_ulUser = 0L;
     // Initialize positions.
@@ -687,7 +687,7 @@ void RHot::Init(void)
     // Non-prioritized.
     m_sPriority = RHOT_NO_PRIORITY;
     // Global; no parent.
-    m_photParent = NULL;
+    m_photParent = nullptr;
     // Not capturing events.
     m_sCapture = FALSE;
 }
@@ -697,14 +697,14 @@ void RHot::Init(void)
 // Gets the list appropriate for this hotbox.
 //
 //////////////////////////////////////////////////////////////////////////////
-RHot::ListHots *RHot::GetCaptureList(void) // Returns Capture list
+RHot::ListHots *RHot::GetCaptureList() // Returns Capture list
                                            // appropriate for this RHot.
                                            // Cannot fail.
 {
     // Go to highest level.
     RHot *phot = this;
     RHot *photParent = GetParent();
-    while (photParent != NULL)
+    while (photParent != nullptr)
     {
         phot = photParent;
         photParent = phot->GetParent();

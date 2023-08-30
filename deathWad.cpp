@@ -56,7 +56,7 @@
 #define DEATHWAD_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "deathWad.h"
 #include "dude.h"
@@ -216,7 +216,7 @@ short CDeathWad::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CDeathWad::Update(void)
+void CDeathWad::Update()
 {
     double dNewX;
     double dNewZ;
@@ -314,7 +314,7 @@ void CDeathWad::Update(void)
                 if (m_stockpile.m_sNumGrenades)
                 {
                     // If we hit someone . . .
-                    CSmash *pSmashed = NULL;
+                    CSmash *pSmashed = nullptr;
                     if (m_pRealm->m_smashatorium.QuickCheck(&m_smash,
                                                             m_u32CollideIncludeBits,
                                                             m_u32CollideDontcareBits,
@@ -441,7 +441,7 @@ void CDeathWad::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CDeathWad::Render(void)
+void CDeathWad::Render()
 {
     long lThisTime = m_pRealm->m_time.GetGameTime();
 
@@ -532,11 +532,11 @@ short CDeathWad::Setup( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CDeathWad::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CDeathWad::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
-    sResult = m_anim.Get(RES_BASE_NAME, NULL, NULL, NULL, 0);
+    sResult = m_anim.Get(RES_BASE_NAME, nullptr, nullptr, nullptr, 0);
     if (sResult == 0)
     {
         sResult = rspGetResource(&g_resmgrGame,
@@ -563,7 +563,7 @@ short CDeathWad::GetResources(void) // Returns 0 if successfull, non-zero otherw
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CDeathWad::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CDeathWad::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     m_anim.Release();
 
@@ -580,7 +580,7 @@ short CDeathWad::Preload(CRealm *prealm) // In:  Calling realm.
 {
     CAnim3D anim;
     RImage *pimage;
-    short sResult = anim.Get(RES_BASE_NAME, NULL, NULL, NULL, 0);
+    short sResult = anim.Get(RES_BASE_NAME, nullptr, nullptr, nullptr, 0);
     if (sResult == 0)
     {
         anim.Release();
@@ -605,7 +605,7 @@ short CDeathWad::Preload(CRealm *prealm) // In:  Calling realm.
 // ProcessMessages
 ////////////////////////////////////////////////////////////////////////////////
 
-void CDeathWad::ProcessMessages(void)
+void CDeathWad::ProcessMessages()
 {
     GameMessage msg;
 
@@ -704,7 +704,7 @@ bool CDeathWad::TraversePath( // Returns true, when destination reached; false,
 ////////////////////////////////////////////////////////////////////////////////
 // Generate an explosion at the current position.
 ////////////////////////////////////////////////////////////////////////////////
-void CDeathWad::Explosion(void)
+void CDeathWad::Explosion()
 {
     // Start an explosion object and some smoke (doesn't an explosion object
     // automatically make smoke??).
@@ -747,13 +747,13 @@ void CDeathWad::Explosion(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Generate some thrust at the current position.
 ////////////////////////////////////////////////////////////////////////////////
-void CDeathWad::Thrust(void)
+void CDeathWad::Thrust()
 {
     m_stockpile.m_sNumFuel--;
 
     if (m_bInsideTerrain == false)
     {
-        CFire *pSmoke = NULL;
+        CFire *pSmoke = nullptr;
         if (CThing::Construct(CThing::CFireID, m_pRealm, (CThing **)&pSmoke) == 0)
         {
             // This needs to be fixed by calculating the position of the back end of
@@ -763,7 +763,7 @@ void CDeathWad::Thrust(void)
         }
 
         // Also, create a fire (moving at the wad's velocity?).
-        CFireball *pfireball = NULL;
+        CFireball *pfireball = nullptr;
         if (CThing::Construct(CFireballID, m_pRealm, (CThing **)&pfireball) == 0)
         {
             pfireball->Setup(m_dX, m_dY, m_dZ, m_dRot, ms_lFireBallTimeToLive, m_u16ShooterID);
@@ -776,7 +776,7 @@ void CDeathWad::Thrust(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Generate the launch kick/debris.
 ////////////////////////////////////////////////////////////////////////////////
-void CDeathWad::Launch(void)
+void CDeathWad::Launch()
 {
     // The launch sound.
     PlaySample(                                               // Returns nothing.
@@ -792,7 +792,7 @@ void CDeathWad::Launch(void)
       SampleMaster::Weapon,                                  // In:  Sound Volume Category for user adjustment
       DistanceToVolume(m_dX, m_dY, m_dZ, LaunchSndHalfLife), // In:  Initial Sound Volume (0 - 255)
       &m_siThrust,                                           // Out: Handle for adjusting sound volume
-      NULL,                                                  // Out: Sample duration in ms, if not NULL.
+      nullptr,                                                  // Out: Sample duration in ms, if not NULL.
       100,                                                   // In:  Where to loop back to in milliseconds.
                                                              //	-1 indicates no looping (unless m_sLoop is
                                                              // explicitly set).
@@ -802,7 +802,7 @@ void CDeathWad::Launch(void)
 
     Explosion();
 
-    CThing *pthing = NULL;
+    CThing *pthing = nullptr;
     // Get the launcher . . .
     if (m_pRealm->m_idbank.GetThingByID(&pthing, m_u16ShooterID) == 0)
     {

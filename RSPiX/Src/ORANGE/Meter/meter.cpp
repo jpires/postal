@@ -65,7 +65,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // Headers.
 //////////////////////////////////////////////////////////////////////////////
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "Blue.h"
 
@@ -166,7 +166,7 @@ inline short Rectangle( // Returns 0 on success.
   short sDstY,          // Destination y coordinate.
   short sDstW,          // Width.
   short sDstH,          // Height.
-  RRect *prClip = NULL) // Optional clipping rectangle.
+  RRect *prClip = nullptr) // Optional clipping rectangle.
 {
     short sRes = 0; // Assume success.
 
@@ -190,7 +190,7 @@ void RMeter::Compose(        // Returns nothing.
 {
     short sRes = 0; // Assume success.
 
-    if (pimDst == NULL)
+    if (pimDst == nullptr)
     {
         pimDst = &m_im;
     }
@@ -202,7 +202,7 @@ void RMeter::Compose(        // Returns nothing.
     GetClient(&sX, &sY, &sW, &sH);
 
     short sCellH;
-    m_pprint->GetPos(NULL, NULL, NULL, &sCellH);
+    m_pprint->GetPos(nullptr, nullptr, nullptr, &sCellH);
 
     short sMeterX;
     short sMeterY;
@@ -243,7 +243,7 @@ void RMeter::Compose(        // Returns nothing.
     m_guiMeter.m_sInvertedBorder = !m_sInvertedBorder;
 
     // If there is already data . . .
-    if (m_guiMeter.m_im.m_pData != NULL)
+    if (m_guiMeter.m_im.m_pData != nullptr)
     {
         m_guiMeter.m_im.DestroyData();
     }
@@ -283,7 +283,7 @@ short RMeter::Draw(      // Returns 0 on success.
 {
     short sRes = 0; // Assume success.
 
-    ASSERT(pimDst != NULL); // Duh!
+    ASSERT(pimDst != nullptr); // Duh!
 
     // If visible . . .
     if (m_sVisible != FALSE)
@@ -292,7 +292,7 @@ short RMeter::Draw(      // Returns 0 on success.
         if (lTime >= m_lNextUpdate)
         {
             // First copy precomposed stuff.
-            if (m_im.m_pData != NULL)
+            if (m_im.m_pData != nullptr)
             {
                 RDlg::Draw(pimDst, sDstX, sDstY, sSrcX, sSrcY, sW, sH, prc);
             }
@@ -314,7 +314,7 @@ short RMeter::Draw(      // Returns 0 on success.
             }
 
             // Draw text label.
-            if (m_pprint->GetFont() != NULL)
+            if (m_pprint->GetFont() != nullptr)
             {
                 // Determine info based on type.
                 long lVal = lAvg;

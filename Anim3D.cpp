@@ -75,13 +75,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 CAnim3D::CAnim3D()
 {
-    m_psops = NULL;
-    m_pmeshes = NULL;
-    m_ptextures = NULL;
-    m_pbounds = NULL;
-    m_ptransRigid = NULL;
-    m_pevent = NULL;
-    m_ptransWeapon = NULL;
+    m_psops = nullptr;
+    m_pmeshes = nullptr;
+    m_ptextures = nullptr;
+    m_pbounds = nullptr;
+    m_ptransRigid = nullptr;
+    m_pevent = nullptr;
+    m_ptransWeapon = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +118,7 @@ short CAnim3D::Get(     // Returns 0 on success.
                 if (sRes == 0)
                 {
                     sComplainIndex = 6;
-                    if (ppszFileNames[sComplainIndex] != NULL)
+                    if (ppszFileNames[sComplainIndex] != nullptr)
                     {
                         sRes = rspGetResource(&g_resmgrGame, ppszFileNames[sComplainIndex], &m_ptransRigid);
                     }
@@ -202,7 +202,7 @@ short CAnim3D::Get(         // Returns 0 on success.
                 sRes = rspGetResource(&g_resmgrGame, szResName, &m_pbounds);
                 if (sRes == 0)
                 {
-                    if (pszRigidName != NULL)
+                    if (pszRigidName != nullptr)
                     {
                         if (*pszRigidName != '\0')
                         {
@@ -213,7 +213,7 @@ short CAnim3D::Get(         // Returns 0 on success.
 
                     if (sRes == 0)
                     {
-                        if (pszEventName != NULL)
+                        if (pszEventName != nullptr)
                         {
                             if (*pszEventName != '\0')
                             {
@@ -224,7 +224,7 @@ short CAnim3D::Get(         // Returns 0 on success.
 
                         if (sRes == 0)
                         {
-                            if (pszWeaponTransName != NULL)
+                            if (pszWeaponTransName != nullptr)
                             {
                                 if (*pszWeaponTransName != '\0')
                                 {
@@ -326,7 +326,7 @@ short CAnim3D::Get(         // Returns 0 on success.
                 sRes = rspGetResource(&g_resmgrGame, szResName, &m_pbounds);
                 if (sRes == 0)
                 {
-                    if (pszRigidName != NULL)
+                    if (pszRigidName != nullptr)
                     {
                         if (*pszRigidName != '\0')
                         {
@@ -337,7 +337,7 @@ short CAnim3D::Get(         // Returns 0 on success.
 
                     if (sRes == 0)
                     {
-                        if (pszEventName != NULL)
+                        if (pszEventName != nullptr)
                         {
                             if (*pszEventName != '\0')
                             {
@@ -348,7 +348,7 @@ short CAnim3D::Get(         // Returns 0 on success.
 
                         if (sRes == 0)
                         {
-                            if (pszWeaponTransName != NULL)
+                            if (pszWeaponTransName != nullptr)
                             {
                                 if (*pszWeaponTransName != '\0')
                                 {
@@ -384,24 +384,24 @@ short CAnim3D::Get(         // Returns 0 on success.
 // Release all resources.
 // (virtual)
 ////////////////////////////////////////////////////////////////////////////////
-void CAnim3D::Release(void) // Returns nothing.
+void CAnim3D::Release() // Returns nothing.
 {
-    if (m_psops != NULL)
+    if (m_psops != nullptr)
         rspReleaseResource(&g_resmgrGame, &m_psops);
 
-    if (m_pmeshes != NULL)
+    if (m_pmeshes != nullptr)
         rspReleaseResource(&g_resmgrGame, &m_pmeshes);
 
-    if (m_ptextures != NULL)
+    if (m_ptextures != nullptr)
         rspReleaseResource(&g_resmgrGame, &m_ptextures);
 
-    if (m_pbounds != NULL)
+    if (m_pbounds != nullptr)
         rspReleaseResource(&g_resmgrGame, &m_pbounds);
 
-    if (m_ptransRigid != NULL)
+    if (m_ptransRigid != nullptr)
         rspReleaseResource(&g_resmgrGame, &m_ptransRigid);
 
-    if (m_pevent != NULL)
+    if (m_pevent != nullptr)
         rspReleaseResource(&g_resmgrGame, &m_pevent);
 
     if (m_ptransWeapon)
@@ -420,9 +420,9 @@ void CAnim3D::SetLooping( // Returns nothing.
     m_pmeshes->SetLooping(sLoopFlags);
     m_ptextures->SetLooping(sLoopFlags);
     m_pbounds->SetLooping(sLoopFlags);
-    if (m_ptransRigid != NULL)
+    if (m_ptransRigid != nullptr)
         m_ptransRigid->SetLooping(sLoopFlags);
-    if (m_pevent != NULL)
+    if (m_pevent != nullptr)
         m_pevent->SetLooping(sLoopFlags);
     if (m_ptransWeapon)
         m_ptransWeapon->SetLooping(sLoopFlags);

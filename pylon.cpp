@@ -77,7 +77,7 @@
 #define PYLON_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "pylon.h"
 
@@ -213,7 +213,7 @@ short CPylon::Save( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CPylon::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CPylon::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -240,7 +240,7 @@ short CPylon::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CPylon::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CPylon::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -248,7 +248,7 @@ short CPylon::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CPylon::Suspend(void)
+void CPylon::Suspend()
 {
     m_sSuspend++;
 }
@@ -256,7 +256,7 @@ void CPylon::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CPylon::Resume(void)
+void CPylon::Resume()
 {
     m_sSuspend--;
 
@@ -268,7 +268,7 @@ void CPylon::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CPylon::Update(void)
+void CPylon::Update()
 {
     // Clear the target dude.
     m_u16TargetDudeID = 0;
@@ -280,7 +280,7 @@ void CPylon::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CPylon::Render(void) {}
+void CPylon::Render() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to init new object at specified position
@@ -323,7 +323,7 @@ inline void SetText(  // Returns nothing.
   long lVal)          // In:  Value to set text to.
 {
     RGuiItem *pgui = pguiRoot->GetItemFromId(lId);
-    if (pgui != NULL)
+    if (pgui != nullptr)
     {
         pgui->SetText("%ld", lVal);
         pgui->Compose();
@@ -333,11 +333,11 @@ inline void SetText(  // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CPylon::EditModify(void)
+short CPylon::EditModify()
 {
     short sResult = 0;
     RGuiItem *pGui = RGuiItem::LoadInstantiate(FullPathVD("res/editor/bouy.gui"));
-    RGuiItem *pSecondaryGui = NULL;
+    RGuiItem *pSecondaryGui = nullptr;
     if (pGui)
     {
         RListBox *pList = (RListBox *)pGui->GetItemFromId(3);
@@ -490,12 +490,12 @@ short CPylon::EditMove( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CPylon::EditUpdate(void) {}
+void CPylon::EditUpdate() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CPylon::EditRender(void)
+void CPylon::EditRender()
 {
     // No special flags
     m_sprite.m_sInFlags = 0;
@@ -530,7 +530,7 @@ void CPylon::EditRect(RRect *pRect)
     pRect->sW = 10; // Safety.
     pRect->sH = 10; // Safety.
 
-    if (m_pImage != NULL)
+    if (m_pImage != nullptr)
     {
         pRect->sW = m_pImage->m_sWidth;
         pRect->sH = m_pImage->m_sHeight;
@@ -557,11 +557,11 @@ void CPylon::EditHotSpot( // Returns nothiing.
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CPylon::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CPylon::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
-    if (m_pImage == 0)
+    if (m_pImage == nullptr)
     {
         RImage *pimBouyRes;
         sResult = rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(IMAGE_FILE), &pimBouyRes);
@@ -569,7 +569,7 @@ short CPylon::GetResources(void) // Returns 0 if successfull, non-zero otherwise
         {
             // Allocate image . . .
             m_pImage = new RImage;
-            if (m_pImage != NULL)
+            if (m_pImage != nullptr)
             {
                 // Allocate image data . . .
                 if (m_pImage->CreateImage(pimBouyRes->m_sWidth, pimBouyRes->m_sHeight, RImage::BMP8) == 0)
@@ -579,7 +579,7 @@ short CPylon::GetResources(void) // Returns 0 if successfull, non-zero otherwise
                             m_pImage,   // Dst.
                             0,          // Dst.
                             0,          // Dst.
-                            NULL);      // Dst clip.
+                            nullptr);      // Dst clip.
 
                     // Put in ID.
                     RPrint print;
@@ -613,7 +613,7 @@ short CPylon::GetResources(void) // Returns 0 if successfull, non-zero otherwise
                 if (sResult != 0)
                 {
                     delete m_pImage;
-                    m_pImage = NULL;
+                    m_pImage = nullptr;
                 }
             }
             else
@@ -632,12 +632,12 @@ short CPylon::GetResources(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CPylon::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CPylon::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
-    if (m_pImage != NULL)
+    if (m_pImage != nullptr)
     {
         delete m_pImage;
-        m_pImage = NULL;
+        m_pImage = nullptr;
     }
 
     return 0;
@@ -660,14 +660,14 @@ void CPylon::MessageRequest(CThing *pRequestingThing)
 //						  not used before it is given out.
 ////////////////////////////////////////////////////////////////////////////////
 
-UCHAR CPylon::GetFreePylonID(void)
+UCHAR CPylon::GetFreePylonID()
 {
     UCHAR id = m_pRealm->m_ucNextPylonID;
 
     if (m_pRealm->m_sNumPylons >= PYLON_MAX_PYLONS)
         return 0;
 
-    CListNode<CThing> *pNext = NULL;
+    CListNode<CThing> *pNext = nullptr;
     bool bIdInUse = false;
 
     do
@@ -708,7 +708,7 @@ UCHAR CPylon::GetFreePylonID(void)
 
 CPylon *CPylon::GetPylon(UCHAR ucPylonID)
 {
-    CPylon *pPylon = NULL;
+    CPylon *pPylon = nullptr;
     ;
 
     if (m_pRealm->m_idbank.GetThingByID((CThing **)&pPylon, GetPylonUniqueID(ucPylonID)) != SUCCESS)
@@ -746,7 +746,7 @@ U16 CPylon::GetPylonUniqueID(UCHAR ucPylonID)
 // ProcessMessages - Similar to the base class version but handles a few more
 ////////////////////////////////////////////////////////////////////////////////
 
-void CPylon::ProcessMessages(void)
+void CPylon::ProcessMessages()
 {
     double dMinSqDistance = 1.0e200;
     double dTempSqDistance = 0;

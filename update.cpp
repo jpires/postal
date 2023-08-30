@@ -53,7 +53,7 @@
 // This must be called periodically to keep input flowing, audio playing, etc.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void UpdateSystem(void)
+extern void UpdateSystem()
 {
     rspDoSystem();
 

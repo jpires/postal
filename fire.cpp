@@ -196,7 +196,7 @@
 #define FIRE_CPP
 
 #include "RSPiX.h"
-#include <math.h>
+#include <cmath>
 
 #include "fire.h"
 #include "dude.h"
@@ -329,7 +329,7 @@ short CFire::Save(  // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Startup object
 ////////////////////////////////////////////////////////////////////////////////
-short CFire::Startup(void) // Returns 0 if successfull, non-zero otherwise
+short CFire::Startup() // Returns 0 if successfull, non-zero otherwise
 {
     return Init();
 }
@@ -337,7 +337,7 @@ short CFire::Startup(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Shutdown object
 ////////////////////////////////////////////////////////////////////////////////
-short CFire::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
+short CFire::Shutdown() // Returns 0 if successfull, non-zero otherwise
 {
     return 0;
 }
@@ -345,7 +345,7 @@ short CFire::Shutdown(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Suspend object
 ////////////////////////////////////////////////////////////////////////////////
-void CFire::Suspend(void)
+void CFire::Suspend()
 {
     m_sSuspend++;
 }
@@ -353,7 +353,7 @@ void CFire::Suspend(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Resume object
 ////////////////////////////////////////////////////////////////////////////////
-void CFire::Resume(void)
+void CFire::Resume()
 {
     m_sSuspend--;
 
@@ -367,7 +367,7 @@ void CFire::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Update object
 ////////////////////////////////////////////////////////////////////////////////
-void CFire::Update(void)
+void CFire::Update()
 {
     long lThisTime;
     double dSeconds;
@@ -409,7 +409,7 @@ void CFire::Update(void)
                 if (m_bSendMessages && m_sCurrentAlphaLevel > SMOLDER_ALPHA && m_eFireAnim != Smoke &&
                     m_eFireAnim != SmallSmoke)
                 {
-                    CSmash *pSmashed = NULL;
+                    CSmash *pSmashed = nullptr;
                     GameMessage msg;
                     msg.msg_Burn.eType = typeBurn;
                     msg.msg_Burn.sPriority = 0;
@@ -509,7 +509,7 @@ void CFire::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Render object
 ////////////////////////////////////////////////////////////////////////////////
-void CFire::Render(void)
+void CFire::Render()
 {
 
     CAlphaAnim *pAnim;
@@ -620,19 +620,19 @@ short CFire::Setup(   // Returns 0 if successfull, non-zero otherwise
 // Init
 ////////////////////////////////////////////////////////////////////////////////
 
-short CFire::Init(void)
+short CFire::Init()
 {
     short sResult = SUCCESS;
-    CAlphaAnim *pAnim = NULL;
+    CAlphaAnim *pAnim = nullptr;
 
-    if (m_pAnimChannel != NULL)
+    if (m_pAnimChannel != nullptr)
     {
         m_lTimer = GetRandom() % m_pAnimChannel->TotalTime();
         m_lStartTime = m_lTimer;
         m_lBurnUntil = m_lTimer + m_lTimeToLive;
         m_lAlphaBreakPoint = m_lTimer + (m_lTimeToLive * BRIGHT_PERCENT);
         pAnim = (CAlphaAnim *)m_pAnimChannel->GetAtTime(0);
-        ASSERT(pAnim != NULL);
+        ASSERT(pAnim != nullptr);
         m_lBrightAlphaInterval = (m_lTimeToLive * BRIGHT_PERCENT) / MAX(1, m_sCurrentAlphaLevel - DIEDOWN_ALPHA);
         m_lDimAlphaInterval = (m_lTimeToLive * (100.0 - BRIGHT_PERCENT)) / MAX(1, DIEDOWN_ALPHA);
         m_lCurrentAlphaTimeout = m_lTimer + m_lBrightAlphaInterval;
@@ -666,12 +666,12 @@ short CFire::Init(void)
             break;
 
         case Smoke:
-            m_smash.m_pThing = NULL;
+            m_smash.m_pThing = nullptr;
             m_bSendMessages = false;
             break;
 
         case SmallSmoke:
-            m_smash.m_pThing = NULL;
+            m_smash.m_pThing = nullptr;
             m_bSendMessages = false;
             m_lStartTime = m_lTimer = GetRandom() % m_pAnimChannel->TotalTime() / 3;
             m_lBurnUntil = m_lTimer + m_lTimeToLive;
@@ -690,7 +690,7 @@ short CFire::Init(void)
 // Smokeout - Change from fire to smoke
 ////////////////////////////////////////////////////////////////////////////////
 
-short CFire::Smokeout(void)
+short CFire::Smokeout()
 {
     short sResult = SUCCESS;
 
@@ -712,14 +712,14 @@ short CFire::Smokeout(void)
     sResult = GetResources();
 
     // Reset timers
-    CAlphaAnim *pAnim = NULL;
+    CAlphaAnim *pAnim = nullptr;
 
-    if (m_pAnimChannel != NULL)
+    if (m_pAnimChannel != nullptr)
     {
         // Reset alpha level
         m_sCurrentAlphaLevel = THICK_ALPHA;
         pAnim = (CAlphaAnim *)m_pAnimChannel->GetAtTime(0);
-        ASSERT(pAnim != NULL);
+        ASSERT(pAnim != nullptr);
         //		m_lTimeToLive = m_pAnimChannel->TotalTime();
         // use same time to live as the original
         m_lStartTime = m_lTimer = 0;
@@ -760,7 +760,7 @@ short CFire::EditNew( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object
 ////////////////////////////////////////////////////////////////////////////////
-short CFire::EditModify(void)
+short CFire::EditModify()
 {
     return 0;
 }
@@ -783,12 +783,12 @@ short CFire::EditMove( // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to update object
 ////////////////////////////////////////////////////////////////////////////////
-void CFire::EditUpdate(void) {}
+void CFire::EditUpdate() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to render object
 ////////////////////////////////////////////////////////////////////////////////
-void CFire::EditRender(void)
+void CFire::EditRender()
 {
     // In some cases, object's might need to do a special-case render in edit
     // mode because Startup() isn't called.  In this case it doesn't matter, so
@@ -799,7 +799,7 @@ void CFire::EditRender(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Get all required resources
 ////////////////////////////////////////////////////////////////////////////////
-short CFire::GetResources(void) // Returns 0 if successfull, non-zero otherwise
+short CFire::GetResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = SUCCESS;
 
@@ -837,7 +837,7 @@ short CFire::GetResources(void) // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Free all resources
 ////////////////////////////////////////////////////////////////////////////////
-short CFire::FreeResources(void) // Returns 0 if successfull, non-zero otherwise
+short CFire::FreeResources() // Returns 0 if successfull, non-zero otherwise
 {
     short sResult = 0;
 
@@ -874,7 +874,7 @@ short CFire::Preload(CRealm *prealm) // In:  Calling realm.
 // ProcessMessages
 ////////////////////////////////////////////////////////////////////////////////
 
-CFire::CFireState CFire::ProcessMessages(void)
+CFire::CFireState CFire::ProcessMessages()
 {
     CFireState eNewState = State_Idle;
 

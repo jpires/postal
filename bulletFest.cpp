@@ -614,7 +614,7 @@ void CBulletFest::Flare(                      // Returns nothing.
 {
     // Create the animator . . .
     CAnimThing *pat = new CAnimThing(pRealm);
-    ASSERT(pat != NULL);
+    ASSERT(pat != nullptr);
 
     strcpy(pat->m_szResName, FLARE_RES_NAME);
 
@@ -643,7 +643,7 @@ void CBulletFest::Impact( // Returns nothing.
 {
     // Create the animator . . .
     CAnimThing *pat = new CAnimThing(pRealm);
-    ASSERT(pat != NULL);
+    ASSERT(pat != nullptr);
 
     strcpy(pat->m_szResName, IMPACT_RES_NAME);
 
@@ -669,7 +669,7 @@ void CBulletFest::Ricochet( // Returns nothing.
 {
     // Create the animator . . .
     CAnimThing *pat = new CAnimThing(pRealm);
-    ASSERT(pat != NULL);
+    ASSERT(pat != nullptr);
 
     strcpy(pat->m_szResName, RICOCHET_RES_NAME);
 
@@ -807,7 +807,7 @@ bool CBulletFest::Fire(      // Returns true if a hit, false otherwise.
     else
     {
         // Clear thing ptr.
-        *ppthing = NULL;
+        *ppthing = nullptr;
         // Set end pt.
         *psX = fPosX;
         *psY = fPosY;
@@ -818,7 +818,7 @@ bool CBulletFest::Fire(      // Returns true if a hit, false otherwise.
     {
         // Create a line sprite.
         CSpriteLine2d *psl2d = new CSpriteLine2d;
-        if (psl2d != NULL)
+        if (psl2d != nullptr)
         {
             // Get distance.  Since an interception may have occurred, we need to redetermine the
             // distance.
