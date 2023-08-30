@@ -2568,8 +2568,8 @@ extern short DoNetGameDialog( // Returns 0 if successfull, non-zero otherwise.
                                                                        -1,
                                                                        SPECIFIC_MP_REALM_FILE,
 #else
-                                                                        RSP_SAFE_GUI_REF(pguiSel, m_lId),
-                                                                        "",
+                                                                       RSP_SAFE_GUI_REF(pguiSel, m_lId),
+                                                                       "",
 #endif
                                                                        g_GameSettings.m_sDifficulty,
                                                                        g_GameSettings.m_sHostRejuvenate,

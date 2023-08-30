@@ -795,9 +795,9 @@ extern Menu menuMain = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -943,9 +943,9 @@ extern Menu menuVerifyExit = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -1042,9 +1042,9 @@ extern Menu g_menuVerifyQuitGame = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -1357,9 +1357,9 @@ extern Menu menuOptions = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -1367,7 +1367,7 @@ extern Menu menuOptions = {
 
     // Menu items.
     {
-      // pszText,								sEnabled,	pmenu,					pgui
+// pszText,								sEnabled,	pmenu,					pgui
 #if 0
 			{ g_pszOptionsMenu_Video,			TRUE,			&menuVideoOptions,	NULL,	},
 #endif
@@ -1491,9 +1491,9 @@ extern Menu menuPlayOptions = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -1589,9 +1589,9 @@ extern Menu menuOrgan = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -1718,9 +1718,9 @@ extern Menu menuAudioOptions = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -1824,9 +1824,9 @@ extern Menu menuVideoOptions = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -1924,9 +1924,9 @@ extern Menu menuControls = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -2078,9 +2078,9 @@ extern Menu menuKeyboard = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -2390,9 +2390,9 @@ extern Menu menuMouse = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -2702,9 +2702,9 @@ extern Menu menuJoystick = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -3006,9 +3006,9 @@ extern Menu menuFeatures = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -3130,9 +3130,9 @@ extern Menu menuRotation = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -3260,9 +3260,9 @@ extern Menu menuVolumes = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -3503,9 +3503,9 @@ extern Menu menuStart = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -3616,9 +3616,9 @@ extern Menu menuStartSingle = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -3743,9 +3743,9 @@ extern Menu menuChallenge = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -3866,9 +3866,9 @@ extern Menu menuStartMulti = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -3977,9 +3977,9 @@ extern Menu menuJoinMulti = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -4082,9 +4082,9 @@ extern Menu menuHostMulti = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -4181,9 +4181,9 @@ extern Menu menuStartDemo = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -4288,9 +4288,9 @@ extern Menu menuMultiOptions = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).
@@ -6317,9 +6317,9 @@ extern Menu g_menuPickFile = {
     // Menu auto items.
     {
       // sDefaultItem, sCancelItem,
-      0,  // Menu item (index in ami[]) selected initially.
-          // Negative indicates distance from number of items
-          // (e.g., -1 is the last item).
+      0, // Menu item (index in ami[]) selected initially.
+         // Negative indicates distance from number of items
+         // (e.g., -1 is the last item).
       -1, // Menu item (index in ami[]) chosen on cancel.
           // Negative indicates distance from number of items
           // (e.g., -1 is the last item).

@@ -671,7 +671,7 @@ bool ScoreUpdateDisplay(RImage *pim,
                           rcDst.sX,
                           rcDst.sY,
                           //							" There are no time or kill limits on this game - play as long
-                          //as you like"
+                          // as you like"
                           g_apszScoreGoalText[CRealm::MPLastManTimedFrag] // Cheating since this is
                                                                           // Really none of the scoring modes
 

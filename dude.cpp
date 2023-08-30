@@ -3737,7 +3737,7 @@ short CDude::GetResources(void) // Returns 0 if successfull, non-zero otherwise
     short sResult = 0;
 
     //											Anim base name					Rigid name		Event name		Loop
-    //flags
+    // flags
     //											===================			=============	===========		===========
     sResult = m_animRun.Get("3d/main_runnogun", NULL, "mainevent", RChannel_LoopAtStart | RChannel_LoopAtEnd);
     sResult |= m_animThrow.Get("3d/main_grenade", "maingrenade", "mainevent", 0);

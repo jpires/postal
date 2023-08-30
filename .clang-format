@@ -31,7 +31,7 @@ FixNamespaceComments: true
 IndentWidth: 4
 Language: Cpp
 SortIncludes: Never
-Standard: c++03
+Standard: c++17
 TabWidth: 4
 PenaltyBreakAssignment: 100
 PointerAlignment: Right

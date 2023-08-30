@@ -98,13 +98,14 @@ class CNetClient
         CNetInput m_netinput;     // Sliding window of inputs
         Net::SEQ m_seqLastActive; // Last active sequence (only if dropped)
         bool m_bInactive;         // True after last active sequence was used
-                                  //				Net::SEQ				m_seqWhatHeNeeds;						// What input seq he needs from
-        //me 				Net::SEQ				m_seqWhatINeed;						// What input seq I need from him 				long
-        //m_lNextSendTime;						// When to next send inputs to him
+                                  //				Net::SEQ				m_seqWhatHeNeeds;						// What
+                                  //input seq he needs from
+        // me 				Net::SEQ				m_seqWhatINeed;						// What input seq I need from him
+        // long m_lNextSendTime;						// When to next send inputs to him
         long m_lLastReceiveTime; // When we last got data from him *SPA
 
         //				FQueue<long, NumAvgItems>	m_qPings;					// Queue of ping times for running
-        //average 				long					m_lRunnigAvgPing;						// Running average
+        // average 				long					m_lRunnigAvgPing;						// Running average
 
         U16 m_idDude; // Dude's ID
 

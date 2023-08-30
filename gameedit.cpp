@@ -1092,9 +1092,9 @@ typedef struct TAG_Line
 #if __MWERKS >= 0x1100
 ITERATOR_TRAITS(const LINKLINE);
 #endif
-typedef set<LINKLINE, less<LINKLINE>, allocator<LINKLINE> > lineset;
+typedef set<LINKLINE, less<LINKLINE>, allocator<LINKLINE>> lineset;
 #else
-typedef set<LINKLINE, less<LINKLINE> > lineset;
+typedef set<LINKLINE, less<LINKLINE>> lineset;
 #endif
 
 // Container for a GUI and Camera pair.

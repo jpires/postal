@@ -151,17 +151,19 @@ short CVideo::Create(void)
     // Let's create the avi video window if one has not already been created.
     if (m_lhwnd == 0)
     {
-        m_lhwnd = (long)MCIWndCreate(gsi.hWnd,
-                                     gsi.hInstance,
-                                     (DWORD)(WS_CHILD |
-                                             //											  			 WS_EX_TOPMOST |
-                                             //														 WS_THICKFRAME |
-                                             //											  			 WS_CAPTION |
-                                             //											  			 WS_BORDER |
-                                             //											  			 MCIWNDF_NOAUTOSIZEMOVIE
-                                             //| 											  			 MCIWNDF_NOAUTOSIZEWINDOW | 											  			 MCIWNDF_SHOWALL |
-                                             MCIWNDF_NOPLAYBAR | MCIWNDF_NOOPEN | MCIWNDF_NOMENU | MCIWNDF_NOERRORDLG),
-                                     "avivideo");
+        m_lhwnd = (long)MCIWndCreate(
+          gsi.hWnd,
+          gsi.hInstance,
+          (DWORD)(WS_CHILD |
+                  //											  			 WS_EX_TOPMOST |
+                  //														 WS_THICKFRAME |
+                  //											  			 WS_CAPTION |
+                  //											  			 WS_BORDER |
+                  //											  			 MCIWNDF_NOAUTOSIZEMOVIE
+                  //| 											  			 MCIWNDF_NOAUTOSIZEWINDOW |
+                  //MCIWNDF_SHOWALL |
+                  MCIWNDF_NOPLAYBAR | MCIWNDF_NOOPEN | MCIWNDF_NOMENU | MCIWNDF_NOERRORDLG),
+          "avivideo");
         if (TraceMCIError("CVideo::Create(MCIWndCreate)") == 0)
         {
             // Let's subclass the window proc for m_lhwnd.

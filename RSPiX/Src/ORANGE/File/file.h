@@ -565,7 +565,6 @@ class RFile
 
   protected: // Internal functions.
              /////////// Binary Reads /////////////////////////////////////////////////////
-
     // Reads in 8 bit data, swapped if necessary (BWAH HA).
     long Read8(   // Returns number of 8 bit items read.
       U8 *pu8,    // In:  8 bit data to read (swapping, if necessary).

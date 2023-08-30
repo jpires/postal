@@ -1337,19 +1337,19 @@ static short GameCore(void) // Returns 0 on success.
               // Title
               "Postal Launch Weekend Edition",
 #elif defined(EXPIRATION_MSG_MARKETING_RELEASE)
-               // Title
-               "Postal Beta Contest",
-               // Message Body
-               "This is a large, single-player, single-level BETA test version -- that means we're "
-               "still working on it and it's not final. But we want your comments to help us make it "
-               "even cooler, so we're holding a BETA TEST CONTEST!" NEXT_LINE
-               "We're giving away tons o' free stuff, including FREE GAMES, T-SHIRTS, and even a hot "
-               "NEW DELL 266MHZ COMPUTER!" NEXT_LINE
-               "If you haven't already registered, visit http://www.gopostal.com to find out more about Postal "
-               "and how you can register for the BETA TEST CONTEST!" NEXT_LINE
+              // Title
+              "Postal Beta Contest",
+              // Message Body
+              "This is a large, single-player, single-level BETA test version -- that means we're "
+              "still working on it and it's not final. But we want your comments to help us make it "
+              "even cooler, so we're holding a BETA TEST CONTEST!" NEXT_LINE
+              "We're giving away tons o' free stuff, including FREE GAMES, T-SHIRTS, and even a hot "
+              "NEW DELL 266MHZ COMPUTER!" NEXT_LINE
+              "If you haven't already registered, visit http://www.gopostal.com to find out more about Postal "
+              "and how you can register for the BETA TEST CONTEST!" NEXT_LINE
 #else
-               // Title
-               "Limited-Time Version",
+              // Title
+              "Limited-Time Version",
 #endif
               // Message Body
               "This limited-time version will expire on %s" NEXT_LINE
@@ -4474,7 +4474,7 @@ short CorrectifyBasePath( // Returns 0 if successfull, non-zero otherwise
                     sLastIndex--;
 
 #if 1 // def WIN32
-                // If base path doesn't end with a slash, add one
+      // If base path doesn't end with a slash, add one
                 if (pszBasePath[sLastIndex] != RSP_SYSTEM_PATH_SEPARATOR)
                 {
                     if ((sLastIndex + 2) < RSP_MAX_PATH)

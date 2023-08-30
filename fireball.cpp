@@ -846,7 +846,7 @@ void CFireball::Render(void)
         }
 
         //		m_sprite.m_sAlphaLevel = MIN((long)255, (long) (((m_lTimeToLive - m_pRealm->m_time.GetGameTime()) /
-        //m_lTotalFlameTime) * 255));
+        // m_lTotalFlameTime) * 255));
 
         // Copy the color info and the alpha channel to the Alpha Sprite
         m_sprite.m_pImage = &(pAnim->m_imColor);

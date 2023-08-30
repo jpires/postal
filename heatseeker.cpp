@@ -378,8 +378,8 @@ void CHeatseeker::Update(void)
                                                               // NOTE: Values less than 1.0 are inefficient.
                                                               // NOTE: We scan terrain using GetHeight()
                                                               // at only one pixel.
-                                             // NOTE: We could change this to a speed in pixels per second
-                                             // where we'd assume a certain frame rate.
+                                        // NOTE: We could change this to a speed in pixels per second
+                                        // where we'd assume a certain frame rate.
                                         (short)dNewX, // In:  Destination X.
                                         (short)dNewZ, // In:  Destination Z.
                                         0,            // In:  Max traverser can step up.

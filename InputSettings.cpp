@@ -509,7 +509,7 @@ CInputSettings::InputInfo CInputSettings::ms_ainputinfo[CInputSettings::NumInput
       "Fire",
       RSP_SK_CONTROL,
       0,
-      //FixMe: I don't think this works, as the value will be zero after the cast
+      // FixMe: I don't think this works, as the value will be zero after the cast
       static_cast<short>(RSP_JOY_BUT_17),
     },
     {

@@ -555,7 +555,7 @@ class CToolItem
                 }
                 // memcpy(ms_pimCompositeBufferScaled->m_pData + n * ms_pimCompositeBufferScaled->m_lPitch,
                 //		ms_pimCompositeBuffer->m_pData + n *
-                //ms_pimCompositeBuffer->m_lPitch,ms_pimCompositeBuffer->m_sWidth);
+                // ms_pimCompositeBuffer->m_lPitch,ms_pimCompositeBuffer->m_sWidth);
             }
             rspBlit(ms_pimCompositeBufferScaled,
                     pimDst,

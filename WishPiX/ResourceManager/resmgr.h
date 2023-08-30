@@ -364,21 +364,21 @@ class CResourceBlock
 #if __MWERKS__ >= 0x1100
 ITERATOR_TRAIT(const RString);
 #endif
-typedef map<RString, CResourceBlock, less<RString>, allocator<CResourceBlock> > resclassMap;
-typedef map<void *, RString, less<void *>, allocator<RString> > ptrLookupMap;
-typedef vector<RString, allocator<RString> > accessVector;
-typedef set<RString, less<RString>, allocator<RString> > dupSet;
-typedef vector<USHORT, allocator<USHORT> > typeVector;
-typedef map<RString, long, less<RString>, allocator<long> > dirMap;
-typedef set<long, less<long>, allocator<long> > dirOffsets;
+typedef map<RString, CResourceBlock, less<RString>, allocator<CResourceBlock>> resclassMap;
+typedef map<void *, RString, less<void *>, allocator<RString>> ptrLookupMap;
+typedef vector<RString, allocator<RString>> accessVector;
+typedef set<RString, less<RString>, allocator<RString>> dupSet;
+typedef vector<USHORT, allocator<USHORT>> typeVector;
+typedef map<RString, long, less<RString>, allocator<long>> dirMap;
+typedef set<long, less<long>, allocator<long>> dirOffsets;
 #else
-typedef map<RString, CResourceBlock, less<RString> > resclassMap;
-typedef map<void *, RString, less<void *> > ptrLookupMap;
+typedef map<RString, CResourceBlock, less<RString>> resclassMap;
+typedef map<void *, RString, less<void *>> ptrLookupMap;
 typedef vector<RString> accessVector;
-typedef set<RString, less<RString> > dupSet;
+typedef set<RString, less<RString>> dupSet;
 typedef vector<USHORT> typeVector;
-typedef map<RString, long, less<RString> > dirMap;
-typedef set<long, less<long> > dirOffsets;
+typedef map<RString, long, less<RString>> dirMap;
+typedef set<long, less<long>> dirOffsets;
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////

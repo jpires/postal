@@ -159,7 +159,7 @@ void CNetServer::Update(void)
                         // Don't return an actual error code from this function because we can't
                         // get all bent-out-of-shape over not being able to connect to a client
                         //						TRACE("CNetServer()::Update(): Tried to accept connection, but
-                        //failed.\n");
+                        // failed.\n");
                     }
                 }
                 // Break out of loop that was looking for unused clients

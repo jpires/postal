@@ -718,8 +718,8 @@ short RResMgr::CreateSak(RString strScriptFile, RString strSakFile)
                 m_DirectoryMap[(*iFilename)] = sak.Tell();
 
                 // Open disk file . . .
-                //				if (fileRes.Open( FromSystempath((char*) (*iFilename).c_str() ), "rb", SAK_FILE_ENDIAN) ==
-                //0)
+                //				if (fileRes.Open( FromSystempath((char*) (*iFilename).c_str() ), "rb", SAK_FILE_ENDIAN)
+                //== 0)
                 if (fileRes.Open(FromSystempath((char *)(*iFilename)), "rb", SAK_FILE_ENDIAN) == 0)
                 {
                     do

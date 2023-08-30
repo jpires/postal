@@ -54,9 +54,9 @@ class CNavigationNet : public CThing
 #if __MWERKS__ >= 0x1100
     ITERATOR_TRAITS(const CBouy *);
 #endif
-    typedef map<UCHAR, CBouy *, less<UCHAR>, allocator<CBouy *> > nodeMap;
+    typedef map<UCHAR, CBouy *, less<UCHAR>, allocator<CBouy *>> nodeMap;
 #else
-    typedef map<UCHAR, CBouy *, less<UCHAR> > nodeMap;
+    typedef map<UCHAR, CBouy *, less<UCHAR>> nodeMap;
 #endif
 
     //---------------------------------------------------------------------------

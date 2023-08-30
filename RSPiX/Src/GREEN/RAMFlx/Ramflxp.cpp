@@ -1120,7 +1120,7 @@ short CRamFlx::ReadDataSS2(CImage *pimageRead, CNFile *pfile, short *psPixelsMod
         y++;
     }
 #else // ifdef WIN32
-        // Need a local for this-> stuff.
+      // Need a local for this-> stuff.
         MEM pCurFlxBuf = pfile->GetMemory() + pfile->Tell();
         void *pData = pimageRead->pData;
         long lPitch = pimageRead->lPitch;

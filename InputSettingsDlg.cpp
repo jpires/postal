@@ -613,8 +613,8 @@ inline void ListenForInput( // Returns nothing.
                         }
 
 #endif
-#if 0 // defined(ALLOW_JOYSTICK)
-      //  Only use one joystick.
+#if 0  // defined(ALLOW_JOYSTICK)
+       //  Only use one joystick.
 						rspUpdateJoy(0);
 
 						// Get prev and current status.

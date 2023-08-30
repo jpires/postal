@@ -1181,7 +1181,7 @@ short CHood::GetResources(void) // Returns 0 if successfull, non-zero otherwise
             }
             // memcpy(ms_pimCompositeBufferScaled->m_pData + n * ms_pimCompositeBufferScaled->m_lPitch,
             //		ms_pimCompositeBuffer->m_pData + n *
-            //ms_pimCompositeBuffer->m_lPitch,ms_pimCompositeBuffer->m_sWidth);
+            // ms_pimCompositeBuffer->m_lPitch,ms_pimCompositeBuffer->m_sWidth);
         }
         // TODO free m_pimTopBar
         m_pimTopBar = stretched;

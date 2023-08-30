@@ -1235,7 +1235,7 @@ void CNetClient::ReceiveFromPeers(void)
 
                         // Now that I got new inputs, determine the first input seq I need from him
                         //						m_aPeers[id].m_seqWhatINeed =
-                        //m_aPeers[id].m_netinput.FindFirstInvalid();
+                        // m_aPeers[id].m_netinput.FindFirstInvalid();
 
                         // Since messages can arrive in the wrong order, we want to ignore older
                         // versions of this value so we don't send him more than he really needs.
