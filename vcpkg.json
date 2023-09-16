@@ -1,0 +1,11 @@
+{
+  "name": "postal",
+  "version-semver": "1.0.0",
+  "dependencies": [
+    {
+      "name": "sdl2",
+      "version>=": "2.24.2"
+    }
+  ],
+  "builtin-baseline": "67d17889c241a46f46d0785669d4eaf4ee4ab9f2"
+}
