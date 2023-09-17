@@ -90,16 +90,8 @@
 
 #include <cstdlib>
 #include "System.h"
-
-#ifdef PATHS_IN_INCLUDES
 #include "ORANGE/Attribute/attribute.h"
 #include "ORANGE/File/file.h"
-
-#else
-#include "ATTRIBUTE.H"
-#include "FILE.H"
-
-#endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////
 //

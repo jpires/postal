@@ -81,12 +81,7 @@
 
 #include "Blue.h"
 #include "CYAN/cyan.h"
-#ifdef PATHS_IN_INCLUDES
 #include "ORANGE/str/str.h"
-#else
-#include "str.h"
-#endif
-
 #include "prefline.h"
 #include "prefs.h"
 

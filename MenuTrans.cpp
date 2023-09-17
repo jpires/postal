@@ -72,10 +72,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "RSPiX.h"
-#ifdef PATHS_IN_INCLUDES
-#else
-#endif
-
 #include "game.h"
 #include "MenuTrans.h"
 #include "update.h"

@@ -147,16 +147,9 @@
 // RSPiX Headers.
 //////////////////////////////////////////////////////////////////////////////
 #include "Blue.h"
-
-#ifdef PATHS_IN_INCLUDES
 #include "ORANGE/MsgBox/MsgBox.h"
 #include "ORANGE/DirtRect/DirtRect.h"
 #include "ORANGE/GUI/scrollbar.h"
-#else
-#include "MsgBox.h"
-#include "dirtrect.h"
-#include "scrollbar.h"
-#endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific macros.

@@ -116,21 +116,8 @@ pntBuf.Clear(); // Clear the print buffer early
 // #include "Blue.h"
 // TO:
 #include "Blue.h"
-
-// If PATHS_IN_INCLUDES macro is defined, we can utilized relative
-// paths to a header file.  In this case we generally go off of our
-// RSPiX root directory.  System.h MUST be included before this macro
-// is evaluated.  System.h is the header that, based on the current
-// platform (or more so in this case on the compiler), defines
-// PATHS_IN_INCLUDES.  Blue.h includes system.h so you can include
-// that instead.
-#ifdef PATHS_IN_INCLUDES
 #include "GREEN/Image/Image.h"
 #include "GREEN/Image/SpecialTyp.h"
-#else
-#include "Image.h"
-#include "SpecialTyp.h"
-#endif // PATHS_IN_INCLUDES
 // END//CHANGES//BY//JON//////////////////////////////////////////////
 
 // This is the user header for all 2D sprite operations.
@@ -715,15 +702,8 @@ static const short gsBitsToShift[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 #define NULL 0
 #endif
 //====================================
-#ifdef PATHS_IN_INCLUDES
 #include "GREEN/BLiT/Cfnt.h"
 #include "GREEN/BLiT/RPrint.h"
 #include "ORANGE/QuickMath/QuickMath.h"
-#else
-#include "QuickMath.h"
-#include "Cfnt.h"
-#include "RPrint.h"
-#endif // PATHS_IN_INCLUDES
-
 //====================================
 #endif

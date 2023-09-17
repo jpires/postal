@@ -68,12 +68,7 @@
 #include <cstdlib>
 
 #include "Blue.h"
-
-#ifdef PATHS_IN_INCLUDES
 #include "ORANGE/Meter/meter.h"
-#else
-#include "meter.h"
-#endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific macros.

@@ -44,12 +44,7 @@
 #define SETTINGS_CPP
 
 #include "RSPiX.h"
-#ifdef PATHS_IN_INCLUDES
 #include "WishPiX/Prefs/prefs.h"
-#else
-#include "prefs.h"
-#endif
-
 #include "main.h"
 #include "settings.h"
 

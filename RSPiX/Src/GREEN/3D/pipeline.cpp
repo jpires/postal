@@ -16,11 +16,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
 #include "System.h"
-#ifdef PATHS_IN_INCLUDES
 #include "GREEN/3D/pipeline.h"
-#else
-#include "pipeline.h"
-#endif
 ///////////////////////////////////////////////////////////////
 // This is the highest level considered actually part of the 3d engine.
 // It is the highest level control -> it decides how 3d pts map to 2d.

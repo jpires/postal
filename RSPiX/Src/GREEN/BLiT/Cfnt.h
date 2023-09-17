@@ -18,13 +18,8 @@
 #ifndef CFNT_H
 #define CFNT_H
 //====================
-#ifdef PATHS_IN_INCLUDES
 #include "GREEN/BLiT/BLIT.H"
 #include "GREEN/BLiT/_BlitInt.H"
-#else
-#include "BLIT.H"
-#include "_BlitInt.H"
-#endif
 //====================
 
 // This class is used to hold the information for

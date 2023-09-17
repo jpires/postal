@@ -19,13 +19,8 @@
 #define DITHER_MATCH_H
 //==============================================
 #include "System.h"
-#ifdef PATHS_IN_INCLUDES
 #include "GREEN/Image/Image.h"
 #include "ORANGE/color/colormatch.h"
-#else
-#include "Image.h"
-#include "colormatch.h"
-#endif
 //==============================================
 
 //==============================================

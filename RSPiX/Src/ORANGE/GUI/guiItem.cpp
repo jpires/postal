@@ -376,8 +376,6 @@
 // RSPiX Headers.
 //////////////////////////////////////////////////////////////////////////////
 #include "Blue.h"
-
-#ifdef PATHS_IN_INCLUDES
 #include "ORANGE/GUI/guiItem.h"
 #include "GREEN/BLiT/BLIT.H"
 #include "ORANGE/IFF/iff.h"
@@ -391,21 +389,6 @@
 #include "ORANGE/GUI/ListBox.h"
 #include "ORANGE/GUI/PushBtn.h"
 #include "ORANGE/GUI/MultiBtn.h"
-#else
-#include "BLIT.H"
-#include "GuiItem.h"
-
-// Headers for CreateGuiItem.
-#include "Txt.h"
-#include "Btn.h"
-#include "Edit.h"
-#include "ScrollBar.h"
-#include "Dlg.h"
-#include "ListBox.h"
-#include "iff.h"
-#include "PushBtn.h"
-#include "MultiBtn.h"
-#endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific macros.

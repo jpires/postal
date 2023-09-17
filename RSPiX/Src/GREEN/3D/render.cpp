@@ -16,11 +16,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
 #include "System.h"
-#ifdef PATHS_IN_INCLUDES
 #include "GREEN/3D/render.h"
-#else
-#include "render.h"
-#endif
 
 typedef struct
 {

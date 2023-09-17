@@ -37,11 +37,7 @@
 #include <stdarg.h>
 
 #include "System.h"
-#ifdef PATHS_IN_INCLUDES
 #include "ORANGE/File/file.h"
-#else
-#include "file.h"
-#endif
 
 class RString
 {

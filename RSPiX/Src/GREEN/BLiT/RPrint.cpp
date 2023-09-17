@@ -27,16 +27,9 @@
 #include <cstring>
 
 #include "System.h"
-
-#ifdef PATHS_IN_INCLUDES
 #include "GREEN/BLiT/BLIT.H"
 #include "GREEN/BLiT/Cfnt.h"
 #include "RPrint.h"
-#else
-#include "BLIT.H"
-#include "Cfnt.h"
-#include "RPrint.h"
-#endif
 
 //========================================================
 // Instantiate the static members:

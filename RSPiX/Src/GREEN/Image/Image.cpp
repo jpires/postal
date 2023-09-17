@@ -358,16 +358,9 @@
 #include <cstring> // For memcpy...
 
 #include "Blue.h"
-
-#ifdef PATHS_IN_INCLUDES
 #include "GREEN/Image/Image.h"
 #include "GREEN/Image/ImageFile.h"
 #include "ORANGE/File/file.h"
-#else
-#include "Image.h"
-#include "ImageFile.h"
-#include "FILE.H"
-#endif // PATHS_IN_INCLUDES
 
 // Local function prototypes
 static short sCreateMem(void **hMem, ULONG ulSize);

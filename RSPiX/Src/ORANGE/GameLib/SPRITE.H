@@ -32,29 +32,12 @@
 #define SPRITE_H
 
 #include "System.h"
-
-// If PATHS_IN_INCLUDES macro is defined, we can utilized relative
-// paths to a header file.  In this case we generally go off of our
-// RSPiX root directory.  System.h MUST be included before this macro
-// is evaluated.  System.h is the header that, based on the current
-// platform (or more so in this case on the compiler), defines
-// PATHS_IN_INCLUDES.  Blue.h includes system.h so you can include that
-// instead.
-#ifdef PATHS_IN_INCLUDES
 // Green include files
 #include "GREEN/Image/Image.h"
 // Orange include files
 #include "ORANGE/GameLib/Region.h"
 #include "ORANGE/CDT/List.h"
 #include "ORANGE/CDT/slist.h"
-#else
-// Green include files
-#include "Image.h"
-// Orange include files
-#include "region.h"
-#include "list.h"
-#include "slist.h"
-#endif // PATHS_IN_INCLUDES
 
 // These values are used to identify the sprite file
 #define SPRITE_COOKIE 0x54525053 // Looks like "SPRT" in file

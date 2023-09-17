@@ -166,12 +166,7 @@ typedef HRESULT(WINAPI *fnSHGetFolderPathW)(HWND hwnd, int nFolder, HANDLE hToke
 #endif
 
 #include "Blue.h"
-
-#ifdef PATHS_IN_INCLUDES
 #include "ORANGE/File/file.h"
-#else
-#include "file.h"
-#endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific macros.

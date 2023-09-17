@@ -39,11 +39,7 @@
 #define PREFLINE_H
 
 #include "Blue.h"
-#ifdef PATHS_IN_INCLUDES
 #include "ORANGE/CDT/flist.h"
-#else
-#include "flist.h"
-#endif
 
 class RPrefsLine;
 

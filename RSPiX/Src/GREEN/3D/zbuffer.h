@@ -20,13 +20,8 @@
 #define ZBUFFER_H
 //==================================================
 #include "Blue.h"
-#ifdef PATHS_IN_INCLUDES
 #include "ORANGE/QuickMath/FixedPoint.h" // for RFixedS32
 #include "ORANGE/color/colormatch.h"     // for RFixedS32
-#else
-#include "FixedPoint.h" // for RFixedS32
-#include "ColorMatch.h" // for RFixedS32
-#endif
 //==================================================
 // Note that z-buffer assumes that positive z is
 // towards the viewer.

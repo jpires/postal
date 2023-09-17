@@ -35,14 +35,9 @@
 #include <cstdlib>
 #include <cstring>
 #include "System.h"
-
-#ifdef PATHS_IN_INCLUDES
 #include "ORANGE/MultiGrid/MultiGrid.h"
 #include "ORANGE/str/str.h"
-#else
-#include "MULTIGRID.H"
-#include "str.h"
-#endif // PATHS_IN_INCLUDES
+
 
 //////////////////////////////////////////////////////////////////////
 //

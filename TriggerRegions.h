@@ -30,11 +30,7 @@
 
 #include "RSPiX.h"
 #include "TriggerRgn.h"
-#ifdef PATHS_IN_INCLUDES
 #include "ORANGE/MultiGrid/MultiGridIndirect.h"
-#else
-#include "multigridindirect.h"
-#endif
 #include "realm.h"
 
 // See the cpp file for usage details...

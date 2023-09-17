@@ -73,12 +73,7 @@
 #define INPUTSETTINGS_H
 
 #include "RSPiX.h"
-#ifdef PATHS_IN_INCLUDES
 #include "WishPiX/Prefs/prefs.h"
-#else
-#include "prefs.h"
-#endif
-
 #include "settings.h"
 #include "localize.h"
 

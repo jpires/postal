@@ -42,11 +42,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "RSPiX.h"
-#ifdef PATHS_IN_INCLUDES
 #include "WishPiX/ResourceManager/resmgr.h"
-#else
-#include "resmgr.h"
-#endif
 #include "SampleMaster.h"
 #include "game.h"
 #include "update.h"

@@ -17,17 +17,10 @@
 //
 #include <cstring>
 #include "Blue.h"
-#ifdef PATHS_IN_INCLUDES
 #include "GREEN/Image/Image.h"
 #include "ORANGE/color/colormatch.h"
 #include "GREEN/BLiT/BLIT.H" // ONLY for the debug command... can be disabled if nec
 #include "ORANGE/QuickMath/FixedPoint.h"
-#else
-#include "Image.h"
-#include "colormatch.h"
-#include "BLIT.H" // ONLY for the debug command... can be disabled if nec
-#include "fixedpoint.h"
-#endif
 
 // short RAlpha::ms_SetPalette(RImage* pimImage);
 short RAlpha::ms_IsPaletteSet = FALSE;

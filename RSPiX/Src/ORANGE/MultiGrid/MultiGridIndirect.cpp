@@ -32,14 +32,8 @@
 #include <cstdlib>
 #include <cstring>
 #include "System.h"
-
-#ifdef PATHS_IN_INCLUDES
 #include "ORANGE/MultiGrid/MultiGrid.h"
 #include "ORANGE/MultiGrid/MultiGridIndirect.h"
-#else
-#include "MULTIGRID.H"
-#include "MULTIGRIDINDIRECT.H"
-#endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////
 //

@@ -18,16 +18,9 @@
 // This is one of the fist advanced BLiT functions supporting any color depth!
 
 #include "System.h"
-
-#ifdef PATHS_IN_INCLUDES
 #include "GREEN/BLiT/BLIT.H"
 #include "GREEN/BLiT/Cfnt.h"
 #include "ORANGE/QuickMath/Fractions.h"
-#else
-#include "BLIT.H"
-#include "Cfnt.h"
-#include "fractions.h"
-#endif
 
 #define _ROT64 // 64-bit math
 

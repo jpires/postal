@@ -20,15 +20,8 @@
 // but it could very easily be updated for TC use and any
 // image type.
 #include <cstring>
-
-#ifdef PATHS_IN_INCLUDES
 #include "GREEN/BLiT/BLIT.H"
 #include "GREEN/BLiT/_BlitInt.H"
-#else
-#include "BLIT.H"
-#include "_BlitInt.H"
-#endif
-
 #include "Cfnt.h"
 
 //========================================================

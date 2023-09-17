@@ -19,13 +19,8 @@
 #define COLOR_MATCH_H
 //==================================
 #include "System.h"
-#ifdef PATHS_IN_INCLUDES
 #include "GREEN/Image/Image.h"
 #include "ORANGE/File/file.h"
-#else
-#include "Image.h"
-#include "file.h"
-#endif
 //==================================
 
 extern UCHAR

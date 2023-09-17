@@ -93,16 +93,9 @@
 
 #include <cstdlib>
 #include <cstring>
-
-#ifdef PATHS_IN_INCLUDES
 #include "BLUE/system.h"
 #include "BLUE/Blue.h"
 #include "GREEN/Mix/MixBuf.h"
-#else
-#include "System.h"
-#include "Blue.h"
-#include "MixBuf.h"
-#endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific macros.

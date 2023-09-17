@@ -201,15 +201,9 @@
 #include <ctype.h>
 
 #include "Blue.h"
-#ifdef PATHS_IN_INCLUDES
 #include "CYAN/cyan.h"
 #include "ORANGE/File/file.h"
 #include "ORANGE/RString/rstring.h"
-#else
-#include "cyan.h"
-#include "file.h"
-#include "rstring.h"
-#endif
 
 #if _MSC_VER >= 1020 || __MWERKS__ >= 0x1100 || __GNUC__
 #include <map>

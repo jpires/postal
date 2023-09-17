@@ -105,14 +105,8 @@
 // Headers.
 //////////////////////////////////////////////////////////////////////////////
 #include "Blue.h"
-
-#ifdef PATHS_IN_INCLUDES
 #include "ORANGE/GUI/ListBox.h"
 #include "ORANGE/GUI/txt.h"
-#else
-#include "listbox.h"
-#include "txt.h"
-#endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific macros.

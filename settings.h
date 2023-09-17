@@ -23,11 +23,7 @@
 #define SETTINGS_H
 
 #include "RSPiX.h"
-#ifdef PATHS_IN_INCLUDES
 #include "ORANGE/CDT/flist.h"
-#else
-#include "flist.h"
-#endif
 
 class RPrefs;
 class RFile;

@@ -17,13 +17,8 @@
 //
 #include <cstdlib>
 #include "System.h"
-#ifdef PATHS_IN_INCLUDES
 #include "GREEN/3D/zbuffer.h"
 #include "ORANGE/QuickMath/FixedPoint.h"
-#else
-#include "zbuffer.h"
-#include "fixedpoint.h"
-#endif
 
 //************************ RZBuffer
 void RZBuffer::Init()

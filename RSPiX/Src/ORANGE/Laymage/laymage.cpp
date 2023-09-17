@@ -92,18 +92,10 @@
 #include <cstdlib>
 #include <cstring>
 #include "System.h"
-
-#ifdef PATHS_IN_INCLUDES
 #include "GREEN/Image/Image.h"
 #include "ORANGE/File/file.h"
 #include "ORANGE/Laymage/laymage.h"
 #include "BLUE/Blue.h"
-#else
-#include "Image.h"
-#include "FILE.H"
-#include "LAYMAGE.H"
-#include "Blue.h"
-#endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////
 //

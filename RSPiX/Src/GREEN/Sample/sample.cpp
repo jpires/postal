@@ -67,14 +67,8 @@
 #include <cstring>
 
 #include "System.h"
-
-#ifdef PATHS_IN_INCLUDES
 #include "BLUE/Blue.h"
 #include "GREEN/Sample/sample.h"
-#else
-#include "Blue.h"
-#include "sample.h"
-#endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////////////
 // Initialize static member variables.
